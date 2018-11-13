@@ -9,7 +9,7 @@ import Foundation
 
 open class FeatureKit {
     
-    open static func seed(name: String) {
+    public static func seed(name: String) {
         let actionCrumb = FKActionCrumb(name: name)
         
         if let projectId = CUUUtils.projectId, let commitHash = CUUUtils.commitHash, let trackingToken = CUUUtils.trackingToken {
