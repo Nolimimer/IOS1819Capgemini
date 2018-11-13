@@ -100,6 +100,7 @@
 				A66447E12192121300B2D32B /* Frameworks */,
 				A66447E22192121300B2D32B /* Resources */,
 				2BB4D6BE2094823F903AE34C /* [CP] Embed Pods Frameworks */,
+				A6055265219B5416003F773D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -184,6 +185,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		A6055265219B5416003F773D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 		F74D6D0CFD3BF5C8C2BCD1B3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -391,7 +409,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.www1.ios1819capgemini;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$SIGH_NAME";
+				PROVISIONING_PROFILE_SPECIFIER = $SIGH_NAME;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

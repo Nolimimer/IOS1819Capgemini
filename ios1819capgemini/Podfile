@@ -8,6 +8,7 @@ target 'ios1819capgemini' do
   # Pods for ios1819capgemini
 pod 'Prototyper'
 pod 'CUU'
+pod 'SwiftLint'
 
 end
 
