@@ -1,0 +1,6 @@
+framework module CUU {
+  umbrella header "CUU-umbrella.h"
+
+  export *
+  module * { export * }
+}
