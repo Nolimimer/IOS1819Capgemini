@@ -14,7 +14,7 @@
 APPID = "de.tum.in.www1.ios1819capgemini"
 SCHEME = "ios1819capgemini"
 WORKSPACEPATH = "./ios1819capgemini.xcworkspace"
-#PODFILE = "ExampleApp/Podfile"
+PODFILE = "ios1819capgemini/Podfile"
 
 
 
@@ -42,10 +42,10 @@ platform :ios do
                 ENV['PROTOTYPER_BUILDSTRING'] = sh("date", "+%y%m%d_%H%M").rstrip + "-build" + (ENV['bamboo_buildNumber'] ||= "") + "-" + (ENV['bamboo_repository_branch_name'] ||= "") # Prototyper Buildstring to identify releases
                 
                 # Init Cocoapods
-#                cocoapods(
-#                       podfile: PODFILE,
-#                      repo_update: true
-#             )
+                cocoapods(
+                       podfile: PODFILE,
+                      repo_update: true
+             )
 
                 # Write Prototyper BuildString to Info.plist
                 set_info_plist_value(

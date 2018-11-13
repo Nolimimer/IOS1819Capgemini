@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:ios1819capgemini/ios1819capgemini.xcodeproj">
+      location = "group:ios1819capgemini/ios1819capgemini.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:ios1819capgemini/Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

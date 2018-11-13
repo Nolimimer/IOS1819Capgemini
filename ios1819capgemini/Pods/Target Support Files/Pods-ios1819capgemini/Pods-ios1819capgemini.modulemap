@@ -1,0 +1,6 @@
+framework module Pods_ios1819capgemini {
+  umbrella header "Pods-ios1819capgemini-umbrella.h"
+
+  export *
+  module * { export * }
+}

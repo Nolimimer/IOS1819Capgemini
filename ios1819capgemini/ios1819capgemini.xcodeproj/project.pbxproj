@@ -12,9 +12,12 @@
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
 		A66447EF2192121300B2D32B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A66447EE2192121300B2D32B /* Assets.xcassets */; };
 		A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447F02192121300B2D32B /* LaunchScreen.storyboard */; };
+		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0CDB5AF4C15D59DC7C04B3EA /* Pods-ios1819capgemini.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.release.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.release.xcconfig"; sourceTree = "<group>"; };
+		67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios1819capgemini.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A66447E42192121300B2D32B /* ios1819capgemini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ios1819capgemini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A66447E72192121300B2D32B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A66447E92192121300B2D32B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +25,7 @@
 		A66447EE2192121300B2D32B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A66447F12192121300B2D32B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A66447F32192121300B2D32B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +33,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		253FA3086DD92FE99E3DF7A7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A66447DB2192121200B2D32B = {
 			isa = PBXGroup;
 			children = (
 				A66447E62192121300B2D32B /* ios1819capgemini */,
 				A66447E52192121300B2D32B /* Products */,
+				D8D30B6BEE4E7F64DA26A3F4 /* Pods */,
+				253FA3086DD92FE99E3DF7A7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +79,15 @@
 			path = ios1819capgemini;
 			sourceTree = "<group>";
 		};
+		D8D30B6BEE4E7F64DA26A3F4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */,
+				0CDB5AF4C15D59DC7C04B3EA /* Pods-ios1819capgemini.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -71,9 +95,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A66447F62192121300B2D32B /* Build configuration list for PBXNativeTarget "ios1819capgemini" */;
 			buildPhases = (
+				F74D6D0CFD3BF5C8C2BCD1B3 /* [CP] Check Pods Manifest.lock */,
 				A66447E02192121300B2D32B /* Sources */,
 				A66447E12192121300B2D32B /* Frameworks */,
 				A66447E22192121300B2D32B /* Resources */,
+				2BB4D6BE2094823F903AE34C /* [CP] Embed Pods Frameworks */,
+				A6055265219B5416003F773D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -129,6 +156,76 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2BB4D6BE2094823F903AE34C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CUU/CUU.framework",
+				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Prototype/Prototype.framework",
+				"${BUILT_PRODUCTS_DIR}/Prototyper/Prototyper.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CUU.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Prototype.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Prototyper.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6055265219B5416003F773D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+		};
+		F74D6D0CFD3BF5C8C2BCD1B3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ios1819capgemini-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A66447E02192121300B2D32B /* Sources */ = {
@@ -280,6 +377,7 @@
 		};
 		A66447F72192121300B2D32B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -299,6 +397,7 @@
 		};
 		A66447F82192121300B2D32B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0CDB5AF4C15D59DC7C04B3EA /* Pods-ios1819capgemini.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
