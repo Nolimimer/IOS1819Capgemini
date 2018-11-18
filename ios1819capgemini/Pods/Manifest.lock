@@ -1,13 +1,5 @@
 PODS:
-  - CUU (1.0.0):
-    - CUU/CUUCore (= 1.0.0)
-    - CUU/FeatureKit (= 1.0.0)
-    - CUU/InteractionKit (= 1.0.0)
-  - CUU/CUUCore (1.0.0)
-  - CUU/FeatureKit (1.0.0):
-    - CUU/CUUCore
-  - CUU/InteractionKit (1.0.0):
-    - CUU/CUUCore
+  - CUU (2.0.2)
   - KeychainSwift (13.0.0)
   - Prototype (0.3.3)
   - Prototyper (1.1):
@@ -29,7 +21,7 @@ SPEC REPOS:
     - SwiftLint
 
 SPEC CHECKSUMS:
-  CUU: fcb53c8490d8ca873c7e11eb8b28c0d46c5c7879
+  CUU: d5b85393a172a6b63aabf80e4835d1da778a8089
   KeychainSwift: 23d6c16cbc33f20fafa30c3d783241b4b87d998c
   Prototype: 2009eb25fccdcbe5339d1cbe4f116eb6e68466aa
   Prototyper: 09bf1e15d619a7cd6ae358beaa58dc2e0955fa16
