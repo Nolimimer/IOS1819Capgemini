@@ -12,6 +12,7 @@
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
 		A66447EF2192121300B2D32B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A66447EE2192121300B2D32B /* Assets.xcassets */; };
 		A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447F02192121300B2D32B /* LaunchScreen.storyboard */; };
+		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,8 @@
 		A66447EE2192121300B2D32B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A66447F12192121300B2D32B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A66447F32192121300B2D32B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE5BAF7A21A16A0700CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -33,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */,
 				D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -43,6 +47,7 @@
 		253FA3086DD92FE99E3DF7A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE5BAF8121A16B1B00CEBB3C /* CUU.framework */,
 				67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */,
 			);
 			name = Frameworks;
@@ -51,6 +56,7 @@
 		A66447DB2192121200B2D32B = {
 			isa = PBXGroup;
 			children = (
+				BE5BAF7A21A16A0700CEBB3C /* CUU.framework */,
 				A66447E62192121300B2D32B /* ios1819capgemini */,
 				A66447E52192121300B2D32B /* Products */,
 				D8D30B6BEE4E7F64DA26A3F4 /* Pods */,
