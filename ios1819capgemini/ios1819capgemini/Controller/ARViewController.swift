@@ -17,19 +17,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
         sceneView.delegate = self
         sceneView.showsStatistics = false
-        
         sceneView.scene = scene
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationController?.isNavigationBarHidden = true
-        
         let config = ARWorldTrackingConfiguration()
         sceneView.session.run(config)
     }
@@ -38,7 +35,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
         super.viewWillDisappear(animated)
         
         self.navigationController?.isNavigationBarHidden = false
-        
         sceneView.session.pause()
     }
 
