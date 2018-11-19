@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D5F4A7721A3121F00D443CC /* CUU.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0D5F4A7621A3121F00D443CC /* CUU.plist */; };
+		0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9DBF3121A33D39004D445B /* DetailViewController.swift */; };
+		0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */; };
 		A66447E82192121300B2D32B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E72192121300B2D32B /* AppDelegate.swift */; };
-		A66447EA2192121300B2D32B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E92192121300B2D32B /* ViewController.swift */; };
+		A66447EA2192121300B2D32B /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E92192121300B2D32B /* ARViewController.swift */; };
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
 		A66447EF2192121300B2D32B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A66447EE2192121300B2D32B /* Assets.xcassets */; };
 		A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447F02192121300B2D32B /* LaunchScreen.storyboard */; };
@@ -18,10 +21,13 @@
 
 /* Begin PBXFileReference section */
 		0CDB5AF4C15D59DC7C04B3EA /* Pods-ios1819capgemini.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.release.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.release.xcconfig"; sourceTree = "<group>"; };
+		0D5F4A7621A3121F00D443CC /* CUU.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = CUU.plist; sourceTree = "<group>"; };
+		0D9DBF3121A33D39004D445B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios1819capgemini.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A66447E42192121300B2D32B /* ios1819capgemini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ios1819capgemini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A66447E72192121300B2D32B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A66447E92192121300B2D32B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A66447E92192121300B2D32B /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
 		A66447EC2192121300B2D32B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A66447EE2192121300B2D32B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A66447F12192121300B2D32B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -44,6 +50,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D5F4A7821A317AB00D443CC /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A66447E92192121300B2D32B /* ARViewController.swift */,
+				0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */,
+				0D9DBF3121A33D39004D445B /* DetailViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		0D5F4A7921A317B500D443CC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A66447EB2192121300B2D32B /* Main.storyboard */,
+				A66447F02192121300B2D32B /* LaunchScreen.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		253FA3086DD92FE99E3DF7A7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -76,11 +101,11 @@
 			isa = PBXGroup;
 			children = (
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
-				A66447E92192121300B2D32B /* ViewController.swift */,
-				A66447EB2192121300B2D32B /* Main.storyboard */,
-				A66447EE2192121300B2D32B /* Assets.xcassets */,
-				A66447F02192121300B2D32B /* LaunchScreen.storyboard */,
+				0D5F4A7621A3121F00D443CC /* CUU.plist */,
 				A66447F32192121300B2D32B /* Info.plist */,
+				0D5F4A7921A317B500D443CC /* View */,
+				0D5F4A7821A317AB00D443CC /* Controller */,
+				A66447EE2192121300B2D32B /* Assets.xcassets */,
 			);
 			path = ios1819capgemini;
 			sourceTree = "<group>";
@@ -155,6 +180,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D5F4A7721A3121F00D443CC /* CUU.plist in Resources */,
 				A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */,
 				A66447EF2192121300B2D32B /* Assets.xcassets in Resources */,
 				A66447ED2192121300B2D32B /* Main.storyboard in Resources */,
@@ -238,8 +264,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A66447EA2192121300B2D32B /* ViewController.swift in Sources */,
+				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
 				A66447E82192121300B2D32B /* AppDelegate.swift in Sources */,
+				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,
+				0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,9 +8,10 @@
 
 import UIKit
 import Prototyper
+import CUU
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
 
     var window: UIWindow?
 
@@ -18,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         PrototyperController.showFeedbackButton = true
         // Override point for customization after application launch.
+        
+        CUU.start()
+        
         return true
     }
 
@@ -41,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        CUU.stop()
     }
 
 
