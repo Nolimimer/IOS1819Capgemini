@@ -10,6 +10,12 @@
 		0D5F4A7721A3121F00D443CC /* CUU.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0D5F4A7621A3121F00D443CC /* CUU.plist */; };
 		0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9DBF3121A33D39004D445B /* DetailViewController.swift */; };
 		0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */; };
+		9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6421A561D200CA8E80 /* CarPart.swift */; };
+		9082AF6B21A561D200CA8E80 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6521A561D200CA8E80 /* Car.swift */; };
+		9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6621A561D200CA8E80 /* Incident.swift */; };
+		9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6721A561D200CA8E80 /* CarPartItem.swift */; };
+		9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6821A561D200CA8E80 /* CarPartComponent.swift */; };
+		9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6921A561D200CA8E80 /* Attachment.swift */; };
 		A66447E82192121300B2D32B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E72192121300B2D32B /* AppDelegate.swift */; };
 		A66447EA2192121300B2D32B /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E92192121300B2D32B /* ARViewController.swift */; };
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
@@ -25,6 +31,12 @@
 		0D9DBF3121A33D39004D445B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios1819capgemini.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9082AF6421A561D200CA8E80 /* CarPart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPart.swift; sourceTree = "<group>"; };
+		9082AF6521A561D200CA8E80 /* Car.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
+		9082AF6621A561D200CA8E80 /* Incident.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Incident.swift; sourceTree = "<group>"; };
+		9082AF6721A561D200CA8E80 /* CarPartItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartItem.swift; sourceTree = "<group>"; };
+		9082AF6821A561D200CA8E80 /* CarPartComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartComponent.swift; sourceTree = "<group>"; };
+		9082AF6921A561D200CA8E80 /* Attachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		A66447E42192121300B2D32B /* ios1819capgemini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ios1819capgemini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A66447E72192121300B2D32B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A66447E92192121300B2D32B /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +90,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9082AF6321A5618100CA8E80 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9082AF6921A561D200CA8E80 /* Attachment.swift */,
+				9082AF6521A561D200CA8E80 /* Car.swift */,
+				9082AF6421A561D200CA8E80 /* CarPart.swift */,
+				9082AF6821A561D200CA8E80 /* CarPartComponent.swift */,
+				9082AF6721A561D200CA8E80 /* CarPartItem.swift */,
+				9082AF6621A561D200CA8E80 /* Incident.swift */,
+			);
+			name = Model;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		A66447DB2192121200B2D32B = {
 			isa = PBXGroup;
 			children = (
@@ -100,6 +126,7 @@
 		A66447E62192121300B2D32B /* ios1819capgemini */ = {
 			isa = PBXGroup;
 			children = (
+				9082AF6321A5618100CA8E80 /* Model */,
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
 				0D5F4A7621A3121F00D443CC /* CUU.plist */,
 				A66447F32192121300B2D32B /* Info.plist */,
@@ -264,9 +291,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */,
 				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
+				9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */,
+				9082AF6B21A561D200CA8E80 /* Car.swift in Sources */,
+				9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */,
 				A66447E82192121300B2D32B /* AppDelegate.swift in Sources */,
 				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,
+				9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */,
+				9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */,
 				0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
