@@ -10,6 +10,7 @@
 		0D5F4A7721A3121F00D443CC /* CUU.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0D5F4A7621A3121F00D443CC /* CUU.plist */; };
 		0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9DBF3121A33D39004D445B /* DetailViewController.swift */; };
 		0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */; };
+		5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC4072921A8331100A64106 /* DataHandler.swift */; };
 		9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6421A561D200CA8E80 /* CarPart.swift */; };
 		9082AF6B21A561D200CA8E80 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6521A561D200CA8E80 /* Car.swift */; };
 		9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6621A561D200CA8E80 /* Incident.swift */; };
@@ -30,6 +31,7 @@
 		0D5F4A7621A3121F00D443CC /* CUU.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = CUU.plist; sourceTree = "<group>"; };
 		0D9DBF3121A33D39004D445B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		5EC4072921A8331100A64106 /* DataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
 		67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios1819capgemini.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9082AF6421A561D200CA8E80 /* CarPart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPart.swift; sourceTree = "<group>"; };
 		9082AF6521A561D200CA8E80 /* Car.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				9082AF6821A561D200CA8E80 /* CarPartComponent.swift */,
 				9082AF6721A561D200CA8E80 /* CarPartItem.swift */,
 				9082AF6621A561D200CA8E80 /* Incident.swift */,
+				5EC4072921A8331100A64106 /* DataHandler.swift */,
 			);
 			name = Model;
 			path = "New Group";
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */,
+				5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */,
 				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
 				9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */,
 				9082AF6B21A561D200CA8E80 /* Car.swift in Sources */,

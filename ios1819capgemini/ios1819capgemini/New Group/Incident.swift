@@ -8,22 +8,22 @@
 
 import Foundation
 
-public class Incident {
-    private var identifier: Int
+public class Incident: Codable {
+    private var identifier: Int = 0
     private var type: IncidentType?
     private var date: Date
     private var description: String
-    private var attachments: [Attachment]
+    private var attachments: [Attachment]?
     
     init(type: IncidentType?, date: Date, description: String) {
         self.type = type
         self.date = date
         self.description = description
         attachments = [Attachment]()
-        identifier = 1
+        identifier = self.identifier + 1
     }
     
-    public func suggest() -> IncidentType? {
+    private func suggest() -> IncidentType? {
         return nil
     }
     
@@ -40,7 +40,7 @@ public class Incident {
     }
 }
 
-public enum IncidentType {
+enum IncidentType: String, Codable {
     case scratch
     case dent
 }

@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-public class Attachment {
-    private var identifier: Int
+public struct Attachment: Codable {
+    private var identifier: Int = 0
     private var date: Date
     private var size: Double
     private var filePath: String
@@ -19,6 +19,6 @@ public class Attachment {
         self.date = date
         self.size = size
         self.filePath = filePath
-        identifier = 1
+        identifier = self.identifier + 1
     }
 }

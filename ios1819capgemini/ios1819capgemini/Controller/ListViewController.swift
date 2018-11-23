@@ -46,7 +46,7 @@ class ListViewController: UIViewController {
 }
 
 // MARK: Extension - UITableViewDelegate
-extension ListViewController: UITableViewDataSource{
+extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
         cell.textLabel?.text = incidents[indexPath.row]
