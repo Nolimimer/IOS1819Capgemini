@@ -13,4 +13,21 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    @IBAction private func backButtonPressed(_ sender: Any) {
+         self.dismiss(animated: true, completion: nil)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.modalPresentationStyle = .overCurrentContext
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        
+        // add blurred subview
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        blurView.frame = UIScreen.main.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.navigationController?.view.addSubview(blurView)
+        self.navigationController?.view.sendSubviewToBack(blurView)
+    }
 }

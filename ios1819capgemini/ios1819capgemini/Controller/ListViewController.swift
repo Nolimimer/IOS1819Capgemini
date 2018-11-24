@@ -16,7 +16,7 @@ class ListViewController: UIViewController {
     @IBOutlet private weak var tableView: UITableView!
     
     // MARK: Instance proprties
-    let incidents = ["Scratch", "Dent"]
+    let incidents = ["Scratch", "Dent", "Unknown Issue"]
     
     // MARK: Overriddent instance methods
     override func viewDidLoad() {

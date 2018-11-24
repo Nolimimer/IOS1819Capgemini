@@ -8,18 +8,18 @@
 
 import Foundation
 
-public class Incident: Codable {
+public struct Incident: Codable {
     private var identifier: Int = 0
     private var type: IncidentType?
     private var date: Date
     private var description: String
     private var attachments: [Attachment]?
     
-    init(type: IncidentType?, date: Date, description: String) {
+    init(type: IncidentType?, description: String) {
         self.type = type
-        self.date = date
         self.description = description
         attachments = [Attachment]()
+        self.date = Date()
         identifier = self.identifier + 1
     }
     
