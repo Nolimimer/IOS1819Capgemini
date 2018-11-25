@@ -42,4 +42,5 @@ class DetailViewController: UIViewController {
         descriptionLabel.text = incident.description
         descriptionLabel.reloadInputViews()
     }
+    
 }

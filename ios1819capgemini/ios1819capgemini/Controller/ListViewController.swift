@@ -14,8 +14,8 @@ class ListViewController: UIViewController {
 
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
-    
-   // MARK: Overridden/Lifecycle Methods
+
+    // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navigationController = segue.destination as? UINavigationController {
             guard let detailsViewController = navigationController.viewControllers.first as? DetailViewController,
@@ -57,6 +57,35 @@ class ListViewController: UIViewController {
     @IBAction private func didPressAddButton(_ sender: Any) {
          self.dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction private func shareButtonPressed(_ sender: Any) {
+        share()
+    }
+    
+    // Share with airDrop just works on iPhone and not in the xCode simulator
+    private func share() {
+    let activityController = UIActivityViewController(activityItems: DataHandler.incidents, applicationActivities: nil)
+        
+        let excludedActivities =
+            [UIActivity.ActivityType.mail,
+             UIActivity.ActivityType.addToReadingList,
+             UIActivity.ActivityType.assignToContact,
+             UIActivity.ActivityType.copyToPasteboard,
+             UIActivity.ActivityType.mail,
+             UIActivity.ActivityType.postToTencentWeibo,
+             UIActivity.ActivityType.postToFacebook,
+             UIActivity.ActivityType.postToTwitter,
+             UIActivity.ActivityType.postToFlickr,
+             UIActivity.ActivityType.postToWeibo,
+             UIActivity.ActivityType.postToVimeo]
+        
+        activityController.excludedActivityTypes = excludedActivities
+        
+        present(activityController, animated: true, completion: nil)
+    
+    }
+    
+    
 }
 
 // MARK: Extension - UITableViewDelegate
