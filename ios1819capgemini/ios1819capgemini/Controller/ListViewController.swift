@@ -9,19 +9,33 @@
 // MARK: Imports
 import UIKit
 
-// MARK: MyClass
+// MARK: LastViewController
 class ListViewController: UIViewController {
 
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
     
-    // MARK: Instance proprties
-    let incidents = ["Scratch", "Dent", "Unknown Issue"]
-    
+   // MARK: Overridden/Lifecycle Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let navigationController = segue.destination as? UINavigationController {
+            guard let detailsViewController = navigationController.viewControllers.first as? DetailViewController,
+                let senderCell = sender as? UITableViewCell,
+                let incident = DataHandler.incident(withId: senderCell.tag) else {
+                        print("Unknown Sender in segue to EditTransactionViewController")
+                        return
+                }
+                detailsViewController.incident = incident
+            }
+    }
+
+
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let incidentDent = Incident(type: nil, description: "Dent")
+        let incidentScratch = Incident(type: nil, description: "Scratch")
+        DataHandler.incidents = [incidentDent, incidentScratch]
         tableView.reloadData()
     }
     
@@ -49,11 +63,14 @@ class ListViewController: UIViewController {
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-        cell.textLabel?.text = incidents[indexPath.row]
+        let incident = DataHandler.incidents[indexPath.row]
+        cell.textLabel?.text = incident.description
+        cell.tag = incident.identifier
+        print("Tag: \(cell.tag)")
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return incidents.count
+        return DataHandler.incidents.count
     }
 }

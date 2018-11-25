@@ -9,8 +9,8 @@
 import Foundation
 
 public class Car {
-    private var vin: String
-    private var carParts: [CarPartComponent]
+    var vin: String
+    var carParts: [CarPartComponent]
     
     init(vin: String) {
         self.vin = vin

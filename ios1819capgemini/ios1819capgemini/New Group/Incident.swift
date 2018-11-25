@@ -6,21 +6,24 @@
 //  Copyright © 2018 TUM LS1. All rights reserved.
 //
 
+// MARK: Imports
 import Foundation
 
+// MARK: - Incident
 public struct Incident: Codable {
-    private var identifier: Int = 0
-    private var type: IncidentType?
-    private var date: Date
-    private var description: String
-    private var attachments: [Attachment]?
+    var identifier: Int
+    var type: IncidentType?
+    var description: String
+    var date: Date
+    var attachments: [Attachment]?
     
+    // MARK: Initializers
     init(type: IncidentType?, description: String) {
         self.type = type
         self.description = description
+        date = Date()
+        identifier = DataHandler.nextIncidentID
         attachments = [Attachment]()
-        self.date = Date()
-        identifier = self.identifier + 1
     }
     
     private func suggest() -> IncidentType? {
@@ -38,9 +41,19 @@ public struct Incident: Codable {
     public func resolve() {
         
     }
+    
+    
 }
 
+ // MARK: Constants
 enum IncidentType: String, Codable {
     case scratch
     case dent
+}
+
+// MARK: - Extension: Equatable
+extension Incident: Equatable {
+    public static func == (lhs: Incident, rhs: Incident) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
 }

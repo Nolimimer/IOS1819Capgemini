@@ -23,8 +23,21 @@ enum DataHandler {
         }
     }
     
+    // MARK: Stored Type Properties
     static var incidents: [Incident] = []
+    static var largestID = 0
     
+    // MARK: Computed Instance Properties
+    static var nextIncidentID: Int {
+        largestID += 1
+        return largestID
+    }
+    
+    static func incident(withId id: Int) -> Incident? {
+        return incidents.first(where: { $0.identifier == id })
+    }
+    
+     // MARK: Type Methods
     static func loadFromJSON() {
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)
@@ -48,4 +61,5 @@ enum DataHandler {
             print("Could not save incidents")
         }
     }
+    
 }
