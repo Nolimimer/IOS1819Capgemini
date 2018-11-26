@@ -24,4 +24,5 @@ public struct Attachment: Codable {
         self.filePath = filePath
         Attachment.identifier = Attachment.identifier + 1
     }
+    
 }

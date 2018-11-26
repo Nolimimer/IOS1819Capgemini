@@ -21,7 +21,7 @@ class ListViewController: UIViewController {
             guard let detailsViewController = navigationController.viewControllers.first as? DetailViewController,
                 let senderCell = sender as? UITableViewCell,
                 let incident = DataHandler.incident(withId: senderCell.tag) else {
-                        print("Unknown Sender in segue to EditTransactionViewController")
+                        print("Unknown Sender in segue to DetailViewController")
                         return
                 }
                 detailsViewController.incident = incident
@@ -33,8 +33,8 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let incidentDent = Incident(type: nil, description: "Dent")
-        let incidentScratch = Incident(type: nil, description: "Scratch")
+        let incidentDent = Incident(type: IncidentType.dent, description: "Dent, groß")
+        let incidentScratch = Incident(type: IncidentType.scratch, description: "Scratch, 5cm ")
         DataHandler.incidents = [incidentDent, incidentScratch]
         tableView.reloadData()
     }
@@ -97,7 +97,7 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
         let incident = DataHandler.incidents[indexPath.row]
-        cell.textLabel?.text = incident.description
+        cell.textLabel?.text = incident.
         cell.tag = incident.identifier
         print("Tag: \(cell.tag)")
         return cell

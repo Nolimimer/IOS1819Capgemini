@@ -11,5 +11,5 @@ import Foundation
 
 // MARK: - CarPartComponent
 public class CarPartComponent {
-    
+
 }

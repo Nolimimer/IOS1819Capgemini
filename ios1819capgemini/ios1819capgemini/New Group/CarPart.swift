@@ -9,6 +9,7 @@
 // MARK: Imports
 import Foundation
 
+// MARK: - CarPart
 public class CarPart: CarPartComponent {
     
 }
