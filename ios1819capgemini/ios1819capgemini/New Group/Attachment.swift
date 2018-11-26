@@ -22,7 +22,7 @@ public struct Attachment: Codable {
         date = Date()
         self.size = size
         self.filePath = filePath
-        Attachment.identifier = Attachment.identifier + 1
+        Attachment.identifier += 1
     }
     
 }

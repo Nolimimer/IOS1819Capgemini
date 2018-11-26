@@ -97,7 +97,7 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
         let incident = DataHandler.incidents[indexPath.row]
-        cell.textLabel?.text = incident.
+        cell.textLabel?.text = incident.description
         cell.tag = incident.identifier
         print("Tag: \(cell.tag)")
         return cell

@@ -44,7 +44,6 @@ public struct Incident: Codable {
         return nil
     }
     
-    
 }
 
  // MARK: Constants
