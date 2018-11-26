@@ -11,11 +11,11 @@ import Foundation
 
 // MARK: - Incident
 public struct Incident: Codable {
-    var identifier: Int
-    var type: IncidentType?
-    var description: String
-    var date: Date
-    var attachments: [Attachment]?
+    private(set) var identifier: Int
+    private var type: IncidentType?
+    private(set) var description: String
+    private var date: Date
+    private var attachments: [Attachment]?
     
     // MARK: Initializers
     init(type: IncidentType?, description: String) {

@@ -15,7 +15,7 @@ import SceneKit
 class ARViewController: UIViewController, ARSCNViewDelegate {
 
     // MARK: Stored Instance Properties
-    let scene = SCNScene()
+    final let scene = SCNScene()
     
     // MARK: IBOutlets
     @IBOutlet private var sceneView: ARSCNView!

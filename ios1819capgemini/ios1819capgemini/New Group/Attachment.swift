@@ -12,10 +12,10 @@ import UIKit
 
 // MARK: - Attachment
 public struct Attachment: Codable {
-    static var identifier: Int = 0
-    var date: Date
-    var size: Double
-    var filePath: String
+    private static var identifier: Int = 0
+    private var date: Date
+    private var size: Double
+    private var filePath: String
     
     // MARK: Initializers
     init(name: String, size: Double, filePath: String) {

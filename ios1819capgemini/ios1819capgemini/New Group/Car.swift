@@ -11,8 +11,8 @@ import Foundation
 
 // MARK: - Car
 public class Car {
-    var vin: String
-    var carParts: [CarPartComponent]
+    private var vin: String
+    private var carParts: [CarPartComponent]
     
     init(vin: String) {
         self.vin = vin

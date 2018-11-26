@@ -13,7 +13,7 @@ import UIKit
 class DetailViewController: UIViewController {
     
     // Variables
-    var incident = Incident(type: nil, description: "na")
+    final var incident = Incident(type: nil, description: "na")
     
     // MARK: IBOutlets
     @IBOutlet private weak var descriptionLabel: UILabel!
