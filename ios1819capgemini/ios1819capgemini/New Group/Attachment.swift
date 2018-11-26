@@ -12,7 +12,7 @@ import UIKit
 
 // MARK: - Attachment
 public struct Attachment: Codable {
-    var identifier: Int = 0
+    static var identifier: Int = 0
     var date: Date
     var size: Double
     var filePath: String
@@ -22,6 +22,6 @@ public struct Attachment: Codable {
         date = Date()
         self.size = size
         self.filePath = filePath
-        identifier = self.identifier + 1
+        Attachment.identifier = Attachment.identifier + 1
     }
 }
