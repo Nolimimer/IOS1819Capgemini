@@ -85,6 +85,10 @@ class ListViewController: UIViewController {
     
     }
     
+    private func receive() {
+        
+    }
+    
     
 }
 

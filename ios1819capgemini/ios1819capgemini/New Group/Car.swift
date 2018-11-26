@@ -6,8 +6,10 @@
 //  Copyright © 2018 TUM LS1. All rights reserved.
 //
 
+// MARK: Imports
 import Foundation
 
+// MARK: - Car
 public class Car {
     var vin: String
     var carParts: [CarPartComponent]

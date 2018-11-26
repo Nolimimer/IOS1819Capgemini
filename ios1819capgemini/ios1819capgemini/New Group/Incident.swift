@@ -26,10 +26,7 @@ public struct Incident: Codable {
         attachments = [Attachment]()
     }
     
-    private func suggest() -> IncidentType? {
-        return nil
-    }
-    
+    // MARK: Instance Methods
     public func edit() {
         
     }
@@ -40,6 +37,11 @@ public struct Incident: Codable {
     
     public func resolve() {
         
+    }
+    
+    // MARK: Private Instance Methods
+    private func suggest() -> IncidentType? {
+        return nil
     }
     
     
