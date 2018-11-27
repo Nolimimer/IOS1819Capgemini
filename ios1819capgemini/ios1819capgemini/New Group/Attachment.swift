@@ -6,19 +6,23 @@
 //  Copyright © 2018 TUM LS1. All rights reserved.
 //
 
+// MARK: Imports
 import Foundation
 import UIKit
 
-public class Attachment {
-    private var identifier: Int
+// MARK: - Attachment
+public struct Attachment: Codable {
+    private static var identifier: Int = 0
     private var date: Date
     private var size: Double
     private var filePath: String
     
-    init(date: Date, name: String, size: Double, filePath: String) {
-        self.date = date
+    // MARK: Initializers
+    init(name: String, size: Double, filePath: String) {
+        date = Date()
         self.size = size
         self.filePath = filePath
-        identifier = 1
+        Attachment.identifier += 1
     }
+    
 }

@@ -6,27 +6,27 @@
 //  Copyright © 2018 TUM LS1. All rights reserved.
 //
 
+// MARK: Imports
 import Foundation
 
-public class Incident {
-    private var identifier: Int
+// MARK: - Incident
+public struct Incident: Codable {
+    private(set) var identifier: Int
     private var type: IncidentType?
+    private(set) var description: String
     private var date: Date
-    private var description: String
-    private var attachments: [Attachment]
+    private var attachments: [Attachment]?
     
-    init(type: IncidentType?, date: Date, description: String) {
+    // MARK: Initializers
+    init(type: IncidentType?, description: String) {
         self.type = type
-        self.date = date
         self.description = description
+        date = Date()
+        identifier = DataHandler.nextIncidentID
         attachments = [Attachment]()
-        identifier = 1
     }
     
-    public func suggest() -> IncidentType? {
-        return nil
-    }
-    
+    // MARK: Instance Methods
     public func edit() {
         
     }
@@ -38,9 +38,23 @@ public class Incident {
     public func resolve() {
         
     }
+    
+    // MARK: Private Instance Methods
+    private func suggest() -> IncidentType? {
+        return nil
+    }
+    
 }
 
-public enum IncidentType {
+ // MARK: Constants
+enum IncidentType: String, Codable {
     case scratch
     case dent
+}
+
+// MARK: - Extension: Equatable
+extension Incident: Equatable {
+    public static func == (lhs: Incident, rhs: Incident) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
 }

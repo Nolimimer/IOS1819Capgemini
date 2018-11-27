@@ -6,15 +6,21 @@
 //  Copyright © 2018 TUM LS1. All rights reserved.
 //
 
+// MARK: Imports
 import UIKit
 import ARKit
 import SceneKit
 
+// MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate {
 
-    @IBOutlet private var sceneView: ARSCNView!
-    let scene = SCNScene()
+    // MARK: Stored Instance Properties
+    final let scene = SCNScene()
     
+    // MARK: IBOutlets
+    @IBOutlet private var sceneView: ARSCNView!
+    
+    // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,16 +32,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.isNavigationBarHidden = true
         let config = ARWorldTrackingConfiguration()
         sceneView.session.run(config)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.navigationController?.isNavigationBarHidden = false
-        sceneView.session.pause()
     }
 
 }
