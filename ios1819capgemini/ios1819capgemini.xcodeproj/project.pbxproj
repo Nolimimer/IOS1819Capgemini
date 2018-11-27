@@ -17,6 +17,22 @@
 		9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6721A561D200CA8E80 /* CarPartItem.swift */; };
 		9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6821A561D200CA8E80 /* CarPartComponent.swift */; };
 		9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6921A561D200CA8E80 /* Attachment.swift */; };
+		90CB845B21AD9E1B00CA1C09 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845721AD9E1B00CA1C09 /* BoundingBox.swift */; };
+		90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845821AD9E1B00CA1C09 /* NonMaxSuppression.swift */; };
+		90CB845D21AD9E1B00CA1C09 /* SSDPostprocessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845921AD9E1B00CA1C09 /* SSDPostprocessor.swift */; };
+		90CB845E21AD9E1B00CA1C09 /* Anchors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845A21AD9E1B00CA1C09 /* Anchors.swift */; };
+		90CB846021AD9F4100CA1C09 /* StickerDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845F21AD9F4100CA1C09 /* StickerDetector.mlmodel */; };
+		90CB846221ADA08E00CA1C09 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB846121ADA08E00CA1C09 /* Utilities.swift */; };
+		90CB846421ADAAF700CA1C09 /* Anchors1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB846321ADAAF700CA1C09 /* Anchors1.swift */; };
+		90CB846621ADAB0500CA1C09 /* Anchors2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB846521ADAB0500CA1C09 /* Anchors2.swift */; };
+		90CB846821ADAB1100CA1C09 /* Anchors3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB846721ADAB1100CA1C09 /* Anchors3.swift */; };
+		90CB846A21ADAB1A00CA1C09 /* Anchors4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB846921ADAB1A00CA1C09 /* Anchors4.swift */; };
+		90CB846C21ADAB2100CA1C09 /* Anchors5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB846B21ADAB2100CA1C09 /* Anchors5.swift */; };
+		90CB846E21ADAB2800CA1C09 /* Anchors6.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB846D21ADAB2800CA1C09 /* Anchors6.swift */; };
+		90CB847021ADAB3100CA1C09 /* Anchors7.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB846F21ADAB3100CA1C09 /* Anchors7.swift */; };
+		90CB847221ADAB3700CA1C09 /* Anchors8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB847121ADAB3700CA1C09 /* Anchors8.swift */; };
+		90CB847421ADAB3F00CA1C09 /* Anchors9.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB847321ADAB3F00CA1C09 /* Anchors9.swift */; };
+		90CB847621ADAB8B00CA1C09 /* Anchors10.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB847521ADAB8B00CA1C09 /* Anchors10.swift */; };
 		A66447E82192121300B2D32B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E72192121300B2D32B /* AppDelegate.swift */; };
 		A66447EA2192121300B2D32B /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E92192121300B2D32B /* ARViewController.swift */; };
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
@@ -39,6 +55,22 @@
 		9082AF6721A561D200CA8E80 /* CarPartItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartItem.swift; sourceTree = "<group>"; };
 		9082AF6821A561D200CA8E80 /* CarPartComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartComponent.swift; sourceTree = "<group>"; };
 		9082AF6921A561D200CA8E80 /* Attachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
+		90CB845721AD9E1B00CA1C09 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
+		90CB845821AD9E1B00CA1C09 /* NonMaxSuppression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonMaxSuppression.swift; sourceTree = "<group>"; };
+		90CB845921AD9E1B00CA1C09 /* SSDPostprocessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSDPostprocessor.swift; sourceTree = "<group>"; };
+		90CB845A21AD9E1B00CA1C09 /* Anchors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Anchors.swift; sourceTree = "<group>"; };
+		90CB845F21AD9F4100CA1C09 /* StickerDetector.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = StickerDetector.mlmodel; sourceTree = "<group>"; };
+		90CB846121ADA08E00CA1C09 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		90CB846321ADAAF700CA1C09 /* Anchors1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors1.swift; sourceTree = "<group>"; };
+		90CB846521ADAB0500CA1C09 /* Anchors2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors2.swift; sourceTree = "<group>"; };
+		90CB846721ADAB1100CA1C09 /* Anchors3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors3.swift; sourceTree = "<group>"; };
+		90CB846921ADAB1A00CA1C09 /* Anchors4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors4.swift; sourceTree = "<group>"; };
+		90CB846B21ADAB2100CA1C09 /* Anchors5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors5.swift; sourceTree = "<group>"; };
+		90CB846D21ADAB2800CA1C09 /* Anchors6.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors6.swift; sourceTree = "<group>"; };
+		90CB846F21ADAB3100CA1C09 /* Anchors7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors7.swift; sourceTree = "<group>"; };
+		90CB847121ADAB3700CA1C09 /* Anchors8.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors8.swift; sourceTree = "<group>"; };
+		90CB847321ADAB3F00CA1C09 /* Anchors9.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors9.swift; sourceTree = "<group>"; };
+		90CB847521ADAB8B00CA1C09 /* Anchors10.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors10.swift; sourceTree = "<group>"; };
 		A66447E42192121300B2D32B /* ios1819capgemini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ios1819capgemini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A66447E72192121300B2D32B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A66447E92192121300B2D32B /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +139,37 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
+		90CB845621AD9D4100CA1C09 /* Scratch Detection */ = {
+			isa = PBXGroup;
+			children = (
+				90CB847721ADAB9500CA1C09 /* Anchors */,
+				90CB845F21AD9F4100CA1C09 /* StickerDetector.mlmodel */,
+				90CB845721AD9E1B00CA1C09 /* BoundingBox.swift */,
+				90CB845821AD9E1B00CA1C09 /* NonMaxSuppression.swift */,
+				90CB845921AD9E1B00CA1C09 /* SSDPostprocessor.swift */,
+				90CB846121ADA08E00CA1C09 /* Utilities.swift */,
+			);
+			path = "Scratch Detection";
+			sourceTree = "<group>";
+		};
+		90CB847721ADAB9500CA1C09 /* Anchors */ = {
+			isa = PBXGroup;
+			children = (
+				90CB845A21AD9E1B00CA1C09 /* Anchors.swift */,
+				90CB846321ADAAF700CA1C09 /* Anchors1.swift */,
+				90CB846521ADAB0500CA1C09 /* Anchors2.swift */,
+				90CB846721ADAB1100CA1C09 /* Anchors3.swift */,
+				90CB846921ADAB1A00CA1C09 /* Anchors4.swift */,
+				90CB846B21ADAB2100CA1C09 /* Anchors5.swift */,
+				90CB846D21ADAB2800CA1C09 /* Anchors6.swift */,
+				90CB846F21ADAB3100CA1C09 /* Anchors7.swift */,
+				90CB847121ADAB3700CA1C09 /* Anchors8.swift */,
+				90CB847321ADAB3F00CA1C09 /* Anchors9.swift */,
+				90CB847521ADAB8B00CA1C09 /* Anchors10.swift */,
+			);
+			path = Anchors;
+			sourceTree = "<group>";
+		};
 		A66447DB2192121200B2D32B = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +192,7 @@
 		A66447E62192121300B2D32B /* ios1819capgemini */ = {
 			isa = PBXGroup;
 			children = (
+				90CB845621AD9D4100CA1C09 /* Scratch Detection */,
 				9082AF6321A5618100CA8E80 /* Model */,
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
 				0D5F4A7621A3121F00D443CC /* CUU.plist */,
@@ -294,16 +358,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90CB846E21ADAB2800CA1C09 /* Anchors6.swift in Sources */,
+				90CB847621ADAB8B00CA1C09 /* Anchors10.swift in Sources */,
 				9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */,
 				5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */,
+				90CB846821ADAB1100CA1C09 /* Anchors3.swift in Sources */,
+				90CB847421ADAB3F00CA1C09 /* Anchors9.swift in Sources */,
+				90CB845E21AD9E1B00CA1C09 /* Anchors.swift in Sources */,
 				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
+				90CB846621ADAB0500CA1C09 /* Anchors2.swift in Sources */,
+				90CB846021AD9F4100CA1C09 /* StickerDetector.mlmodel in Sources */,
+				90CB846A21ADAB1A00CA1C09 /* Anchors4.swift in Sources */,
+				90CB845B21AD9E1B00CA1C09 /* BoundingBox.swift in Sources */,
 				9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */,
+				90CB845D21AD9E1B00CA1C09 /* SSDPostprocessor.swift in Sources */,
+				90CB847221ADAB3700CA1C09 /* Anchors8.swift in Sources */,
 				9082AF6B21A561D200CA8E80 /* Car.swift in Sources */,
+				90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */,
+				90CB846421ADAAF700CA1C09 /* Anchors1.swift in Sources */,
+				90CB846221ADA08E00CA1C09 /* Utilities.swift in Sources */,
 				9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */,
+				90CB846C21ADAB2100CA1C09 /* Anchors5.swift in Sources */,
 				A66447E82192121300B2D32B /* AppDelegate.swift in Sources */,
 				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,
 				9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */,
 				9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */,
+				90CB847021ADAB3100CA1C09 /* Anchors7.swift in Sources */,
 				0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
