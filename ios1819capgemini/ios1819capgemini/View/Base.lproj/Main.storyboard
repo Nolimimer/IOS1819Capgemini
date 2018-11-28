@@ -33,7 +33,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Details"/>
                                 <connections>
-                                    <segue destination="arL-mF-BSR" kind="presentation" modalPresentationStyle="overCurrentContext" id="uUl-YU-Nua"/>
+                                    <segue destination="arL-mF-BSR" kind="presentation" identifier="ShowDetailSegue" modalPresentationStyle="overCurrentContext" id="uUl-YU-Nua"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -45,7 +45,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dAU-gm-pmP" secondAttribute="bottom" constant="20" id="Oug-f9-ub7"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ydv-fJ-Xpy"/>
-                            <constraint firstItem="zuy-y1-cIR" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="kaw-PZ-WL2"/>
+                            <constraint firstItem="zuy-y1-cIR" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="kaw-PZ-WL2"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="nW0-tZ-ukQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -67,7 +67,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Indcident Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bBZ-Zl-rAD">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Incident Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bBZ-Zl-rAD" userLabel="Incident Name:">
                                 <rect key="frame" x="33" y="174" width="156.5" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="42" id="ng4-Vd-Pqr"/>

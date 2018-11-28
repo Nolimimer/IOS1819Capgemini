@@ -33,8 +33,10 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let incidentDent = Incident(type: IncidentType.dent, description: "Dent, groß")
-        let incidentScratch = Incident(type: IncidentType.scratch, description: "Scratch, 5cm ")
+        let incidentDent = Incident(type: IncidentType.dent,
+                                    description: "Dent, groß")
+        let incidentScratch = Incident(type: IncidentType.scratch,
+                                       description: "Scratch, 5cm ")
         DataHandler.incidents = [incidentDent, incidentScratch]
         tableView.reloadData()
     }

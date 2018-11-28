@@ -17,14 +17,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: Stored Instance Properties
     //for AR
-    var objectAnchorAbsolute = simd_float4(0,0,0,0)
+    var objectAnchorAbsolute = simd_float4(0, 0, 0, 0)
     var coordinatesPin = [Coordinate(pointX: 0.039081514, pointY: 0.07508006, pointZ: 0.00025102496),
                           Coordinate(pointX: 0.039081514, pointY: 0.07508006, pointZ: 0.00025102496),
                           Coordinate(pointX: 0.17503417, pointY: -0.009129599, pointZ: 0.14398605),
                           Coordinate(pointX: -0.032168947, pointY: 0.023964524, pointZ: 0.011013627),
                           Coordinate(pointX: -0.29854614, pointY: -0.0061006695, pointZ: -0.070008695)]
     
-    final let scene = SCNScene()
+    let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?
     var screenWidth: Double?
@@ -50,6 +50,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.showsStatistics = false
         sceneView.scene = scene
         
+        
+        sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+
         sceneView.session.delegate = self
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
@@ -85,7 +88,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
-        classifyCurrentImage()
+        //classifyCurrentImage()
     }
     
     func setupBoxes() {
@@ -228,8 +231,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.scene.rootNode.addChildNode(sphereNode)
     }
     @objc func tapped(recognizer: UIGestureRecognizer) {
-        
+        print("tapped called")
         if recognizer.state == .ended {
+            print("tap ended")
             let location: CGPoint = recognizer.location(in: sceneView)
             let hits = self.sceneView.hitTest(location, options: nil)
             if !hits.isEmpty {
@@ -244,6 +248,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
                     
                     if !hitTestResult.isEmpty {
+                        print("hit result not empty")
                         guard let hitResult = hitTestResult.first else {
                             return
                         }
@@ -259,6 +264,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                     return
                 }
+                self.performSegue(withIdentifier: "ShowDetailSegue", sender: self)
                 print(name)
             }
         }
@@ -287,7 +293,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 }
 
 // MARK: Coordinate
-struct Coordinate {
+struct Coordinate: Codable {
     var pointX: Float
     var pointY: Float
     var pointZ: Float

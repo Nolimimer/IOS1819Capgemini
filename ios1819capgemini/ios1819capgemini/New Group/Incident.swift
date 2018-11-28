@@ -11,13 +11,23 @@ import Foundation
 
 // MARK: - Incident
 public struct Incident: Codable {
+    
     private(set) var identifier: Int
     private var type: IncidentType?
     private(set) var description: String
     private var date: Date
     private var attachments: [Attachment]?
-    
+    private var coordinate: Coordinate?
     // MARK: Initializers
+    init(type: IncidentType?, description: String, coordinate: Coordinate) {
+        self.type = type
+        self.description = description
+        date = Date()
+        identifier = DataHandler.nextIncidentID
+        attachments = [Attachment]()
+        self.coordinate = Coordinate(pointX: 0, pointY: 0, pointZ: 0)
+    }
+    
     init(type: IncidentType?, description: String) {
         self.type = type
         self.description = description
@@ -56,5 +66,10 @@ enum IncidentType: String, Codable {
 extension Incident: Equatable {
     public static func == (lhs: Incident, rhs: Incident) -> Bool {
         return lhs.identifier == rhs.identifier
+    }
+}
+extension Coordinate: Equatable {
+    public static func == (lhs: Coordinate, rhs: Coordinate) -> Bool {
+        return lhs.description == rhs.description
     }
 }
