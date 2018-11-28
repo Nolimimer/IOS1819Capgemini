@@ -200,53 +200,42 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         print(coordinatesPin)
     }
     private func loadPin (toPlace: Coordinate, objectAnchor: ARObjectAnchor) -> SCNNode {
-        let planeGeometry = SCNPlane(width: 0.1, height: 0.2)
-        let material = SCNMaterial()
-        material.diffuse.contents = UIImage(named: "pin")
-        planeGeometry.materials = [material]
-        planeGeometry.firstMaterial?.isDoubleSided = true
-        
-        let pinNode = SCNNode(geometry: planeGeometry)
-        pinNode.name = "pin node"
-        pinNode.position = SCNVector3Make(toPlace.pointX + objectAnchor.referenceObject.center.x,
-                                          toPlace.pointY + objectAnchor.referenceObject.center.y,
-                                          toPlace.pointZ + objectAnchor.referenceObject.center.z)
-        
-        sceneView.scene.rootNode.addChildNode(pinNode)
-        print("relative Koordinate: ")
-        print(toPlace.pointX)
-        print(toPlace.pointY)
-        print(toPlace.pointZ)
-        print("Neue absolute Koordinate:")
-        print(toPlace.pointX + objectAnchor.referenceObject.center.x)
-        print(toPlace.pointY + objectAnchor.referenceObject.center.y)
-        print(toPlace.pointZ + objectAnchor.referenceObject.center.z)
-        return pinNode
-    }
-    private func configureLighting() {
-        sceneView.autoenablesDefaultLighting = true
-        sceneView.automaticallyUpdatesLighting = true
-    }
-    
-    private func add3DPin (x: Float, y: Float, z: Float) {
         let sphere = SCNSphere(radius: 0.01)
         let materialSphere = SCNMaterial()
         materialSphere.diffuse.contents = UIImage(named: "three_notes")
         sphere.materials = [materialSphere]
         let sphereNode = SCNNode(geometry: sphere)
         sphereNode.name = "sphere"
-        sphereNode.position = SCNVector3(x, y, z)
+        sphereNode.position = SCNVector3(toPlace.pointX + objectAnchor.referenceObject.center.x,
+                                         toPlace.pointY + objectAnchor.referenceObject.center.y,
+                                         toPlace.pointZ + objectAnchor.referenceObject.center.z)
+        sceneView.scene.rootNode.addChildNode(sphereNode)
+        return sphereNode
+    }
+    private func configureLighting() {
+        sceneView.autoenablesDefaultLighting = true
+        sceneView.automaticallyUpdatesLighting = true
+    }
+    
+    private func add3DPin (xCoordinate: Float, yCoordinate: Float, zCoordinate: Float) {
+        let sphere = SCNSphere(radius: 0.01)
+        let materialSphere = SCNMaterial()
+        materialSphere.diffuse.contents = UIImage(named: "three_notes")
+        sphere.materials = [materialSphere]
+        let sphereNode = SCNNode(geometry: sphere)
+        sphereNode.name = "sphere"
+        sphereNode.position = SCNVector3(xCoordinate, yCoordinate, zCoordinate)
         sceneView.scene.rootNode.addChildNode(sphereNode)
     }
-    @objc func tapped(recognizer :UIGestureRecognizer) {
+    @objc func tapped(recognizer: UIGestureRecognizer) {
         
         if recognizer.state == .ended {
             let location: CGPoint = recognizer.location(in: sceneView)
             let hits = self.sceneView.hitTest(location, options: nil)
-            if !hits.isEmpty{
+            if !hits.isEmpty {
                 print("node detected.")
                 let tappedNode = hits.first?.node
-                guard let name = tappedNode?.name else{
+                guard let name = tappedNode?.name else {
                     print("no name node")
                     // Get exact position where touch happened on screen of iPhone (2D coordinate)
                     let touchPosition = recognizer.location(in: sceneView)
@@ -259,16 +248,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             return
                         }
                         
-                        add3DPin(x: hitResult.worldTransform.columns.3.x,
-                                 y: hitResult.worldTransform.columns.3.y,
-                                 z: hitResult.worldTransform.columns.3.z)
-                        
-                        //                         addPin(x: hitResult.worldTransform.columns.3.x,
-                        //                               y: hitResult.worldTransform.columns.3.y,
-                        //                               z: hitResult.worldTransform.columns.3.z)
-                        
+                        add3DPin(xCoordinate: hitResult.worldTransform.columns.3.x,
+                                 yCoordinate: hitResult.worldTransform.columns.3.y,
+                                 zCoordinate: hitResult.worldTransform.columns.3.z)
+      
                         print("tap coordinate \(hitResult.worldTransform.columns.3)")
-                        clipToObject(pinReferenceX: hitResult.worldTransform.columns.3.x, pinReferenceY: hitResult.worldTransform.columns.3.y, pinReferenceZ: hitResult.worldTransform.columns.3.z)
+                        clipToObject(pinReferenceX: hitResult.worldTransform.columns.3.x,
+                                     pinReferenceY: hitResult.worldTransform.columns.3.y,
+                                     pinReferenceZ: hitResult.worldTransform.columns.3.z)
                     }
                     return
                 }
