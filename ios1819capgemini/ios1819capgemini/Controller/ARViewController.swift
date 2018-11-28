@@ -18,12 +18,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: Stored Instance Properties
     //for AR
     var objectAnchorAbsolute = simd_float4(0, 0, 0, 0)
-    var coordinatesPin = [Coordinate(pointX: 0.039081514, pointY: 0.07508006, pointZ: 0.00025102496),
-                          Coordinate(pointX: 0.039081514, pointY: 0.07508006, pointZ: 0.00025102496),
-                          Coordinate(pointX: 0.17503417, pointY: -0.009129599, pointZ: 0.14398605),
-                          Coordinate(pointX: -0.032168947, pointY: 0.023964524, pointZ: 0.011013627),
-                          Coordinate(pointX: -0.29854614, pointY: -0.0061006695, pointZ: -0.070008695)]
-    
+    var coordinatesPin = [Coordinate]()
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?
@@ -195,12 +190,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return 1.0 / (1.0 + exp(-val))
     }
     
-    private func clipToObject (pinReferenceX: Float, pinReferenceY: Float, pinReferenceZ: Float) {
-        coordinatesPin.append( Coordinate(pointX: pinReferenceX - objectAnchorAbsolute.x,
-                                          pointY: pinReferenceY - objectAnchorAbsolute.y,
-                                          pointZ: pinReferenceZ - objectAnchorAbsolute.z))
-        print("relative coordinates:")
-        print(coordinatesPin)
+    private func clipToObject (pinReferenceX: Float, pinReferenceY: Float, pinReferenceZ: Float) -> Coordinate{
+        return Coordinate(pointX: pinReferenceX - objectAnchorAbsolute.x,
+                          pointY: pinReferenceY - objectAnchorAbsolute.y,
+                          pointZ: pinReferenceZ - objectAnchorAbsolute.z
+        )
     }
     private func loadPin (toPlace: Coordinate, objectAnchor: ARObjectAnchor) -> SCNNode {
         let sphere = SCNSphere(radius: 0.01)
@@ -252,15 +246,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         guard let hitResult = hitTestResult.first else {
                             return
                         }
-                        
                         add3DPin(xCoordinate: hitResult.worldTransform.columns.3.x,
                                  yCoordinate: hitResult.worldTransform.columns.3.y,
                                  zCoordinate: hitResult.worldTransform.columns.3.z)
-      
+                        let coordinate = clipToObject(pinReferenceX: hitResult.worldTransform.columns.3.x,
+                                                                              pinReferenceY: hitResult.worldTransform.columns.3.y,
+                                                                              pinReferenceZ: hitResult.worldTransform.columns.3.z)
                         print("tap coordinate \(hitResult.worldTransform.columns.3)")
-                        clipToObject(pinReferenceX: hitResult.worldTransform.columns.3.x,
-                                     pinReferenceY: hitResult.worldTransform.columns.3.y,
-                                     pinReferenceZ: hitResult.worldTransform.columns.3.z)
+                        DataHandler.incidents.append(Incident (type: nil, description: "New Incident", coordinate: coordinate))
                     }
                     return
                 }

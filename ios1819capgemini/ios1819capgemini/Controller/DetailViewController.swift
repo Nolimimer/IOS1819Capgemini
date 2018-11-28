@@ -18,14 +18,23 @@ class DetailViewController: UIViewController {
                             coordinate: Coordinate (pointX: 0, pointY: 0, pointZ: 0))
     
     // MARK: IBOutlets
-    @IBOutlet private weak var descriptionLabel: UILabel!
+
+    @IBOutlet private weak var incidentTypeTextField: UITextField!
+    @IBOutlet private weak var descriptionTextField: UITextField!
     
      // MARK: IBActions
     @IBAction private func backButtonPressed(_ sender: Any) {
          self.dismiss(animated: true, completion: nil)
     }
-
+    @IBAction private func saveIncidentDetailsButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     // MARK: Overridden/Lifecycle Methods
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
@@ -41,8 +50,8 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        descriptionLabel.text = incident.description
-        descriptionLabel.reloadInputViews()
+        descriptionTextField.text = incident.description
+        descriptionTextField.reloadInputViews()
     }
     
 }

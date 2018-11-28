@@ -35,6 +35,14 @@ public struct Incident: Codable {
         identifier = DataHandler.nextIncidentID
         attachments = [Attachment]()
     }
+    init(type: IncidentType?, description: String, coordinate: Coordinate, identifier: Int) {
+        self.type = type
+        self.description = description
+        date = Date()
+        self.identifier = identifier
+        attachments = [Attachment]()
+        self.coordinate = Coordinate(pointX: 0, pointY: 0, pointZ: 0)
+    }
     
     // MARK: Instance Methods
     public func edit() {

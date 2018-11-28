@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        PrototyperController.showFeedbackButton = true
+        PrototyperController.showFeedbackButton = false
         // Override point for customization after application launch.
         
         CUU.start()
