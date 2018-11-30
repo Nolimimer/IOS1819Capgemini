@@ -18,18 +18,12 @@ class DetailViewController: UIViewController {
                             coordinate: Coordinate (pointX: 0, pointY: 0, pointZ: 0))
     
     // MARK: IBOutlets
-
-    @IBOutlet private weak var incidentTypeTextField: UITextField!
-    @IBOutlet private weak var descriptionTextField: UITextField!
     
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
     
     // MARK: IBActions
     @IBAction private func backButtonPressed(_ sender: Any) {
          self.dismiss(animated: true, completion: nil)
-    }
-    @IBAction private func saveIncidentDetailsButtonPressed(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
     }
     
 
@@ -60,8 +54,6 @@ class DetailViewController: UIViewController {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
-        descriptionTextField.text = incident.description
-        descriptionTextField.reloadInputViews()
     }
     
 }
