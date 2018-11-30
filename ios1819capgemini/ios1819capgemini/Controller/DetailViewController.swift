@@ -13,7 +13,11 @@ import UIKit
 class DetailViewController: UIViewController {
     
     // Variables
-    var incident = Incident(type: nil, description: "na")
+    var incident = Incident(type: IncidentType.dent,
+                            description: "",
+                            coordinate: Coordinate (pointX: 0, pointY: 0, pointZ: 0))
+    
+    // MARK: IBOutlets
     
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
     
@@ -21,9 +25,14 @@ class DetailViewController: UIViewController {
     @IBAction private func backButtonPressed(_ sender: Any) {
          self.dismiss(animated: true, completion: nil)
     }
+    
 
    
     // MARK: Overridden/Lifecycle Methods
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
