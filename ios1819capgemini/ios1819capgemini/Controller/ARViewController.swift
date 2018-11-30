@@ -224,6 +224,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sphereNode.position = SCNVector3(xCoordinate, yCoordinate, zCoordinate)
         sceneView.scene.rootNode.addChildNode(sphereNode)
     }
+    
     @objc func tapped(recognizer: UIGestureRecognizer) {
         print("tapped called")
         if recognizer.state == .ended {
