@@ -13,9 +13,9 @@ import Foundation
 public struct Incident: Codable {
     
     private(set) var identifier: Int
-    private var type: IncidentType?
+    private(set) var type: IncidentType?
     private(set) var description: String
-    private var date: Date
+    private(set) var date: Date
     private var attachments: [Attachment]?
     private var coordinate: Coordinate?
     // MARK: Initializers
@@ -66,8 +66,8 @@ public struct Incident: Codable {
 
  // MARK: Constants
 enum IncidentType: String, Codable {
-    case scratch
-    case dent
+    case scratch = "Scratch"
+    case dent = "Dent"
 }
 
 // MARK: - Extension: Equatable
