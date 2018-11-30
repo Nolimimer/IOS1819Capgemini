@@ -37,13 +37,6 @@ class ListViewController: UIViewController {
         let incidentScratch = Incident(type: IncidentType.scratch, description: "Scratch, 5cm ")
         DataHandler.incidents = [incidentDent, incidentScratch]
         tableView.reloadData()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.modalPresentationStyle = .overCurrentContext
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.view.bringSubviewToFront(tableView)
         
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -51,6 +44,13 @@ class ListViewController: UIViewController {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.modalPresentationStyle = .overCurrentContext
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.view.bringSubviewToFront(tableView)
     }
 
     // MARK: IBActions
