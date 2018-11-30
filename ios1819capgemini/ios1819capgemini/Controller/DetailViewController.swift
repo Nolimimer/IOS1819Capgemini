@@ -13,21 +13,28 @@ import UIKit
 class DetailViewController: UIViewController {
     
     // Variables
-    final var incident = Incident(type: nil, description: "na")
+    var incident = Incident(type: nil, description: "na")
     
-    // MARK: IBOutlets
-    @IBOutlet private weak var descriptionLabel: UILabel!
+    @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
     
-     // MARK: IBActions
+    // MARK: IBActions
     @IBAction private func backButtonPressed(_ sender: Any) {
          self.dismiss(animated: true, completion: nil)
     }
 
+   
     // MARK: Overridden/Lifecycle Methods
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+                
+        if let type = incident.type {
+            navigationItemIncidentTitle.title = "\(type.rawValue) 00\(incident.identifier)"
+        } else {
+            navigationItemIncidentTitle.title = "Incident \(incident.identifier)"
+        }
+        
         
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -39,8 +46,6 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        descriptionLabel.text = incident.description
-        descriptionLabel.reloadInputViews()
     }
     
 }
