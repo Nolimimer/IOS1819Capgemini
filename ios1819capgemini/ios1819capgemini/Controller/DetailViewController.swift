@@ -34,7 +34,10 @@ class DetailViewController: UIViewController {
         } else {
             navigationItemIncidentTitle.title = "Incident \(incident.identifier)"
         }
-        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -42,10 +45,6 @@ class DetailViewController: UIViewController {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
     
 }
