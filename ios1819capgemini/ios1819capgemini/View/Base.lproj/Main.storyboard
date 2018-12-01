@@ -196,7 +196,7 @@
                                     <segue destination="T6S-Pu-SFY" kind="show" id="1AI-p7-PtP"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="COY-aq-UVO">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="COY-aq-UVO">
                                 <rect key="frame" x="16" y="235" width="343" height="69"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -226,6 +226,7 @@
                             <constraint firstItem="WSz-DG-4sS" firstAttribute="top" secondItem="COY-aq-UVO" secondAttribute="bottom" constant="81" id="JYo-AK-oYS"/>
                             <constraint firstItem="uPK-r0-I5L" firstAttribute="top" secondItem="dgC-Da-5Ih" secondAttribute="top" constant="70" id="Lc0-lU-00U"/>
                             <constraint firstItem="PcM-9Y-5y7" firstAttribute="top" secondItem="WSz-DG-4sS" secondAttribute="bottom" constant="19" id="O4a-ft-Gv3"/>
+                            <constraint firstItem="dgC-Da-5Ih" firstAttribute="trailing" secondItem="COY-aq-UVO" secondAttribute="trailing" constant="16" id="UiL-AI-bZX"/>
                             <constraint firstItem="3ur-jx-McY" firstAttribute="leading" secondItem="dgC-Da-5Ih" secondAttribute="leading" constant="16" id="ae2-Eg-0jV"/>
                             <constraint firstItem="uPK-r0-I5L" firstAttribute="leading" secondItem="dgC-Da-5Ih" secondAttribute="leading" constant="16" id="b0z-FK-eVc"/>
                             <constraint firstItem="WSz-DG-4sS" firstAttribute="leading" secondItem="3ur-jx-McY" secondAttribute="trailing" constant="28" id="cZs-S8-dqO"/>
@@ -234,6 +235,7 @@
                             <constraint firstItem="BCS-uW-z3A" firstAttribute="leading" secondItem="dgC-Da-5Ih" secondAttribute="leading" constant="16" id="fqY-lO-Bwu"/>
                             <constraint firstItem="U9Z-sw-20j" firstAttribute="leading" secondItem="tOs-XI-t5A" secondAttribute="trailing" constant="156" id="hHF-bC-dZW"/>
                             <constraint firstItem="feY-q0-J8T" firstAttribute="leading" secondItem="dgC-Da-5Ih" secondAttribute="leading" constant="16" id="hLq-ud-H3P"/>
+                            <constraint firstItem="dgC-Da-5Ih" firstAttribute="trailing" secondItem="uPK-r0-I5L" secondAttribute="trailing" constant="16" id="hLr-xI-M4Q"/>
                             <constraint firstItem="feY-q0-J8T" firstAttribute="top" secondItem="dgC-Da-5Ih" secondAttribute="top" constant="25" id="pF1-DV-IRM"/>
                             <constraint firstItem="BCS-uW-z3A" firstAttribute="top" secondItem="3ur-jx-McY" secondAttribute="bottom" constant="19" id="qLy-QK-Mck"/>
                             <constraint firstItem="dgC-Da-5Ih" firstAttribute="trailing" secondItem="z23-Qm-9Du" secondAttribute="trailing" id="qZY-8W-Qwg"/>

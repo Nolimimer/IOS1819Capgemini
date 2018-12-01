@@ -49,14 +49,15 @@ class DetailViewController: UIViewController {
             modus = .edit
             editButton.title = "Save"
             segmentControll.isEnabled = true
+            textField.layer.borderColor = UIColor.white.cgColor
+            textField.layer.borderWidth = 1.0
             textField.isEditable = true
-            textField.isSelectable = true
         case .edit:
+            textField.layer.borderWidth = 0.0
             modus = .view
             editButton.title = "Edit"
             segmentControll.isEnabled = false
             textField.isEditable = false
-            textField.isSelectable = false
             incident.modifiedDate = Date()
             switch segmentControll.selectedSegmentIndex {
             case 0:
