@@ -84,7 +84,7 @@ class DetailViewController: UIViewController {
         
         // TODO: handle generatedDate and modified in Incidents
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
         
        let dateString = dateFormatter.string(from: Date())
         
