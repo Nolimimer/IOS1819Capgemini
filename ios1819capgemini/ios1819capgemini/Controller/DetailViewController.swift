@@ -12,6 +12,14 @@ import UIKit
 // MARK: - DetailViewController
 class DetailViewController: UIViewController {
     
+    @IBOutlet private weak var descriptionLabel: UILabel!
+    
+    @IBOutlet private weak var generatedDateLabel: UILabel!
+    
+    @IBOutlet private weak var lastModifiedDateLabel: UILabel!
+    
+    @IBOutlet private weak var collectionView: UICollectionView!
+    
     // Variables
     var incident = Incident(type: IncidentType.dent,
                             description: "",
@@ -25,8 +33,6 @@ class DetailViewController: UIViewController {
     @IBAction private func backButtonPressed(_ sender: Any) {
          self.dismiss(animated: true, completion: nil)
     }
-    
-
    
     // MARK: Overridden/Lifecycle Methods
     
@@ -48,6 +54,21 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+       let dateString = dateFormatter.string(from: Date())
+        
+        generatedDateLabel.text = dateString
+        
+        descriptionLabel.text = "You don't always know what you are getting with mass-market cloud computing services."
+        
+        descriptionLabel.numberOfLines = 2
+        
+        descriptionLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        
+        descriptionLabel.sizeToFit()
+        
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -55,5 +76,19 @@ class DetailViewController: UIViewController {
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
     }
+    
+}
+
+extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
+        cell?.attachementCellLabel.text = String(indexPath.row)
+        return cell!
+    }
+    
     
 }

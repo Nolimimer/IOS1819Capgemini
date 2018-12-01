@@ -286,6 +286,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 }
 
+
 // MARK: Coordinate
 struct Coordinate: Codable {
     var pointX: Float

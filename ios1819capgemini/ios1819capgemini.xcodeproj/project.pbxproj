@@ -38,6 +38,7 @@
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
 		A66447EF2192121300B2D32B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A66447EE2192121300B2D32B /* Assets.xcassets */; };
 		A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447F02192121300B2D32B /* LaunchScreen.storyboard */; };
+		BE092A8921B1A920009A8768 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE092A8821B1A920009A8768 /* CollectionViewCell.swift */; };
 		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
@@ -78,6 +79,7 @@
 		A66447EE2192121300B2D32B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A66447F12192121300B2D32B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A66447F32192121300B2D32B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE092A8821B1A920009A8768 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		BE5BAF7A21A16A0700CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				A66447E92192121300B2D32B /* ARViewController.swift */,
 				0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */,
 				0D9DBF3121A33D39004D445B /* DetailViewController.swift */,
+				BE092A8821B1A920009A8768 /* CollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
 				90CB846621ADAB0500CA1C09 /* Anchors2.swift in Sources */,
 				90CB846021AD9F4100CA1C09 /* StickerDetector.mlmodel in Sources */,
+				BE092A8921B1A920009A8768 /* CollectionViewCell.swift in Sources */,
 				90CB846A21ADAB1A00CA1C09 /* Anchors4.swift in Sources */,
 				90CB845B21AD9E1B00CA1C09 /* BoundingBox.swift in Sources */,
 				9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */,
