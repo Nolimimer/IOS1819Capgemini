@@ -18,6 +18,16 @@ public struct Incident: Codable {
     private(set) var date: Date
     private var attachments: [Attachment]?
     private var coordinate: Coordinate?
+    var status: Status
+    private var _modifiedDate: Date?
+    var modifiedDate: Date {
+        get {
+            return _modifiedDate ?? self.date
+        }
+        set(modifiedDate) {
+            _modifiedDate = modifiedDate
+        }
+    }
     // MARK: Initializers
     init(type: IncidentType?, description: String, coordinate: Coordinate) {
         self.type = type
@@ -25,6 +35,7 @@ public struct Incident: Codable {
         date = Date()
         identifier = DataHandler.nextIncidentID
         attachments = [Attachment]()
+        self.status = Status.open
         self.coordinate = Coordinate(pointX: 0, pointY: 0, pointZ: 0)
     }
     
@@ -33,6 +44,7 @@ public struct Incident: Codable {
         self.description = description
         date = Date()
         identifier = DataHandler.nextIncidentID
+        self.status = Status.open
         attachments = [Attachment]()
     }
     init(type: IncidentType?, description: String, coordinate: Coordinate, identifier: Int) {
@@ -41,6 +53,7 @@ public struct Incident: Codable {
         date = Date()
         self.identifier = identifier
         attachments = [Attachment]()
+        self.status = Status.open
         self.coordinate = Coordinate(pointX: 0, pointY: 0, pointZ: 0)
     }
     
@@ -68,6 +81,12 @@ public struct Incident: Codable {
 enum IncidentType: String, Codable {
     case scratch = "Scratch"
     case dent = "Dent"
+}
+
+enum Status: String, Codable {
+    case open
+    case progress
+    case resolved
 }
 
 // MARK: - Extension: Equatable
