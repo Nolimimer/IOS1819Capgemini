@@ -11,14 +11,42 @@ import UIKit
 
 // MARK: - DetailViewController
 class DetailViewController: UIViewController {
-    
-    @IBOutlet private weak var descriptionLabel: UILabel!
-    
+
     @IBOutlet private weak var generatedDateLabel: UILabel!
     
     @IBOutlet private weak var lastModifiedDateLabel: UILabel!
     
     @IBOutlet private weak var collectionView: UICollectionView!
+    
+    @IBOutlet private weak var segmentControll: UISegmentedControl!
+    
+    @IBOutlet private weak var backButton: UIBarButtonItem!
+    
+    @IBOutlet private weak var textField: UITextView!
+    
+    @IBOutlet private weak var editButton: UIBarButtonItem!
+    
+    
+    @IBAction private func editButtonPressed(_ sender: Any) {
+        switch modus {
+        case .view:
+        modus = .edit
+        editButton.title = "Save"
+        segmentControll.isEnabled = true
+            textField.isEditable = true
+            textField.isSelectable = true
+        case .edit:
+            // TODO: change last modified in Incident
+        // change last modifiered
+        modus = .view
+        editButton.title = "Edit"
+        segmentControll.isEnabled = false
+            textField.isEditable = false
+            textField.isSelectable = false
+        }
+    }
+    
+    var modus = Modus.view
     
     // Variables
     var incident = Incident(type: IncidentType.dent,
@@ -54,6 +82,7 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // TODO: handle generatedDate and modified in Incidents
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         
@@ -61,13 +90,7 @@ class DetailViewController: UIViewController {
         
         generatedDateLabel.text = dateString
         
-        descriptionLabel.text = "You don't always know what you are getting with mass-market cloud computing services."
-        
-        descriptionLabel.numberOfLines = 2
-        
-        descriptionLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        
-        descriptionLabel.sizeToFit()
+        lastModifiedDateLabel.text = dateString
         
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -79,16 +102,30 @@ class DetailViewController: UIViewController {
     
 }
 
-extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource{
+extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
-        cell?.attachementCellLabel.text = String(indexPath.row)
+        // Just for testing/mocking
+        // TODO
+        let number = Int.random(in: 0 ..< 10)
+        if number > 6 {
+        cell?.imageView.image = #imageLiteral(resourceName: "picturePreview")
+        } else if number > 3 {
+        cell?.imageView.image = #imageLiteral(resourceName: "documentPreview")
+        } else {
+        cell?.imageView.image = #imageLiteral(resourceName: "videoPreview")
+        }
         return cell!
     }
     
     
+}
+
+enum Modus {
+    case view
+    case edit
 }
