@@ -28,6 +28,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
     var model: VNCoreMLModel?
+    private var isDetecting = true
     private var anchorLabels = [UUID: String]()
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
@@ -36,6 +37,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: IBOutlets
     @IBOutlet private var sceneView: ARSCNView!
+    @IBAction private func detectionButtonTapped(_ sender: UIButton) {
+        if sender.currentTitle == "Automatic Detection: On" {
+            // TODO not working yet
+            //sender.setTitle("Automatic Detection: Off", for: UIControl.State.normal)
+            //isDetecting = false
+        } else {
+            sender.setTitle("Automatic Detection: On", for: UIControl.State.normal)
+            isDetecting = true
+        }
+    }
     
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
@@ -83,7 +94,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
-        //classifyCurrentImage()
+        if isDetecting {
+            classifyCurrentImage()
+        }
     }
     
     func setupBoxes() {
@@ -254,7 +267,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                               pinReferenceY: hitResult.worldTransform.columns.3.y,
                                                                               pinReferenceZ: hitResult.worldTransform.columns.3.z)
                         print("tap coordinate \(hitResult.worldTransform.columns.3)")
-                        DataHandler.incidents.append(Incident (type: nil, description: "New Incident", coordinate: coordinate))
+                        DataHandler.incidents.append(Incident (type: .unknown, description: "New Incident", coordinate: coordinate))
                     }
                     return
                 }
