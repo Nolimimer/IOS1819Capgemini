@@ -224,7 +224,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
             FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
         let documentsDirectory: URL = URL(fileURLWithPath: paths[0])
         
-        guard let data = image.jpegData(compressionQuality: 1) ?? image.jpegData(compressionQuality: 0.5) else {
+        guard let data = image.jpegData(compressionQuality: 0.5) else {
             return false
         }
         guard let directory = try? FileManager.default.url(for: .documentDirectory,
