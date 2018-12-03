@@ -20,10 +20,9 @@
                             <arscnView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zuy-y1-cIR">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
-                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAU-gm-pmP" customClass="List">
-                                <rect key="frame" x="20" y="605" width="39" height="42"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="List"/>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAU-gm-pmP" customClass="List">
+                                <rect key="frame" x="20" y="583" width="64" height="64"/>
+                                <state key="normal" image="list"/>
                                 <connections>
                                     <segue destination="b3y-gK-GfZ" kind="presentation" modalPresentationStyle="overCurrentContext" id="dsP-mo-Jml"/>
                                 </connections>
@@ -422,6 +421,9 @@
             <point key="canvasLocation" x="2941.5999999999999" y="919.95073891625623"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="list" width="64" height="64"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="uUl-YU-Nua"/>
     </inferredMetricsTieBreakers>

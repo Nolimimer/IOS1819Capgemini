@@ -222,6 +222,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.scene.rootNode.addChildNode(sphereNode)
         return sphereNode
     }
+    
     private func configureLighting() {
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true

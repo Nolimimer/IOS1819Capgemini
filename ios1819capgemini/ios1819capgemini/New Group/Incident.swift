@@ -71,6 +71,7 @@ extension Incident: Equatable {
         return lhs.identifier == rhs.identifier
     }
 }
+
 extension Coordinate: Equatable {
     public static func == (lhs: Coordinate, rhs: Coordinate) -> Bool {
         return lhs.description == rhs.description
