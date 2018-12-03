@@ -103,13 +103,132 @@
             </objects>
             <point key="canvasLocation" x="3884" y="919.79010494752629"/>
         </scene>
-        <!--View Controller-->
+        <!--Attachment View Controller-->
         <scene sceneID="UvA-Pw-Rpf">
             <objects>
-                <viewController id="T6S-Pu-SFY" sceneMemberID="viewController"/>
+                <viewController id="T6S-Pu-SFY" customClass="AttachmentViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ahL-qv-P1P">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6xp-nU-bii">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <items>
+                                    <barButtonItem title="Photo" id="jOo-4y-eKy">
+                                        <connections>
+                                            <action selector="takePhoto:" destination="T6S-Pu-SFY" id="gOi-nF-F3u"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ASl-sg-xUy"/>
+                                    <barButtonItem title="Video" id="OtV-tD-XMe">
+                                        <connections>
+                                            <action selector="takeVideo:" destination="T6S-Pu-SFY" id="GYa-X4-SBS"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="iC6-2y-Yzq"/>
+                                    <barButtonItem title="Audio" image="audio" id="pEI-zp-iYa">
+                                        <connections>
+                                            <action selector="recordAudio:" destination="T6S-Pu-SFY" id="jqU-NU-3t4"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="iC4-vi-5Wh">
+                                <rect key="frame" x="0.0" y="151" width="375" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="oaR-Fi-wub">
+                                    <size key="itemSize" width="180" height="145"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ExampleCell" id="Bof-c0-jh3" customClass="ExampleCollectionViewCell" customModule="ios1819capgemini" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="180" height="145"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="180" height="145"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gfe-2x-5Tu">
+                                                    <rect key="frame" x="0.0" y="0.0" width="180" height="145"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <connections>
+                                            <outlet property="imageView" destination="Gfe-2x-5Tu" id="h6O-gG-oEw"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ydR-6x-uDw">
+                                <rect key="frame" x="0.0" y="340" width="375" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="d1R-0A-oon">
+                                    <size key="itemSize" width="180" height="145"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoCollectionViewCell" id="Fwj-sf-OJ6" userLabel="VideoCollection-viewCell" customClass="VideoCollectionViewCell" customModule="ios1819capgemini" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="180" height="145"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="180" height="145"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tda-6W-lfR">
+                                                    <rect key="frame" x="0.0" y="0.0" width="180" height="145"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <connections>
+                                            <outlet property="imageView" destination="Tda-6W-lfR" id="Xqm-jL-UaK"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Photos" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="g9g-EZ-qVd">
+                                <rect key="frame" x="0.0" y="116" width="97" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Videos" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="50w-Yh-heG">
+                                <rect key="frame" x="0.0" y="301" width="97" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="PCk-co-DnF"/>
+                    </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="mainView" destination="ahL-qv-P1P" id="9Wb-fb-RSR"/>
+                        <outlet property="photoButton" destination="jOo-4y-eKy" id="h36-Jn-SVR"/>
+                        <outlet property="photoCollectionView" destination="iC4-vi-5Wh" id="GZx-tE-gWf"/>
+                        <outlet property="toolbar" destination="6xp-nU-bii" id="9B5-1M-Rcz"/>
+                        <outlet property="videoCollectionView" destination="ydR-6x-uDw" id="wvB-Xr-6SG"/>
+                        <outlet property="view" destination="ahL-qv-P1P" id="GS0-Kf-ZQf"/>
+                    </connections>
+                </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AEk-6G-kTM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4225" y="1606"/>
+            <point key="canvasLocation" x="4224.8000000000002" y="1605.2473763118442"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="fvq-Ru-fY4">
@@ -238,6 +357,9 @@
             <point key="canvasLocation" x="2941.5999999999999" y="919.95073891625623"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="audio" width="36" height="36"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="uUl-YU-Nua"/>
     </inferredMetricsTieBreakers>

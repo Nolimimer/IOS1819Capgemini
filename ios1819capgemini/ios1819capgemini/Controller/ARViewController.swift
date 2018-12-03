@@ -52,7 +52,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
         
-        model = try? VNCoreMLModel(for: StickerDetector().model)
+        model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
         // Hook up status view controller callback.
@@ -83,7 +83,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
-        //classifyCurrentImage()
+        classifyCurrentImage()
     }
     
     func setupBoxes() {

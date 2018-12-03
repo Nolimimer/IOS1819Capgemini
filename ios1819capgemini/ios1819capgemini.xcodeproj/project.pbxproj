@@ -17,6 +17,7 @@
 		9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6721A561D200CA8E80 /* CarPartItem.swift */; };
 		9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6821A561D200CA8E80 /* CarPartComponent.swift */; };
 		9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6921A561D200CA8E80 /* Attachment.swift */; };
+		90C7377821B5368D008AD568 /* stickerTest.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377721B5368D008AD568 /* stickerTest.mlmodel */; };
 		90CB845B21AD9E1B00CA1C09 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845721AD9E1B00CA1C09 /* BoundingBox.swift */; };
 		90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845821AD9E1B00CA1C09 /* NonMaxSuppression.swift */; };
 		90CB845D21AD9E1B00CA1C09 /* SSDPostprocessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845921AD9E1B00CA1C09 /* SSDPostprocessor.swift */; };
@@ -33,6 +34,8 @@
 		90CB847221ADAB3700CA1C09 /* Anchors8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB847121ADAB3700CA1C09 /* Anchors8.swift */; };
 		90CB847421ADAB3F00CA1C09 /* Anchors9.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB847321ADAB3F00CA1C09 /* Anchors9.swift */; };
 		90CB847621ADAB8B00CA1C09 /* Anchors10.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB847521ADAB8B00CA1C09 /* Anchors10.swift */; };
+		90D3451321B3FF29009EF79E /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D3451221B3FF29009EF79E /* AttachmentViewController.swift */; };
+		90D3453321B44C34009EF79E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D3453021B44C34009EF79E /* Video.swift */; };
 		A66447E82192121300B2D32B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E72192121300B2D32B /* AppDelegate.swift */; };
 		A66447EA2192121300B2D32B /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E92192121300B2D32B /* ARViewController.swift */; };
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
@@ -55,6 +58,7 @@
 		9082AF6721A561D200CA8E80 /* CarPartItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartItem.swift; sourceTree = "<group>"; };
 		9082AF6821A561D200CA8E80 /* CarPartComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartComponent.swift; sourceTree = "<group>"; };
 		9082AF6921A561D200CA8E80 /* Attachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
+		90C7377721B5368D008AD568 /* stickerTest.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = stickerTest.mlmodel; path = ../stickerTest.mlmodel; sourceTree = "<group>"; };
 		90CB845721AD9E1B00CA1C09 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
 		90CB845821AD9E1B00CA1C09 /* NonMaxSuppression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonMaxSuppression.swift; sourceTree = "<group>"; };
 		90CB845921AD9E1B00CA1C09 /* SSDPostprocessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSDPostprocessor.swift; sourceTree = "<group>"; };
@@ -71,6 +75,8 @@
 		90CB847121ADAB3700CA1C09 /* Anchors8.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors8.swift; sourceTree = "<group>"; };
 		90CB847321ADAB3F00CA1C09 /* Anchors9.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors9.swift; sourceTree = "<group>"; };
 		90CB847521ADAB8B00CA1C09 /* Anchors10.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors10.swift; sourceTree = "<group>"; };
+		90D3451221B3FF29009EF79E /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
+		90D3453021B44C34009EF79E /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A66447E42192121300B2D32B /* ios1819capgemini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ios1819capgemini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A66447E72192121300B2D32B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A66447E92192121300B2D32B /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +108,7 @@
 				A66447E92192121300B2D32B /* ARViewController.swift */,
 				0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */,
 				0D9DBF3121A33D39004D445B /* DetailViewController.swift */,
+				90D3451221B3FF29009EF79E /* AttachmentViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -142,6 +149,7 @@
 		90CB845621AD9D4100CA1C09 /* Scratch Detection */ = {
 			isa = PBXGroup;
 			children = (
+				90C7377721B5368D008AD568 /* stickerTest.mlmodel */,
 				90CB847721ADAB9500CA1C09 /* Anchors */,
 				90CB845F21AD9F4100CA1C09 /* StickerDetector.mlmodel */,
 				90CB845721AD9E1B00CA1C09 /* BoundingBox.swift */,
@@ -170,6 +178,14 @@
 			path = Anchors;
 			sourceTree = "<group>";
 		};
+		90D3452E21B44C03009EF79E /* Attachment */ = {
+			isa = PBXGroup;
+			children = (
+				90D3453021B44C34009EF79E /* Video.swift */,
+			);
+			path = Attachment;
+			sourceTree = "<group>";
+		};
 		A66447DB2192121200B2D32B = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +208,7 @@
 		A66447E62192121300B2D32B /* ios1819capgemini */ = {
 			isa = PBXGroup;
 			children = (
+				90D3452E21B44C03009EF79E /* Attachment */,
 				90CB845621AD9D4100CA1C09 /* Scratch Detection */,
 				9082AF6321A5618100CA8E80 /* Model */,
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
@@ -294,6 +311,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CUU/CUU.framework",
+				"${BUILT_PRODUCTS_DIR}/INSPhotoGallery/INSPhotoGallery.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Prototype/Prototype.framework",
 				"${BUILT_PRODUCTS_DIR}/Prototyper/Prototyper.framework",
@@ -303,6 +321,7 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CUU.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/INSPhotoGallery.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Prototype.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Prototyper.framework",
@@ -377,12 +396,15 @@
 				90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */,
 				90CB846421ADAAF700CA1C09 /* Anchors1.swift in Sources */,
 				90CB846221ADA08E00CA1C09 /* Utilities.swift in Sources */,
+				90D3453321B44C34009EF79E /* Video.swift in Sources */,
+				90C7377821B5368D008AD568 /* stickerTest.mlmodel in Sources */,
 				9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */,
 				90CB846C21ADAB2100CA1C09 /* Anchors5.swift in Sources */,
 				A66447E82192121300B2D32B /* AppDelegate.swift in Sources */,
 				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,
 				9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */,
 				9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */,
+				90D3451321B3FF29009EF79E /* AttachmentViewController.swift in Sources */,
 				90CB847021ADAB3100CA1C09 /* Anchors7.swift in Sources */,
 				0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */,
 			);
