@@ -13,10 +13,7 @@ public class Video {
         self.thumbnailImage = thumbnailImage
     }
     
-  
-    
-    
-    @objc open func loadThumbnailImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
+    @objc open func loadThumbnailImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> Void) {
         if let thumbnailImage = thumbnailImage {
             completion(thumbnailImage, nil)
             return
@@ -24,11 +21,11 @@ public class Video {
         loadThumbnailImageWithURL(thumbnailURL, completion: completion)
     }
     
-    open func loadThumbnailImageWithURL(_ url: URL?, completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
+    open func loadThumbnailImageWithURL(_ url: URL?, completion: @escaping (_ image: UIImage?, _ error: Error?) -> Void) {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
         if let imageURL = url {
-            session.dataTask(with: imageURL, completionHandler: { (response, data, error) in
+            session.dataTask(with: imageURL, completionHandler: { response, data, error in
                 DispatchQueue.main.async(execute: { () -> Void in
                     if error != nil {
                         completion(nil, error)
@@ -39,10 +36,10 @@ public class Video {
                     }
                     session.finishTasksAndInvalidate()
                 })
-            }).resume()
+            })
+                .resume()
         } else {
             completion(nil, NSError(domain: "INSPhotoDomain", code: -2, userInfo: [ NSLocalizedDescriptionKey: "Image URL not found."]))
         }
     }
 }
-

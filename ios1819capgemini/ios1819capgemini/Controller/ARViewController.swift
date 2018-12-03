@@ -190,7 +190,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return 1.0 / (1.0 + exp(-val))
     }
     
-    private func clipToObject (pinReferenceX: Float, pinReferenceY: Float, pinReferenceZ: Float) -> Coordinate{
+    private func clipToObject (pinReferenceX: Float, pinReferenceY: Float, pinReferenceZ: Float) -> Coordinate {
         return Coordinate(pointX: pinReferenceX - objectAnchorAbsolute.x,
                           pointY: pinReferenceY - objectAnchorAbsolute.y,
                           pointZ: pinReferenceZ - objectAnchorAbsolute.z
@@ -251,8 +251,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                  yCoordinate: hitResult.worldTransform.columns.3.y,
                                  zCoordinate: hitResult.worldTransform.columns.3.z)
                         let coordinate = clipToObject(pinReferenceX: hitResult.worldTransform.columns.3.x,
-                                                                              pinReferenceY: hitResult.worldTransform.columns.3.y,
-                                                                              pinReferenceZ: hitResult.worldTransform.columns.3.z)
+                                                      pinReferenceY: hitResult.worldTransform.columns.3.y,
+                                                      pinReferenceZ: hitResult.worldTransform.columns.3.z)
                         print("tap coordinate \(hitResult.worldTransform.columns.3)")
                         DataHandler.incidents.append(Incident (type: nil, description: "New Incident", coordinate: coordinate))
                     }

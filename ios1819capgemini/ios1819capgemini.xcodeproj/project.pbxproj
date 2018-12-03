@@ -18,6 +18,10 @@
 		9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6821A561D200CA8E80 /* CarPartComponent.swift */; };
 		9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6921A561D200CA8E80 /* Attachment.swift */; };
 		90C7377821B5368D008AD568 /* stickerTest.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377721B5368D008AD568 /* stickerTest.mlmodel */; };
+		90C7377A21B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377921B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift */; };
+		90C7377C21B56BF6008AD568 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377B21B56BF6008AD568 /* PhotoCollectionViewCell.swift */; };
+		90C7377E21B56C15008AD568 /* VideoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377D21B56C15008AD568 /* VideoCollectionViewCell.swift */; };
+		90C7378021B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377F21B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift */; };
 		90CB845B21AD9E1B00CA1C09 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845721AD9E1B00CA1C09 /* BoundingBox.swift */; };
 		90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845821AD9E1B00CA1C09 /* NonMaxSuppression.swift */; };
 		90CB845D21AD9E1B00CA1C09 /* SSDPostprocessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB845921AD9E1B00CA1C09 /* SSDPostprocessor.swift */; };
@@ -59,6 +63,10 @@
 		9082AF6821A561D200CA8E80 /* CarPartComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartComponent.swift; sourceTree = "<group>"; };
 		9082AF6921A561D200CA8E80 /* Attachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		90C7377721B5368D008AD568 /* stickerTest.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = stickerTest.mlmodel; path = ../stickerTest.mlmodel; sourceTree = "<group>"; };
+		90C7377921B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentViewController+UIImagePickerControllerDelegate.swift"; sourceTree = "<group>"; };
+		90C7377B21B56BF6008AD568 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		90C7377D21B56C15008AD568 /* VideoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCollectionViewCell.swift; sourceTree = "<group>"; };
+		90C7377F21B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentViewController+UICollectionViewDataSource.swift"; sourceTree = "<group>"; };
 		90CB845721AD9E1B00CA1C09 /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
 		90CB845821AD9E1B00CA1C09 /* NonMaxSuppression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonMaxSuppression.swift; sourceTree = "<group>"; };
 		90CB845921AD9E1B00CA1C09 /* SSDPostprocessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSDPostprocessor.swift; sourceTree = "<group>"; };
@@ -109,6 +117,8 @@
 				0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */,
 				0D9DBF3121A33D39004D445B /* DetailViewController.swift */,
 				90D3451221B3FF29009EF79E /* AttachmentViewController.swift */,
+				90C7377921B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift */,
+				90C7377F21B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -118,6 +128,8 @@
 			children = (
 				A66447EB2192121300B2D32B /* Main.storyboard */,
 				A66447F02192121300B2D32B /* LaunchScreen.storyboard */,
+				90C7377B21B56BF6008AD568 /* PhotoCollectionViewCell.swift */,
+				90C7377D21B56C15008AD568 /* VideoCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -377,6 +389,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90C7377E21B56C15008AD568 /* VideoCollectionViewCell.swift in Sources */,
 				90CB846E21ADAB2800CA1C09 /* Anchors6.swift in Sources */,
 				90CB847621ADAB8B00CA1C09 /* Anchors10.swift in Sources */,
 				9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */,
@@ -386,13 +399,16 @@
 				90CB845E21AD9E1B00CA1C09 /* Anchors.swift in Sources */,
 				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
 				90CB846621ADAB0500CA1C09 /* Anchors2.swift in Sources */,
+				90C7377C21B56BF6008AD568 /* PhotoCollectionViewCell.swift in Sources */,
 				90CB846021AD9F4100CA1C09 /* StickerDetector.mlmodel in Sources */,
 				90CB846A21ADAB1A00CA1C09 /* Anchors4.swift in Sources */,
 				90CB845B21AD9E1B00CA1C09 /* BoundingBox.swift in Sources */,
 				9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */,
 				90CB845D21AD9E1B00CA1C09 /* SSDPostprocessor.swift in Sources */,
 				90CB847221ADAB3700CA1C09 /* Anchors8.swift in Sources */,
+				90C7378021B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift in Sources */,
 				9082AF6B21A561D200CA8E80 /* Car.swift in Sources */,
+				90C7377A21B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift in Sources */,
 				90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */,
 				90CB846421ADAAF700CA1C09 /* Anchors1.swift in Sources */,
 				90CB846221ADA08E00CA1C09 /* Utilities.swift in Sources */,

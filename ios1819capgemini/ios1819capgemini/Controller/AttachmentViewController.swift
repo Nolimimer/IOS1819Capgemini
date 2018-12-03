@@ -20,33 +20,32 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     var recordButton: UIButton!
     var audioRecorder: AVAudioRecorder!
     
-    @IBOutlet weak var videoCollectionView: UICollectionView!
-    @IBOutlet weak var photoCollectionView: UICollectionView!
-    @IBOutlet weak var photoButton: UIBarButtonItem!
-    @IBOutlet weak var toolbar: UIToolbar!
-    @IBOutlet var mainView: UIView!
+    @IBOutlet private weak var videoCollectionView: UICollectionView!
+    @IBOutlet private weak var photoCollectionView: UICollectionView!
+    @IBOutlet private weak var photoButton: UIBarButtonItem!
+    @IBOutlet private weak var toolbar: UIToolbar!
+    @IBOutlet private var mainView: UIView!
     
     
     var photos: [INSPhotoViewable] = []
     var videos: [Video] = []
     
+    
+    // MARK: -override methods
     override func viewDidLoad() {
         super.viewDidLoad()
         photos = computePhotos()
-
         self.videos = computeVideos()
-        let videos = self.videos
         for photo in photos {
             if let photo = photo as? INSPhoto {
                 photo.attributedTitle = NSAttributedString(string: "Example caption text\ncaption text",
-                    attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
 
             }
         }
         videoCollectionView.delegate = self
         videoCollectionView.dataSource = self
         videoCollectionView.reloadData()
-
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
         photoCollectionView.reloadData()
@@ -66,27 +65,55 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         super.viewWillAppear(animated)
         photos = computePhotos()
         videos = computeVideos()
-      
         videoCollectionView.reloadData()
-
         photoCollectionView.reloadData()
+        
         var items = toolbar.items
         items?[0] = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.camera, target: self, action: #selector(takePhoto(_:)))
-        self.modalPresentationStyle = .overCurrentContext
         toolbar.setItems(items, animated: false)
+
+        self.modalPresentationStyle = .overCurrentContext
         toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .bottom, barMetrics: .default)
     }
     
-    
-    
-    
-    @IBAction func loadPhoto(_ sender: Any) {
-        guard let ass = getSavedImage(named: "fileName.png") else {
-            return
-        }
+    // MARK: -IBActions
+    @IBAction private func takeVideo(_ sender: Any) {
+        imagePicker =  UIImagePickerController()
+        imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        imagePicker.sourceType = .camera
+        imagePicker.mediaTypes = [kUTTypeMovie as String]
+        present(imagePicker, animated: true, completion: nil)
     }
     
-    @IBAction func takePhoto(_ sender: Any) {
+    @IBAction func deleteAll(_ sender: Any) {
+        if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
+            
+            let fileManager = FileManager.default
+            do {
+                let filePaths = try fileManager.contentsOfDirectory(atPath: dir.path)
+                for filePath in filePaths {
+                    let fullPath = URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(filePath).path
+
+                    if fileManager.fileExists(atPath: fullPath) {
+                        do {
+                            try fileManager.removeItem(atPath: fullPath)
+                        } catch {
+                            print ("Error deleting file")
+                        } }  else {
+                        print("File does not exist")
+                    }
+                }
+            } catch {
+                    print("Error deleting file")
+            }
+        }
+        photos = []
+        videos = []
+        photoCollectionView.reloadData()
+        videoCollectionView.reloadData()
+    }
+    
+    @IBAction private func takePhoto(_ sender: Any) {
         imagePicker =  UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
@@ -94,13 +121,13 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         
     }
     
-    @IBAction func recordAudio(_ sender: Any) {
+    @IBAction private func recordAudio(_ sender: Any) {
         let recordingSession = AVAudioSession.sharedInstance()
         
         do {
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
-            recordingSession.requestRecordPermission() { [unowned self] allowed in
+            recordingSession.requestRecordPermission { [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
                         self.loadRecordingUI()
@@ -114,6 +141,8 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         }
     }
     
+    
+    // MARK: -Methods
     func loadRecordingUI() {
         recordButton = UIButton(frame: CGRect(x: 64, y: 64, width: 128, height: 64))
         recordButton.setTitle("Tap to Record", for: .normal)
@@ -134,14 +163,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         }
     }
     
-    @objc func recordTapped() {
-        if audioRecorder == nil {
-          //  startRecording()
-        } else {
-            finishRecording(success: true)
-        }
-    }
-    
+   
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if !flag {
             finishRecording(success: false)
@@ -153,13 +175,13 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
             
             let fileManager = FileManager.default
-            let arrImages : NSMutableArray = []
+            let arrImages: NSMutableArray = []
             do {
                 let filePaths = try fileManager.contentsOfDirectory(atPath: dir.path)
                 for filePath in filePaths {
                     let urlString = URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(filePath).path
-                    if urlString.hasSuffix("jpg"){
-                        try arrImages.add(urlString)
+                    if urlString.hasSuffix("jpg") {
+                        arrImages.add(urlString)
                     }
                     
                 }
@@ -182,15 +204,14 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
             
             let fileManager = FileManager.default
-            let arrImages : NSMutableArray = []
+            let arrImages: NSMutableArray = []
             do {
                 let filePaths = try fileManager.contentsOfDirectory(atPath: dir.path)
                 for filePath in filePaths {
                     let urlString = URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(filePath).path
-                    if urlString.hasSuffix("mov"){
-                        try arrImages.add(urlString)
+                    if urlString.hasSuffix("mov") {
+                        arrImages.add(urlString)
                     }
-
                 }
             } catch {
                 print("Could not get folder: \(error)")
@@ -208,66 +229,6 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         return []
     }
     
-    @IBAction func takeVideo(_ sender: Any) {
-        imagePicker =  UIImagePickerController()
-        imagePicker.delegate = self as? UIImagePickerControllerDelegate & UINavigationControllerDelegate
-        imagePicker.sourceType = .camera
-        imagePicker.mediaTypes = [kUTTypeMovie as String]
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    
-    private func saveImage(image: UIImage) -> Bool {
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
-        
-        let paths = NSSearchPathForDirectoriesInDomains(
-            FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-        let documentsDirectory: URL = URL(fileURLWithPath: paths[0])
-        
-        guard let data = image.jpegData(compressionQuality: 0.5) else {
-            return false
-        }
-        guard let directory = try? FileManager.default.url(for: .documentDirectory,
-                                                           in: .userDomainMask,
-                                                           appropriateFor: nil,
-                                                           create: false) as NSURL else {
-            return false
-        }
-        do {
-            let defaults = UserDefaults.standard
-            try data.write(to: documentsDirectory.appendingPathComponent("cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"), options:[])
-            defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedPhotoName")
-            return true
-        } catch {
-            print(error.localizedDescription)
-            return false
-        }
-    }
-    
-    @objc func videoSaved(_ video: String, didFinishSavingWithError error: NSError!, context: UnsafeMutableRawPointer){
-        if let theError = error {
-            print("error saving the video = \(theError)")
-        } else {
-            DispatchQueue.main.async(execute: { () -> Void in
-            })
-        }
-    }
-    
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
-            // we got back an error!
-            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            present(ac, animated: true)
-        } else {
-            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            present(ac, animated: true)
-        }
-    }
-    
-    
-    
     func getSavedImage(named: String) -> UIImage? {
         if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
             return UIImage(contentsOfFile: URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(named).path)
@@ -276,14 +237,13 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     }
     
     func createThumbnailOfVideoFromRemoteUrl(url: String) -> UIImage? {
-       
+        
         let asset = AVURLAsset(url: URL(fileURLWithPath: url), options: nil)
         let imgGenerator = AVAssetImageGenerator(asset: asset)
         
         
         //Can set this to improve performance if target size is known before hand
         //assetImgGenerate.maximumSize = CGSize(width,height)
-        var time = CMTimeMakeWithSeconds(1.0, preferredTimescale: 600)
         do {
             imgGenerator.appliesPreferredTrackTransform = true
             let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(value: 0, timescale: 1), actualTime: nil)
@@ -295,16 +255,44 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         }
     }
     
+    // MARK: -OBJC Functions
+    @objc func recordTapped() {
+        if audioRecorder == nil {
+            //  startRecording()
+        } else {
+            finishRecording(success: true)
+        }
+    }
+    
+    
+    @objc func videoSaved(_ video: String, didFinishSavingWithError error: NSError!, context: UnsafeMutableRawPointer) {
+        if let theError = error {
+            print("error saving the video = \(theError)")
+        } else {
+            DispatchQueue.main.async(execute: { () -> Void in })
+        }
+    }
+    
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            let alertController = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alertController, animated: true)
+        } else {
+            let alertController = UIAlertController(title: "Saved!",
+                                                    message: "Your altered image has been saved to your photos.",
+                                                    preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alertController, animated: true)
+        }
+    }
 }
 
-
-
 extension AttachmentViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //swiftlint:disable
-        if(collectionView == self.videoCollectionView) {
+        if collectionView == self.videoCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCollectionViewCell", for: indexPath) as? VideoCollectionViewCell
             cell?.populateWithVideo(videos[(indexPath as NSIndexPath).row])
             return cell ?? UICollectionViewCell()
@@ -314,10 +302,10 @@ extension AttachmentViewController: UICollectionViewDataSource, UICollectionView
             
             return cell ?? UICollectionViewCell()
         }
-      
+        
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if(collectionView == self.videoCollectionView) {
+        if collectionView == self.videoCollectionView {
             return videos.count
         }
         return photos.count
@@ -325,7 +313,7 @@ extension AttachmentViewController: UICollectionViewDataSource, UICollectionView
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if(collectionView == self.videoCollectionView) {
+        if collectionView == self.videoCollectionView {
             let item = videos[(indexPath as NSIndexPath).item]
             guard let path = item.videoPath else {
                 return
@@ -352,74 +340,12 @@ extension AttachmentViewController: UICollectionViewDataSource, UICollectionView
         present(galleryPreview, animated: true, completion: nil)
     }
     
-
-}
-
-extension AttachmentViewController: UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
-        imagePicker.dismiss(animated: true, completion: nil)
-        if let selectedImage = info[.originalImage] as? UIImage {
-            if(saveImage(image: selectedImage)) {
-                print("Saved image")
-            }
-        }
-        
-        if let selectedVideo:URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
-            // Save video to the main photo album
-            let selectorToCall = #selector(AttachmentViewController.videoSaved(_:didFinishSavingWithError:context:))
-            
-            // 2
-            UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
-            // Save the video to the app directory
-            let videoData = try? Data(contentsOf: selectedVideo)
-            let paths = NSSearchPathForDirectoriesInDomains(
-                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
-            let documentsDirectory: URL = URL(fileURLWithPath: paths[0])
-            let defaults = UserDefaults.standard
-            let dataPath = documentsDirectory.appendingPathComponent("cARgeminiVideoAsset\(defaults.integer(forKey: "AttachedVideoName")).mov")
-             defaults.set(defaults.integer(forKey: "AttachedVideoName") + 1, forKey: "AttachedVideoName")
-            do {
-                try videoData?.write(to: dataPath, options: [])
-            }
-            catch is Error {
-                print(Error.self)
-            }
-        }
-    }
     
 }
 
-class ExampleCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var imageView: UIImageView!
-    
-    func populateWithPhoto(_ photo: INSPhotoViewable) {
-        photo.loadThumbnailImageWithCompletionHandler { [weak photo] (image, error) in
-            if let image = image {
-                if let photo = photo as? INSPhoto {
-                    photo.thumbnailImage = image
-                }
-                self.imageView.image = image
-            }
-        }
-    }
-}
 
-class VideoCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var imageView: UIImageView!
-    
-    func populateWithVideo(_ video: Video) {
-        video.loadThumbnailImageWithCompletionHandler { [weak video] (image, error) in
-            if let image = image {
-                if let video = video as? Video {
-                    video.thumbnailImage = image
-                }
-                let frontimg = UIImage(named: "play") // The image in the foreground
-                let frontimgview = UIImageView(image: frontimg) // Create the view holding the image
-                self.imageView.image = image
-                self.imageView.addSubview(frontimgview)
 
-            }
-        }
-    }
-}
+
+
+
 

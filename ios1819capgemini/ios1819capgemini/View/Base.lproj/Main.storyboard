@@ -128,7 +128,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="iC6-2y-Yzq"/>
-                                    <barButtonItem title="Audio" image="audio" id="pEI-zp-iYa">
+                                    <barButtonItem title="Audio" id="pEI-zp-iYa">
                                         <connections>
                                             <action selector="recordAudio:" destination="T6S-Pu-SFY" id="jqU-NU-3t4"/>
                                         </connections>
@@ -211,6 +211,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNp-di-5ls">
+                                <rect key="frame" x="154" y="593" width="66" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Delete All"/>
+                                <connections>
+                                    <action selector="deleteAll:" destination="T6S-Pu-SFY" eventType="touchUpInside" id="NlP-zG-smX"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="PCk-co-DnF"/>
@@ -357,9 +365,6 @@
             <point key="canvasLocation" x="2941.5999999999999" y="919.95073891625623"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="audio" width="36" height="36"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="uUl-YU-Nua"/>
     </inferredMetricsTieBreakers>
