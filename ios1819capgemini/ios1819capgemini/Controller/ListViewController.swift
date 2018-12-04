@@ -14,7 +14,7 @@ class ListViewController: UIViewController {
 
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
-
+    
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navigationController = segue.destination as? UINavigationController {

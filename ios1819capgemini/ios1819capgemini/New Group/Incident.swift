@@ -10,64 +10,59 @@
 import Foundation
 
 // MARK: - Incident
-public struct Incident: Codable {
+public class Incident: Codable {
     
-    private(set) var identifier: Int
-    private(set) var type: IncidentType?
+    let identifier: Int
+    let createDate: Date
+
+    private(set) var modifiedDate: Date
+    private(set) var type: IncidentType
     private(set) var description: String
-    private(set) var date: Date
-    private var attachments: [Attachment]?
+    private(set) var status: Status
+    private(set) var attachments = [Attachment]()
+    
     private var coordinate: Coordinate?
+    
     // MARK: Initializers
-    init(type: IncidentType?, description: String, coordinate: Coordinate) {
+    init(type: IncidentType, description: String) {
+        createDate = Date()
+        modifiedDate = createDate
+        identifier = DataHandler.nextIncidentID
+        status = .open
+        
         self.type = type
         self.description = description
-        date = Date()
-        identifier = DataHandler.nextIncidentID
-        attachments = [Attachment]()
-        self.coordinate = Coordinate(pointX: 0, pointY: 0, pointZ: 0)
     }
     
-    init(type: IncidentType?, description: String) {
-        self.type = type
-        self.description = description
-        date = Date()
-        identifier = DataHandler.nextIncidentID
-        attachments = [Attachment]()
-    }
-    init(type: IncidentType?, description: String, coordinate: Coordinate, identifier: Int) {
-        self.type = type
-        self.description = description
-        date = Date()
-        self.identifier = identifier
-        attachments = [Attachment]()
+    convenience init(type: IncidentType, description: String, coordinate: Coordinate) {
+        self.init(type: type, description: description)
         self.coordinate = Coordinate(pointX: 0, pointY: 0, pointZ: 0)
     }
     
     // MARK: Instance Methods
-    public func edit() {
-        
-    }
-    
-    public func delete() {
-        
-    }
-    
-    public func resolve() {
-        
+    func edit(status: Status, description: String, modifiedDate: Date) {
+        self.status = status
+        self.description = description
+        self.modifiedDate = modifiedDate
     }
     
     // MARK: Private Instance Methods
     private func suggest() -> IncidentType? {
         return nil
     }
-    
 }
 
  // MARK: Constants
 enum IncidentType: String, Codable {
     case scratch = "Scratch"
     case dent = "Dent"
+    case unknown = "Unknown Incident"
+}
+
+enum Status: String, Codable {
+    case open
+    case progress
+    case resolved
 }
 
 // MARK: - Extension: Equatable
@@ -76,6 +71,7 @@ extension Incident: Equatable {
         return lhs.identifier == rhs.identifier
     }
 }
+
 extension Coordinate: Equatable {
     public static func == (lhs: Coordinate, rhs: Coordinate) -> Bool {
         return lhs.description == rhs.description
