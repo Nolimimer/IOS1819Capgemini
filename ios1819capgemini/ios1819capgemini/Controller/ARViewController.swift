@@ -213,29 +213,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return 1.0 / (1.0 + exp(-val))
     }
     
-<<<<<<< HEAD
-=======
-    private func clipToObject (pinReferenceX: Float, pinReferenceY: Float, pinReferenceZ: Float) -> Coordinate {
-        return Coordinate(pointX: pinReferenceX - objectAnchorAbsolute.x,
-                          pointY: pinReferenceY - objectAnchorAbsolute.y,
-                          pointZ: pinReferenceZ - objectAnchorAbsolute.z
-        )
-    }
-    private func loadPin (toPlace: Coordinate, objectAnchor: ARObjectAnchor) -> SCNNode {
-        let sphere = SCNSphere(radius: 0.01)
-        let materialSphere = SCNMaterial()
-        materialSphere.diffuse.contents = UIImage(named: "three_notes")
-        sphere.materials = [materialSphere]
-        let sphereNode = SCNNode(geometry: sphere)
-        sphereNode.name = "sphere"
-        sphereNode.position = SCNVector3(toPlace.pointX + objectAnchor.referenceObject.center.x,
-                                         toPlace.pointY + objectAnchor.referenceObject.center.y,
-                                         toPlace.pointZ + objectAnchor.referenceObject.center.z)
-        sceneView.scene.rootNode.addChildNode(sphereNode)
-        return sphereNode
-    }
-    
->>>>>>> 8071a55e91c1e47045e0538b48a7615adf92cd5f
     private func configureLighting() {
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
