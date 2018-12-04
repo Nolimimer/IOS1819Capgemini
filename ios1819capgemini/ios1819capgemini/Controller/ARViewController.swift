@@ -18,7 +18,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: Stored Instance Properties
     //AR
     var detectedObjectNode: SCNNode?
-    var pinCoordinates = [SCNVector3(x: -0.028375685, y: 0.095250055, z: 0.04986086)]
     //End AR
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
@@ -98,6 +97,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if isDetecting {
             classifyCurrentImage()
         }
+
     }
     
     func setupBoxes() {
@@ -220,24 +220,35 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sphereNode.position = vectorCoordinate
         
         if let detectedObjectNode = detectedObjectNode {
-            
             detectedObjectNode.addChildNode(sphereNode)
-            print("detectedObject not nil")
         }
+    }
+    
+    private func addInfoPlane (node: SCNNode, objectAnchor: ARObjectAnchor) {
+        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
+                             height: CGFloat(objectAnchor.referenceObject.extent.y * 0.5))
+        plane.cornerRadius = plane.width / 8
+        let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
+        plane.firstMaterial?.diffuse.contents = spriteKitScene
+        plane.firstMaterial?.isDoubleSided = true
+        plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.position = SCNVector3Make(objectAnchor.referenceObject.center.x,
+                                            objectAnchor.referenceObject.center.y + objectAnchor.referenceObject.extent.y,
+                                            objectAnchor.referenceObject.center.z)
         
+        planeNode.name = "plane node"
+        
+        node.addChildNode(planeNode)
     }
     
     @objc func tapped(recognizer: UIGestureRecognizer) {
-        print("tapped called")
         if recognizer.state == .ended {
-            print("tap ended")
             let location: CGPoint = recognizer.location(in: sceneView)
             let hits = self.sceneView.hitTest(location, options: nil)
             if !hits.isEmpty {
-                print("node detected.")
                 let tappedNode = hits.first?.node
                 guard let name = tappedNode?.name else {
-                    print("no name node")
                     // Get exact position where touch happened on screen of iPhone (2D coordinate)
                     let touchPosition = recognizer.location(in: sceneView)
                     
@@ -261,21 +272,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     return
                 }
                 self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-                print(name)
             }
         }
     }
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        print("renderer() aufgerufen")
-        
         let node = SCNNode()
         
         if let objectAnchor = anchor as? ARObjectAnchor {
             
             detectedObjectNode = node
             for incident in DataHandler.incidents {
+                print("is in loop")
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
+            addInfoPlane(node: node, objectAnchor: objectAnchor)
             
             let alert = UIAlertController(title: "Object detected", message: "\(objectAnchor.referenceObject.name ?? "no name")", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -295,8 +305,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 return
             }
             detailVC.incident = incident
-            print("delegate was set")
-
         default :
             return
         }
