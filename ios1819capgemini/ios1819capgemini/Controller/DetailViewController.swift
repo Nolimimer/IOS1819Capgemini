@@ -8,6 +8,7 @@
 
 // MARK: Imports
 import UIKit
+import SceneKit
 
 // MARK: - DetailViewController
 class DetailViewController: UIViewController {
@@ -23,7 +24,7 @@ class DetailViewController: UIViewController {
     // Variables / Mock Variable
     var incident = Incident(type: IncidentType.dent,
                             description: "This scratch is a critical one, my suggestion is to completly remove the right door.",
-                            coordinate: Coordinate (pointX: 0, pointY: 0, pointZ: 0))
+                            coordinate: Coordinate (vector: SCNVector3(0, 0, 0)))
     
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!

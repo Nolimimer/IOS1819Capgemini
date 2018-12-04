@@ -16,9 +16,7 @@ import Vision
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: Stored Instance Properties
-    //for AR
-    var objectAnchorAbsolute = simd_float4(0, 0, 0, 0)
-    var coordinatesPin = [Coordinate]()
+    var detectedObjectNode: SCNNode?
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?
@@ -108,6 +106,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if isDetecting {
             classifyCurrentImage()
         }
+
     }
     
     func setupBoxes() {
@@ -181,7 +180,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         for (index, prediction) in predictions.enumerated() {
             if let classNames = self.ssdPostProcessor.classNames {
-                print("Class: \(classNames[prediction.detectedClass])")
+                //print("Class: \(classNames[prediction.detectedClass])")
                 
                 let textColor: UIColor
                 let textLabel = String(format: "%.2f - %@", self.sigmoid(prediction.score), classNames[prediction.detectedClass])
@@ -214,53 +213,51 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return 1.0 / (1.0 + exp(-val))
     }
     
-    private func clipToObject (pinReferenceX: Float, pinReferenceY: Float, pinReferenceZ: Float) -> Coordinate {
-        return Coordinate(pointX: pinReferenceX - objectAnchorAbsolute.x,
-                          pointY: pinReferenceY - objectAnchorAbsolute.y,
-                          pointZ: pinReferenceZ - objectAnchorAbsolute.z
-        )
-    }
-    private func loadPin (toPlace: Coordinate, objectAnchor: ARObjectAnchor) -> SCNNode {
-        let sphere = SCNSphere(radius: 0.01)
-        let materialSphere = SCNMaterial()
-        materialSphere.diffuse.contents = UIImage(named: "three_notes")
-        sphere.materials = [materialSphere]
-        let sphereNode = SCNNode(geometry: sphere)
-        sphereNode.name = "sphere"
-        sphereNode.position = SCNVector3(toPlace.pointX + objectAnchor.referenceObject.center.x,
-                                         toPlace.pointY + objectAnchor.referenceObject.center.y,
-                                         toPlace.pointZ + objectAnchor.referenceObject.center.z)
-        sceneView.scene.rootNode.addChildNode(sphereNode)
-        return sphereNode
-    }
-    
     private func configureLighting() {
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
     }
     
-    private func add3DPin (xCoordinate: Float, yCoordinate: Float, zCoordinate: Float) {
-        let sphere = SCNSphere(radius: 0.01)
+    private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
+        
+        let sphere = SCNSphere(radius: 0.03)
         let materialSphere = SCNMaterial()
         materialSphere.diffuse.contents = UIImage(named: "three_notes")
         sphere.materials = [materialSphere]
         let sphereNode = SCNNode(geometry: sphere)
-        sphereNode.name = "sphere"
-        sphereNode.position = SCNVector3(xCoordinate, yCoordinate, zCoordinate)
-        sceneView.scene.rootNode.addChildNode(sphereNode)
+        sphereNode.name = identifier
+        sphereNode.position = vectorCoordinate
+        
+        if let detectedObjectNode = detectedObjectNode {
+            detectedObjectNode.addChildNode(sphereNode)
+        }
+    }
+    
+    private func addInfoPlane (node: SCNNode, objectAnchor: ARObjectAnchor) {
+        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
+                             height: CGFloat(objectAnchor.referenceObject.extent.y * 0.5))
+        plane.cornerRadius = plane.width / 8
+        let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
+        plane.firstMaterial?.diffuse.contents = spriteKitScene
+        plane.firstMaterial?.isDoubleSided = true
+        plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.position = SCNVector3Make(objectAnchor.referenceObject.center.x,
+                                            objectAnchor.referenceObject.center.y + objectAnchor.referenceObject.extent.y,
+                                            objectAnchor.referenceObject.center.z)
+        
+        planeNode.name = "plane node"
+        
+        node.addChildNode(planeNode)
     }
     
     @objc func tapped(recognizer: UIGestureRecognizer) {
-        print("tapped called")
         if recognizer.state == .ended {
-            print("tap ended")
             let location: CGPoint = recognizer.location(in: sceneView)
             let hits = self.sceneView.hitTest(location, options: nil)
             if !hits.isEmpty {
-                print("node detected.")
                 let tappedNode = hits.first?.node
                 guard let name = tappedNode?.name else {
-                    print("no name node")
                     // Get exact position where touch happened on screen of iPhone (2D coordinate)
                     let touchPosition = recognizer.location(in: sceneView)
                     
@@ -268,57 +265,75 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
                     
                     if !hitTestResult.isEmpty {
-                        print("hit result not empty")
                         guard let hitResult = hitTestResult.first else {
                             return
                         }
-                        add3DPin(xCoordinate: hitResult.worldTransform.columns.3.x,
-                                 yCoordinate: hitResult.worldTransform.columns.3.y,
-                                 zCoordinate: hitResult.worldTransform.columns.3.z)
-                        let coordinate = clipToObject(pinReferenceX: hitResult.worldTransform.columns.3.x,
-                                                      pinReferenceY: hitResult.worldTransform.columns.3.y,
-                                                      pinReferenceZ: hitResult.worldTransform.columns.3.z)
-                        print("tap coordinate \(hitResult.worldTransform.columns.3)")
-                        DataHandler.incidents.append(Incident (type: .unknown, description: "New Incident", coordinate: coordinate))
+                        let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                                                                             hitResult.worldTransform.columns.3.y,
+                                                                                                             hitResult.worldTransform.columns.3.z),
+                                                                                                  to: detectedObjectNode)
+                        let incident = Incident (type: .unknown,
+                                                description: "New Incident",
+                                                coordinate: Coordinate(vector: coordinateRelativeToObject))
+                        DataHandler.incidents.append(incident)
+                        add3DPin(vectorCoordinate: coordinateRelativeToObject, identifier: "\(incident.identifier)" )
                     }
                     return
                 }
-                self.performSegue(withIdentifier: "ShowDetailSegue", sender: self)
-                print(name)
+                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
             }
         }
     }
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        print("renderer() aufgerufen")
-        
         let node = SCNNode()
         
         if let objectAnchor = anchor as? ARObjectAnchor {
             
-            objectAnchorAbsolute = objectAnchor.transform.columns.3
-            print("definitely the absolute position of the chair anchor \(objectAnchorAbsolute)")
-            //Maybe we should consider this method for easier computations. sceneView.session.setWorldOrigin(relativeTransform: point)
-            
-            for pin in coordinatesPin {
-                node.addChildNode(loadPin(toPlace: pin, objectAnchor: objectAnchor))
+            detectedObjectNode = node
+            for incident in DataHandler.incidents {
+                print("is in loop")
+                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
-            let alert = UIAlertController(title: "Object detected", message: "\(objectAnchor.referenceObject.name ?? "no name")", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true)
-            print("detected object anchor absolute position. x: \(objectAnchorAbsolute.x), y: \(objectAnchorAbsolute.y), x: \(objectAnchorAbsolute.z)")
+            addInfoPlane(node: node, objectAnchor: objectAnchor)
+            
+//            let alert = UIAlertController(title: "Object detected", message: "\(objectAnchor.referenceObject.name ?? "no name")", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            self.present(alert, animated: true)
         }
         return node
+    }
+    
+    
+    // MARK: Overridden/Lifecycle Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "ShowDetailSegue":
+            guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
+            let pin = sender as? SCNNode,
+                let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
+                return
+            }
+            detailVC.incident = incident
+        default :
+            return
+        }
     }
 }
 
 
 // MARK: Coordinate
 struct Coordinate: Codable {
-    var pointX: Float
-    var pointY: Float
-    var pointZ: Float
+    let pointX: Float
+    let pointY: Float
+    let pointZ: Float
     
     var description: String {
         return "x: \(pointX), y: \(pointY), z: \(pointZ) "
+    }
+    
+    init(vector: SCNVector3) {
+        pointX = vector.x
+        pointY = vector.y
+        pointZ = vector.z
     }
 }

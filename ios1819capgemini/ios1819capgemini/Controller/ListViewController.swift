@@ -32,7 +32,6 @@ class ListViewController: UIViewController {
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.reloadData()
         
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -43,6 +42,7 @@ class ListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)

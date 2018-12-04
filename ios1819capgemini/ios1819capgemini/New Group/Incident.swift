@@ -8,6 +8,7 @@
 
 // MARK: Imports
 import Foundation
+import SceneKit
 
 // MARK: - Incident
 public class Incident: Codable {
@@ -21,22 +22,18 @@ public class Incident: Codable {
     private(set) var status: Status
     private(set) var attachments = [Attachment]()
     
-    private var coordinate: Coordinate?
+    let coordinate: Coordinate
     
     // MARK: Initializers
-    init(type: IncidentType, description: String) {
+    init(type: IncidentType, description: String, coordinate: Coordinate) {
+        
+        identifier = DataHandler.nextIncidentID
         createDate = Date()
         modifiedDate = createDate
-        identifier = DataHandler.nextIncidentID
-        status = .open
-        
         self.type = type
         self.description = description
-    }
-    
-    convenience init(type: IncidentType, description: String, coordinate: Coordinate) {
-        self.init(type: type, description: description)
-        self.coordinate = Coordinate(pointX: 0, pointY: 0, pointZ: 0)
+        status = .open
+        self.coordinate = coordinate
     }
     
     // MARK: Instance Methods
@@ -49,6 +46,10 @@ public class Incident: Codable {
     // MARK: Private Instance Methods
     private func suggest() -> IncidentType? {
         return nil
+    }
+    
+    func getCoordinateToVector() -> SCNVector3 {
+        return SCNVector3(x: coordinate.pointX, y: coordinate.pointY, z: coordinate.pointZ)
     }
 }
 
