@@ -27,7 +27,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     @IBOutlet private var mainView: UIView!
     
     
-    var photos: [INSPhotoViewable] = []
+    var photos: [PhotoWrapper] = []
     var videos: [Video] = []
     
     
@@ -171,7 +171,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     }
     
     
-    func computePhotos() -> [INSPhotoViewable] {
+    func computePhotos() -> [PhotoWrapper] {
         if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
             
             let fileManager = FileManager.default
@@ -188,12 +188,14 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
             } catch {
                 print("Could not get folder: \(error)")
             }
-            var result: [INSPhoto] = []
+            var result: [PhotoWrapper] = []
+            
             for val in arrImages {
                 guard let val = val as? String else {
                     continue
                 }
-                result.append(INSPhoto(image: UIImage(contentsOfFile: val), thumbnailImage: UIImage(contentsOfFile: val)))
+                let strings = val.split(separator: "/")
+                result.append(PhotoWrapper(photo: Photo(name: String(strings[strings.count - 1]), photoPath: val)))
             }
             return result
         }
@@ -221,8 +223,9 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
                 guard let val = val as? String else {
                     continue
                 }
-                let thumbnail = createThumbnailOfVideoFromRemoteUrl(url: val)
-                result.append(Video(videoPath: val, thumbnailImage: thumbnail ?? UIImage()))
+                let strings = val.split(separator: "/")
+                let name = strings[strings.count - 1]
+                result.append(Video(name: String(name), videoPath: val))
             }
             return result
         }
@@ -236,25 +239,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         return nil
     }
     
-    func createThumbnailOfVideoFromRemoteUrl(url: String) -> UIImage? {
-        
-        let asset = AVURLAsset(url: URL(fileURLWithPath: url), options: nil)
-        let imgGenerator = AVAssetImageGenerator(asset: asset)
-        
-        
-        //Can set this to improve performance if target size is known before hand
-        //assetImgGenerate.maximumSize = CGSize(width,height)
-        do {
-            imgGenerator.appliesPreferredTrackTransform = true
-            let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(value: 0, timescale: 1), actualTime: nil)
-            let thumbnail = UIImage(cgImage: cgImage)
-            return thumbnail
-        } catch {
-            print(error)
-            return nil
-        }
-    }
-    
+   
     // MARK: -OBJC Functions
     @objc func recordTapped() {
         if audioRecorder == nil {
@@ -315,10 +300,7 @@ extension AttachmentViewController: UICollectionViewDataSource, UICollectionView
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.videoCollectionView {
             let item = videos[(indexPath as NSIndexPath).item]
-            guard let path = item.videoPath else {
-                return
-            }
-            let player = AVPlayer(url: URL(fileURLWithPath: path))
+            let player = AVPlayer(url: URL(fileURLWithPath: item.filePath))
             let playerController = AVPlayerViewController()
             playerController.player = player
             present(playerController, animated: true) {

@@ -19,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         PrototyperController.showFeedbackButton = false
         let defaults = UserDefaults.standard
+        if defaults.integer(forKey: "AttachmentIdentifier") == 0 {
+            defaults.set(1, forKey: "AttachmentIdentifier")
+        }
         if defaults.integer(forKey: "AttachedPhotoName") == 0 {
             defaults.set(1, forKey: "AttachedPhotoName")
         }
