@@ -9,6 +9,7 @@ target 'ios1819capgemini' do
 pod 'Prototyper'
 pod 'CUU'
 pod 'SwiftLint'
+pod 'INSPhotoGallery'
 
 end
 

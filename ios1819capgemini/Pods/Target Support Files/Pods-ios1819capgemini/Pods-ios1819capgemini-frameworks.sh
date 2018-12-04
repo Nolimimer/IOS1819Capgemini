@@ -144,12 +144,14 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CUU/CUU.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/INSPhotoGallery/INSPhotoGallery.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Prototype/Prototype.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Prototyper/Prototyper.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/CUU/CUU.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/INSPhotoGallery/INSPhotoGallery.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Prototype/Prototype.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Prototyper/Prototyper.framework"
