@@ -15,10 +15,9 @@ class DetailViewController: UIViewController {
     private var modus = Modus.view
     
     private var dateFormatter: DateFormatter {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
-            return dateFormatter
-        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
+        return dateFormatter
     }
     
     // Variables / Mock Variable
@@ -38,35 +37,39 @@ class DetailViewController: UIViewController {
     
     // MARK: IBActions
     @IBAction private func backButtonPressed(_ sender: Any) {
-        
          self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction private func editButtonPressed(_ sender: Any) {
         switch modus {
         case .view:
-            lastModifiedDateLabel.text = dateFormatter.string(from: incident.modifiedDate)
-            modus = .edit
             editButton.title = "Save"
-            segmentControll.isEnabled = true
-            textField.layer.borderColor = UIColor.white.cgColor
-            textField.layer.borderWidth = 1.0
             textField.isEditable = true
+            segmentControll.isEnabled = true
+            textField.layer.borderWidth = 1.0
+            textField.layer.borderColor = UIColor.white.cgColor
+            
+            modus = .edit
         case .edit:
-            textField.layer.borderWidth = 0.0
-            modus = .view
-            editButton.title = "Edit"
-            segmentControll.isEnabled = false
-            textField.isEditable = false
-            incident.modifiedDate = Date()
+            // Saves changes
+            var status: Status
             switch segmentControll.selectedSegmentIndex {
             case 0:
-            incident.status = .open
+                status = .open
             case 1:
-                incident.status = .progress
+                status = .progress
             default:
-                incident.status = .resolved
+                status = .resolved
             }
+            incident.edit(status: status, description: textField.text, modifiedDate: Date())
+            
+            editButton.title = "Edit"
+            textField.isEditable = false
+            segmentControll.isEnabled = false
+            textField.layer.borderWidth = 0.0
+            lastModifiedDateLabel.text = dateFormatter.string(from: incident.modifiedDate)
+            
+            modus = .view
         }
     }
    
@@ -76,27 +79,31 @@ class DetailViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.modalPresentationStyle = .overCurrentContext
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-                
-        if let type = incident.type {
-            navigationItemIncidentTitle.title = "\(type.rawValue) 00\(incident.identifier)"
-        } else {
-            navigationItemIncidentTitle.title = "Incident \(incident.identifier)"
+        modalPresentationStyle = .overCurrentContext
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        
+        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
+        
+        let controllIndex: Int
+        switch incident.status {
+        case .open:
+            controllIndex = 0
+        case .progress:
+            controllIndex = 1
+        case .resolved:
+            controllIndex = 2
         }
+        segmentControll.selectedSegmentIndex = controllIndex
+        
+        let dateString = dateFormatter.string(from: incident.createDate)
+        let lastModifiedDateString = dateFormatter.string(from: incident.modifiedDate)
+        generatedDateLabel.text = dateString
+        lastModifiedDateLabel.text = lastModifiedDateString
+        textField.text = incident.description
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       let dateString = dateFormatter.string(from: incident.date)
-       let lastModifiedDateString = dateFormatter.string(from: incident.modifiedDate)
-        
-        generatedDateLabel.text = dateString
-        
-        lastModifiedDateLabel.text = lastModifiedDateString
-        
-        textField.text = incident.description
         
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -127,8 +134,6 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         }
         return cell!
     }
-    
-    
 }
 
 // MARK: Constants
@@ -136,5 +141,3 @@ enum Modus {
     case view
     case edit
 }
-
-
