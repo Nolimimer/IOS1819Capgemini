@@ -17,6 +17,7 @@
 		9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6721A561D200CA8E80 /* CarPartItem.swift */; };
 		9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6821A561D200CA8E80 /* CarPartComponent.swift */; };
 		9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6921A561D200CA8E80 /* Attachment.swift */; };
+		90903D1521B6854A00DA4C7E /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90903D1421B6854A00DA4C7E /* CollectionViewCell.swift */; };
 		90C7377821B5368D008AD568 /* stickerTest.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377721B5368D008AD568 /* stickerTest.mlmodel */; };
 		90C7377A21B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377921B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift */; };
 		90C7377C21B56BF6008AD568 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C7377B21B56BF6008AD568 /* PhotoCollectionViewCell.swift */; };
@@ -62,6 +63,7 @@
 		9082AF6721A561D200CA8E80 /* CarPartItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartItem.swift; sourceTree = "<group>"; };
 		9082AF6821A561D200CA8E80 /* CarPartComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPartComponent.swift; sourceTree = "<group>"; };
 		9082AF6921A561D200CA8E80 /* Attachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
+		90903D1421B6854A00DA4C7E /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		90C7377721B5368D008AD568 /* stickerTest.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = stickerTest.mlmodel; path = ../stickerTest.mlmodel; sourceTree = "<group>"; };
 		90C7377921B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentViewController+UIImagePickerControllerDelegate.swift"; sourceTree = "<group>"; };
 		90C7377B21B56BF6008AD568 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				90D3451221B3FF29009EF79E /* AttachmentViewController.swift */,
 				90C7377921B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift */,
 				90C7377F21B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift */,
+				90903D1421B6854A00DA4C7E /* CollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 				90CB845E21AD9E1B00CA1C09 /* Anchors.swift in Sources */,
 				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
 				90CB846621ADAB0500CA1C09 /* Anchors2.swift in Sources */,
+				90903D1521B6854A00DA4C7E /* CollectionViewCell.swift in Sources */,
 				90C7377C21B56BF6008AD568 /* PhotoCollectionViewCell.swift in Sources */,
 				90CB846021AD9F4100CA1C09 /* StickerDetector.mlmodel in Sources */,
 				90CB846A21ADAB1A00CA1C09 /* Anchors4.swift in Sources */,
