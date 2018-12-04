@@ -144,11 +144,11 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     
     // MARK: -Methods
     func loadRecordingUI() {
-        recordButton = UIButton(frame: CGRect(x: 64, y: 64, width: 128, height: 64))
-        recordButton.setTitle("Tap to Record", for: .normal)
-        recordButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .title1)
-        recordButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
-        view.addSubview(recordButton)
+//        recordButton = UIButton(frame: CGRect(x: 64, y: 64, width: 128, height: 64))
+//        recordButton.setTitle("Tap to Record", for: .normal)
+//        recordButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .title1)
+//        recordButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+//        view.addSubview(recordButton)
     }
     
     func finishRecording(success: Bool) {
