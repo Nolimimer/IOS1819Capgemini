@@ -16,6 +16,4 @@ class CollectionViewCell: UICollectionViewCell {
     // aufgerufen werden, um die Funktionalität
     // in diese Klasse zu delegieren.
     @IBOutlet weak var imageView: UIImageView!
-    
-    
 }
