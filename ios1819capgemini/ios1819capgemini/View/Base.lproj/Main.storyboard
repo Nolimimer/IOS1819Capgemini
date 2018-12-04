@@ -186,7 +186,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="T6S-Pu-SFY" kind="show" id="1AI-p7-PtP"/>
+                                                    <segue destination="T6S-Pu-SFY" kind="show" identifier="attachmentSegue" id="1AI-p7-PtP"/>
                                                 </connections>
                                             </button>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="COY-aq-UVO">
