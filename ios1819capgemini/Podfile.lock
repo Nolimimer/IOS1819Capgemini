@@ -1,5 +1,6 @@
 PODS:
   - CUU (2.0.2)
+  - INSPhotoGallery (1.2.7)
   - KeychainSwift (13.0.0)
   - Prototype (0.3.3)
   - Prototyper (1.1):
@@ -9,12 +10,14 @@ PODS:
 
 DEPENDENCIES:
   - CUU
+  - INSPhotoGallery
   - Prototyper
   - SwiftLint
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CUU
+    - INSPhotoGallery
     - KeychainSwift
     - Prototype
     - Prototyper
@@ -22,11 +25,12 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   CUU: d5b85393a172a6b63aabf80e4835d1da778a8089
+  INSPhotoGallery: a4e698e3d6338d9016328d6747488a2a111d94e2
   KeychainSwift: 23d6c16cbc33f20fafa30c3d783241b4b87d998c
   Prototype: 2009eb25fccdcbe5339d1cbe4f116eb6e68466aa
   Prototyper: 09bf1e15d619a7cd6ae358beaa58dc2e0955fa16
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
 
-PODFILE CHECKSUM: e7bbbe3c6eaa61c66dd11f3f2b925975a2f73048
+PODFILE CHECKSUM: a78c5954bea63465fe9de1f2feadf560b70c1570
 
 COCOAPODS: 1.5.3

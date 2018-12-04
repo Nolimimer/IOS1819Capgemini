@@ -18,6 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         PrototyperController.showFeedbackButton = false
+        let defaults = UserDefaults.standard
+        if defaults.integer(forKey: "AttachedPhotoName") == 0 {
+            defaults.set(1, forKey: "AttachedPhotoName")
+        }
+        if defaults.integer(forKey: "AttachedVideoName") == 0 {
+            defaults.set(1, forKey: "AttachedVideoName")
+        }
         // Override point for customization after application launch.
         
         CUU.start()

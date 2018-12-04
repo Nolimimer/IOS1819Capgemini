@@ -63,7 +63,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
         
-        model = try? VNCoreMLModel(for: StickerDetector().model)
+        model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
         // Hook up status view controller callback.
@@ -74,6 +74,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.addGestureRecognizer(gestureRecognizer)
         
         configureLighting()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        screenWidth = Double(size.width)
+        screenHeight = Double(size.height)
+        if UIDevice.current.orientation.isLandscape {
+            print("Landscape")
+        } else {
+            print("Portrait")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -203,7 +214,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return 1.0 / (1.0 + exp(-val))
     }
     
-    private func clipToObject (pinReferenceX: Float, pinReferenceY: Float, pinReferenceZ: Float) -> Coordinate{
+    private func clipToObject (pinReferenceX: Float, pinReferenceY: Float, pinReferenceZ: Float) -> Coordinate {
         return Coordinate(pointX: pinReferenceX - objectAnchorAbsolute.x,
                           pointY: pinReferenceY - objectAnchorAbsolute.y,
                           pointZ: pinReferenceZ - objectAnchorAbsolute.z
@@ -265,8 +276,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                  yCoordinate: hitResult.worldTransform.columns.3.y,
                                  zCoordinate: hitResult.worldTransform.columns.3.z)
                         let coordinate = clipToObject(pinReferenceX: hitResult.worldTransform.columns.3.x,
-                                                                              pinReferenceY: hitResult.worldTransform.columns.3.y,
-                                                                              pinReferenceZ: hitResult.worldTransform.columns.3.z)
+                                                      pinReferenceY: hitResult.worldTransform.columns.3.y,
+                                                      pinReferenceZ: hitResult.worldTransform.columns.3.z)
                         print("tap coordinate \(hitResult.worldTransform.columns.3)")
                         DataHandler.incidents.append(Incident (type: .unknown, description: "New Incident", coordinate: coordinate))
                     }
