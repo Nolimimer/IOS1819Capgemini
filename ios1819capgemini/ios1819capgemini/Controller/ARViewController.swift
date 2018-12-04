@@ -16,9 +16,7 @@ import Vision
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: Stored Instance Properties
-    //AR
     var detectedObjectNode: SCNNode?
-    //End AR
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?
@@ -171,7 +169,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         for (index, prediction) in predictions.enumerated() {
             if let classNames = self.ssdPostProcessor.classNames {
-                print("Class: \(classNames[prediction.detectedClass])")
+                //print("Class: \(classNames[prediction.detectedClass])")
                 
                 let textColor: UIColor
                 let textLabel = String(format: "%.2f - %@", self.sigmoid(prediction.score), classNames[prediction.detectedClass])
@@ -287,9 +285,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             addInfoPlane(node: node, objectAnchor: objectAnchor)
             
-            let alert = UIAlertController(title: "Object detected", message: "\(objectAnchor.referenceObject.name ?? "no name")", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true)
+//            let alert = UIAlertController(title: "Object detected", message: "\(objectAnchor.referenceObject.name ?? "no name")", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            self.present(alert, animated: true)
         }
         return node
     }
