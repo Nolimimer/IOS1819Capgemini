@@ -172,6 +172,11 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).row == 0 {
+            let attachmentView = AttachmentView(frame: CGRect(x: collectionView.cellForItem(at: indexPath)!.center.x - 30,
+                                                              y: collectionView.center.y - 200,
+                                                              width: 150,
+                                                              height: 200))
+            view.addSubview(attachmentView)
             return
         }
         let currentAttachment = attachments[(indexPath as NSIndexPath).row]
