@@ -95,7 +95,7 @@ extension ListViewController: UITableViewDataSource {
         let incident = DataHandler.incidents[indexPath.row]
         cell.textLabel?.text = incident.description
         cell.tag = incident.identifier
-        print("Tag: \(cell.tag)")
+//        print("Tag: \(cell.tag)")
         return cell
     }
     
