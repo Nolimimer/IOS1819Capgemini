@@ -324,10 +324,3 @@ extension AttachmentViewController: UICollectionViewDataSource, UICollectionView
     
     
 }
-
-
-
-
-
-
-
