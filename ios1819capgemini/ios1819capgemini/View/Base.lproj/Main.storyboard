@@ -179,15 +179,6 @@
                                                     <outlet property="delegate" destination="jav-cE-mj7" id="jyd-dg-y62"/>
                                                 </connections>
                                             </collectionView>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9Z-sw-20j">
-                                                <rect key="frame" x="372" y="401" width="57" height="30"/>
-                                                <state key="normal" title="Show all">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <segue destination="T6S-Pu-SFY" kind="show" identifier="attachmentSegue" id="1AI-p7-PtP"/>
-                                                </connections>
-                                            </button>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="COY-aq-UVO">
                                                 <rect key="frame" x="16" y="167" width="343" height="69"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -229,7 +220,6 @@
                                             <constraint firstItem="tOs-XI-t5A" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="7es-eY-c2P"/>
                                             <constraint firstItem="8tk-Hj-sM2" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="8jO-rK-3Dm"/>
                                             <constraint firstItem="UGE-4X-rly" firstAttribute="leading" secondItem="tOs-XI-t5A" secondAttribute="trailing" constant="158" id="9VD-Hm-6Wy"/>
-                                            <constraint firstItem="U9Z-sw-20j" firstAttribute="leading" secondItem="UGE-4X-rly" secondAttribute="trailing" constant="5" id="Cxw-Z5-axS"/>
                                             <constraint firstItem="z23-Qm-9Du" firstAttribute="top" secondItem="UGE-4X-rly" secondAttribute="bottom" constant="22" id="F1A-Go-97y"/>
                                             <constraint firstItem="BCS-uW-z3A" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="Jgy-gz-ay0"/>
                                             <constraint firstItem="3ur-jx-McY" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="KQE-d0-kcH"/>
