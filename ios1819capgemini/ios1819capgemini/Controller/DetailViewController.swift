@@ -10,10 +10,11 @@
 import UIKit
 import AVKit
 import INSPhotoGallery
+import MobileCoreServices
 import SceneKit
 
 // MARK: - DetailViewController
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     private var modus = Modus.view
     
@@ -28,6 +29,8 @@ class DetailViewController: UIViewController {
                             description: "This scratch is a critical one, my suggestion is to completly remove the right door.",
                             coordinate: Coordinate (vector: SCNVector3(0, 0, 0)))
     var attachments: [Attachment] = []
+    var imagePicker: UIImagePickerController!
+
     
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
@@ -84,7 +87,61 @@ class DetailViewController: UIViewController {
     // MARK: Overridden/Lifecycle Methods
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+        if let firstTouch = touches.first {
+            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
+            
+            let attachmentView = view.subviews.first {
+                $0 is AttachmentView
+            }
+            if hitView != attachmentView {
+                attachmentView?.removeFromSuperview()
+            } 
+        }
     }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        if let firstTouch = touches.first {
+            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
+            
+            let attachmentView = view.subviews.first {
+                $0 is AttachmentView
+            }
+            if hitView != attachmentView {
+                attachmentView?.removeFromSuperview()
+            }
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        if let firstTouch = touches.first {
+            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
+            
+            let attachmentView = view.subviews.first {
+                $0 is AttachmentView
+            }
+            if hitView != attachmentView {
+                attachmentView?.removeFromSuperview()
+            }
+        }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        if let firstTouch = touches.first {
+            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
+            
+            let attachmentView = view.subviews.first {
+                $0 is AttachmentView
+            }
+            if hitView != attachmentView {
+                attachmentView?.removeFromSuperview()
+            }
+        }
+    }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         modalPresentationStyle = .overCurrentContext
@@ -112,10 +169,15 @@ class DetailViewController: UIViewController {
         collectionView.reloadData()
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         attachments = computeAttachments()
+        
+//        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.handleTap(recognizer:)))
+//        self.view.addGestureRecognizer(gesture)
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -162,6 +224,57 @@ class DetailViewController: UIViewController {
         return []
     }
     
+    @objc func handleTap(recognizer: UITapGestureRecognizer){
+        self.view.endEditing(true)
+        let location = recognizer.location(in: view)
+
+        let attachmentView = view.subviews.first {
+            $0 is AttachmentView
+        }
+        
+        if attachmentView?.frame.contains(location) ?? false {
+            attachmentView?.removeFromSuperview()
+        }
+    }
+
+    
+    @objc private func takePhoto() {
+        imagePicker =  UIImagePickerController()
+        imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        imagePicker.sourceType = .camera
+        present(imagePicker, animated: true, completion: nil)
+        
+    }
+    
+    @objc private func takeVideo() {
+        imagePicker =  UIImagePickerController()
+        imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        imagePicker.sourceType = .camera
+        imagePicker.mediaTypes = [kUTTypeMovie as String]
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    @objc private func recordAudio() {
+        
+    }
+    
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            let alertController = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alertController, animated: true)
+        } else {
+            print("Saved picture")
+            let index = 0
+            for child in view.subviews {
+                if child is AttachmentView {
+                    child.removeFromSuperview()
+                }
+            }
+        }
+    }
+    
 }
 
 // MARK: Extension
@@ -176,6 +289,9 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                                                               y: collectionView.center.y - 200,
                                                               width: 150,
                                                               height: 200))
+            attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
+             attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
+             attachmentView.audioButton.addTarget(self, action: #selector(recordAudio), for: .touchUpInside)
             view.addSubview(attachmentView)
             return
         }
@@ -209,14 +325,78 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         }
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
         cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row])
         return cell ?? UICollectionViewCell()
-        // Just for testing/mocking // TODO
-      
     }
 }
+
+extension DetailViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey:Any]) {
+        imagePicker.dismiss(animated: true, completion: nil)
+        if let selectedImage = info[.originalImage] as? UIImage {
+            if saveImage(image: selectedImage) {
+                print("Saved image")
+            }
+        }
+        
+        if let selectedVideo: URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
+            // Save video to the main photo album
+            let selectorToCall = #selector(AttachmentViewController.videoSaved(_:didFinishSavingWithError:context:))
+            
+            // 2
+            UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
+            // Save the video to the app directory
+            let videoData = try? Data(contentsOf: selectedVideo)
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory = URL(fileURLWithPath: paths[0])
+            let defaults = UserDefaults.standard
+            let dataPath = documentsDirectory.appendingPathComponent("cARgeminiVideoAsset\(defaults.integer(forKey: "AttachedVideoName")).mov")
+            defaults.set(defaults.integer(forKey: "AttachedVideoName") + 1, forKey: "AttachedVideoName")
+            do {
+                try videoData?.write(to: dataPath, options: [])
+            } catch {
+                print(Error.self)
+            }
+        }
+    }
+    
+    @objc func videoSaved(_ video: String, didFinishSavingWithError error: NSError!, context: UnsafeMutableRawPointer) {
+        if let theError = error {
+            print("error saving the video = \(theError)")
+        } else {
+            DispatchQueue.main.async(execute: { () -> Void in })
+        }
+    }
+        
+        
+    
+    func saveImage(image: UIImage) -> Bool {
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        
+        let paths = NSSearchPathForDirectoriesInDomains(
+            FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let documentsDirectory = URL(fileURLWithPath: paths[0])
+        
+        guard let data = image.jpegData(compressionQuality: 0.5) else {
+            return false
+        }
+        do {
+            let defaults = UserDefaults.standard
+            try data.write(to: documentsDirectory.appendingPathComponent("cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"), options: [])
+            defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedPhotoName")
+            return true
+        } catch {
+            print(error.localizedDescription)
+            return false
+        }
+    }
+    
+}
+
 
 // MARK: Constants
 enum Modus {

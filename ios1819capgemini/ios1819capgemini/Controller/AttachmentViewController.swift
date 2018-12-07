@@ -32,6 +32,10 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     
     
     // MARK: -override methods
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let iNT = 0 
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         photos = computePhotos()
@@ -40,7 +44,6 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
             if let photo = photo as? INSPhoto {
                 photo.attributedTitle = NSAttributedString(string: "Example caption text\ncaption text",
                                                            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-
             }
         }
         videoCollectionView.delegate = self
@@ -142,7 +145,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     }
     
     
-    // MARK: -Methods
+    // MARK: - Methods
     func loadRecordingUI() {
 //        recordButton = UIButton(frame: CGRect(x: 64, y: 64, width: 128, height: 64))
 //        recordButton.setTitle("Tap to Record", for: .normal)
@@ -163,13 +166,11 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         }
     }
     
-   
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if !flag {
             finishRecording(success: false)
         }
     }
-    
     
     func computePhotos() -> [PhotoWrapper] {
         if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {

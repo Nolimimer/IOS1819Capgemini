@@ -23,16 +23,24 @@ class CollectionViewCell: UICollectionViewCell {
         let attachmentWrapper = AttachmentWrapper(attachment: attachment)
         
         attachmentWrapper.loadThumbnailImage()
+        self.imageView.image = nil
         self.imageView.image = cropToBounds(image: attachmentWrapper.thumbnail!, width: 90, height: 88)
+        if attachment is Photo {
+            let image = makeRoundImg(img: self.imageView)
+            imageView.transform = imageView.transform.rotated(by: CGFloat(M_PI_2))
+            self.imageView.image = image
+            return
+        }
         if attachment is Video {
             let frontImage = UIImage(named: "play2") // The image in the foreground
             let frontImageView = UIImageView(image: frontImage) // Create the view holding the image
             frontImageView.frame = self.imageView.frame // The size and position of the front image
             self.imageView.addSubview(frontImageView)
             self.imageView.image = cropToBounds(image: imageView.image ?? UIImage(), width: 90, height: 88)
+            let image = makeRoundImg(img: self.imageView)
+            self.imageView.image = image
         }
-        let image = makeRoundImg(img: self.imageView)
-        self.imageView.image = image
+      
        
     }
 
@@ -84,7 +92,4 @@ class CollectionViewCell: UICollectionViewCell {
         
         return image
     }
-
-
-    
 }
