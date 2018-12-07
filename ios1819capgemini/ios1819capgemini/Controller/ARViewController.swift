@@ -49,7 +49,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         sceneView.delegate = self
         sceneView.showsStatistics = false
         sceneView.scene = scene
