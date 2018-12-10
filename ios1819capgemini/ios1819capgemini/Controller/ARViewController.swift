@@ -58,7 +58,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
         
-        sceneView.debugOptions = [.showFeaturePoints]
+        //sceneView.debugOptions = [.showFeaturePoints]
         
         model = try? VNCoreMLModel(for: stickerTest().model)
         
@@ -67,8 +67,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //        statusViewController.restartExperienceHandler = { [unowned self] in
 //            self.restartSession()
 //        }
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
-        sceneView.addGestureRecognizer(gestureRecognizer)
+//        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
+//        sceneView.addGestureRecognizer(gestureRecognizer)
         
         configureLighting()
     }
@@ -264,44 +264,85 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         scene.rootNode.addChildNode(planeNode)
     }
     
-    @objc func tapped(recognizer: UIGestureRecognizer) {
-        if recognizer.state == .ended {
-            let location: CGPoint = recognizer.location(in: sceneView)
-            let hits = self.sceneView.hitTest(location, options: nil)
-            if !hits.isEmpty {
-                let tappedNode = hits.first?.node
-                guard (tappedNode?.name) != nil else {
-                    // Get exact position where touch happened on screen of iPhone (2D coordinate)
-                    let touchPosition = recognizer.location(in: sceneView)
-                    // Conduct a hit test based on a feature point that ARKit detected to find out what 3D point this 2D coordinate relates to
-                    let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
-                    
-                    if !hitTestResult.isEmpty {
-                        guard let hitResult = hitTestResult.first else {
-                            return
-                        }
-                        if detectedObjectNode != nil {
-                            let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
-                                SCNVector3(hitResult.worldTransform.columns.3.x,
-                                           hitResult.worldTransform.columns.3.y,
-                                           hitResult.worldTransform.columns.3.z),
-                                to: detectedObjectNode)
-                            let incident = Incident (type: .unknown,
-                                                     description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            DataHandler.incidents.append(incident)
-                            print("new incident created")
-                            add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                                  hitResult.worldTransform.columns.3.y,
-                                                                  hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
-                        }
-                    }
-                    return
-                }
-                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+        let location = touches.first!.location(in: sceneView)
+        let hitOptions = self.sceneView.hitTest(location, options: nil)
+        if let tappedNode = hitOptions.first?.node,
+            let _ = tappedNode.name {
+            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+        } else {
+    
+        let hitResultsFeaturePoints: [ARHitTestResult] =
+            sceneView.hitTest(location, types: .featurePoint)
+        if let hitResult = hitResultsFeaturePoints.first {
+            if detectedObjectNode != nil {
+                let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
+                    SCNVector3(hitResult.worldTransform.columns.3.x,
+                               hitResult.worldTransform.columns.3.y,
+                               hitResult.worldTransform.columns.3.z),
+                    to: detectedObjectNode)
+                let incident = Incident (type: .unknown,
+                                         description: "New Incident",
+                                         coordinate: Coordinate(vector: coordinateRelativeToObject))
+                DataHandler.incidents.append(incident)
+                print("new incident created")
+                add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                      hitResult.worldTransform.columns.3.y,
+                                                      hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
+            } else {
+                let coordinate = SCNVector3(hitResult.worldTransform.columns.3.x,
+                                            hitResult.worldTransform.columns.3.y,
+                                            hitResult.worldTransform.columns.3.z)
+                let incident = Incident (type: .unknown,
+                                         description: "New Incident",
+                                         coordinate: Coordinate(vector: coordinate))
+                DataHandler.incidents.append(incident)
+                print("new incident created")
+                add3DPin(vectorCoordinate: coordinate, identifier: "\(incident.identifier)" )
+            }
             }
         }
     }
+    
+//    @objc func tapped(recognizer: UIGestureRecognizer) {
+//        if recognizer.state == .ended {
+//            let location: CGPoint = recognizer.location(in: sceneView)
+//            let hits = self.sceneView.hitTest(location, options: nil)
+//            if !hits.isEmpty {
+//                let tappedNode = hits.first?.node
+//                guard (tappedNode?.name) != nil else {
+//                    // Get exact position where touch happened on screen of iPhone (2D coordinate)
+//                    let touchPosition = recognizer.location(in: sceneView)
+//                    // Conduct a hit test based on a feature point that ARKit detected to find out what 3D point this 2D coordinate relates to
+//                    let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
+//
+//                    if !hitTestResult.isEmpty {
+//                        guard let hitResult = hitTestResult.first else {
+//                            return
+//                        }
+//                        if detectedObjectNode != nil {
+//                            let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
+//                                SCNVector3(hitResult.worldTransform.columns.3.x,
+//                                           hitResult.worldTransform.columns.3.y,
+//                                           hitResult.worldTransform.columns.3.z),
+//                                to: detectedObjectNode)
+//                            let incident = Incident (type: .unknown,
+//                                                     description: "New Incident",
+//                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
+//                            DataHandler.incidents.append(incident)
+//                            print("new incident created")
+//                            add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+//                                                                  hitResult.worldTransform.columns.3.y,
+//                                                                  hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
+//                        }
+//                    }
+//                    return
+//                }
+//                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+//            }
+//        }
+//    }
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
