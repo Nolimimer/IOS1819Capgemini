@@ -232,22 +232,35 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     private func addInfoPlane (node: SCNNode, objectAnchor: ARObjectAnchor) {
-        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
-                             height: CGFloat(objectAnchor.referenceObject.extent.y * 0.5))
+        
+        let notification = UINotificationFeedbackGenerator()
+
+        DispatchQueue.main.async {
+            notification.notificationOccurred(.success)
+        }
+        
+        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.5),
+                             height: CGFloat(objectAnchor.referenceObject.extent.x * 0.5))
         plane.cornerRadius = plane.width / 8
         let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
-        let planePosition = sceneView.scene.rootNode.convertPosition(
-            SCNVector3Make(objectAnchor.referenceObject.center.x,
-                           objectAnchor.referenceObject.center.y + objectAnchor.referenceObject.extent.y + 0.25,
-                           objectAnchor.referenceObject.center.z),
-            to: nil)
+        //let planePosition = SCNVector3Make(objectAnchor.referenceObject.center.x,
+//        objectAnchor.referenceObject.center.y + objectAnchor.referenceObject.extent.y;,
+//                                           objectAnchor.referenceObject.center.z)
+        let absoluteObjectPosition = objectAnchor.transform.columns.3
+        let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y + 0.5, absoluteObjectPosition.z)
+        
+        //let planePosition = sceneView.scene.rootNode.convertPosition(nodePosition,
+         //   from: node)
+        // SCNVector3(x: 0.0010555089, y: 0.26650947, z: 0.004215777)
+        print(planePosition)
         planeNode.position = planePosition
         
         planeNode.constraints = [SCNBillboardConstraint()]
+        //node.addChildNode(planeNode)
         scene.rootNode.addChildNode(planeNode)
     }
     
@@ -299,13 +312,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 print("is in loop")
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
-            //addInfoPlane(node: node, objectAnchor: objectAnchor)
+            addInfoPlane(node: node, objectAnchor: objectAnchor)
             
-            let alertController = UIAlertController(title: "Object detected",
-                                                    message: "Dashboard",
-                                                    preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alertController, animated: true)
+//            let alertController = UIAlertController(title: "Object detected",
+//                                                    message: "Dashboard",
+//                                                    preferredStyle: .alert)
+//            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+//            present(alertController, animated: true)
         }
         return node
     }
