@@ -55,7 +55,6 @@
 		A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447F02192121300B2D32B /* LaunchScreen.storyboard */; };
 		B316D16021B6CC9E007097D3 /* ObjectInfo.sks in Resources */ = {isa = PBXBuildFile; fileRef = B316D15F21B6CC9E007097D3 /* ObjectInfo.sks */; };
 		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
-		BEAA363221C3D55400F49069 /* AirDropCustomData.m in Sources */ = {isa = PBXBuildFile; fileRef = BEAA363121C3D55400F49069 /* AirDropCustomData.m */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
 
@@ -113,8 +112,6 @@
 		B316D15F21B6CC9E007097D3 /* ObjectInfo.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ObjectInfo.sks; sourceTree = "<group>"; };
 		BE5BAF7A21A16A0700CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BEAA362E21C3D4A300F49069 /* AirDropCustomData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AirDropCustomData.h; sourceTree = "<group>"; };
-		BEAA363121C3D55400F49069 /* AirDropCustomData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirDropCustomData.m; sourceTree = "<group>"; };
 		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -267,8 +264,6 @@
 				0D5F4A7821A317AB00D443CC /* Controller */,
 				A66447EE2192121300B2D32B /* Assets.xcassets */,
 				B316D15F21B6CC9E007097D3 /* ObjectInfo.sks */,
-				BEAA362E21C3D4A300F49069 /* AirDropCustomData.h */,
-				BEAA363121C3D55400F49069 /* AirDropCustomData.m */,
 			);
 			path = ios1819capgemini;
 			sourceTree = "<group>";
@@ -435,7 +430,6 @@
 			files = (
 				90C7377E21B56C15008AD568 /* VideoCollectionViewCell.swift in Sources */,
 				90CB846E21ADAB2800CA1C09 /* Anchors6.swift in Sources */,
-				BEAA363221C3D55400F49069 /* AirDropCustomData.m in Sources */,
 				90CB847621ADAB8B00CA1C09 /* Anchors10.swift in Sources */,
 				9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */,
 				5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */,

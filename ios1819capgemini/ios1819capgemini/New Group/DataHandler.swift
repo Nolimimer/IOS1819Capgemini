@@ -62,6 +62,16 @@ enum DataHandler {
         }
     }
     
+    static func getJSON() -> Data? {
+        do {
+            let data = try JSONEncoder().encode(incidents)
+            return data
+        } catch _ {
+            return nil
+        }
+    }
+
+    
     static func loadFromJSON(url: URL) {
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)

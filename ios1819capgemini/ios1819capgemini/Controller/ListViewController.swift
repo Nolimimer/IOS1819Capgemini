@@ -60,7 +60,7 @@ class ListViewController: UIViewController {
     
     // Share with airDrop just works on iPhone and not in the xCode simulator
     private func share() {
-    let activityController = UIActivityViewController(activityItems: DataHandler.incidents, applicationActivities: nil)
+    let activityController = UIActivityViewController(activityItems: [DataHandler.getJSON()!], applicationActivities: nil)
         
         let excludedActivities =
             [UIActivity.ActivityType.mail,
