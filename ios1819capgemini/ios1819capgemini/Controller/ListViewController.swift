@@ -77,15 +77,8 @@ class ListViewController: UIViewController {
         
         activityController.excludedActivityTypes = excludedActivities
         
-        present(activityController, animated: true, completion: nil)
-    
+        self.present(activityController, animated: true, completion: nil)
     }
-    
-    private func receive() {
-        
-    }
-    
-    
 }
 
 // MARK: Extension - UITableViewDelegate
