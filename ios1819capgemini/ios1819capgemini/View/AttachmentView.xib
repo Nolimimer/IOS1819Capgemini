@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AttachmentView" customModule="customviewtest" customModuleProvider="target">
+            <connections>
+                <outlet property="audioButton" destination="qVw-WD-hxU" id="elH-Z2-hCm"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="guf-oz-9Qs"/>
+                <outlet property="documentButton" destination="I7U-6M-W19" id="Yxy-Ph-Qdj"/>
+                <outlet property="photoButton" destination="pIU-vk-ClK" id="HhZ-i7-kAu"/>
+                <outlet property="videoButton" destination="l7r-nn-dj2" id="yZ4-3S-EDU"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleAspectFit" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="124" height="163"/>
+            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="cji-LF-OlT">
+                    <rect key="frame" x="8" y="8" width="108" height="140"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="9GD-7q-aCL">
+                            <rect key="frame" x="0.0" y="0.0" width="108" height="35"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pIU-vk-ClK">
+                                    <rect key="frame" x="0.0" y="0.0" width="108" height="30"/>
+                                    <state key="normal" title="Photo">
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ecd-1t-jQ4" customClass="LineView" customModule="customviewtest" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="30" width="108" height="5"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </view>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rXv-qk-VeY">
+                            <rect key="frame" x="0.0" y="35" width="108" height="35"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7r-nn-dj2">
+                                    <rect key="frame" x="0.0" y="0.0" width="108" height="30"/>
+                                    <state key="normal" title="Video">
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XYb-F8-h2B" customClass="LineView" customModule="customviewtest" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="30" width="108" height="5"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </view>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="pBc-pN-Umr">
+                            <rect key="frame" x="0.0" y="70" width="108" height="35"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qVw-WD-hxU">
+                                    <rect key="frame" x="0.0" y="0.0" width="108" height="30"/>
+                                    <state key="normal" title="Audio">
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JyC-x0-bwi" customClass="LineView" customModule="customviewtest" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="30" width="108" height="5"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </view>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="cNm-EJ-z7J">
+                            <rect key="frame" x="0.0" y="105" width="108" height="35"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I7U-6M-W19">
+                                    <rect key="frame" x="0.0" y="0.0" width="108" height="30"/>
+                                    <state key="normal" title="Document">
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zjd-Sw-UJZ" customClass="LineView" customModule="customviewtest" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="30" width="108" height="5"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                                            <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </view>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="cji-LF-OlT" secondAttribute="bottom" constant="15" id="03B-Jv-Tgr"/>
+                <constraint firstItem="cji-LF-OlT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="s5s-pF-2Qf"/>
+                <constraint firstItem="cji-LF-OlT" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="8" id="tYl-nB-1ba"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="cji-LF-OlT" secondAttribute="trailing" constant="8" id="tyT-ZS-ATN"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="4.7999999999999998" y="35.532233883058474"/>
+        </view>
+    </objects>
+</document>

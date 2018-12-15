@@ -179,16 +179,6 @@
                                                     <outlet property="delegate" destination="jav-cE-mj7" id="jyd-dg-y62"/>
                                                 </connections>
                                             </collectionView>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9Z-sw-20j">
-                                                <rect key="frame" x="3331.5" y="401" width="57" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Show all">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <segue destination="T6S-Pu-SFY" kind="show" identifier="attachmentSegue" id="1AI-p7-PtP"/>
-                                                </connections>
-                                            </button>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="COY-aq-UVO">
                                                 <rect key="frame" x="16" y="167" width="343" height="69"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -212,6 +202,13 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGE-4X-rly">
+                                                <rect key="frame" x="308" y="401" width="59" height="30"/>
+                                                <state key="normal" title="Show All"/>
+                                                <connections>
+                                                    <action selector="showAllAttachments:" destination="jav-cE-mj7" eventType="touchUpInside" id="ibe-L6-hY1"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -222,6 +219,8 @@
                                             <constraint firstItem="8tk-Hj-sM2" firstAttribute="top" secondItem="COY-aq-UVO" secondAttribute="bottom" constant="25" id="7b0-Kv-A4V"/>
                                             <constraint firstItem="tOs-XI-t5A" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="7es-eY-c2P"/>
                                             <constraint firstItem="8tk-Hj-sM2" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="8jO-rK-3Dm"/>
+                                            <constraint firstItem="UGE-4X-rly" firstAttribute="leading" secondItem="tOs-XI-t5A" secondAttribute="trailing" constant="158" id="9VD-Hm-6Wy"/>
+                                            <constraint firstItem="z23-Qm-9Du" firstAttribute="top" secondItem="UGE-4X-rly" secondAttribute="bottom" constant="22" id="F1A-Go-97y"/>
                                             <constraint firstItem="BCS-uW-z3A" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="Jgy-gz-ay0"/>
                                             <constraint firstItem="3ur-jx-McY" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="KQE-d0-kcH"/>
                                             <constraint firstItem="tOs-XI-t5A" firstAttribute="top" secondItem="BCS-uW-z3A" secondAttribute="bottom" constant="47" id="MVO-CO-n9P"/>
@@ -233,6 +232,7 @@
                                             <constraint firstItem="HV7-TB-qWr" firstAttribute="top" secondItem="uPK-r0-I5L" secondAttribute="bottom" constant="30" id="h1O-Gv-JAe"/>
                                             <constraint firstItem="HV7-TB-qWr" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" constant="16" id="kdd-eY-Dzt"/>
                                             <constraint firstItem="z23-Qm-9Du" firstAttribute="leading" secondItem="UKy-Lv-xeZ" secondAttribute="leading" id="lbc-u6-aXx"/>
+                                            <constraint firstItem="UGE-4X-rly" firstAttribute="top" secondItem="WSz-DG-4sS" secondAttribute="bottom" constant="44" id="lkE-L3-PmG"/>
                                             <constraint firstAttribute="bottom" secondItem="z23-Qm-9Du" secondAttribute="bottom" constant="86" id="phJ-82-k2i"/>
                                             <constraint firstAttribute="trailing" secondItem="WSz-DG-4sS" secondAttribute="trailing" constant="16" id="tJC-SZ-BQm"/>
                                             <constraint firstItem="WSz-DG-4sS" firstAttribute="top" secondItem="COY-aq-UVO" secondAttribute="bottom" constant="100" id="uqP-Id-VN2"/>
