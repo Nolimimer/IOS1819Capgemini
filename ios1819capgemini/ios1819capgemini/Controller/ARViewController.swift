@@ -12,9 +12,12 @@ import ARKit
 import SceneKit
 import Vision
 
+// Stores all the nodes added to the scene
+var nodes = [SCNNode]()
+
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
-
+    
     // MARK: Stored Instance Properties
     var detectedObjectNode: SCNNode?
     let scene = SCNScene()
@@ -32,7 +35,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
     private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
-
+    
     // MARK: IBOutlets
     @IBOutlet private var sceneView: ARSCNView!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
@@ -53,22 +56,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.delegate = self
         sceneView.showsStatistics = false
         sceneView.scene = scene
-
+        
+        
         sceneView.session.delegate = self
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
-        
-        //sceneView.debugOptions = [.showFeaturePoints]
         
         model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
         // Hook up status view controller callback.
-//        statusViewController.restartExperienceHandler = { [unowned self] in
-//            self.restartSession()
-//        }
-//        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
-//        sceneView.addGestureRecognizer(gestureRecognizer)
+        //        statusViewController.restartExperienceHandler = { [unowned self] in
+        //            self.restartSession()
+        //        }
+        
         
         configureLighting()
     }
@@ -93,8 +94,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             sceneView.session.run(config)
         }
     }
-
-
+    
+    
     // MARK: Object Detection Functions
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         // Do not enqueue other buffers for processing while another Vision task is still running.
@@ -107,7 +108,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if isDetecting {
             classifyCurrentImage()
         }
-
+        
     }
     
     func setupBoxes() {
@@ -122,7 +123,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
-    
+        
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
             //self?.processClassifications(for: request, error: error)
             guard let predictions = self?.processClassifications(for: request, error: error) else {
@@ -221,128 +222,59 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         
-        let sphere = SCNSphere(radius: 0.015)
-        let materialSphere = SCNMaterial()
-        materialSphere.diffuse.contents = UIColor.red
-        sphere.materials = [materialSphere]
-        let sphereNode = SCNNode(geometry: sphere)
-        sphereNode.name = identifier
-        sphereNode.position = vectorCoordinate
-        self.scene.rootNode.addChildNode(sphereNode)
+        //        let sphere = SCNSphere(radius: 0.015)
+        //        let materialSphere = SCNMaterial()
+        //        materialSphere.diffuse.contents = UIColor.red
+        //        sphere.materials = [materialSphere]
+        //        let sphereNode = SCNNode(geometry: sphere)
+        //        sphereNode.name = identifier
+        //        sphereNode.position = vectorCoordinate
+        //        self.scene.rootNode.addChildNode(sphereNode)
+        //        nodes.append(sphereNode)
+        
+        let solutionScene = SCNScene(named: "art.scnassets/pin.scn")
+        
+        guard let pinNode = solutionScene!.rootNode.childNodes.first else {
+            print("couldn't create node with scene")
+            return
+        }
+        pinNode.scale = SCNVector3(x: 0.015, y: 0.015, z: 0.015)
+        pinNode.position = vectorCoordinate
+        pinNode.name = identifier
+        pinNode.geometry?.materials.first?.diffuse.contents = UIColor.red
+        self.scene.rootNode.addChildNode(pinNode)
+        nodes.append(pinNode)
+        
     }
     
     private func addInfoPlane (node: SCNNode, objectAnchor: ARObjectAnchor) {
         
         let notification = UINotificationFeedbackGenerator()
-
+        
         DispatchQueue.main.async {
             notification.notificationOccurred(.success)
         }
         
-        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.5),
-                             height: CGFloat(objectAnchor.referenceObject.extent.x * 0.5))
+        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.3),
+                             height: CGFloat(objectAnchor.referenceObject.extent.x * 0.3))
+        
         plane.cornerRadius = plane.width / 8
         let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
-        //let planePosition = SCNVector3Make(objectAnchor.referenceObject.center.x,
-//        objectAnchor.referenceObject.center.y + objectAnchor.referenceObject.extent.y;,
-//                                           objectAnchor.referenceObject.center.z)
         let absoluteObjectPosition = objectAnchor.transform.columns.3
-        let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y + 0.5, absoluteObjectPosition.z)
+        let planePosition = SCNVector3(absoluteObjectPosition.x,
+                                       absoluteObjectPosition.y + 0.5,
+                                       absoluteObjectPosition.z)
         
-        //let planePosition = sceneView.scene.rootNode.convertPosition(nodePosition,
-         //   from: node)
-        // SCNVector3(x: 0.0010555089, y: 0.26650947, z: 0.004215777)
-        print(planePosition)
         planeNode.position = planePosition
         
         planeNode.constraints = [SCNBillboardConstraint()]
-        //node.addChildNode(planeNode)
         scene.rootNode.addChildNode(planeNode)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-
-        let location = touches.first!.location(in: sceneView)
-        let hitOptions = self.sceneView.hitTest(location, options: nil)
-        if let tappedNode = hitOptions.first?.node,
-            let _ = tappedNode.name {
-            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-        } else {
-    
-        let hitResultsFeaturePoints: [ARHitTestResult] =
-            sceneView.hitTest(location, types: .featurePoint)
-        if let hitResult = hitResultsFeaturePoints.first {
-            if detectedObjectNode != nil {
-                let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
-                    SCNVector3(hitResult.worldTransform.columns.3.x,
-                               hitResult.worldTransform.columns.3.y,
-                               hitResult.worldTransform.columns.3.z),
-                    to: detectedObjectNode)
-                let incident = Incident (type: .unknown,
-                                         description: "New Incident",
-                                         coordinate: Coordinate(vector: coordinateRelativeToObject))
-                DataHandler.incidents.append(incident)
-                print("new incident created")
-                add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                      hitResult.worldTransform.columns.3.y,
-                                                      hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
-            } else {
-                let coordinate = SCNVector3(hitResult.worldTransform.columns.3.x,
-                                            hitResult.worldTransform.columns.3.y,
-                                            hitResult.worldTransform.columns.3.z)
-                let incident = Incident (type: .unknown,
-                                         description: "New Incident",
-                                         coordinate: Coordinate(vector: coordinate))
-                DataHandler.incidents.append(incident)
-                print("new incident created")
-                add3DPin(vectorCoordinate: coordinate, identifier: "\(incident.identifier)" )
-            }
-            }
-        }
-    }
-    
-//    @objc func tapped(recognizer: UIGestureRecognizer) {
-//        if recognizer.state == .ended {
-//            let location: CGPoint = recognizer.location(in: sceneView)
-//            let hits = self.sceneView.hitTest(location, options: nil)
-//            if !hits.isEmpty {
-//                let tappedNode = hits.first?.node
-//                guard (tappedNode?.name) != nil else {
-//                    // Get exact position where touch happened on screen of iPhone (2D coordinate)
-//                    let touchPosition = recognizer.location(in: sceneView)
-//                    // Conduct a hit test based on a feature point that ARKit detected to find out what 3D point this 2D coordinate relates to
-//                    let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
-//
-//                    if !hitTestResult.isEmpty {
-//                        guard let hitResult = hitTestResult.first else {
-//                            return
-//                        }
-//                        if detectedObjectNode != nil {
-//                            let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
-//                                SCNVector3(hitResult.worldTransform.columns.3.x,
-//                                           hitResult.worldTransform.columns.3.y,
-//                                           hitResult.worldTransform.columns.3.z),
-//                                to: detectedObjectNode)
-//                            let incident = Incident (type: .unknown,
-//                                                     description: "New Incident",
-//                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
-//                            DataHandler.incidents.append(incident)
-//                            print("new incident created")
-//                            add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-//                                                                  hitResult.worldTransform.columns.3.y,
-//                                                                  hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
-//                        }
-//                    }
-//                    return
-//                }
-//                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-//            }
-//        }
-//    }
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
@@ -350,29 +282,55 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             detectedObjectNode = node
             for incident in DataHandler.incidents {
-                print("is in loop")
-                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
+                let absoluteX = objectAnchor.transform.columns.3.x + incident.getCoordinateToVector().x
+                let absoluteY = objectAnchor.transform.columns.3.y + incident.getCoordinateToVector().y
+                let absoluteZ = objectAnchor.transform.columns.3.z + incident.getCoordinateToVector().z
+                let absoluteCoordinate = SCNVector3(absoluteX, absoluteY, absoluteZ)
+                add3DPin(vectorCoordinate: absoluteCoordinate, identifier: "\(incident.identifier)")
             }
             addInfoPlane(node: node, objectAnchor: objectAnchor)
             
-//            let alertController = UIAlertController(title: "Object detected",
-//                                                    message: "Dashboard",
-//                                                    preferredStyle: .alert)
-//            alertController.addAction(UIAlertAction(title: "OK", style: .default))
-//            present(alertController, animated: true)
         }
         return node
     }
     
-    
     // MARK: Overridden/Lifecycle Methods
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        let location = touches.first!.location(in: sceneView)
+        
+        let hitOptions = self.sceneView.hitTest(location, options: nil)
+        if let tappedNode = hitOptions.first?.node {
+            if tappedNode.name != nil {
+                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+            }
+        } else {
+            let hitResultsFeaturePoints: [ARHitTestResult] =
+                sceneView.hitTest(location, types: .featurePoint)
+            if let hitResult = hitResultsFeaturePoints.first {
+                let absoluteVectorCoordinate = SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                          hitResult.worldTransform.columns.3.y,
+                                                          hitResult.worldTransform.columns.3.z)
+                let relativeVectorCoordinate = sceneView.scene.rootNode.convertPosition(
+                    absoluteVectorCoordinate,
+                    to: detectedObjectNode)
+                let incident = Incident (type: .unknown,
+                                         description: "New Incident",
+                                         coordinate: Coordinate(vector: relativeVectorCoordinate))
+                DataHandler.incidents.append(incident)
+                add3DPin(vectorCoordinate: absoluteVectorCoordinate, identifier: "\(incident.identifier)" )
+                
+            }
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "ShowDetailSegue":
             guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
-            let pin = sender as? SCNNode,
+                let pin = sender as? SCNNode,
                 let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
-                return
+                    return
             }
             detailVC.incident = incident
         default :
@@ -380,7 +338,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 }
-
 
 // MARK: Coordinate
 struct Coordinate: Codable {

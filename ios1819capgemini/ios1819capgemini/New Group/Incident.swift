@@ -41,6 +41,13 @@ public class Incident: Codable {
         self.status = status
         self.description = description
         self.modifiedDate = modifiedDate
+        
+        switch status {
+        case .open: self.changePinColor(to: .red)
+        case .progress: self.changePinColor(to: .yellow)
+        case .resolved: self.changePinColor(to: .green)
+        }
+        
     }
     
     // MARK: Private Instance Methods
@@ -48,9 +55,23 @@ public class Incident: Codable {
         return nil
     }
     
+    private func changePinColor(to color: UIColor) {
+        for node in nodes {
+            guard let name = node.name,
+                let nodeId = Int(name) else {
+                    print("no node found")
+                    return
+            }
+            if nodeId == identifier {
+                node.geometry?.materials.first?.diffuse.contents = color
+            }
+        }
+    }
+    
     func getCoordinateToVector() -> SCNVector3 {
         return SCNVector3(x: coordinate.pointX, y: coordinate.pointY, z: coordinate.pointZ)
     }
+
 }
 
  // MARK: Constants
