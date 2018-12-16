@@ -19,7 +19,7 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>public.contetn</string>
+				<string>public.content</string>
 				<string>public.data</string>
 			</array>
 		</dict>
