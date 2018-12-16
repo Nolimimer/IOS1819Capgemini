@@ -60,6 +60,7 @@ class ListViewController: UIViewController {
     
     // Share with airDrop just works on iPhone and not in the xCode simulator
     private func share() {
+    DataHandler.saveToJSON()
     let activityController = UIActivityViewController(activityItems: [DataHandler.getJSON()!], applicationActivities: nil)
         
         let excludedActivities =
