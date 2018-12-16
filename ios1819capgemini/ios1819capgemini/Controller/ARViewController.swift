@@ -277,6 +277,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
                             DataHandler.incidents.append(incident)
+                            DataHandler.saveToJSON()
                             print("new incident created")
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
