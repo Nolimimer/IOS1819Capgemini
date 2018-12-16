@@ -19,7 +19,8 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>ios1819.capgemini.tum</string>
+				<string>public.contetn</string>
+				<string>public.data</string>
 			</array>
 		</dict>
 	</array>
@@ -72,13 +73,14 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.content</string>
+				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Incident JsonData</string>
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
-			<string>ios1819.capgemini.tum</string>
+			<string>cargemini</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -94,13 +96,14 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.content</string>
+				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Incident JsonData</string>
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
-			<string>ios1819.capgemini.tum</string>
+			<string>cargemini</string>
 		</dict>
 	</array>
 </dict>
