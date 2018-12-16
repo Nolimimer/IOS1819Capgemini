@@ -160,7 +160,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
-    
     // Handle completion of the Vision request and choose results to display.
     /// - Tag: ProcessClassifications
     private func processClassifications(for request: VNRequest, error: Error?) -> [Prediction]? {
@@ -220,7 +219,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
-        
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
         materialSphere.diffuse.contents = UIColor.red
@@ -276,11 +274,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            DataHandler.incidents.append(incident)
                             print("new incident created")
+                            let imageWithoutPin = sceneView.snapshot()
+                            saveImage(image: imageWithoutPin)
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
+                            let imageWithPin = sceneView.snapshot()
+                            saveImage(image: imageWithPin)
+                            DataHandler.incidents.append(incident)
                         }
                     }
                     return
@@ -310,7 +312,27 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return node
     }
     
-    
+    func saveImage(image: UIImage) {
+        
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        
+        let paths = NSSearchPathForDirectoriesInDomains(
+            FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let documentsDirectory = URL(fileURLWithPath: paths[0])
+        
+        guard let data = image.jpegData(compressionQuality: 0.5) else {
+            return
+        }
+        print("save image data description : \(data.description)")
+        do {
+            let defaults = UserDefaults.standard
+            try data.write(to: documentsDirectory.appendingPathComponent("cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"), options: [])
+            defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedPhotoName")
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+    }
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
