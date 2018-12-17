@@ -30,8 +30,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     private var isDetecting = true
     private var anchorLabels = [UUID: String]()
-    var objectAnchor: ARObjectAnchor? = nil
-    var node: SCNNode? = nil
+    private var objectAnchor: ARObjectAnchor?
+    private var node: SCNNode?
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
@@ -122,11 +122,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.boundingBoxes.append(box)
         }
     }
-    
-    
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
-    
+        //swiftlint:disable force_unwrapping
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
             //self?.processClassifications(for: request, error: error)
             guard let predictions = self?.processClassifications(for: request, error: error) else {
@@ -143,7 +141,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return request
     }()
-    
+    //swiftlint:enable force_unwrapping
     // Run the Vision+ML classifier on the current image buffer.
     /// - Tag: ClassifyCurrentImage
     private func classifyCurrentImage() {
@@ -287,22 +285,21 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             to: nil)
         planeNode.position = planePosition
         let labelNode = SKLabelNode(text: carPart)
-        labelNode.fontSize = 50
-        labelNode.color = UIColor.white
+        labelNode.fontSize = 40
+        labelNode.color = UIColor.black
         labelNode.fontName = "Helvetica-Black"
-        labelNode.position = CGPoint(x: 100, y: 200)
+        labelNode.position = CGPoint(x: 120, y: 200)
         
         
         let descriptionNode = SKLabelNode(text: "Incidents: \(numberOfIncidents)")
         descriptionNode.fontSize = 20
         if numberOfIncidents == 0 {
-            descriptionNode.fontColor = UIColor.white
+            descriptionNode.fontColor = UIColor.green
         } else {
             descriptionNode.fontColor = UIColor.red
         }
         descriptionNode.fontName = "Helvetica"
-        descriptionNode.position = CGPoint(x: 100, y: 50)
-        
+        descriptionNode.position = CGPoint(x: 120, y: 50)
         spriteKitScene.addChild(descriptionNode)
         spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
@@ -346,11 +343,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
-                            self.scene.rootNode.childNodes.forEach { node in
-                                print(node.name)
-                            }
+//                            self.scene.rootNode.childNodes.forEach { node in
+//                                print(node.name)
+//                            }
                             removeNode(identifier: "v1He0zIqEVzVLWa4jZ0Z")
-                            addInfoPlane(numberOfIncidents: incident.identifier, carPart: incident.type.rawValue)
+                            addInfoPlane(numberOfIncidents: incident.identifier, carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
                             let imageWithPin = sceneView.snapshot()
                             filter3DPins(identifier: "\(incident.identifier)")
                             saveImage(image: imageWithPin)
@@ -373,11 +370,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
-            addInfoPlane(numberOfIncidents: 0, carPart: "Car Part")
-            
+            addInfoPlane(numberOfIncidents: 0, carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+            // swiftlint:disable force_unwrapping
+
             let alertController = UIAlertController(title: "Object detected",
-                                                    message: "Dashboard",
+                                                    message: "\(objectAnchor.referenceObject.name!)",
                                                     preferredStyle: .alert)
+            // swiftlint:enable force_unwrapping
             alertController.addAction(UIAlertAction(title: "OK", style: .default))
             present(alertController, animated: true)
         }
@@ -420,7 +419,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 }
-
 
 // MARK: Coordinate
 struct Coordinate: Codable {
