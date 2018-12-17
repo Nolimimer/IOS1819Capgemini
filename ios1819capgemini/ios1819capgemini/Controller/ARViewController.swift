@@ -13,6 +13,7 @@ import SceneKit
 import Vision
 
 // MARK: - ARViewController
+// swiftlint:disable type_body_length
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: Stored Instance Properties
@@ -26,8 +27,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
     var model: VNCoreMLModel?
+    
     private var isDetecting = true
     private var anchorLabels = [UUID: String]()
+    var objectAnchor: ARObjectAnchor? = nil
+    var node: SCNNode? = nil
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
@@ -229,18 +233,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.scene.rootNode.addChildNode(sphereNode)
     }
     
-    private func remove3DPin (identifier: String) {
+    // swiftlint:disable force_unwrapping
+    func removeNode (identifier: String) -> Bool {
         self.scene.rootNode.childNode(withName: identifier, recursively: false)?.removeFromParentNode()
+        if self.scene.rootNode.childNode(withName: identifier, recursively: false) != nil {
+            self.scene.rootNode.childNode(withName: identifier, recursively: false)!.removeFromParentNode()
+            return true
+        }
+        return false
     }
-    
     private func filter3DPins (identifier: String) {
         self.scene.rootNode.childNodes.forEach { node in
             if node.name != nil {
-                if node.name != identifier {
+                if node.name != identifier && node.name != "v1He0zIqEVzVLWa4jZ0Z" {
                     let tmpNode = node
                     self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                        print("\(node.name!) will be disabled for 1 second(s)")
                         self.scene.rootNode.addChildNode(tmpNode)
                     })
                 }
@@ -251,35 +259,61 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.scene.rootNode.childNodes.forEach { node in
             if node.name != nil {
                 let tmpNode = node
-                self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                    print("\(node.name!) will be disabled for 1 second")
-                    self.scene.rootNode.addChildNode(tmpNode)
-                })
+                if node.name != "v1He0zIqEVzVLWa4jZ0Z" {
+                    self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                        self.scene.rootNode.addChildNode(tmpNode)
+                    })
+                }
             }
         }
     }
-    
-    private func addInfoPlane (node: SCNNode, objectAnchor: ARObjectAnchor) {
-        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
-                             height: CGFloat(objectAnchor.referenceObject.extent.y * 0.5))
+    private func addInfoPlane (numberOfIncidents: Int, carPart: String) {
+        
+        let plane = SCNPlane(width: CGFloat(self.objectAnchor!.referenceObject.extent.x * 0.8),
+                             height: CGFloat(self.objectAnchor!.referenceObject.extent.y * 0.3))
         plane.cornerRadius = plane.width / 8
-        let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
+        //let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
+        let spriteKitScene = SKScene(size: CGSize(width: 300, height: 300))
+        spriteKitScene.backgroundColor = UIColor.black
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
         let planePosition = sceneView.scene.rootNode.convertPosition(
-            SCNVector3Make(objectAnchor.referenceObject.center.x,
-                           objectAnchor.referenceObject.center.y + objectAnchor.referenceObject.extent.y + 0.25,
-                           objectAnchor.referenceObject.center.z),
+            SCNVector3Make(self.objectAnchor!.referenceObject.center.x,
+                           self.objectAnchor!.referenceObject.center.y + self.objectAnchor!.referenceObject.extent.y,
+                           self.objectAnchor!.referenceObject.center.z),
             to: nil)
         planeNode.position = planePosition
+        let labelNode = SKLabelNode(text: carPart)
+        labelNode.fontSize = 50
+        labelNode.color = UIColor.white
+        labelNode.fontName = "Helvetica-Black"
+        labelNode.position = CGPoint(x: 100, y: 200)
         
+        
+        let descriptionNode = SKLabelNode(text: "Incidents: \(numberOfIncidents)")
+        descriptionNode.fontSize = 20
+        if numberOfIncidents == 0 {
+            descriptionNode.fontColor = UIColor.white
+        } else {
+            descriptionNode.fontColor = UIColor.red
+        }
+        descriptionNode.fontName = "Helvetica"
+        descriptionNode.position = CGPoint(x: 100, y: 50)
+        
+        spriteKitScene.addChild(descriptionNode)
+        spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
+        //ES BLEIBT ALLES SO WIE ES IST!! xoxo minh
+        planeNode.name = "v1He0zIqEVzVLWa4jZ0Z"
         scene.rootNode.addChildNode(planeNode)
+        self.scene.rootNode.childNodes.forEach { node in
+            print(node.name)
+        }
     }
-    
+    // swiftlint:enable force_unwrapping
     @objc func tapped(recognizer: UIGestureRecognizer) {
         if recognizer.state == .ended {
             let location: CGPoint = recognizer.location(in: sceneView)
@@ -312,6 +346,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
+                            self.scene.rootNode.childNodes.forEach { node in
+                                print(node.name)
+                            }
+                            removeNode(identifier: "v1He0zIqEVzVLWa4jZ0Z")
+                            addInfoPlane(numberOfIncidents: incident.identifier, carPart: incident.type.rawValue)
                             let imageWithPin = sceneView.snapshot()
                             filter3DPins(identifier: "\(incident.identifier)")
                             saveImage(image: imageWithPin)
@@ -328,13 +367,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let node = SCNNode()
         
         if let objectAnchor = anchor as? ARObjectAnchor {
-            
+            self.node = node
+            self.objectAnchor = objectAnchor
             detectedObjectNode = node
             for incident in DataHandler.incidents {
-                print("is in loop")
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
-            //addInfoPlane(node: node, objectAnchor: objectAnchor)
+            addInfoPlane(numberOfIncidents: 0, carPart: "Car Part")
             
             let alertController = UIAlertController(title: "Object detected",
                                                     message: "Dashboard",
