@@ -229,6 +229,37 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.scene.rootNode.addChildNode(sphereNode)
     }
     
+    private func remove3DPin (identifier: String) {
+        self.scene.rootNode.childNode(withName: identifier, recursively: false)?.removeFromParentNode()
+    }
+    
+    private func filter3DPins (identifier: String) {
+        self.scene.rootNode.childNodes.forEach { node in
+            if node.name != nil {
+                if node.name != identifier {
+                    let tmpNode = node
+                    self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                        print("\(node.name!) will be disabled for 1 second(s)")
+                        self.scene.rootNode.addChildNode(tmpNode)
+                    })
+                }
+            }
+        }
+    }
+    private func filterAllPins () {
+        self.scene.rootNode.childNodes.forEach { node in
+            if node.name != nil {
+                let tmpNode = node
+                self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    print("\(node.name!) will be disabled for 1 second")
+                    self.scene.rootNode.addChildNode(tmpNode)
+                })
+            }
+        }
+    }
+    
     private func addInfoPlane (node: SCNNode, objectAnchor: ARObjectAnchor) {
         let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
                              height: CGFloat(objectAnchor.referenceObject.extent.y * 0.5))
@@ -275,12 +306,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
                             print("new incident created")
+                            filterAllPins()
                             let imageWithoutPin = sceneView.snapshot()
                             saveImage(image: imageWithoutPin)
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
                             let imageWithPin = sceneView.snapshot()
+                            filter3DPins(identifier: "\(incident.identifier)")
                             saveImage(image: imageWithPin)
                             DataHandler.incidents.append(incident)
                         }
