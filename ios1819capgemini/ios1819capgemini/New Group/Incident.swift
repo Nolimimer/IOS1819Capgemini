@@ -71,7 +71,12 @@ public class Incident: Codable {
     func getCoordinateToVector() -> SCNVector3 {
         return SCNVector3(x: coordinate.pointX, y: coordinate.pointY, z: coordinate.pointZ)
     }
-
+    
+    func addAttachment(attachment: Attachment) {
+        attachments.append(attachment)
+        print("\(attachment) added")
+    }
+    
 }
 
  // MARK: Constants
