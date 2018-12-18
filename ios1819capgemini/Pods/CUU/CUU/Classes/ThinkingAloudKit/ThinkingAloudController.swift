@@ -37,6 +37,8 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
     // MARK: - Thinking Aloud Run Controlling
     
     @objc func crumbReceived(notification: NSNotification) {
+        if !ThinkingAloudKit.isActive { return }
+        
         let payload = notification.userInfo
         
         let featureArray = CUUUserManager.sharedManager.completedThinkingAloudFeatures
@@ -207,7 +209,7 @@ class ThinkingAloudController : ThinkingAloudStartViewControllerDelegate, Thinki
         }))
         alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { _ in
             if let previousCrumbId = self.previousCrumbId {
-               self.stop(for: previousCrumbId)
+                self.stop(for: previousCrumbId)
             }
         }))
         topVC.present(alert, animated: true, completion: nil)
