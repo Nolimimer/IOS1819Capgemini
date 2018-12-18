@@ -27,7 +27,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
     var model: VNCoreMLModel?
-    
+    private var detected = false
     private var descriptionNode = SKLabelNode(text: "")
     private var isDetecting = true
     private var anchorLabels = [UUID: String]()
@@ -369,6 +369,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let node = SCNNode()
         
         if let objectAnchor = anchor as? ARObjectAnchor {
+            
+            detected = true
             self.node = node
             self.objectAnchor = objectAnchor
             detectedObjectNode = node
