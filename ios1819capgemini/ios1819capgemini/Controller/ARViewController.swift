@@ -11,9 +11,7 @@ import UIKit
 import ARKit
 import SceneKit
 import Vision
-
 // MARK: - ARViewController
-// swiftlint:disable type_body_length
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: Stored Instance Properties
@@ -95,8 +93,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 
-
-    // MARK: Object Detection Functions
+    // MARK: ML methods
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         // Do not enqueue other buffers for processing while another Vision task is still running.
         // The camera stream has only a finite amount of buffers available; holding too many buffers for analysis would starve the camera.
@@ -121,7 +118,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
-        //swiftlint:disable force_unwrapping
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
             //self?.processClassifications(for: request, error: error)
             guard let predictions = self?.processClassifications(for: request, error: error) else {
@@ -138,7 +134,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return request
     }()
-    //swiftlint:enable force_unwrapping
     // Run the Vision+ML classifier on the current image buffer.
     /// - Tag: ClassifyCurrentImage
     private func classifyCurrentImage() {
@@ -217,6 +212,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.automaticallyUpdatesLighting = true
     }
     
+    // MARK: AR methods
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
@@ -228,40 +224,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.scene.rootNode.addChildNode(sphereNode)
     }
     
-    // swiftlint:disable force_unwrapping
-    func removeNode (identifier: String) -> Bool {
-        if self.scene.rootNode.childNode(withName: identifier, recursively: false) != nil {
-            self.scene.rootNode.childNode(withName: identifier, recursively: false)!.removeFromParentNode()
-            return true
-        }
-        return false
-    }
-    private func filter3DPins (identifier: String) {
-        self.scene.rootNode.childNodes.forEach { node in
-            if node.name != nil {
-                if node.name != identifier {
-                    let tmpNode = node
-                    self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                        self.scene.rootNode.addChildNode(tmpNode)
-                    })
-                }
-            }
-        }
-    }
-    private func filterAllPins () {
-        self.scene.rootNode.childNodes.forEach { node in
-            if node.name != nil {
-                let tmpNode = node
-                    self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                        self.scene.rootNode.addChildNode(tmpNode)
-                    })
-            }
-        }
-    }
+    //swiftlint:disable force_unwrapping
     private func addInfoPlane (carPart: String) {
-        
         let plane = SCNPlane(width: CGFloat(self.objectAnchor!.referenceObject.extent.x * 0.8),
                              height: CGFloat(self.objectAnchor!.referenceObject.extent.y * 0.3))
         plane.cornerRadius = plane.width / 8
@@ -281,7 +245,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         labelNode.fontName = "Helvetica-Bold"
         labelNode.position = CGPoint(x: 120, y: 200)
         
-        
         descriptionNode = SKLabelNode(text: "Incidents: \(DataHandler.incidents.count)")
         descriptionNode.fontSize = 30
         //swiftlint:disable empty_count
@@ -298,7 +261,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
         scene.rootNode.addChildNode(planeNode)
     }
-    // swiftlint:enable force_unwrapping
+    //swiftlint:enable force_unwrapping
+    
     @objc func tapped(recognizer: UIGestureRecognizer) {
         if recognizer.state == .ended {
             let location: CGPoint = recognizer.location(in: sceneView)
@@ -306,9 +270,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             if !hits.isEmpty {
                 let tappedNode = hits.first?.node
                 guard (tappedNode?.name) != nil else {
-                    // Get exact position where touch happened on screen of iPhone (2D coordinate)
                     let touchPosition = recognizer.location(in: sceneView)
-                    // Conduct a hit test based on a feature point that ARKit detected to find out what 3D point this 2D coordinate relates to
                     let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
                     
                     if !hitTestResult.isEmpty {
@@ -344,6 +306,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
+    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
@@ -357,18 +320,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
-            // swiftlint:disable force_unwrapping
-
-            let alertController = UIAlertController(title: "Object detected",
-                                                    message: "\(objectAnchor.referenceObject.name!)",
-                                                    preferredStyle: .alert)
-            // swiftlint:enable force_unwrapping
-            alertController.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alertController, animated: true)
+//            let alertController = UIAlertController(title: "Object detected",
+//                                                    message: "\(objectAnchor.referenceObject.name!)",
+//                                                    preferredStyle: .alert)
+//            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+//            present(alertController, animated: true)
         }
         return node
     }
     
+    // MARK: Screenshot methods
     func saveImage(image: UIImage) {
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
@@ -389,7 +350,34 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
     }
+    //swiftlint:disable force_unwrapping
+    private func filter3DPins (identifier: String) {
+        self.scene.rootNode.childNodes.forEach { node in
+            if node.name != nil {
+                if node.name != identifier {
+                    let tmpNode = node
+                    self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                        self.scene.rootNode.addChildNode(tmpNode)
+                    })
+                }
+            }
+        }
+    }
     
+    private func filterAllPins () {
+        self.scene.rootNode.childNodes.forEach { node in
+            if node.name != nil {
+                let tmpNode = node
+                self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    self.scene.rootNode.addChildNode(tmpNode)
+                })
+            }
+        }
+    }
+    //swiftlint:enable force_unwrapping
+
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
