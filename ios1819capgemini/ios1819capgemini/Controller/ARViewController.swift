@@ -233,7 +233,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // swiftlint:disable force_unwrapping
     func removeNode (identifier: String) -> Bool {
-        self.scene.rootNode.childNode(withName: identifier, recursively: false)?.removeFromParentNode()
         if self.scene.rootNode.childNode(withName: identifier, recursively: false) != nil {
             self.scene.rootNode.childNode(withName: identifier, recursively: false)!.removeFromParentNode()
             return true
@@ -278,11 +277,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
-        let planePosition = sceneView.scene.rootNode.convertPosition(
-            SCNVector3Make(self.objectAnchor!.referenceObject.center.x,
-                           self.objectAnchor!.referenceObject.center.y + self.objectAnchor!.referenceObject.extent.y,
-                           self.objectAnchor!.referenceObject.center.z),
-            to: nil)
+//        let planePosition = sceneView.scene.rootNode.convertPosition(
+//            SCNVector3Make(self.objectAnchor!.referenceObject.center.x,
+//                           self.objectAnchor!.referenceObject.center.y + self.objectAnchor!.referenceObject.extent.y ,
+//                           self.objectAnchor!.referenceObject.center.z),
+//            to: nil)
+        let absoluteObjectPosition = objectAnchor!.transform.columns.3
+        let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y, absoluteObjectPosition.z)
         planeNode.position = planePosition
         let labelNode = SKLabelNode(text: carPart)
         labelNode.fontSize = 40
@@ -306,9 +307,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         //ES BLEIBT ALLES SO WIE ES IST!! xoxo minh
         planeNode.name = "v1He0zIqEVzVLWa4jZ0Z"
         scene.rootNode.addChildNode(planeNode)
-        self.scene.rootNode.childNodes.forEach { node in
-            print(node.name)
-        }
+//        self.scene.rootNode.childNodes.forEach { node in
+//            print(node.name)
+//        }
     }
     // swiftlint:enable force_unwrapping
     @objc func tapped(recognizer: UIGestureRecognizer) {
@@ -336,13 +337,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            print("new incident created")
+//                            print("new incident created")
                             filterAllPins()
                             let imageWithoutPin = sceneView.snapshot()
                             saveImage(image: imageWithoutPin)
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
-                                                                  hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
+                                                                  hitResult.worldTransform.columns.3.z),
+                                     identifier: "\(incident.identifier)" )
 //                            self.scene.rootNode.childNodes.forEach { node in
 //                                print(node.name)
 //                            }
@@ -370,7 +372,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
-            addInfoPlane(numberOfIncidents: 0, carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+            addInfoPlane(numberOfIncidents: DataHandler.largestID, carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             // swiftlint:disable force_unwrapping
 
             let alertController = UIAlertController(title: "Object detected",
