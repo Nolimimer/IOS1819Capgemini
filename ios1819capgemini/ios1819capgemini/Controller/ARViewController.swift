@@ -28,6 +28,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     let multiClass = true
     var model: VNCoreMLModel?
     
+    private var descriptionNode = SKLabelNode(text: "")
     private var isDetecting = true
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
@@ -265,7 +266,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
-    private func addInfoPlane (numberOfIncidents: Int, carPart: String) {
+    private func addInfoPlane (carPart: String) {
         
         let plane = SCNPlane(width: CGFloat(self.objectAnchor!.referenceObject.extent.x * 0.8),
                              height: CGFloat(self.objectAnchor!.referenceObject.extent.y * 0.3))
@@ -289,18 +290,19 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let labelNode = SKLabelNode(text: carPart)
         labelNode.fontSize = 40
         labelNode.color = UIColor.black
-        labelNode.fontName = "Helvetica-Black"
+        labelNode.fontName = "Helvetica-Bold"
         labelNode.position = CGPoint(x: 120, y: 200)
         
         
-        let descriptionNode = SKLabelNode(text: "Incidents: \(numberOfIncidents)")
-        descriptionNode.fontSize = 20
-        if numberOfIncidents == 0 {
+        descriptionNode = SKLabelNode(text: "Incidents: \(DataHandler.incidents.count)")
+        descriptionNode.fontSize = 30
+        //swiftlint:disable empty_count
+        if DataHandler.incidents.count == 0 {
             descriptionNode.fontColor = UIColor.green
         } else {
             descriptionNode.fontColor = UIColor.red
         }
-        descriptionNode.fontName = "Helvetica"
+        descriptionNode.fontName = "Helvetica-Bold"
         descriptionNode.position = CGPoint(x: 120, y: 50)
         spriteKitScene.addChild(descriptionNode)
         spriteKitScene.addChild(labelNode)
@@ -349,10 +351,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //                            self.scene.rootNode.childNodes.forEach { node in
 //                                print(node.name)
 //                            }
-                            removeNode(identifier: "v1He0zIqEVzVLWa4jZ0Z")
-                            addInfoPlane(numberOfIncidents: incident.identifier, carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
-                            filter3DPins(identifier: "\(incident.identifier)")
+                            //removeNode(identifier: "v1He0zIqEVzVLWa4jZ0Z")
                             DataHandler.incidents.append(incident)
+                            descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
                         }
                     }
                     return
@@ -371,7 +372,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
-            addInfoPlane(numberOfIncidents: DataHandler.largestID, carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             // swiftlint:disable force_unwrapping
 
             let alertController = UIAlertController(title: "Object detected",
@@ -395,7 +396,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard let data = image.jpegData(compressionQuality: 0.5) else {
             return
         }
-        print("save image data description : \(data.description)")
+        //print("save image data description : \(data.description)")
         do {
             let defaults = UserDefaults.standard
             try data.write(to: documentsDirectory.appendingPathComponent("cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"), options: [])
