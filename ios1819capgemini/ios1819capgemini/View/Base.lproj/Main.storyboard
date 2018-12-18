@@ -487,6 +487,11 @@
                         <viewLayoutGuide key="safeArea" id="aL3-UY-sVh"/>
                     </view>
                     <navigationItem key="navigationItem" title="Incident List" id="02i-px-RU8">
+                        <barButtonItem key="leftBarButtonItem" title="Show Open" id="VdJ-kt-XCE" userLabel="Show">
+                            <connections>
+                                <action selector="showButton:" destination="qwB-cY-kiz" id="Ctn-vt-nbW"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="AZm-i1-5TK">
                                 <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

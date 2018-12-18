@@ -26,6 +26,7 @@ enum DataHandler {
     // MARK: Stored Type Properties
     static var incidents: [Incident] = []
     static var largestID = 0
+    static var showAll = true
     
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {

@@ -58,7 +58,29 @@ class ListViewController: UIViewController {
         share()
     }
     
+    @IBAction private func showButton(_ sender: UIBarButtonItem) {
+        if DataHandler.showAll == false {
+            // In show all state
+            tableView.reloadData()
+            DataHandler.showAll = true
+            sender.title = "Show Open"
+            print("Show Open")
+        } else {
+            // In filter list state
+            sender.title = "Show All"
+            print("Show All")
+            filterList()
+            DataHandler.showAll = false
+        }
+    }
     // Share with airDrop just works on iPhone and not in the xCode simulator
+    
+    private func filterList() {
+        // Show list with only open items
+        
+        tableView.reloadData()
+    }
+    
     private func share() {
     let activityController = UIActivityViewController(activityItems: DataHandler.incidents, applicationActivities: nil)
         
@@ -96,8 +118,6 @@ extension ListViewController: UITableViewDataSource {
         cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
         cell.tag = incident.identifier
         cell.detailTextLabel?.text = incident.description
-        
-//        print("Tag: \(cell.tag)")
         return cell
     }
     
