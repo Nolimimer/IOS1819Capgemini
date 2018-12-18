@@ -272,7 +272,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         plane.cornerRadius = plane.width / 8
         //let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
         let spriteKitScene = SKScene(size: CGSize(width: 300, height: 300))
-        spriteKitScene.backgroundColor = UIColor.black
+        spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
@@ -282,8 +282,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //                           self.objectAnchor!.referenceObject.center.y + self.objectAnchor!.referenceObject.extent.y ,
 //                           self.objectAnchor!.referenceObject.center.z),
 //            to: nil)
+        // swiftlint:disable line_length
         let absoluteObjectPosition = objectAnchor!.transform.columns.3
-        let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y, absoluteObjectPosition.z)
+        let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y + self.objectAnchor!.referenceObject.extent.y, absoluteObjectPosition.z)
         planeNode.position = planePosition
         let labelNode = SKLabelNode(text: carPart)
         labelNode.fontSize = 40
@@ -350,9 +351,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //                            }
                             removeNode(identifier: "v1He0zIqEVzVLWa4jZ0Z")
                             addInfoPlane(numberOfIncidents: incident.identifier, carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
-                            let imageWithPin = sceneView.snapshot()
                             filter3DPins(identifier: "\(incident.identifier)")
-                            saveImage(image: imageWithPin)
                             DataHandler.incidents.append(incident)
                         }
                     }
