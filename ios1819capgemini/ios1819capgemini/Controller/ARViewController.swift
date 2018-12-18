@@ -272,6 +272,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
         let absoluteObjectPosition = objectAnchor!.transform.columns.3
+        //swiftlint:disable line_length
         let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y + self.objectAnchor!.referenceObject.extent.y, absoluteObjectPosition.z)
         planeNode.position = planePosition
         let labelNode = SKLabelNode(text: carPart)
