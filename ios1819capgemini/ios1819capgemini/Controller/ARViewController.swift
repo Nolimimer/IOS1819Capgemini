@@ -352,6 +352,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //                                print(node.name)
 //                            }
                             //removeNode(identifier: "v1He0zIqEVzVLWa4jZ0Z")
+                            filter3DPins(identifier: "\(incident.identifier)")
+                            let imageWithPin = sceneView.snapshot()
+                            saveImage(image: imageWithPin)
                             DataHandler.incidents.append(incident)
                             descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
                         }
