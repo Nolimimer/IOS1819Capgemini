@@ -74,7 +74,7 @@ enum DataHandler {
     
     static func loadFromJSON(url: URL) {
         do {
-            let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)
+            let fileWrapper = try FileWrapper(url: url, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
             }
