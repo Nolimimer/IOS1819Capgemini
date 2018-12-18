@@ -22,7 +22,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?
     var screenWidth: Double?
-    let semaphore = DispatchSemaphore(value: 1)
     let numBoxes = 100
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
@@ -42,9 +41,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet private var sceneView: ARSCNView!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
         if sender.currentTitle == "Automatic Detection: On" {
-            // TODO not working yet
-            //sender.setTitle("Automatic Detection: Off", for: UIControl.State.normal)
-            //isDetecting = false
         } else {
             sender.setTitle("Automatic Detection: On", for: UIControl.State.normal)
             isDetecting = true
@@ -243,7 +239,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private func filter3DPins (identifier: String) {
         self.scene.rootNode.childNodes.forEach { node in
             if node.name != nil {
-                if node.name != identifier && node.name != "v1He0zIqEVzVLWa4jZ0Z" {
+                if node.name != identifier {
                     let tmpNode = node
                     self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
@@ -257,12 +253,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.scene.rootNode.childNodes.forEach { node in
             if node.name != nil {
                 let tmpNode = node
-                if node.name != "v1He0zIqEVzVLWa4jZ0Z" {
                     self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                         self.scene.rootNode.addChildNode(tmpNode)
                     })
-                }
             }
         }
     }
@@ -271,19 +265,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let plane = SCNPlane(width: CGFloat(self.objectAnchor!.referenceObject.extent.x * 0.8),
                              height: CGFloat(self.objectAnchor!.referenceObject.extent.y * 0.3))
         plane.cornerRadius = plane.width / 8
-        //let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
         let spriteKitScene = SKScene(size: CGSize(width: 300, height: 300))
         spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
-//        let planePosition = sceneView.scene.rootNode.convertPosition(
-//            SCNVector3Make(self.objectAnchor!.referenceObject.center.x,
-//                           self.objectAnchor!.referenceObject.center.y + self.objectAnchor!.referenceObject.extent.y ,
-//                           self.objectAnchor!.referenceObject.center.z),
-//            to: nil)
-        // swiftlint:disable line_length
         let absoluteObjectPosition = objectAnchor!.transform.columns.3
         let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y + self.objectAnchor!.referenceObject.extent.y, absoluteObjectPosition.z)
         planeNode.position = planePosition
@@ -307,12 +294,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         spriteKitScene.addChild(descriptionNode)
         spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
-        //ES BLEIBT ALLES SO WIE ES IST!! xoxo minh
-        planeNode.name = "v1He0zIqEVzVLWa4jZ0Z"
+
         scene.rootNode.addChildNode(planeNode)
-//        self.scene.rootNode.childNodes.forEach { node in
-//            print(node.name)
-//        }
     }
     // swiftlint:enable force_unwrapping
     @objc func tapped(recognizer: UIGestureRecognizer) {
@@ -340,7 +323,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
-//                            print("new incident created")
                             filterAllPins()
                             let imageWithoutPin = sceneView.snapshot()
                             saveImage(image: imageWithoutPin)
@@ -348,10 +330,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z),
                                      identifier: "\(incident.identifier)" )
-//                            self.scene.rootNode.childNodes.forEach { node in
-//                                print(node.name)
-//                            }
-                            //removeNode(identifier: "v1He0zIqEVzVLWa4jZ0Z")
                             filter3DPins(identifier: "\(incident.identifier)")
                             let imageWithPin = sceneView.snapshot()
                             saveImage(image: imageWithPin)
@@ -401,7 +379,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard let data = image.jpegData(compressionQuality: 0.5) else {
             return
         }
-        //print("save image data description : \(data.description)")
         do {
             let defaults = UserDefaults.standard
             try data.write(to: documentsDirectory.appendingPathComponent("cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"), options: [])
@@ -411,6 +388,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
     }
+    
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
