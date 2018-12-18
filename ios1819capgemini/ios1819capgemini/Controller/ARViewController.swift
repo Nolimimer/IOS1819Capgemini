@@ -224,29 +224,27 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         
-        //        let sphere = SCNSphere(radius: 0.015)
-        //        let materialSphere = SCNMaterial()
-        //        materialSphere.diffuse.contents = UIColor.red
-        //        sphere.materials = [materialSphere]
-        //        let sphereNode = SCNNode(geometry: sphere)
-        //        sphereNode.name = identifier
-        //        sphereNode.position = vectorCoordinate
-        //        self.scene.rootNode.addChildNode(sphereNode)
-        //        nodes.append(sphereNode)
+                let sphere = SCNSphere(radius: 0.015)
+                let materialSphere = SCNMaterial()
+                materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
+                sphere.materials = [materialSphere]
+                let sphereNode = SCNNode(geometry: sphere)
+                sphereNode.name = identifier
+                sphereNode.position = vectorCoordinate
+                self.scene.rootNode.addChildNode(sphereNode)
+                nodes.append(sphereNode)
         
-        let pinScene = SCNScene(named: "art.scnassets/pin.scn")
-        
-        guard let pinNode = pinScene!.rootNode.childNodes.first else {
-            print("couldn't create node with scene")
-            return
-        }
-        pinNode.scale = SCNVector3(x: 0.015, y: 0.015, z: 0.015)
-        pinNode.position = vectorCoordinate
-        pinNode.name = identifier
-        pinNode.geometry?.materials.first?.diffuse.contents = UIColor.red
-        self.scene.rootNode.addChildNode(pinNode)
-        nodes.append(pinNode)
-        
+//        let pinScene = SCNScene(named: "art.scnassets/pin.scn")
+//        guard let pinNode = pinScene!.rootNode.childNodes.first else {
+//            print("couldn't create node with scene")
+//            return
+//        }
+//        pinNode.scale = SCNVector3(x: 0.015, y: 0.015, z: 0.015)
+//        pinNode.position = vectorCoordinate
+//        pinNode.name = identifier
+//        pinNode.geometry?.materials.first?.diffuse.contents = UIColor.red
+//        self.scene.rootNode.addChildNode(pinNode)
+//        nodes.append(pinNode)
     }
     
     private func addInfoPlane (node: SCNNode, objectAnchor: ARObjectAnchor) {

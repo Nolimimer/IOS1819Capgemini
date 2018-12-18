@@ -43,9 +43,9 @@ public class Incident: Codable {
         self.modifiedDate = modifiedDate
         
         switch status {
-        case .open: self.changePinColor(to: .red)
-        case .progress: self.changePinColor(to: .yellow)
-        case .resolved: self.changePinColor(to: .green)
+        case .open: self.changePinColor(to: UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9))
+        case .progress: self.changePinColor(to: UIColor(red: 239.0/255.0, green: 196.0/255.0, blue: 0.0, alpha: 0.9))
+        case .resolved: self.changePinColor(to: UIColor(red: 22.0/255.0, green: 167.0/255.0, blue: 0.0, alpha: 0.9))
         }
         
     }
