@@ -60,21 +60,31 @@ class ListViewController: UIViewController {
     }
     
     @IBAction private func showButton(_ sender: UIBarButtonItem) {
-        if DataHandler.showAll == false {
-            // In show open state
-            DataHandler.showAll = true
-            sender.title = "Show Open"
-            DataHandler.refreshOpenIncidents()
+        if DataHandler.showAll {
+            print("all")
+            sender.title = "All"
+            DataHandler.refreshAllIncidents()
             tableView.reloadData()
-        } else {
-            // In filter list state
-            sender.title = "Show All"
             DataHandler.showAll = false
+            DataHandler.showInProgress = true
+        } else if DataHandler.showInProgress {
+            print("in progress")
+            sender.title = "In Progress"
+            DataHandler.refreshInProgressIncidents()
+            tableView.reloadData()
+            DataHandler.showInProgress = false
+            DataHandler.showOpen = true
+        } else if DataHandler.showOpen {
+            print("open")
+            sender.title = "Open"
             DataHandler.refreshOpenIncidents()
             tableView.reloadData()
+            DataHandler.showOpen = false
+            DataHandler.showAll = true
+        } else {
+            //extended if necessary
         }
     }
-    // Share with airDrop just works on iPhone and not in the xCode simulator
   
     
     private func share() {
@@ -109,19 +119,30 @@ class ListViewController: UIViewController {
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if DataHandler.showAll == true { // In show all incidents state
+
+        // In show all incidents state
+        if DataHandler.showAll == true {
             let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
             let incident = DataHandler.incidents[indexPath.row]
             cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
             cell.tag = incident.identifier
             cell.detailTextLabel?.text = incident.description
             return cell
-        } else { // In open incidents state
+        }
+        if DataHandler.showInProgress == true {
             let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-            let openIncident = DataHandler.openIncidents[indexPath.row]
-            cell.textLabel?.text = "\(openIncident.type.rawValue) \(openIncident.identifier)"
-            cell.tag = openIncident.identifier
-            cell.detailTextLabel?.text = openIncident.description
+            let incident = DataHandler.openIncidents[indexPath.row]
+            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
+            cell.tag = incident.identifier
+            cell.detailTextLabel?.text = incident.description
+            return cell
+        }
+        else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
+            let incident = DataHandler.openIncidents[indexPath.row]
+            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
+            cell.tag = incident.identifier
+            cell.detailTextLabel?.text = incident.description
             return cell
         }
     }
