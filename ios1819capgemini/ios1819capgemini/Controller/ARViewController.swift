@@ -288,14 +288,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
                             filterAllPins()
                             let imageWithoutPin = sceneView.snapshot()
-                            saveImage(image: imageWithoutPin)
+                            saveImage(image: imageWithoutPin, incident: incident)
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z),
                                      identifier: "\(incident.identifier)" )
                             filter3DPins(identifier: "\(incident.identifier)")
                             let imageWithPin = sceneView.snapshot()
-                            saveImage(image: imageWithPin)
+                            saveImage(image: imageWithPin, incident: incident)
                             DataHandler.incidents.append(incident)
                             descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
                         }
@@ -330,7 +330,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     // MARK: Screenshot methods
-    func saveImage(image: UIImage) {
+    func saveImage(image: UIImage, incident: Incident) {
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         
@@ -343,8 +343,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         do {
             let defaults = UserDefaults.standard
-            try data.write(to: documentsDirectory.appendingPathComponent("cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"), options: [])
+            let name = "cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"
+            let path = documentsDirectory.appendingPathComponent(name)
+            try data.write(to: path, options: [])
             defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedPhotoName")
+            incident.addAttachment(attachment: Photo(name: name, photoPath: "\(paths[0])/\(name)"))
         } catch {
             print(error.localizedDescription)
             return
