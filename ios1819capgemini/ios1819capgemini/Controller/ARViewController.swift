@@ -189,11 +189,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                imgHeight: imgWidth,
                                                                xOffset: 0,
                                                                yOffset: (imgHeight - imgWidth) / 2)
-                self.boundingBoxes[index].show(frame: rect,
-                                               label: textLabel,
-                                               color: UIColor.green,
-                                               textColor: textColor)
-                
+                if detectedObjectNode != nil {
+                    self.boundingBoxes[index].show(frame: rect,
+                                                   label: textLabel,
+                                                   color: UIColor.green,
+                                                   textColor: textColor)
+                }
                 boundingBoxes[index].addToLayer(sceneView.layer)
                 //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
             }
@@ -312,6 +313,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         if let objectAnchor = anchor as? ARObjectAnchor {
             
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.success)
+            }
             detected = true
             self.node = node
             self.objectAnchor = objectAnchor
