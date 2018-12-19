@@ -54,6 +54,9 @@ public class Incident: Codable {
     
     func addAttachment(attachment: Attachment) {
         attachments.append(attachment)
+        attachments.sort {
+            $0.date > $1.date
+        }
         print("\(attachment) added")
     }
     

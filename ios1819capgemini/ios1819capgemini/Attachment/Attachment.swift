@@ -62,6 +62,12 @@ public class AttachmentWrapper {
             }
             return result
         }
+        if attachment is Audio {
+            let frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 120, height: 120))
+            let cgImage = CIContext().createCGImage(CIImage(color: .black), from: frame)!
+            let uiImage = UIImage(cgImage: cgImage)
+            return uiImage
+        }
         if let result = UIImage(named: "picturePreview") {
             return result
         }

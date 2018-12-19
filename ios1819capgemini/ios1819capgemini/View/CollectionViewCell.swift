@@ -40,7 +40,11 @@ class CollectionViewCell: UICollectionViewCell {
             let image = makeRoundImg(img: self.imageView)
             self.imageView.image = image
         }
-      
+        if attachment is Audio {
+            let image = makeRoundImg(img: self.imageView)
+            self.imageView.image = image
+            return
+        }
        
     }
 

@@ -28,6 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         if defaults.integer(forKey: "AttachedVideoName") == 0 {
             defaults.set(1, forKey: "AttachedVideoName")
         }
+        if defaults.integer(forKey: "AttachedAudioName") == 0 {
+            defaults.set(1, forKey: "AttachedAudioName")
+        }
         // Override point for customization after application launch.
         
         CUU.start()

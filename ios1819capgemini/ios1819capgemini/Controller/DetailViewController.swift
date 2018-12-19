@@ -17,6 +17,10 @@ import SceneKit
 class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     private var modus = Modus.view
+    var recordButton: UIButton!
+    var recordingSession: AVAudioSession!
+    var audioRecorder: AVAudioRecorder!
+    var audioPlayer: AVAudioPlayer?
     
     private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -165,7 +169,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         generatedDateLabel.text = dateString
         lastModifiedDateLabel.text = lastModifiedDateString
         textField.text = incident.description
-        attachments = computeAttachments()
+        attachments = []
+        attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
+        attachments.append(contentsOf: (incident.attachments))
         collectionView.reloadData()
     }
     
@@ -174,7 +180,18 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        attachments = computeAttachments()
+        
+        recordingSession = AVAudioSession.sharedInstance()
+        
+        do {
+            try recordingSession.setCategory(.playAndRecord, mode: .default)
+            try recordingSession.setActive(true)
+        } catch {
+            print("Failed to record audio!")
+        }
+        attachments = []
+        attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
+        attachments.append(contentsOf: (incident.attachments))
         
 //        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.handleTap(recognizer:)))
 //        self.view.addGestureRecognizer(gesture)
@@ -186,44 +203,35 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         self.navigationController?.view.sendSubviewToBack(blurView)
     }
     
-    func computeAttachments() -> [Attachment] {
-        if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
-            
-            let fileManager = FileManager.default
-            let arrImages: NSMutableArray = []
-            do {
-                let filePaths = try fileManager.contentsOfDirectory(atPath: dir.path)
-                for filePath in filePaths {
-                    let urlString = URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(filePath).path
-                        arrImages.add(urlString)
-                }
-            } catch {
-                print("Could not get folder: \(error)")
-            }
-            var result: [Attachment] = []
-            result.append(Photo(name: "plusButton", photoPath: "errorPath"))
-            for val in arrImages {
-                guard let val = val as? String else {
-                    continue
-                }
-                let strings = val.split(separator: "/")
-                let name = strings[strings.count - 1]
-                if val.hasSuffix("mov") {
-                    result.append(Video(name: String(name), videoPath: val))
-                    continue
-                }
-                if val.hasSuffix("jpg") {
-                    result.append(Photo(name: String(name), photoPath: val))
+    func finishRecording(success: Bool) {
+        
+        audioRecorder?.stop()
+        audioRecorder = nil
+        if success {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let defaults = UserDefaults.standard
+            let name = "cARgeminiAudioAsset\(defaults.integer(forKey: "AttachedAudioName") - 1).m4a"
+            let audioFilename = getDocumentsDirectory().appendingPathComponent(name)
+            incident.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)"))
+            recordButton.setTitle("Audio", for: .normal)
+            for child in view.subviews {
+                if child is AttachmentView {
+                    child.removeFromSuperview()
                 }
             }
-            result.sort {
-                $0.date == $1.date
-            }
-            return result
+            attachments = []
+            attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
+            attachments.append(contentsOf: (incident.attachments))
+            collectionView.reloadData()
+        } else {
+            recordButton.setTitle("Tap to Record", for: .normal)
         }
-        return []
     }
-    
+
+ 
+
+    // MARK: - OBJC FUNCTIONS
     @objc func handleTap(recognizer: UITapGestureRecognizer){
         self.view.endEditing(true)
         let location = recognizer.location(in: view)
@@ -237,7 +245,15 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
 
+    @objc func recordTapped() {
+        if audioRecorder == nil {
+            startRecording()
+        } else {
+            finishRecording(success: true)
+        }
+    }
     
+
     @objc private func takePhoto() {
         imagePicker =  UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
@@ -291,7 +307,8 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                                                               height: 200))
             attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
              attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
-             attachmentView.audioButton.addTarget(self, action: #selector(recordAudio), for: .touchUpInside)
+             attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+            recordButton = attachmentView.audioButton
             view.addSubview(attachmentView)
             return
         }
@@ -322,6 +339,13 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 return nil
             }
             present(galleryPreview, animated: true, completion: nil)
+        }
+        if currentAttachment is Audio {
+            let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell
+            guard let audio = currentAttachment as? Audio else {
+                return
+            }
+            playSound(audio: audio)
         }
     }
     
@@ -354,10 +378,12 @@ extension DetailViewController: UIImagePickerControllerDelegate {
                 FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
             let documentsDirectory = URL(fileURLWithPath: paths[0])
             let defaults = UserDefaults.standard
-            let dataPath = documentsDirectory.appendingPathComponent("cARgeminiVideoAsset\(defaults.integer(forKey: "AttachedVideoName")).mov")
+            let name = "cARgeminiVideoAsset\(defaults.integer(forKey: "AttachedVideoName")).mov"
+            let dataPath = documentsDirectory.appendingPathComponent(name)
             defaults.set(defaults.integer(forKey: "AttachedVideoName") + 1, forKey: "AttachedVideoName")
             do {
                 try videoData?.write(to: dataPath, options: [])
+                incident.addAttachment(attachment: Video(name: name, videoPath: "\(paths[0])/\(name)"))
             } catch {
                 print(Error.self)
             }
@@ -386,8 +412,11 @@ extension DetailViewController: UIImagePickerControllerDelegate {
         }
         do {
             let defaults = UserDefaults.standard
-            try data.write(to: documentsDirectory.appendingPathComponent("cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"), options: [])
+            let name = "cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"
+            let path = documentsDirectory.appendingPathComponent(name)
+            try data.write(to: path, options: [])
             defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedPhotoName")
+            incident.addAttachment(attachment: Photo(name: name, photoPath: "\(paths[0])/\(name)"))
             return true
         } catch {
             print(error.localizedDescription)
