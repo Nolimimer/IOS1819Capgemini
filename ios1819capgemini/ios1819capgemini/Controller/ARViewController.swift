@@ -11,9 +11,14 @@ import UIKit
 import ARKit
 import SceneKit
 import Vision
+
+
+// Stores all the nodes added to the scene
+var nodes = [SCNNode]()
+
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
-
+    
     // MARK: Stored Instance Properties
     var detectedObjectNode: SCNNode?
     let scene = SCNScene()
@@ -34,7 +39,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
     private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
-
+    
     // MARK: IBOutlets
     @IBOutlet private var sceneView: ARSCNView!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
@@ -48,22 +53,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         sceneView.delegate = self
         sceneView.showsStatistics = false
         sceneView.scene = scene
-
+        
+        
         sceneView.session.delegate = self
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
-        
-        sceneView.debugOptions = [.showFeaturePoints]
         
         model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
+        
         
         configureLighting()
     }
@@ -101,7 +106,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if isDetecting {
             classifyCurrentImage()
         }
-
+        
     }
     // Create shape layers for the bounding boxes.
     func setupBoxes() {
@@ -213,14 +218,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
-        let sphere = SCNSphere(radius: 0.015)
-        let materialSphere = SCNMaterial()
-        materialSphere.diffuse.contents = UIColor.red
-        sphere.materials = [materialSphere]
-        let sphereNode = SCNNode(geometry: sphere)
-        sphereNode.name = identifier
-        sphereNode.position = vectorCoordinate
-        self.scene.rootNode.addChildNode(sphereNode)
+                let sphere = SCNSphere(radius: 0.015)
+                let materialSphere = SCNMaterial()
+                materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
+                sphere.materials = [materialSphere]
+                let sphereNode = SCNNode(geometry: sphere)
+                sphereNode.name = identifier
+                sphereNode.position = vectorCoordinate
+                self.scene.rootNode.addChildNode(sphereNode)
+                nodes.append(sphereNode)
     }
     
     //adds the info plane which displays the detected object and the number of incidents
@@ -334,7 +340,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return node
     }
     
-    // MARK: Screenshot methods
+        // MARK: Screenshot methods
     func saveImage(image: UIImage, incident: Incident) {
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
@@ -390,9 +396,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         switch segue.identifier {
         case "ShowDetailSegue":
             guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
-            let pin = sender as? SCNNode,
+                let pin = sender as? SCNNode,
                 let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
-                return
+                    return
             }
             detailVC.incident = incident
         default :

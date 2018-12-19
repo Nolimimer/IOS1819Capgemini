@@ -64,4 +64,28 @@ enum DataHandler {
         }
     }
     
+    static func getJSON() -> Data? {
+        do {
+            let data = try JSONEncoder().encode(incidents)
+            return data
+        } catch _ {
+            return nil
+        }
+    }
+
+    
+    static func loadFromJSON(url: URL) {
+        do {
+            let fileWrapper = try FileWrapper(url: url, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            incidents = try JSONDecoder().decode([Incident].self, from: data)
+            print("Decoded \(incidents.count) incidents.")
+        } catch _ {
+            print("Could not load incidents, DataHandler uses no incident")
+        }
+    }
+
+    
 }
