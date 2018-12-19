@@ -33,7 +33,6 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     
     // MARK: -override methods
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let iNT = 0 
     }
     
     override func viewDidLoad() {
@@ -121,7 +120,6 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
         present(imagePicker, animated: true, completion: nil)
-        
     }
     
     @IBAction private func recordAudio(_ sender: Any) {
@@ -277,7 +275,6 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
 
 extension AttachmentViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        //swiftlint:disable
         if collectionView == self.videoCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCollectionViewCell", for: indexPath) as? VideoCollectionViewCell
             cell?.populateWithVideo(videos[(indexPath as NSIndexPath).row])

@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 extension AttachmentViewController: UIImagePickerControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey:Any]) {
         imagePicker.dismiss(animated: true, completion: nil)
         if let selectedImage = info[.originalImage] as? UIImage {

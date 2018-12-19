@@ -31,7 +31,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     var attachments: [Attachment] = []
     var imagePicker: UIImagePickerController!
 
-    
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
     @IBOutlet private weak var generatedDateLabel: UILabel!
@@ -141,7 +140,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         modalPresentationStyle = .overCurrentContext
@@ -175,10 +173,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidLoad()
         
         attachments = computeAttachments()
-        
-//        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.handleTap(recognizer:)))
-//        self.view.addGestureRecognizer(gesture)
-        // add blurred subview
+
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
