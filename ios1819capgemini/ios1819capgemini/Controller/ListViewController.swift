@@ -42,6 +42,7 @@ class ListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        DataHandler.refreshOpenIncidents()
         tableView.reloadData()
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
@@ -60,26 +61,21 @@ class ListViewController: UIViewController {
     
     @IBAction private func showButton(_ sender: UIBarButtonItem) {
         if DataHandler.showAll == false {
-            // In show all state
-            tableView.reloadData()
+            // In show open state
             DataHandler.showAll = true
             sender.title = "Show Open"
-            print("Show Open")
+            DataHandler.refreshOpenIncidents()
+            tableView.reloadData()
         } else {
             // In filter list state
             sender.title = "Show All"
-            print("Show All")
-            filterList()
             DataHandler.showAll = false
+            DataHandler.refreshOpenIncidents()
+            tableView.reloadData()
         }
     }
     // Share with airDrop just works on iPhone and not in the xCode simulator
-    
-    private func filterList() {
-        // Show list with only open items
-        
-        tableView.reloadData()
-    }
+  
     
     private func share() {
     let activityController = UIActivityViewController(activityItems: DataHandler.incidents, applicationActivities: nil)
@@ -113,15 +109,28 @@ class ListViewController: UIViewController {
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-        let incident = DataHandler.incidents[indexPath.row]
-        cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
-        cell.tag = incident.identifier
-        cell.detailTextLabel?.text = incident.description
-        return cell
+        if DataHandler.showAll == true { // In show all incidents state
+            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
+            let incident = DataHandler.incidents[indexPath.row]
+            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
+            cell.tag = incident.identifier
+            cell.detailTextLabel?.text = incident.description
+            return cell
+        } else { // In open incidents state
+            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
+            let openIncident = DataHandler.openIncidents[indexPath.row]
+            cell.textLabel?.text = "\(openIncident.type.rawValue) \(openIncident.identifier)"
+            cell.tag = openIncident.identifier
+            cell.detailTextLabel?.text = openIncident.description
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DataHandler.incidents.count
+       if DataHandler.showAll == true {
+            return DataHandler.incidents.count
+       } else {
+            return DataHandler.openIncidents.count
+        }
     }
 }

@@ -27,6 +27,7 @@ enum DataHandler {
     static var incidents: [Incident] = []
     static var largestID = 0
     static var showAll = true
+    static var openIncidents = incidents.filter({ $0.status == Status.open })
     
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
@@ -36,6 +37,10 @@ enum DataHandler {
     
     static func incident(withId id: Int) -> Incident? {
         return incidents.first(where: { $0.identifier == id })
+    }
+    
+    static func refreshOpenIncidents() {
+        openIncidents = incidents.filter({ $0.status == Status.open })
     }
     
      // MARK: Type Methods
