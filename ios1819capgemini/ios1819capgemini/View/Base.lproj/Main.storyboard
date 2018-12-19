@@ -203,8 +203,8 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGE-4X-rly">
-                                                <rect key="frame" x="308" y="401" width="59" height="30"/>
-                                                <state key="normal" title="Show All"/>
+                                                <rect key="frame" x="308" y="401" width="30" height="30"/>
+                                                <state key="normal" title="All"/>
                                                 <connections>
                                                     <action selector="showAllAttachments:" destination="jav-cE-mj7" eventType="touchUpInside" id="ibe-L6-hY1"/>
                                                 </connections>
