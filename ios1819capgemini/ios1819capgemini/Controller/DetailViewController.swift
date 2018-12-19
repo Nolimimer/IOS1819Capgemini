@@ -99,7 +99,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             }
             if hitView != attachmentView {
                 attachmentView?.removeFromSuperview()
-            } 
+            }
         }
     }
     
@@ -229,10 +229,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
 
- 
-
-    // MARK: - OBJC FUNCTIONS
-    @objc func handleTap(recognizer: UITapGestureRecognizer){
+    @objc func handleTap(recognizer: UITapGestureRecognizer) {
         self.view.endEditing(true)
         let location = recognizer.location(in: view)
 
@@ -255,7 +252,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
 
     @objc private func takePhoto() {
-        imagePicker =  UIImagePickerController()
+        imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
         present(imagePicker, animated: true, completion: nil)
@@ -263,7 +260,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @objc private func takeVideo() {
-        imagePicker =  UIImagePickerController()
+        imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
         imagePicker.mediaTypes = [kUTTypeMovie as String]
@@ -397,8 +394,6 @@ extension DetailViewController: UIImagePickerControllerDelegate {
             DispatchQueue.main.async(execute: { () -> Void in })
         }
     }
-        
-        
     
     func saveImage(image: UIImage) -> Bool {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
@@ -425,7 +420,6 @@ extension DetailViewController: UIImagePickerControllerDelegate {
     }
     
 }
-
 
 // MARK: Constants
 enum Modus {
