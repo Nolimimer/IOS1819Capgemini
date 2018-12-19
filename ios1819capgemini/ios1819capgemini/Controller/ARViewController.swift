@@ -62,10 +62,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
-        // Hook up status view controller callback.
-//        statusViewController.restartExperienceHandler = { [unowned self] in
-//            self.restartSession()
-//        }
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
         
@@ -107,15 +103,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
 
     }
-    
+    // Create shape layers for the bounding boxes.
     func setupBoxes() {
-        // Create shape layers for the bounding boxes.
         for _ in 0..<numBoxes {
             let box = BoundingBox()
             box.addToLayer(sceneView.layer)
             self.boundingBoxes.append(box)
         }
     }
+    //swiftlint:disable force_unwrapping
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
@@ -169,7 +165,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let predictions = self.ssdPostProcessor.postprocess(boxPredictions: boxPredictions, classPredictions: classPredictions)
         return predictions
     }
-    
+    // Draw Boxes which indicate if a sticker has been detected
     func drawBoxes(predictions: [Prediction]) {
         
         for (index, prediction) in predictions.enumerated() {
@@ -214,6 +210,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     // MARK: AR methods
+    
+    //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
@@ -225,7 +223,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.scene.rootNode.addChildNode(sphereNode)
     }
     
-    //swiftlint:disable force_unwrapping
+    //adds the info plane which displays the detected object and the number of incidents
     private func addInfoPlane (carPart: String) {
         let plane = SCNPlane(width: CGFloat(self.objectAnchor!.referenceObject.extent.x * 0.8),
                              height: CGFloat(self.objectAnchor!.referenceObject.extent.y * 0.3))
@@ -237,8 +235,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
         let absoluteObjectPosition = objectAnchor!.transform.columns.3
-        //swiftlint:disable line_length
-        let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y + self.objectAnchor!.referenceObject.extent.y, absoluteObjectPosition.z)
+        let planePosition = SCNVector3(absoluteObjectPosition.x,
+                                       absoluteObjectPosition.y + self.objectAnchor!.referenceObject.extent.y,
+                                       absoluteObjectPosition.z)
         planeNode.position = planePosition
         let labelNode = SKLabelNode(text: carPart)
         labelNode.fontSize = 40
@@ -262,8 +261,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
         scene.rootNode.addChildNode(planeNode)
     }
-    //swiftlint:enable force_unwrapping
     
+    /*
+    recognizes if the screen has been tapped, creates a new pin and a matching incident if the tapped location is not a pin, otherwise
+    opens the detail view for the tapped pin.
+    If a new pin is created a screenshot of the location is taken before/after placing the pin.
+    */
     @objc func tapped(recognizer: UIGestureRecognizer) {
         if recognizer.state == .ended {
             let location: CGPoint = recognizer.location(in: sceneView)
@@ -308,6 +311,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
+    //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
@@ -326,11 +330,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
-//            let alertController = UIAlertController(title: "Object detected",
-//                                                    message: "\(objectAnchor.referenceObject.name!)",
-//                                                    preferredStyle: .alert)
-//            alertController.addAction(UIAlertAction(title: "OK", style: .default))
-//            present(alertController, animated: true)
         }
         return node
     }
@@ -359,7 +358,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
     }
-    //swiftlint:disable force_unwrapping
+    // Temporarily deletes all the pins except for the pin in the method call from the view and then adds them back again after 1 second
     private func filter3DPins (identifier: String) {
         self.scene.rootNode.childNodes.forEach { node in
             if node.name != nil {
@@ -373,7 +372,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
-    
+    // Temporarily deletes all the pins from the view and then adds them back again after 1 second
     private func filterAllPins () {
         self.scene.rootNode.childNodes.forEach { node in
             if node.name != nil {
@@ -385,7 +384,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
-    //swiftlint:enable force_unwrapping
 
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

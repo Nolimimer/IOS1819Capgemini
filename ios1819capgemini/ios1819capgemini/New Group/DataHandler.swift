@@ -55,7 +55,9 @@ enum DataHandler {
         do {
             let data = try JSONEncoder().encode(incidents)
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
-            try jsonFileWrapper.write(to: Constants.localStorageURL, options: FileWrapper.WritingOptions.atomic, originalContentsURL: nil)
+            try jsonFileWrapper.write(to: Constants.localStorageURL,
+                                      options: FileWrapper.WritingOptions.atomic,
+                                      originalContentsURL: nil)
             print("Saved incidents!")
         } catch _ {
             print("Could not save incidents")
