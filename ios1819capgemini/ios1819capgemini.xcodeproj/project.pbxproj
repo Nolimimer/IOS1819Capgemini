@@ -309,6 +309,7 @@
 				TargetAttributes = {
 					A66447E32192121300B2D32B = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -338,6 +339,7 @@
 				0D5F4A7721A3121F00D443CC /* CUU.plist in Resources */,
 				A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */,
 				A66447EF2192121300B2D32B /* Assets.xcassets in Resources */,
+				B363B8DB21C58BCF00754EF1 /* art.scnassets in Resources */,
 				0DF3077221B7DBC4007D57D6 /* LineView.xib in Resources */,
 				A66447ED2192121300B2D32B /* Main.storyboard in Resources */,
 				0DF3077C21B7E067007D57D6 /* AttachmentView.xib in Resources */,
@@ -609,6 +611,7 @@
 			baseConfigurationReference = E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WCM2L8RG39;
 				INFOPLIST_FILE = ios1819capgemini/Info.plist;
@@ -619,6 +622,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.www1.ios1819capgemini;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -629,6 +633,7 @@
 			baseConfigurationReference = 0CDB5AF4C15D59DC7C04B3EA /* Pods-ios1819capgemini.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = WCM2L8RG39;
 				INFOPLIST_FILE = ios1819capgemini/Info.plist;
