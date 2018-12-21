@@ -17,6 +17,7 @@ import UICircularProgressRing
 var nodes = [SCNNode]()
 
 // MARK: - ARViewController
+// swiftlint:disable type_body_length
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
@@ -70,11 +71,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        progressRing.frame.origin.x = 50
-        progressRing.frame.origin.y = 50
+      if let touch = touches.first {
+            let position = touch.location(in: view)
+        progressRing.frame.origin.x = position.x - 110
+        progressRing.frame.origin.y = position.y - 60
+        progressRing.isHidden = false
         progressRing.maxValue = 100
-        progressRing.startProgress(to: 100,duration: 1.0) {
+        progressRing.startProgress(to: 100, duration: 1.0) {
         }
+    }
+        }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+     progressRing.resetProgress()
+    progressRing.isHidden = true
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -83,7 +93,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenHeight = Double(size.height)
         if UIDevice.current.orientation.isLandscape {
         } else {
-            print("Portrait")
         }
     }
     
