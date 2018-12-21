@@ -11,7 +11,7 @@ import UIKit
 import ARKit
 import SceneKit
 import Vision
-
+import UICircularProgressRing
 
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
@@ -43,21 +43,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: IBOutlets
     @IBOutlet private var sceneView: ARSCNView!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
-        if sender.currentTitle == "Automatic Detection: On" {
-        } else {
-            sender.setTitle("Automatic Detection: On", for: UIControl.State.normal)
-            isDetecting = true
-        }
+       
     }
+    
+    @IBOutlet private weak var progressRing: UICircularProgressRing!
     
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         sceneView.delegate = self
         sceneView.showsStatistics = false
         sceneView.scene = scene
-        
         
         sceneView.session.delegate = self
         screenWidth = Double(view.frame.width)
@@ -73,12 +69,19 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configureLighting()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        progressRing.frame.origin.x = 50
+        progressRing.frame.origin.y = 50
+        progressRing.maxValue = 100
+        progressRing.startProgress(to: 100,duration: 1.0) {
+        }
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         screenWidth = Double(size.width)
         screenHeight = Double(size.height)
         if UIDevice.current.orientation.isLandscape {
-            print("Landscape")
         } else {
             print("Portrait")
         }
