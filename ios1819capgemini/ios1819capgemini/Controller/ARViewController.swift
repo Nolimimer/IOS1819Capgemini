@@ -15,7 +15,7 @@ import Vision
 
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
-
+// swiftlint:disable all
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
@@ -29,6 +29,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
     var model: VNCoreMLModel?
+    private var automaticallyDetectedIncidents = [CGPoint]()
     private var detected = false
     private var descriptionNode = SKLabelNode(text: "")
     private var isDetecting = true
@@ -40,13 +41,24 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // Queue for dispatching vision classification requests
     private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
     
+    var imageHighlightAction: SCNAction {
+        return .sequence([
+            .wait(duration: 0.25),
+            .fadeOpacity(to: 0.9, duration: 0.25),
+            .fadeOpacity(to: 0.15, duration: 0.25),
+            .fadeOpacity(to: 0.9, duration: 0.25),
+            ])
+    }
     // MARK: IBOutlets
     @IBOutlet private var sceneView: ARSCNView!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
-        if sender.currentTitle == "Automatic Detection: On" {
-        } else {
-            sender.setTitle("Automatic Detection: On", for: UIControl.State.normal)
+        if isDetecting {
+            isDetecting = false
+            sender.setTitle("Automatic Detection Off", for: .normal)
+        }
+        else {
             isDetecting = true
+            sender.setTitle("Automatic Detection On", for: .normal)
         }
     }
     
@@ -62,7 +74,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.session.delegate = self
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
-        
+        sceneView.debugOptions = [.showFeaturePoints,
+                                  .showBoundingBoxes]
         model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
@@ -77,11 +90,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         super.viewWillTransition(to: size, with: coordinator)
         screenWidth = Double(size.width)
         screenHeight = Double(size.height)
-        if UIDevice.current.orientation.isLandscape {
-            print("Landscape")
-        } else {
-            print("Portrait")
-        }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -170,6 +179,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let predictions = self.ssdPostProcessor.postprocess(boxPredictions: boxPredictions, classPredictions: classPredictions)
         return predictions
     }
+    
     // Draw Boxes which indicate if a sticker has been detected
     func drawBoxes(predictions: [Prediction]) {
         
@@ -178,7 +188,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 //print("Class: \(classNames[prediction.detectedClass])")
                 
                 let textColor: UIColor
-                let textLabel = String(format: "%.2f - %@", self.sigmoid(prediction.score), classNames[prediction.detectedClass])
+                let textLabel = String(format: "%.2f - %@", self.sigmoid(prediction.score),
+                                       classNames[prediction.detectedClass])
                 
                 textColor = UIColor.black
                 guard let imgWidth = self.screenWidth,
@@ -190,19 +201,62 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                imgHeight: imgWidth,
                                                                xOffset: 0,
                                                                yOffset: (imgHeight - imgWidth) / 2)
-                if detectedObjectNode != nil {
+//                if detectedObjectNode != nil {
+                  self.sceneView.debugOptions = []
                     self.boundingBoxes[index].show(frame: rect,
                                                    label: textLabel,
                                                    color: UIColor.green,
                                                    textColor: textColor)
-                }
-                boundingBoxes[index].addToLayer(sceneView.layer)
+                    let position = CGPoint(x: rect.midX,
+                                           y: rect.midY)
+                    let hitTestResult = sceneView.hitTest(position, types: .featurePoint)
+                    guard let hitTest = hitTestResult.first else {
+                        return
+                    }
+                    if sigmoid(prediction.score) > 0.8 && calculateNodesInRadius(coordinate: position, radius: 20) {
+                        let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
+                                             y: (hitTest.worldTransform.columns.3.y),
+                                             z: (hitTest.worldTransform.columns.3.z))
+                        automaticallyDetectedIncidents.append(position)
+                        let sphere = SCNSphere(radius: 0.015)
+                        let materialSphere = SCNMaterial()
+                        materialSphere.diffuse.contents = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 0.9)
+                        sphere.materials = [materialSphere]
+                        let sphereNode = SCNNode(geometry: sphere)
+                        sphereNode.position = tmp
+                        if detectedObjectNode != nil {
+                            let coordinates = sceneView.scene.rootNode.convertPosition(
+                                SCNVector3(hitTest.worldTransform.columns.3.x,
+                                           hitTest.worldTransform.columns.3.y,
+                                           hitTest.worldTransform.columns.3.z),
+                                to: self.detectedObjectNode)
+                            let incident = Incident (type: .unknown,
+                                                     description: "",
+                                                     coordinate: Coordinate(vector: coordinates))
+                            DataHandler.incidents.append(incident)
+                        }
+                        sphereNode.runAction(imageHighlightAction)
+                        self.scene.rootNode.addChildNode(sphereNode)
+                        nodes.append(sphereNode)
+                    }
+//                }
                 //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
             }
         }
         for index in predictions.count..<self.numBoxes {
             self.boundingBoxes[index].hide()
         }
+    }
+    /*
+     returns true if there is a node in a certain radius from the coordinate
+    */
+    private func calculateNodesInRadius(coordinate: CGPoint , radius: CGFloat) -> Bool {
+        for incident in automaticallyDetectedIncidents {
+            if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
+                return false
+            }
+        }
+        return true
     }
     
     func sigmoid(_ val: Double) -> Double {
@@ -215,7 +269,58 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     // MARK: AR methods
-    
+    /*
+     recognizes if the screen has been tapped, creates a new pin and a matching incident if the tapped location is not a pin, otherwise
+     opens the detail view for the tapped pin.
+     If a new pin is created a screenshot of the location is taken before/after placing the pin.
+     */
+    @objc func tapped(recognizer: UIGestureRecognizer) {
+        if recognizer.state == .ended {
+            let location: CGPoint = recognizer.location(in: sceneView)
+            print("recognizer location: \(recognizer.location(in: sceneView))")
+            let hits = self.sceneView.hitTest(location, options: nil)
+            if !hits.isEmpty {
+                let tappedNode = hits.first?.node
+                guard (tappedNode?.name) != nil else {
+                    let touchPosition = recognizer.location(in: sceneView)
+                    let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
+                    
+                    if !hitTestResult.isEmpty {
+                        guard let hitResult = hitTestResult.first else {
+                            return
+                        }
+                        print("touchPosition : \(touchPosition)")
+                        //                        print("hittestresult: \(hitTestResult)")
+                        if detectedObjectNode != nil {
+                            let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
+                                SCNVector3(hitResult.worldTransform.columns.3.x,
+                                           hitResult.worldTransform.columns.3.y,
+                                           hitResult.worldTransform.columns.3.z),
+                                to: detectedObjectNode)
+                            print("coordinateRelativeToObject: \(coordinateRelativeToObject)")
+                            let incident = Incident (type: .unknown,
+                                                     description: "New Incident",
+                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
+                            filterAllPins()
+                            let imageWithoutPin = sceneView.snapshot()
+                            saveImage(image: imageWithoutPin, incident: incident)
+                            add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                                  hitResult.worldTransform.columns.3.y,
+                                                                  hitResult.worldTransform.columns.3.z),
+                                     identifier: "\(incident.identifier)" )
+                            filter3DPins(identifier: "\(incident.identifier)")
+                            let imageWithPin = sceneView.snapshot()
+                            saveImage(image: imageWithPin, incident: incident)
+                            DataHandler.incidents.append(incident)
+                            descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
+                        }
+                    }
+                    return
+                }
+                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+            }
+        }
+    }
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
                 let sphere = SCNSphere(radius: 0.015)
@@ -268,54 +373,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         scene.rootNode.addChildNode(planeNode)
     }
     
-    /*
-    recognizes if the screen has been tapped, creates a new pin and a matching incident if the tapped location is not a pin, otherwise
-    opens the detail view for the tapped pin.
-    If a new pin is created a screenshot of the location is taken before/after placing the pin.
-    */
-    @objc func tapped(recognizer: UIGestureRecognizer) {
-        if recognizer.state == .ended {
-            let location: CGPoint = recognizer.location(in: sceneView)
-            let hits = self.sceneView.hitTest(location, options: nil)
-            if !hits.isEmpty {
-                let tappedNode = hits.first?.node
-                guard (tappedNode?.name) != nil else {
-                    let touchPosition = recognizer.location(in: sceneView)
-                    let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
-                    
-                    if !hitTestResult.isEmpty {
-                        guard let hitResult = hitTestResult.first else {
-                            return
-                        }
-                        if detectedObjectNode != nil {
-                            let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
-                                SCNVector3(hitResult.worldTransform.columns.3.x,
-                                           hitResult.worldTransform.columns.3.y,
-                                           hitResult.worldTransform.columns.3.z),
-                                to: detectedObjectNode)
-                            let incident = Incident (type: .unknown,
-                                                     description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            filterAllPins()
-                            let imageWithoutPin = sceneView.snapshot()
-                            saveImage(image: imageWithoutPin, incident: incident)
-                            add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                                  hitResult.worldTransform.columns.3.y,
-                                                                  hitResult.worldTransform.columns.3.z),
-                                     identifier: "\(incident.identifier)" )
-                            filter3DPins(identifier: "\(incident.identifier)")
-                            let imageWithPin = sceneView.snapshot()
-                            saveImage(image: imageWithPin, incident: incident)
-                            DataHandler.incidents.append(incident)
-                            descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-                        }
-                    }
-                    return
-                }
-                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-            }
-        }
-    }
+
     
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
