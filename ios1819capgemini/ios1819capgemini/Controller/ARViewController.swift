@@ -32,7 +32,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var automaticallyDetectedIncidents = [CGPoint]()
     private var detected = false
     private var descriptionNode = SKLabelNode(text: "")
-    private var isDetecting = true
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?
@@ -51,16 +50,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     // MARK: IBOutlets
     @IBOutlet private var sceneView: ARSCNView!
-    @IBAction private func detectionButtonTapped(_ sender: UIButton) {
-        if isDetecting {
-            isDetecting = false
-            sender.setTitle("Automatic Detection Off", for: .normal)
-        }
-        else {
-            isDetecting = true
-            sender.setTitle("Automatic Detection On", for: .normal)
-        }
-    }
     
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
@@ -111,10 +100,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
-        if isDetecting {
-            classifyCurrentImage()
-        }
-        
+        classifyCurrentImage()
     }
     // Create shape layers for the bounding boxes.
     func setupBoxes() {
@@ -200,6 +186,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                imgHeight: imgWidth,
                                                                xOffset: 0,
                                                                yOffset: (imgHeight - imgWidth) / 2)
+                //uncomment if boxes should only appear after object has been detected
 //                if detectedObjectNode != nil {
                   self.sceneView.debugOptions = []
                     self.boundingBoxes[index].show(frame: rect,
@@ -276,7 +263,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @objc func tapped(recognizer: UIGestureRecognizer) {
         if recognizer.state == .ended {
             let location: CGPoint = recognizer.location(in: sceneView)
-            print("recognizer location: \(recognizer.location(in: sceneView))")
             let hits = self.sceneView.hitTest(location, options: nil)
             if !hits.isEmpty {
                 let tappedNode = hits.first?.node
@@ -288,15 +274,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         guard let hitResult = hitTestResult.first else {
                             return
                         }
-                        print("touchPosition : \(touchPosition)")
-                        //                        print("hittestresult: \(hitTestResult)")
                         if detectedObjectNode != nil {
                             let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
                                 SCNVector3(hitResult.worldTransform.columns.3.x,
                                            hitResult.worldTransform.columns.3.y,
                                            hitResult.worldTransform.columns.3.z),
                                 to: detectedObjectNode)
-                            print("coordinateRelativeToObject: \(coordinateRelativeToObject)")
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
@@ -357,7 +340,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         descriptionNode = SKLabelNode(text: "Incidents: \(DataHandler.incidents.count)")
         descriptionNode.fontSize = 30
-        //swiftlint:disable empty_count
         if DataHandler.incidents.count == 0 {
             descriptionNode.fontColor = UIColor.green
         } else {
