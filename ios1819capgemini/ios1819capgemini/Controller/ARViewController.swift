@@ -30,7 +30,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
     var model: VNCoreMLModel?
-    var isRestartAvailable = true
+    var showDebugOption = true
     private var automaticallyDetectedIncidents = [CGPoint]()
     private var detected = false
     private var descriptionNode = SKLabelNode(text: "")
@@ -193,7 +193,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                yOffset: (imgHeight - imgWidth) / 2)
                 //uncomment if boxes should only appear after object has been detected
 //                if detectedObjectNode != nil {
-                  self.sceneView.debugOptions = []
                     self.boundingBoxes[index].show(frame: rect,
                                                    label: textLabel,
                                                    color: UIColor.green,
@@ -447,6 +446,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             detailVC.incident = incident
         default :
             return
+        }
+    }
+    
+    // MARK: IBAction
+    @IBAction func debugButtonPressed(_ sender: UIButton) {
+        if showDebugOption {
+            showDebugOption = false
+            self.sceneView.debugOptions = []
+            sender.setTitle("Debug On", for: .normal)
+        }
+        else {
+            showDebugOption = true
+            self.sceneView.debugOptions = [.showFeaturePoints, .showBoundingBoxes]
+            sender.setTitle("Debug Off", for: .normal)
         }
     }
 }

@@ -27,6 +27,14 @@
                                     <segue destination="b3y-gK-GfZ" kind="presentation" modalPresentationStyle="overCurrentContext" id="dsP-mo-Jml"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4hd-BX-aPx">
+                                <rect key="frame" x="100" y="605" width="165" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Debug"/>
+                                <connections>
+                                    <action selector="debugButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mjg-JQ-mtx"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vs-jp-QKL">
                                 <rect key="frame" x="281" y="605" width="74" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
@@ -61,6 +69,7 @@
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IBe-6n-2Hy"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="4hd-BX-aPx" secondAttribute="bottom" constant="20" id="Mfh-GX-XP6"/>
                             <constraint firstItem="jNc-tJ-CvY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="NLg-W4-iCb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dAU-gm-pmP" secondAttribute="bottom" constant="20" id="Oug-f9-ub7"/>
                             <constraint firstItem="jNc-tJ-CvY" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="T1k-dx-9md"/>
@@ -69,6 +78,8 @@
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="lWY-SP-Ifl"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="nW0-tZ-ukQ"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="r1j-wH-Wgj"/>
+                            <constraint firstItem="8vs-jp-QKL" firstAttribute="leading" secondItem="4hd-BX-aPx" secondAttribute="trailing" constant="16" id="uq2-2M-y2C"/>
+                            <constraint firstItem="4hd-BX-aPx" firstAttribute="leading" secondItem="dAU-gm-pmP" secondAttribute="trailing" constant="16" id="vAc-x0-kc4"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="jNc-tJ-CvY" secondAttribute="bottom" id="zi5-Ew-eHV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
