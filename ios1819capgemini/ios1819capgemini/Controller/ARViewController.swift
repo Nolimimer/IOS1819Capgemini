@@ -19,7 +19,6 @@ var nodes = [SCNNode]()
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    @IBOutlet weak var blurView: UIVisualEffectView!
     // MARK: Stored Instance Properties
     var detectedObjectNode: SCNNode?
     let scene = SCNScene()
@@ -51,7 +50,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             .wait(duration: 0.25),
             .fadeOpacity(to: 0.9, duration: 0.25),
             .fadeOpacity(to: 0.15, duration: 0.25),
-            .fadeOpacity(to: 0.9, duration: 0.25),
+            .fadeOpacity(to: 1, duration: 0.25),
             ])
     }
     // MARK: IBOutlets
@@ -203,7 +202,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     guard let hitTest = hitTestResult.first else {
                         return
                     }
-                    if sigmoid(prediction.score) > 0.8 && calculateNodesInRadius(coordinate: position, radius: 20) {
+                    if sigmoid(prediction.score) > 0.85 && calculateNodesInRadius(coordinate: position, radius: 20) {
                         let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
                                              y: (hitTest.worldTransform.columns.3.y),
                                              z: (hitTest.worldTransform.columns.3.z))

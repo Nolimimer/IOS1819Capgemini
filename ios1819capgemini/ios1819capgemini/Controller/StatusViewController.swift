@@ -26,7 +26,7 @@ class StatusViewController: UIViewController {
     @IBOutlet private weak var messageLabel: UILabel!
     
     
-    private let displayDuration: TimeInterval = 30
+    private let displayDuration: TimeInterval = 10
     private var messageHideTimer: Timer?
     
     private var timers: [MessageType: Timer] = [:]

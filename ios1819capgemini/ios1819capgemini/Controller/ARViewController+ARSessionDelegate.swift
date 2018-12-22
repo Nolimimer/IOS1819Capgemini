@@ -12,7 +12,7 @@ import ARKit
 extension ARViewController {
         
     func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-        statusViewController.showTrackingQualityInfo(for: camera.trackingState, autoHide: false)
+        statusViewController.showTrackingQualityInfo(for: camera.trackingState, autoHide: true)
         
         switch camera.trackingState {
         case .notAvailable, .limited:
