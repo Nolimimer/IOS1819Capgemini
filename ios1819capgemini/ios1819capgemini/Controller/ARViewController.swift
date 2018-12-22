@@ -29,7 +29,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
     var model: VNCoreMLModel?
-    var showDebugOption = true
+    var showDebugOption = false
     private var automaticallyDetectedIncidents = [CGPoint]()
     private var detected = false
     private var descriptionNode = SKLabelNode(text: "")
@@ -67,8 +67,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.session.delegate = self
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
-        sceneView.debugOptions = [.showFeaturePoints,
-                                  .showBoundingBoxes]
+        sceneView.debugOptions = []
         model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
@@ -209,7 +208,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         automaticallyDetectedIncidents.append(position)
                         let sphere = SCNSphere(radius: 0.015)
                         let materialSphere = SCNMaterial()
-                        materialSphere.diffuse.contents = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 0.9)
+                        materialSphere.diffuse.contents = UIColor(red: 0.0, green: 0.0, blue: 1.0, alpha: 1.0)
                         sphere.materials = [materialSphere]
                         let sphereNode = SCNNode(geometry: sphere)
                         sphereNode.position = tmp
@@ -242,6 +241,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private func calculateNodesInRadius(coordinate: CGPoint , radius: CGFloat) -> Bool {
         for incident in automaticallyDetectedIncidents {
             if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
+                print("sticker has been detected in radius")
                 return false
             }
         }
