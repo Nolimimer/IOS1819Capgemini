@@ -35,22 +35,47 @@
                                     <segue destination="arL-mF-BSR" kind="presentation" identifier="ShowDetailSegue" modalPresentationStyle="overCurrentContext" id="uUl-YU-Nua"/>
                                 </connections>
                             </button>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QGm-iK-VvE">
+                                <rect key="frame" x="0.0" y="20" width="375" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="fk0-8p-4Jx"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="iNR-TU-aP6" kind="embed" id="tJa-dk-vD9"/>
+                                </connections>
+                            </containerView>
+                            <visualEffectView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jNc-tJ-CvY" userLabel="Blur View">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ZRa-T1-5lD">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="dAU-gm-pmP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="2hv-wz-jGw"/>
+                            <constraint firstItem="jNc-tJ-CvY" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="951-u5-XcP"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8vs-jp-QKL" secondAttribute="bottom" constant="20" id="FnX-md-aRt"/>
+                            <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IBe-6n-2Hy"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
+                            <constraint firstItem="jNc-tJ-CvY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="NLg-W4-iCb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dAU-gm-pmP" secondAttribute="bottom" constant="20" id="Oug-f9-ub7"/>
+                            <constraint firstItem="jNc-tJ-CvY" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="T1k-dx-9md"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ydv-fJ-Xpy"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="kaw-PZ-WL2"/>
+                            <constraint firstItem="QGm-iK-VvE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="lWY-SP-Ifl"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="nW0-tZ-ukQ"/>
+                            <constraint firstItem="QGm-iK-VvE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="r1j-wH-Wgj"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="jNc-tJ-CvY" secondAttribute="bottom" id="zi5-Ew-eHV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="AR" id="vck-ZV-qqc"/>
                     <connections>
+                        <outlet property="blurView" destination="jNc-tJ-CvY" id="dXi-NY-2tL"/>
                         <outlet property="sceneView" destination="zuy-y1-cIR" id="6CW-Fu-tmc"/>
                     </connections>
                 </viewController>
@@ -520,9 +545,99 @@
             </objects>
             <point key="canvasLocation" x="2941.5999999999999" y="919.95073891625623"/>
         </scene>
+        <!--Status View Controller-->
+        <scene sceneID="ysd-JI-lVN">
+            <objects>
+                <viewController id="iNR-TU-aP6" customClass="StatusViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" alpha="0.84999999999999998" contentMode="scaleToFill" id="e3q-kY-ttw">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="1000" verticalCompressionResistancePriority="100" translatesAutoresizingMaskIntoConstraints="NO" id="RQV-lw-4nd" userLabel="Message Panel">
+                                <rect key="frame" x="16" y="20" width="125" height="32"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="7qM-UD-c4k">
+                                    <rect key="frame" x="0.0" y="0.0" width="125" height="32"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ab-TC-sVw">
+                                            <rect key="frame" x="0.0" y="0.0" width="125" height="32"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="qqE-vM-3QW">
+                                                <rect key="frame" x="0.0" y="0.0" width="125" height="32"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="250" text="Tracking status" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8lY-7U-LF5" userLabel="Message Label">
+                                                        <rect key="frame" x="16" y="8" width="93" height="16"/>
+                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                                        <nil key="textColor"/>
+                                                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <size key="shadowOffset" width="1" height="1"/>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="8lY-7U-LF5" firstAttribute="trailing" secondItem="qqE-vM-3QW" secondAttribute="trailing" constant="-16" id="7Fu-Xy-WUO"/>
+                                                    <constraint firstItem="8lY-7U-LF5" firstAttribute="centerY" secondItem="qqE-vM-3QW" secondAttribute="centerY" id="Dzl-7Y-hQq"/>
+                                                    <constraint firstItem="8lY-7U-LF5" firstAttribute="top" secondItem="qqE-vM-3QW" secondAttribute="top" constant="8" id="IMZ-oY-ctf"/>
+                                                    <constraint firstItem="8lY-7U-LF5" firstAttribute="leading" secondItem="qqE-vM-3QW" secondAttribute="leading" constant="16" id="fKv-hR-IDR"/>
+                                                </constraints>
+                                            </view>
+                                            <vibrancyEffect>
+                                                <blurEffect style="extraLight"/>
+                                            </vibrancyEffect>
+                                        </visualEffectView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="8Ab-TC-sVw" secondAttribute="trailing" id="1C1-Qh-pmp"/>
+                                        <constraint firstItem="8Ab-TC-sVw" firstAttribute="top" secondItem="7qM-UD-c4k" secondAttribute="top" id="Mua-Ep-H0A"/>
+                                        <constraint firstItem="8Ab-TC-sVw" firstAttribute="leading" secondItem="7qM-UD-c4k" secondAttribute="leading" id="tlC-z3-30A"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="8lY-7U-LF5" secondAttribute="bottom" constant="8" id="w3y-Ch-pEc"/>
+                                </constraints>
+                                <blurEffect style="light"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </visualEffectView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vr0-4U-dmU" userLabel="Restart Experience Button Icon">
+                                <rect key="frame" x="331" y="0.0" width="44" height="59"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="LGK-6k-ccl"/>
+                                    <constraint firstAttribute="height" constant="59" id="krC-Q1-Fid"/>
+                                </constraints>
+                                <inset key="contentEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="12"/>
+                                <state key="normal" image="restart"/>
+                                <state key="selected" image="restartPressed"/>
+                                <state key="highlighted" image="restartPressed"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="RQV-lw-4nd" firstAttribute="leading" secondItem="opy-AH-08H" secondAttribute="leading" constant="16" id="JoM-v8-ZEV"/>
+                            <constraint firstItem="opy-AH-08H" firstAttribute="trailing" secondItem="vr0-4U-dmU" secondAttribute="trailing" id="KUh-MB-v1E"/>
+                            <constraint firstItem="vr0-4U-dmU" firstAttribute="top" secondItem="opy-AH-08H" secondAttribute="top" id="UxF-WF-nUD"/>
+                            <constraint firstItem="RQV-lw-4nd" firstAttribute="top" secondItem="vr0-4U-dmU" secondAttribute="top" constant="20" id="nDP-8e-n1e"/>
+                            <constraint firstItem="vr0-4U-dmU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="RQV-lw-4nd" secondAttribute="trailing" constant="8" id="pkj-tT-0Fk"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="opy-AH-08H"/>
+                    </view>
+                    <connections>
+                        <outlet property="messageLabel" destination="8lY-7U-LF5" id="hcZ-If-caY"/>
+                        <outlet property="messagePanel" destination="8Ab-TC-sVw" id="xim-7n-FXt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FSt-tK-Uln" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2942" y="-634"/>
+        </scene>
     </scenes>
     <resources>
         <image name="list" width="64" height="64"/>
+        <image name="restart" width="16" height="16"/>
+        <image name="restartPressed" width="16" height="16"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="uUl-YU-Nua"/>

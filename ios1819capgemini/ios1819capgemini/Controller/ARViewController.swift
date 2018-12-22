@@ -19,6 +19,7 @@ var nodes = [SCNNode]()
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
+    @IBOutlet weak var blurView: UIVisualEffectView!
     // MARK: Stored Instance Properties
     var detectedObjectNode: SCNNode?
     let scene = SCNScene()
@@ -29,12 +30,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
     var model: VNCoreMLModel?
+    var isRestartAvailable = true
     private var automaticallyDetectedIncidents = [CGPoint]()
     private var detected = false
     private var descriptionNode = SKLabelNode(text: "")
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?
+    lazy var statusViewController: StatusViewController = {
+        return children.lazy.compactMap({ $0 as? StatusViewController }).first!
+    }()
+
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
@@ -54,7 +60,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         sceneView.delegate = self
         sceneView.showsStatistics = false
         sceneView.scene = scene
@@ -70,7 +75,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         setupBoxes()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
-        
         
         configureLighting()
     }
@@ -102,6 +106,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()
     }
+    
     // Create shape layers for the bounding boxes.
     func setupBoxes() {
         for _ in 0..<numBoxes {

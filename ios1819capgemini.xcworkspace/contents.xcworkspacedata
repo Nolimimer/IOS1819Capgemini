@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:StatusViewController.swift">
+   </FileRef>
+   <FileRef
       location = "group:ios1819capgemini/ios1819capgemini.xcodeproj">
    </FileRef>
    <FileRef
