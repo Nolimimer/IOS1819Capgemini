@@ -85,8 +85,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         configureLighting()
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         screenWidth = Double(size.width)
         screenHeight = Double(size.height)
