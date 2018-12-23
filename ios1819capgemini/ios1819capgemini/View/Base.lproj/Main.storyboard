@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dsx-8Z-4fu">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -547,8 +547,306 @@
             </objects>
             <point key="canvasLocation" x="2941.5999999999999" y="919.95073891625623"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="kR8-Kc-VqH">
+            <objects>
+                <viewController id="dsx-8Z-4fu" customClass="ViewController" customModule="ScanningApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="i2z-QK-3m4" customClass="ARSCNView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mkg-0O-22m">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="els-Ez-x3j">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DW7-5J-XOz" userLabel="Blur View">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="RQ5-78-qZI">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kEd-n9-73T" userLabel="Next Button Touch Area">
+                                <rect key="frame" x="291" y="695" width="84" height="83"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="130" id="EFM-Hl-pA5"/>
+                                    <constraint firstAttribute="width" constant="130" id="gcw-8W-feS"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="nextButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="0dU-uR-Eht"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CSi-Iw-mtF" userLabel="Next Button" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                                <rect key="frame" x="334" y="582" width="100" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="4Mz-Oe-YFv"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="5il-4n-WMI"/>
+                                </constraints>
+                                <state key="normal" title="Next"/>
+                                <connections>
+                                    <action selector="nextButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="cEr-oV-FiP"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NMJ-sf-Y1D" userLabel="? Button Touch Area">
+                                <rect key="frame" x="291" y="695" width="84" height="83"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="130" id="IiI-Ax-Bng"/>
+                                    <constraint firstAttribute="width" constant="90" id="qt5-Vr-LMv"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="toggleInstructionsButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="Auc-ud-d7C"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wlu-xb-zjn" userLabel="? Button" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                                <rect key="frame" x="310" y="582" width="45" height="45"/>
+                                <accessibility key="accessibilityConfiguration" label="Toggle instruction label"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="45" id="Lot-ym-rwF"/>
+                                    <constraint firstAttribute="height" constant="45" id="Sjl-U0-XNX"/>
+                                </constraints>
+                                <state key="normal" title="?"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="22"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="toggleInstructionsButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="p4C-Dn-69h"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FST-S1-FNY" userLabel="Left Button Touch Area">
+                                <rect key="frame" x="0.0" y="577" width="130" height="130"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="Dst-gf-MQn"/>
+                                    <constraint firstAttribute="height" constant="130" id="aJt-ai-86D"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="leftButtonTouchAreaTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="nEv-8s-EEe"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttj-7h-ds9" userLabel="Load Model" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                                <rect key="frame" x="20" y="582" width="110" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="110" id="QtQ-Rk-jWh"/>
+                                    <constraint firstAttribute="height" constant="45" id="cbk-oh-Mqb"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Load Model"/>
+                                <state key="selected" image="addPressed"/>
+                                <connections>
+                                    <action selector="loadModelButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="xrI-2f-4MB"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1nE-kK-KtM" userLabel="Flashlight toggle" customClass="FlashlightButton" customModule="ScanningApp" customModuleProvider="target">
+                                <rect key="frame" x="20" y="582" width="110" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="110" id="IgK-wf-fJP"/>
+                                    <constraint firstAttribute="height" constant="45" id="NEA-d0-LhR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Light Off"/>
+                                <state key="selected" image="addPressed"/>
+                                <connections>
+                                    <action selector="toggleFlashlightButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="wXe-Wg-OdL"/>
+                                </connections>
+                            </button>
+                            <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sg1-3l-5lD" userLabel="Session Info View">
+                                <rect key="frame" x="92" y="88" width="191" height="38"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="sil-Zm-enc">
+                                    <rect key="frame" x="0.0" y="0.0" width="191" height="38"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Initializing AR session." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mgd-ai-SNP">
+                                            <rect key="frame" x="8" y="8" width="169" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="KoF-rB-cTL"/>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="300" id="aCj-xG-tXB"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="mgd-ai-SNP" firstAttribute="top" secondItem="sil-Zm-enc" secondAttribute="top" constant="8" id="38n-rm-8iV"/>
+                                        <constraint firstAttribute="trailing" secondItem="mgd-ai-SNP" secondAttribute="trailing" constant="14" id="SWf-Bd-bx8"/>
+                                        <constraint firstAttribute="bottom" secondItem="mgd-ai-SNP" secondAttribute="bottom" constant="8" id="VF6-JK-zre"/>
+                                        <constraint firstItem="mgd-ai-SNP" firstAttribute="leading" secondItem="sil-Zm-enc" secondAttribute="leading" constant="8" id="W01-5B-E2O"/>
+                                    </constraints>
+                                </view>
+                                <blurEffect style="light"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="7"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </visualEffectView>
+                            <visualEffectView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VZP-Fi-Bkk" userLabel="Instruction View">
+                                <rect key="frame" x="66" y="593" width="240" height="50"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="Su4-v1-lwY">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="50"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z0D-fD-4cR">
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ZGe-1g-sov">
+                                                <rect key="frame" x="0.0" y="0.0" width="240" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bg8-MN-qQo" customClass="MessageLabel" customModule="ScanningApp" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="8" width="0.0" height="0.0"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="bg8-MN-qQo" secondAttribute="bottom" constant="8" id="1oW-0G-LwK"/>
+                                                    <constraint firstAttribute="trailing" secondItem="bg8-MN-qQo" secondAttribute="trailing" constant="8" id="YiJ-ww-27m"/>
+                                                    <constraint firstItem="bg8-MN-qQo" firstAttribute="leading" secondItem="ZGe-1g-sov" secondAttribute="leading" constant="8" id="bPD-V3-1FV"/>
+                                                    <constraint firstItem="bg8-MN-qQo" firstAttribute="top" secondItem="ZGe-1g-sov" secondAttribute="top" constant="8" id="gT9-Cy-dTl"/>
+                                                </constraints>
+                                            </view>
+                                            <blurEffect style="light"/>
+                                        </visualEffectView>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="Euq-cb-pbM"/>
+                                </constraints>
+                                <blurEffect style="light"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <real key="value" value="7.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </visualEffectView>
+                            <navigationBar opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="atN-ui-3yi">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <items>
+                                    <navigationItem title="Title" id="u3P-Gm-9Y1"/>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="trailing" secondItem="Wlu-xb-zjn" secondAttribute="trailing" constant="20" id="0xe-sV-fQj"/>
+                            <constraint firstItem="CSi-Iw-mtF" firstAttribute="centerX" secondItem="i2z-QK-3m4" secondAttribute="centerX" id="6Pv-av-uPs"/>
+                            <constraint firstItem="DW7-5J-XOz" firstAttribute="top" secondItem="i2z-QK-3m4" secondAttribute="top" id="8qU-pR-cJj"/>
+                            <constraint firstItem="1nE-kK-KtM" firstAttribute="centerY" secondItem="CSi-Iw-mtF" secondAttribute="centerY" id="9Zj-Ft-zfe"/>
+                            <constraint firstItem="Ttj-7h-ds9" firstAttribute="centerY" secondItem="CSi-Iw-mtF" secondAttribute="centerY" id="AvP-3Q-a7R"/>
+                            <constraint firstItem="sg1-3l-5lD" firstAttribute="top" secondItem="atN-ui-3yi" secondAttribute="bottom" constant="24" id="BmA-u5-YGd"/>
+                            <constraint firstAttribute="trailing" secondItem="DW7-5J-XOz" secondAttribute="trailing" id="CLs-r4-OrA"/>
+                            <constraint firstItem="VZP-Fi-Bkk" firstAttribute="centerX" secondItem="mm7-dA-pjV" secondAttribute="centerX" id="EOY-W0-IrH"/>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="trailing" secondItem="NMJ-sf-Y1D" secondAttribute="trailing" id="EpN-MD-dIy"/>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="bottom" secondItem="VZP-Fi-Bkk" secondAttribute="bottom" constant="135" id="GR6-gp-f2o"/>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="bottom" secondItem="NMJ-sf-Y1D" secondAttribute="bottom" constant="-40" id="GWn-S6-X2b"/>
+                            <constraint firstAttribute="trailing" secondItem="mkg-0O-22m" secondAttribute="trailing" id="HRB-VL-6lt"/>
+                            <constraint firstItem="CSi-Iw-mtF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1nE-kK-KtM" secondAttribute="trailing" constant="8" symbolic="YES" id="Iyh-RN-CdA"/>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="bottom" secondItem="kEd-n9-73T" secondAttribute="bottom" constant="-40" id="J06-cc-8nz"/>
+                            <constraint firstItem="Ttj-7h-ds9" firstAttribute="leading" secondItem="mm7-dA-pjV" secondAttribute="leading" constant="20" id="OdO-jU-mjF"/>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="bottom" secondItem="CSi-Iw-mtF" secondAttribute="bottom" constant="40" id="Qpu-TP-kVl"/>
+                            <constraint firstItem="mkg-0O-22m" firstAttribute="top" secondItem="i2z-QK-3m4" secondAttribute="top" id="R3v-61-qN4"/>
+                            <constraint firstItem="CSi-Iw-mtF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ttj-7h-ds9" secondAttribute="trailing" constant="8" symbolic="YES" id="TMD-Cq-mTa"/>
+                            <constraint firstItem="mkg-0O-22m" firstAttribute="bottom" secondItem="atN-ui-3yi" secondAttribute="bottom" id="Zjj-i6-d7B"/>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="bottom" secondItem="FST-S1-FNY" secondAttribute="bottom" constant="-40" id="afe-BA-F3F"/>
+                            <constraint firstItem="mkg-0O-22m" firstAttribute="leading" secondItem="i2z-QK-3m4" secondAttribute="leading" id="apm-Nv-0IU"/>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="VZP-Fi-Bkk" secondAttribute="trailing" constant="20" id="bIJ-la-Ley">
+                                <variation key="widthClass=regular" constant="120"/>
+                            </constraint>
+                            <constraint firstItem="sg1-3l-5lD" firstAttribute="centerX" secondItem="mm7-dA-pjV" secondAttribute="centerX" id="cRD-aI-WI4"/>
+                            <constraint firstItem="atN-ui-3yi" firstAttribute="leading" secondItem="mm7-dA-pjV" secondAttribute="leading" id="cVG-1M-Ffl"/>
+                            <constraint firstItem="VZP-Fi-Bkk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mm7-dA-pjV" secondAttribute="leading" constant="20" id="e3p-lO-qQt">
+                                <variation key="widthClass=regular" constant="120"/>
+                            </constraint>
+                            <constraint firstItem="DW7-5J-XOz" firstAttribute="leading" secondItem="i2z-QK-3m4" secondAttribute="leading" id="gjH-17-A0M"/>
+                            <constraint firstItem="kEd-n9-73T" firstAttribute="centerX" secondItem="mm7-dA-pjV" secondAttribute="centerX" id="ide-6u-hKl"/>
+                            <constraint firstItem="FST-S1-FNY" firstAttribute="leading" secondItem="mm7-dA-pjV" secondAttribute="leading" id="ngb-fe-XNM"/>
+                            <constraint firstItem="1nE-kK-KtM" firstAttribute="leading" secondItem="mm7-dA-pjV" secondAttribute="leading" constant="20" id="oRr-fr-7wb"/>
+                            <constraint firstAttribute="bottom" secondItem="DW7-5J-XOz" secondAttribute="bottom" id="poB-jV-dba"/>
+                            <constraint firstItem="mm7-dA-pjV" firstAttribute="trailing" secondItem="atN-ui-3yi" secondAttribute="trailing" id="rA1-vm-0pD"/>
+                            <constraint firstItem="Wlu-xb-zjn" firstAttribute="centerY" secondItem="CSi-Iw-mtF" secondAttribute="centerY" id="sG4-Il-bWV"/>
+                            <constraint firstItem="atN-ui-3yi" firstAttribute="top" secondItem="mm7-dA-pjV" secondAttribute="top" id="wBa-pv-nOe"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="mm7-dA-pjV"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Jao-yv-cSS" appends="YES" id="voU-uH-jeB"/>
+                            <outletCollection property="gestureRecognizers" destination="aJg-Sb-qZg" appends="YES" id="KHD-Jn-7wv"/>
+                            <outletCollection property="gestureRecognizers" destination="fU6-ab-02Z" appends="YES" id="SPB-Q0-6I3"/>
+                            <outletCollection property="gestureRecognizers" destination="Va0-ow-ccV" appends="YES" id="9t6-1e-45P"/>
+                            <outletCollection property="gestureRecognizers" destination="DAc-qJ-2NR" appends="YES" id="fhu-b3-mPQ"/>
+                            <outletCollection property="gestureRecognizers" destination="vCo-n8-lDo" appends="YES" id="k78-ZI-LhU"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="blurView" destination="DW7-5J-XOz" id="gbb-dz-Cqq"/>
+                        <outlet property="flashlightButton" destination="1nE-kK-KtM" id="phQ-0f-Tue"/>
+                        <outlet property="instructionLabel" destination="bg8-MN-qQo" id="UsM-Rb-oPJ"/>
+                        <outlet property="instructionView" destination="VZP-Fi-Bkk" id="ZpE-LN-uDT"/>
+                        <outlet property="loadModelButton" destination="Ttj-7h-ds9" id="Yfa-2K-I7z"/>
+                        <outlet property="navigationBar" destination="atN-ui-3yi" id="fjx-ZB-ggd"/>
+                        <outlet property="nextButton" destination="CSi-Iw-mtF" id="laz-Vs-zft"/>
+                        <outlet property="sceneView" destination="i2z-QK-3m4" id="0Rv-0l-C5Y"/>
+                        <outlet property="sessionInfoLabel" destination="mgd-ai-SNP" id="bHU-hj-9cC"/>
+                        <outlet property="sessionInfoView" destination="sg1-3l-5lD" id="9MY-dl-BTF"/>
+                        <outlet property="toggleInstructionsButton" destination="Wlu-xb-zjn" id="nv8-UZ-oqH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6cm-wG-cUD" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Jao-yv-cSS">
+                    <connections>
+                        <action selector="didTap:" destination="dsx-8Z-4fu" id="OcQ-li-yhw"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Rtk-dT-YcL"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" maximumNumberOfTouches="1" id="aJg-Sb-qZg">
+                    <connections>
+                        <action selector="didOneFingerPan:" destination="dsx-8Z-4fu" id="8W0-d5-Lkg"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="jT2-9x-6aJ"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="2" maximumNumberOfTouches="2" id="fU6-ab-02Z" customClass="ThresholdPanGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
+                    <connections>
+                        <action selector="didTwoFingerPan:" destination="dsx-8Z-4fu" id="Yzg-sX-RBv"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Fv2-5T-ltc"/>
+                    </connections>
+                </panGestureRecognizer>
+                <rotationGestureRecognizer id="Va0-ow-ccV" customClass="ThresholdRotationGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
+                    <connections>
+                        <action selector="didRotate:" destination="dsx-8Z-4fu" id="hZG-Ab-xLw"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="2Da-PI-vWh"/>
+                    </connections>
+                </rotationGestureRecognizer>
+                <pinchGestureRecognizer id="DAc-qJ-2NR" customClass="ThresholdPinchGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
+                    <connections>
+                        <action selector="didPinch:" destination="dsx-8Z-4fu" id="5Ud-Qk-Wq9"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="nxG-PP-PZb"/>
+                    </connections>
+                </pinchGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.40000000000000002" id="vCo-n8-lDo">
+                    <connections>
+                        <action selector="didLongPress:" destination="dsx-8Z-4fu" id="HoB-o0-Ap2"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="NCA-u4-dKp"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1058" y="517"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="addPressed" width="48" height="48"/>
         <image name="list" width="64" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>
