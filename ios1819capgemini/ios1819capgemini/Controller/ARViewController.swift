@@ -12,7 +12,7 @@ import ARKit
 import SceneKit
 import Vision
 
-
+//swiftlint:disable all
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
 
@@ -58,7 +58,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.showsStatistics = false
         sceneView.scene = scene
         
-        
+        sceneView.debugOptions = [.showFeaturePoints]
         sceneView.session.delegate = self
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
@@ -68,8 +68,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         setupBoxes()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
-        
-        
         configureLighting()
     }
     
@@ -90,6 +88,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
+        print("closest node distance\(calculateNodeDistanceVectorToCamera(incident: closestOpenIncident()))")
+        
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         if isDetecting {
@@ -105,7 +105,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.boundingBoxes.append(box)
         }
     }
-    //swiftlint:disable force_unwrapping
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
@@ -242,7 +241,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         descriptionNode = SKLabelNode(text: "Incidents: \(DataHandler.incidents.count)")
         descriptionNode.fontSize = 30
-        //swiftlint:disable empty_count
         if DataHandler.incidents.count == 0 {
             descriptionNode.fontColor = UIColor.green
         } else {
@@ -276,7 +274,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         guard let hitResult = hitTestResult.first else {
                             return
                         }
-                        if detectedObjectNode != nil {
+                        //if detectedObjectNode != nil {
                             let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
                                 SCNVector3(hitResult.worldTransform.columns.3.x,
                                            hitResult.worldTransform.columns.3.y,
@@ -284,20 +282,23 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                 to: detectedObjectNode)
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            filterAllPins()
-                            let imageWithoutPin = sceneView.snapshot()
-                            saveImage(image: imageWithoutPin, incident: incident)
+                                                     coordinate: Coordinate(vector: coordinateRelativeToObject),
+                                                     worldCoordinate: Coordinate(vector: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                                                                    hitResult.worldTransform.columns.3.y,
+                                                                                                    hitResult.worldTransform.columns.3.z)))
+                            //filterAllPins()
+                            //let imageWithoutPin = sceneView.snapshot()
+                            //saveImage(image: imageWithoutPin, incident: incident)
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z),
                                      identifier: "\(incident.identifier)" )
-                            filter3DPins(identifier: "\(incident.identifier)")
-                            let imageWithPin = sceneView.snapshot()
-                            saveImage(image: imageWithPin, incident: incident)
+                            //filter3DPins(identifier: "\(incident.identifier)")
+                            //let imageWithPin = sceneView.snapshot()
+                            //saveImage(image: imageWithPin, incident: incident)
                             DataHandler.incidents.append(incident)
                             descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-                        }
+                        //}
                     }
                     return
                 }
@@ -305,6 +306,58 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
+    
+    /*
+    calculates the distance of an input node to the camera on each of the 3 axis, returns the value in centimeters
+    */
+    func calculateNodeDistanceVectorToCamera (incident: Incident?) -> SCNVector3? {
+        guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident, let worldCoordinate = incident.worldCoordinate else {
+            return nil
+        }
+        return SCNVector3(x: (currentFrame.camera.transform.columns.3.x - worldCoordinate.pointX) * 100,
+                          y: (currentFrame.camera.transform.columns.3.y - worldCoordinate.pointY) * 100,
+                          z: (currentFrame.camera.transform.columns.3.z - worldCoordinate.pointZ) * 100)
+    }
+    
+    
+    /*
+    Helper methods to calculate distances between incident and camera
+    */
+    func distanceTravelled(xDist: Float, yDist: Float, zDist: Float) -> Float {
+        return sqrt((xDist * xDist) + (yDist * yDist) + (zDist * zDist))
+    }
+    
+    func distanceTravelled(between v1: SCNVector3, and v2: SCNVector3) -> Float {
+        
+        let xDist = v1.x - v2.x
+        let yDist = v1.y - v2.y
+        let zDist = v1.z - v2.z
+        
+        return distanceTravelled(xDist: xDist, yDist: yDist, zDist: zDist)
+    }
+    func distanceCameraNode (incident: Incident?) -> Float? {
+        guard let currentFrame = self.sceneView.session.currentFrame,
+            let incident = incident,
+            let worldCoordinate = incident.getWorldCoordinate() else {
+            return nil
+        }
+        return distanceTravelled(between: SCNVector3(x: currentFrame.camera.transform.columns.3.x,
+                                                     y: currentFrame.camera.transform.columns.3.y,
+                                                     z: currentFrame.camera.transform.columns.3.z), and: worldCoordinate)
+    }
+    func closestOpenIncident () -> Incident? {
+        let openIncidents = DataHandler.incidents.filter({ $0.status == .open })
+        var openIncidentsDistances = [Float: Incident]()
+        for incident in openIncidents {
+            openIncidentsDistances[distanceCameraNode(incident: incident)!] = incident
+        }
+        let closestIncident = openIncidentsDistances.min { a, b in a.key < b.key }
+        guard let incident = closestIncident else {
+            return nil
+        }
+        return incident.value
+    }
+    
     
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
@@ -329,7 +382,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return node
     }
     
-        // MARK: Screenshot methods
+        // MARK: Helper methods
     func saveImage(image: UIImage, incident: Incident) {
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
