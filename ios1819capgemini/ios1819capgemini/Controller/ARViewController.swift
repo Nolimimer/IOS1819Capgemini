@@ -81,15 +81,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 
-    // MARK: ML methods
+    // MARK: AR Kit methods
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         // Do not enqueue other buffers for processing while another Vision task is still running.
         // The camera stream has only a finite amount of buffers available; holding too many buffers for analysis would starve the camera.
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        print("closest node distance\(calculateNodeDistanceVectorToCamera(incident: closestOpenIncident()))")
-        
+        if  calculateNodeDistanceVectorToCamera(incident: closestOpenIncident()) != nil {
+            print("\(String(describing: calculateNodeDistanceVectorToCamera(incident: closestOpenIncident())))")
+        }
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         if isDetecting {
@@ -97,6 +98,30 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
     }
+    
+    //method is automatically executed. scans the AR View for the object which should be detected
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        let node = SCNNode()
+        
+        if let objectAnchor = anchor as? ARObjectAnchor {
+            
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.success)
+            }
+            detected = true
+            self.node = node
+            self.objectAnchor = objectAnchor
+            detectedObjectNode = node
+            for incident in DataHandler.incidents {
+                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
+            }
+            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+        }
+        return node
+    }
+    
     // Create shape layers for the bounding boxes.
     func setupBoxes() {
         for _ in 0..<numBoxes {
@@ -319,7 +344,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                           z: (currentFrame.camera.transform.columns.3.z - worldCoordinate.pointZ) * 100)
     }
     
-    
+    // MARK: Helper methods
     /*
     Helper methods to calculate distances between incident and camera
     */
@@ -335,6 +360,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return distanceTravelled(xDist: xDist, yDist: yDist, zDist: zDist)
     }
+    
     func distanceCameraNode (incident: Incident?) -> Float? {
         guard let currentFrame = self.sceneView.session.currentFrame,
             let incident = incident,
@@ -345,11 +371,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                      y: currentFrame.camera.transform.columns.3.y,
                                                      z: currentFrame.camera.transform.columns.3.z), and: worldCoordinate)
     }
+    /*
+     return the closest incident with status open
+    */
     func closestOpenIncident () -> Incident? {
         let openIncidents = DataHandler.incidents.filter({ $0.status == .open })
         var openIncidentsDistances = [Float: Incident]()
         for incident in openIncidents {
-            openIncidentsDistances[distanceCameraNode(incident: incident)!] = incident
+            guard let distance = distanceCameraNode(incident: incident) else {
+                return nil
+            }
+            openIncidentsDistances[distance] = incident
         }
         let closestIncident = openIncidentsDistances.min { a, b in a.key < b.key }
         guard let incident = closestIncident else {
@@ -358,31 +390,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return incident.value
     }
     
-    
-    //method is automatically executed. scans the AR View for the object which should be detected
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-        
-        if let objectAnchor = anchor as? ARObjectAnchor {
-            
-            let notification = UINotificationFeedbackGenerator()
-            
-            DispatchQueue.main.async {
-                notification.notificationOccurred(.success)
-            }
-            detected = true
-            self.node = node
-            self.objectAnchor = objectAnchor
-            detectedObjectNode = node
-            for incident in DataHandler.incidents {
-                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
-            }
-            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
-        }
-        return node
-    }
-    
-        // MARK: Helper methods
     func saveImage(image: UIImage, incident: Incident) {
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
