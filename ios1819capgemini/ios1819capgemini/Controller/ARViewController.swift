@@ -421,6 +421,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return incident.value
     }
     
+    
+    
     func saveImage(image: UIImage, incident: Incident) {
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
