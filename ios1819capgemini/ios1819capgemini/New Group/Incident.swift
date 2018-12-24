@@ -23,7 +23,6 @@ public class Incident: Codable {
     private(set) var status: Status
     private(set) var attachments = [Attachment]()
     let coordinate: Coordinate
-    var worldCoordinate: Coordinate?
     // MARK: Initializers
     init(type: IncidentType, description: String, coordinate: Coordinate) {
         
@@ -35,18 +34,6 @@ public class Incident: Codable {
         status = .open
         self.coordinate = coordinate
     }
-    
-    init (type: IncidentType, description: String, coordinate: Coordinate, worldCoordinate: Coordinate) {
-        identifier = DataHandler.nextIncidentID
-        createDate = Date()
-        modifiedDate = createDate
-        self.type = type
-        self.description = description
-        status = .open
-        self.coordinate = coordinate
-        self.worldCoordinate = worldCoordinate
-    }
-    
     // MARK: Instance Methods
     func edit(status: Status, description: String, modifiedDate: Date) {
         self.status = status
@@ -85,14 +72,6 @@ public class Incident: Codable {
         res.y = coordinate.pointY
         res.z = coordinate.pointZ
         return res
-    }
-    func getWorldCoordinate() -> SCNVector3? {
-        guard let worldCoordinate = worldCoordinate else {
-            return nil
-        }
-        return SCNVector3(x: worldCoordinate.pointX,
-                          y: worldCoordinate.pointY,
-                          z: worldCoordinate.pointZ)
     }
     
     func addAttachment(attachment: Attachment) {

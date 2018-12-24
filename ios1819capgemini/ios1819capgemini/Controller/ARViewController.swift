@@ -90,7 +90,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         let closestIncident = closestOpenIncident()
         if calculateNodeDistanceVectorToCamera(incident: closestIncident) != nil && closestIncident != nil {
-            print("\(closestIncident!.identifier)  \(calculateNodeDistanceVectorToCamera(incident: closestIncident))")
+            print("\(closestIncident!.identifier)  \(String(describing: calculateNodeDistanceVectorToCamera(incident: closestIncident)))")
         } else {
             print("no closest incident found")
         }
@@ -320,10 +320,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                 to: detectedObjectNode)
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject),
-                                                     worldCoordinate: Coordinate(vector: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                                                                    hitResult.worldTransform.columns.3.y,
-                                                                                                    hitResult.worldTransform.columns.3.z)))
+                                                     coordinate: Coordinate(vector: coordinateRelativeToObject)
+                                                     )
                             filterAllPins()
                             let imageWithoutPin = sceneView.snapshot()
                             saveImage(image: imageWithoutPin, incident: incident)
@@ -365,16 +363,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     calculates the distance of an input node to the camera on each of the 3 axis, returns the value in centimeters
     */
     func calculateNodeDistanceVectorToCamera (incident: Incident?) -> SCNVector3? {
-        guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident, let worldCoordinate = incident.worldCoordinate else {
+        guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident else {
             return nil
         }
-        return SCNVector3(x: (currentFrame.camera.transform.columns.3.x - worldCoordinate.pointX) * 100,
-                          y: (currentFrame.camera.transform.columns.3.y - worldCoordinate.pointY) * 100,
-                          z: (currentFrame.camera.transform.columns.3.z - worldCoordinate.pointZ) * 100)
+        let worldCoordinate = sceneView.scene.rootNode.convertPosition(SCNVector3(incident.coordinate.pointX,
+                                                                                  incident.coordinate.pointY,
+                                                                                  incident.coordinate.pointZ),
+                                                                       to: nil)
+        return SCNVector3(x: (currentFrame.camera.transform.columns.3.x - worldCoordinate.x) * 100,
+                          y: (currentFrame.camera.transform.columns.3.y - worldCoordinate.y) * 100,
+                          z: (currentFrame.camera.transform.columns.3.z - worldCoordinate.z) * 100)
     }
     
     /*
-    Helper methods to calculate distances between incident and camera
+     Helper methods to calculate distances between incident and camera
     */
     func distanceTravelled(xDist: Float, yDist: Float, zDist: Float) -> Float {
         return sqrt((xDist * xDist) + (yDist * yDist) + (zDist * zDist))
@@ -391,15 +393,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func distanceCameraNode (incident: Incident?) -> Float? {
         
-        guard let currentFrame = self.sceneView.session.currentFrame,
-            let incident = incident,
-            let worldCoordinate = incident.getWorldCoordinate() else {
+        guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident else {
             return nil
         }
         return distanceTravelled(between: SCNVector3(x: currentFrame.camera.transform.columns.3.x,
                                                      y: currentFrame.camera.transform.columns.3.y,
                                                      z: currentFrame.camera.transform.columns.3.z),
-                                 and: worldCoordinate)
+                                 and: self.sceneView.scene.rootNode.convertPosition(SCNVector3(incident.coordinate.pointX,
+                                                                                               incident.coordinate.pointY,
+                                                                                               incident.coordinate.pointZ),
+                                                                                    to: nil))
     }
     /*
      return the closest incident with status open
@@ -480,7 +483,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
-
 }
 
 // MARK: Coordinate
