@@ -88,15 +88,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        if  calculateNodeDistanceVectorToCamera(incident: closestOpenIncident()) != nil {
-            print("\(String(describing: calculateNodeDistanceVectorToCamera(incident: closestOpenIncident())))")
+        let closestIncident = closestOpenIncident()
+        if calculateNodeDistanceVectorToCamera(incident: closestIncident) != nil && closestIncident != nil {
+            print("\(closestIncident!.identifier)  \(calculateNodeDistanceVectorToCamera(incident: closestIncident))")
+        } else {
+            print("no closest incident found")
         }
+        
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         if isDetecting {
             classifyCurrentImage()
         }
-        
     }
     
     //method is automatically executed. scans the AR View for the object which should be detected
@@ -132,6 +135,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
+        
+        //swiftlint:disable force_wrapping
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
             //self?.processClassifications(for: request, error: error)
             guard let predictions = self?.processClassifications(for: request, error: error) else {
@@ -141,6 +146,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self?.drawBoxes(predictions: predictions)
             }
         })
+        //swiftlint:enable force_wrapping
         // Crop input images to square area at center, matching the way the ML model was trained.
         request.imageCropAndScaleOption = .centerCrop
         // Use CPU for Vision processing to ensure that there are adequate GPU resources for rendering.
@@ -171,6 +177,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // Handle completion of the Vision request and choose results to display.
     /// - Tag: ProcessClassifications
     private func processClassifications(for request: VNRequest, error: Error?) -> [Prediction]? {
+        
         guard let results = request.results as? [VNCoreMLFeatureValueObservation], results.count == 2 else {
             return nil
         }
@@ -231,6 +238,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
+        
                 let sphere = SCNSphere(radius: 0.015)
                 let materialSphere = SCNMaterial()
                 materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
@@ -244,8 +252,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     //adds the info plane which displays the detected object and the number of incidents
     private func addInfoPlane (carPart: String) {
-        let plane = SCNPlane(width: CGFloat(self.objectAnchor!.referenceObject.extent.x * 0.8),
-                             height: CGFloat(self.objectAnchor!.referenceObject.extent.y * 0.3))
+        
+        guard let objectAnchor = self.objectAnchor else {
+            return
+        }
+        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
+                             height: CGFloat(objectAnchor.referenceObject.extent.y * 0.3))
         plane.cornerRadius = plane.width / 8
         let spriteKitScene = SKScene(size: CGSize(width: 300, height: 300))
         spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
@@ -253,9 +265,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
-        let absoluteObjectPosition = objectAnchor!.transform.columns.3
+        let absoluteObjectPosition = objectAnchor.transform.columns.3
         let planePosition = SCNVector3(absoluteObjectPosition.x,
-                                       absoluteObjectPosition.y + self.objectAnchor!.referenceObject.extent.y,
+                                       absoluteObjectPosition.y + objectAnchor.referenceObject.extent.y,
                                        absoluteObjectPosition.z)
         planeNode.position = planePosition
         let labelNode = SKLabelNode(text: carPart)
@@ -286,6 +298,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     If a new pin is created a screenshot of the location is taken before/after placing the pin.
     */
     @objc func tapped(recognizer: UIGestureRecognizer) {
+        
         if recognizer.state == .ended {
             let location: CGPoint = recognizer.location(in: sceneView)
             let hits = self.sceneView.hitTest(location, options: nil)
@@ -311,16 +324,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                      worldCoordinate: Coordinate(vector: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                                                     hitResult.worldTransform.columns.3.y,
                                                                                                     hitResult.worldTransform.columns.3.z)))
-                            //filterAllPins()
-                            //let imageWithoutPin = sceneView.snapshot()
-                            //saveImage(image: imageWithoutPin, incident: incident)
+                            filterAllPins()
+                            let imageWithoutPin = sceneView.snapshot()
+                            saveImage(image: imageWithoutPin, incident: incident)
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z),
                                      identifier: "\(incident.identifier)" )
-                            //filter3DPins(identifier: "\(incident.identifier)")
-                            //let imageWithPin = sceneView.snapshot()
-                            //saveImage(image: imageWithPin, incident: incident)
+                            filter3DPins(identifier: "\(incident.identifier)")
+                            let imageWithPin = sceneView.snapshot()
+                            saveImage(image: imageWithPin, incident: incident)
                             DataHandler.incidents.append(incident)
                             descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
                         //}
@@ -331,6 +344,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
+    // MARK: Overridden/Lifecycle Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "ShowDetailSegue":
+            guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
+                let pin = sender as? SCNNode,
+                let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
+                    return
+            }
+            detailVC.incident = incident
+        default :
+            return
+        }
+    }
+    
+    // MARK: Helper methods
     
     /*
     calculates the distance of an input node to the camera on each of the 3 axis, returns the value in centimeters
@@ -344,7 +373,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                           z: (currentFrame.camera.transform.columns.3.z - worldCoordinate.pointZ) * 100)
     }
     
-    // MARK: Helper methods
     /*
     Helper methods to calculate distances between incident and camera
     */
@@ -362,6 +390,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func distanceCameraNode (incident: Incident?) -> Float? {
+        
         guard let currentFrame = self.sceneView.session.currentFrame,
             let incident = incident,
             let worldCoordinate = incident.getWorldCoordinate() else {
@@ -369,12 +398,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         return distanceTravelled(between: SCNVector3(x: currentFrame.camera.transform.columns.3.x,
                                                      y: currentFrame.camera.transform.columns.3.y,
-                                                     z: currentFrame.camera.transform.columns.3.z), and: worldCoordinate)
+                                                     z: currentFrame.camera.transform.columns.3.z),
+                                 and: worldCoordinate)
     }
     /*
      return the closest incident with status open
     */
     func closestOpenIncident () -> Incident? {
+        
         let openIncidents = DataHandler.incidents.filter({ $0.status == .open })
         var openIncidentsDistances = [Float: Incident]()
         for incident in openIncidents {
@@ -415,11 +446,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     // Temporarily deletes all the pins except for the pin in the method call from the view and then adds them back again after 1 second
     private func filter3DPins (identifier: String) {
+        
         self.scene.rootNode.childNodes.forEach { node in
             if node.name != nil {
                 if node.name != identifier {
                     let tmpNode = node
-                    self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                    guard let name = node.name else {
+                        return
+                    }
+                    self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                         self.scene.rootNode.addChildNode(tmpNode)
                     })
@@ -429,10 +464,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     // Temporarily deletes all the pins from the view and then adds them back again after 1 second
     private func filterAllPins () {
+        
         self.scene.rootNode.childNodes.forEach { node in
             if node.name != nil {
                 let tmpNode = node
-                self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                guard let name = node.name else {
+                    return
+                }
+                self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                     self.scene.rootNode.addChildNode(tmpNode)
                 })
@@ -440,20 +479,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 
-    // MARK: Overridden/Lifecycle Methods
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "ShowDetailSegue":
-            guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
-                let pin = sender as? SCNNode,
-                let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
-                    return
-            }
-            detailVC.incident = incident
-        default :
-            return
-        }
-    }
 }
 
 // MARK: Coordinate
