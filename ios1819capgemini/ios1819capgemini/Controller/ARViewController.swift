@@ -49,11 +49,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             isDetecting = true
         }
     }
-    @IBOutlet private weak var navigationButtonUp: UIButton!
-    @IBOutlet private weak var navigationButtonRight: UIButton!
-    @IBOutlet private weak var navigationButtonDown: UIButton!
-    @IBOutlet private weak var navigationButtonLeft: UIButton!
+    @IBOutlet weak var rightNavigation: UILabel!
     
+    @IBOutlet weak var upNavigation: UILabel!
+    @IBOutlet weak var leftNavigation: UILabel!
+    @IBOutlet weak var distanceNavigation: UILabel!
+    
+    @IBOutlet weak var downNavigation: UILabel!
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,7 +94,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        setNavigationButtons()
+        setNavigationArrows()
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         if isDetecting {
@@ -387,7 +389,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                                                incident.coordinate.pointZ),
                                                                                     to: nil))
     }
-    
     /*
      return the closest incident with status open
     */
@@ -478,8 +479,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         if visible {
-//            print("Incident is \( (distanceCamera) * 100)cm from you")
-            return "visible"
+            return "Incident is \( (distanceCamera) * 100)cm from your device"
         }
             if abs(distancePOVVector.x) > abs(distancePOVVector.y) {
                 if distancePOVVector.x.isLess(than: 0.0) {
@@ -500,24 +500,25 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     /*
      sets navigation buttons based on the navigation which is given
     */
-    func setNavigationButtons() {
-        navigationButtonUp.isHidden = true
-        navigationButtonRight.isHidden = true
-        navigationButtonLeft.isHidden = true
-        navigationButtonDown.isHidden = true
-        
+    func setNavigationArrows() {
+        upNavigation.isHidden = true
+        downNavigation.isHidden = true
+        rightNavigation.isHidden = true
+        leftNavigation.isHidden = true
+        distanceNavigation.isHidden = true
         let suggestion =  navigationSuggestion()
         switch suggestion {
         case "up":
-            navigationButtonUp.isHidden = false
+            upNavigation.isHidden = false
         case "down":
-            navigationButtonDown.isHidden = false
+            downNavigation.isHidden = false
         case "right":
-            navigationButtonRight.isHidden = false
+            rightNavigation.isHidden = false
         case "left":
-            navigationButtonLeft.isHidden = false
+            leftNavigation.isHidden = false
         default:
-            return
+            distanceNavigation.text = suggestion
+            distanceNavigation.isHidden = false
         }
     }
     
