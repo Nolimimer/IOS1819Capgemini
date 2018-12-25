@@ -487,10 +487,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         if distanceCamVector.z > 50.0 {
-            return "backwards"
+            return "move backwards"
         }
         if distanceCamVector.z < -50.0 {
-            return "forwards"
+            return "move forwards"
         }
         if visible {
             return "visible"
@@ -498,19 +498,31 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if (distanceCamera * 100) > 50.0 {
             if abs(distanceCamVector.x) > abs(distanceCamVector.y) {
                 if distanceCamVector.x.isLess(than: 0.0) {
-                    return "left"
+                    return "move left"
                 } else {
-                    return "right"
+                    return "move right"
                 }
             } else {
                 if distanceCamVector.y.isLess(than: 0.0) {
-                    return "down"
+                    return "move down"
                 } else {
-                    return "up"
+                    return "move up"
                 }
             }
         } else {
-            return "distance POV : \(distancePOVVector)"
+            if abs(distancePOVVector.x) > abs(distancePOVVector.y) {
+                if distancePOVVector.x.isLess(than: 0.0) {
+                    return "rotate left"
+                } else {
+                    return "rotate right"
+                }
+            } else {
+                if distancePOVVector.y.isLess(than: 0.0) {
+                    return "rotate down"
+                } else {
+                    return "rotate up"
+                }
+            }
         }
     }
     
