@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 Manages the major steps in scanning an object.
 */
@@ -9,6 +13,7 @@ import Foundation
 import UIKit
 import ARKit
 //swiftlint:disable type_body_length
+//swiftlint:disable force_unwrapping
 class Scan {
     
     static let stateChangedNotification = Notification.Name("ScanningStateChanged")
@@ -123,15 +128,12 @@ class Scan {
     
     init(_ sceneView: ARSCNView) {
         self.sceneView = sceneView
-        
         scannedObject = ScannedObject(sceneView)
         pointCloud = ScannedPointCloud()
-        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.applicationStateChanged(_:)),
                                                name: ViewController.appStateChangedNotification,
                                                object: nil)
-        
         self.sceneView.scene.rootNode.addChildNode(self.scannedObject)
         self.sceneView.scene.rootNode.addChildNode(self.pointCloud)
     }
@@ -143,7 +145,8 @@ class Scan {
     
     @objc
     private func applicationStateChanged(_ notification: Notification) {
-        guard let appState = notification.userInfo?[ViewController.appStateUserInfoKey] as? ViewController.State else { return }
+        guard let appState = notification.userInfo?[ViewController.appStateUserInfoKey] as? ViewController.State else {
+            return }
         switch appState {
         case .scanning:
             scannedObject.isHidden = false
@@ -153,7 +156,7 @@ class Scan {
             pointCloud.isHidden = true
         }
     }
-    
+    //swiftlint:disable cyclomatic_complexity
     func didOneFingerPan(_ gesture: UIPanGestureRecognizer) {
         if state == .ready {
             state = .defineBoundingBox
@@ -188,7 +191,6 @@ class Scan {
         if state == .ready {
             state = .defineBoundingBox
         }
-        
         if state == .defineBoundingBox || state == .scanning {
             switch gesture.state {
             case .possible:
@@ -230,7 +232,6 @@ class Scan {
         if state == .ready {
             state = .defineBoundingBox
         }
-        
         if state == .defineBoundingBox || state == .scanning {
             if gesture.state == .changed {
                 scannedObject.rotateOnYAxis(by: -Float(gesture.rotationDelta))
@@ -321,7 +322,6 @@ class Scan {
     func updateOnEveryFrame(_ frame: ARFrame) {
         if state == .ready || state == .defineBoundingBox {
             if let points = frame.rawFeaturePoints {
-                // Automatically adjust the size of the bounding box.
                 self.scannedObject.fitOverPointCloud(points)
             }
         }
@@ -347,9 +347,10 @@ class Scan {
                 if now - timeOfLastReferenceObjectCreation > Scan.objectCreationInterval, !isBusyCreatingReferenceObject {
                     timeOfLastReferenceObjectCreation = now
                     isBusyCreatingReferenceObject = true
-                    sceneView.session.createReferenceObject(transform: boundingBox.simdWorldTransform,
-                                                            center: float3(),
-                                                            extent: boundingBox.extent) { object, error in
+                    sceneView.session.createReferenceObject(
+                        transform: boundingBox.simdWorldTransform,
+                        center: float3(),
+                        extent: boundingBox.extent) { object, _ in
                         if let referenceObject = object {
                             // Pass the feature points to the point cloud visualization.
                             self.pointCloud.update(with: referenceObject.rawFeaturePoints, localFor: boundingBox)
@@ -357,14 +358,12 @@ class Scan {
                         self.isBusyCreatingReferenceObject = false
                     }
                 }
-                
                 // Update the point cloud with the current frame's points as well
                 if let currentPoints = frame.rawFeaturePoints {
                     pointCloud.update(with: currentPoints)
                 }
             }
         }
-        
         // Update bounding box side coloring to visualize scanning coverage
         if state == .scanning {
             scannedObject.boundingBox?.highlightCurrentTile()
@@ -418,13 +417,13 @@ class Scan {
         // Extract the reference object based on the position & orientation of the bounding box.
         sceneView.session.createReferenceObject(
             transform: boundingBox.simdWorldTransform,
-            center: float3(), extent: boundingBox.extent,
+            center: float3(),
+            extent: boundingBox.extent,
             completionHandler: { object, error in
                 if let referenceObject = object {
                     // Adjust the object's origin with the user-provided transform.
                     self.scannedReferenceObject = referenceObject.applyingTransform(origin.simdTransform)
                     self.scannedReferenceObject!.name = self.scannedObject.scanName
-                    
                     if let referenceObjectToMerge = ViewController.instance?.referenceObjectToMerge {
                         ViewController.instance?.referenceObjectToMerge = nil
                         
@@ -432,15 +431,16 @@ class Scan {
                         ViewController.instance?.showAlert(title: "", message: "Merging previous scan into this scan...", buttonTitle: nil)
                         
                         // Try to merge the object which was just scanned with the existing one.
-                        self.scannedReferenceObject?.mergeInBackground(with: referenceObjectToMerge, completion: { (mergedObject, error) in
-
+                        //swiftlint:diasble unneeded_parentheses_in_closure_argument
+                        self.scannedReferenceObject?.mergeInBackground(with: referenceObjectToMerge, completion: { mergedObject, error in
                             if let mergedObject = mergedObject {
                                 mergedObject.name = self.scannedReferenceObject?.name
                                 self.scannedReferenceObject = mergedObject
                                 ViewController.instance?.showAlert(title: "Merge successful",
-                                                                   message: "The previous scan has been merged into this scan.", buttonTitle: "OK")
+                                                                   message: "The previous scan has been merged into this scan.",
+                                                                   buttonTitle: "OK")
                                 creationFinished(self.scannedReferenceObject)
-
+                                
                             } else {
                                 print("Error: Failed to merge scans. \(error?.localizedDescription ?? "")")
                                 let message = """
@@ -466,7 +466,7 @@ class Scan {
                     print("Error: Failed to create reference object. \(error!.localizedDescription)")
                     creationFinished(nil)
                 }
-        })
+            })
     }
     
     private func createScreenshot() {
@@ -474,7 +474,6 @@ class Scan {
             print("Error: Failed to create a screenshot - no current ARFrame exists.")
             return
         }
-
         var orientation: UIImage.Orientation = .right
         switch UIDevice.current.orientation {
         case .portrait:
@@ -488,7 +487,6 @@ class Scan {
         default:
             break
         }
-        
         let ciImage = CIImage(cvPixelBuffer: frame.capturedImage)
         let context = CIContext()
         if let cgimage = context.createCGImage(ciImage, from: ciImage.extent) {

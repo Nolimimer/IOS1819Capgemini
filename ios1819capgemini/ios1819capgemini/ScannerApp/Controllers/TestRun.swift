@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 Manages the process of testing detection after scanning an object.
 */
@@ -64,7 +68,10 @@ class TestRun {
         averageDetectionDelayInSeconds = 0
         
         self.detectedObject = DetectedObject(referenceObject: object)
-        self.sceneView.scene.rootNode.addChildNode(self.detectedObject!)
+        guard let detectedObject = self.detectedObject else {
+            return
+        }
+        self.sceneView.scene.rootNode.addChildNode(detectedObject)
         
         self.lastDetectionStartTime = Date()
         
@@ -78,7 +85,10 @@ class TestRun {
     func successfulDetection(_ objectAnchor: ARObjectAnchor) {
         
         // Compute the time it took to detect this object & the average.
-        lastDetectionDelayInSeconds = Date().timeIntervalSince(self.lastDetectionStartTime!)
+        guard let lastDetectionStartTime = self.lastDetectionStartTime else {
+            return
+        }
+        lastDetectionDelayInSeconds = Date().timeIntervalSince(lastDetectionStartTime)
         detections += 1
         averageDetectionDelayInSeconds = (averageDetectionDelayInSeconds * Double(detections - 1) + lastDetectionDelayInSeconds) / Double(detections)
         

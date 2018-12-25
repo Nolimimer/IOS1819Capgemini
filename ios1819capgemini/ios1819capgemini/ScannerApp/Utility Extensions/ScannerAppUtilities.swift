@@ -1,13 +1,17 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 Convenience extensions on system types used in this project.
 */
 
 import Foundation
 import ARKit
-
+//swiftlint:disable force_unwrapping
 // Convenience accessors for Asset Catalog named colors.
 extension UIColor {
     static let appYellow = UIColor(named: "appYellow")!
@@ -112,7 +116,8 @@ extension ARSCNView {
     
     func smartHitTest(_ point: CGPoint) -> ARHitTestResult? {
         let hitTestResults = hitTest(point, types: .featurePoint)
-        guard !hitTestResults.isEmpty else { return nil }
+        guard !hitTestResults.isEmpty else {
+            return nil }
         
         for result in hitTestResults {
             // Return the first result which is between 20 cm and 3 m away from the user.
@@ -168,7 +173,7 @@ extension SCNNode {
         
         // If there are no light sources in the model, add some
         let lightNodes = node.childNodes(passingTest: { node, _ in
-            return node.light != nil
+            node.light != nil
         })
         if lightNodes.isEmpty {
             let ambientLight = SCNLight()
@@ -213,7 +218,7 @@ extension CGPoint {
         return sqrt(x * x + y * y)
     }
     
-    static func +(left: CGPoint, right: CGPoint) -> CGPoint {
+    static func + (left: CGPoint, right: CGPoint) -> CGPoint {
         return CGPoint(x: left.x + right.x, y: left.y + right.y)
     }
 }

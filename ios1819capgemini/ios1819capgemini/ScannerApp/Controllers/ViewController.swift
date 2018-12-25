@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 Main view controller for the object scanning UI.
 */
@@ -17,7 +21,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     static let appStateUserInfoKey = "AppState"
     
     static var instance: ViewController?
-    
+    //swiftlint:disable private_outlet
+    //swiftlint:disable implicitly_unwrapped_optional
     @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var blurView: UIVisualEffectView!
     @IBOutlet weak var nextButton: RoundedButton!
@@ -91,22 +96,38 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(scanningStateChanged), name: Scan.stateChangedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(ghostBoundingBoxWasCreated),
-                                       name: ScannedObject.ghostBoundingBoxCreatedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(ghostBoundingBoxWasRemoved),
-                                       name: ScannedObject.ghostBoundingBoxRemovedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(boundingBoxWasCreated),
-                                       name: ScannedObject.boundingBoxCreatedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(scanPercentageChanged),
-                                       name: ScanBoundingBox.scanPercentageChangedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(boundingBoxPositionOrExtentChanged(_:)),
-                                       name: ScanBoundingBox.extentChangedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(boundingBoxPositionOrExtentChanged(_:)),
-                                       name: ScanBoundingBox.positionChangedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(objectOriginPositionChanged(_:)),
-                                       name: ObjectOrigin.positionChangedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(displayWarningIfInLowPowerMode),
-                                       name: Notification.Name.NSProcessInfoPowerStateDidChange, object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(ghostBoundingBoxWasCreated),
+                                       name: ScannedObject.ghostBoundingBoxCreatedNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(ghostBoundingBoxWasRemoved),
+                                       name: ScannedObject.ghostBoundingBoxRemovedNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(boundingBoxWasCreated),
+                                       name: ScannedObject.boundingBoxCreatedNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(scanPercentageChanged),
+                                       name: ScanBoundingBox.scanPercentageChangedNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(boundingBoxPositionOrExtentChanged(_:)),
+                                       name: ScanBoundingBox.extentChangedNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(boundingBoxPositionOrExtentChanged(_:)),
+                                       name: ScanBoundingBox.positionChangedNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(objectOriginPositionChanged(_:)),
+                                       name: ObjectOrigin.positionChangedNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(displayWarningIfInLowPowerMode),
+                                       name: Notification.Name.NSProcessInfoPowerStateDidChange,
+                                       object: nil)
         
         setupNavigationBar()
         
@@ -155,18 +176,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             }
         }
     }
-    
+    //swiftlint:disable private_action
     @IBAction func previousButtonTapped(_ sender: Any) {
         switchToPreviousState()
     }
     
     @IBAction func nextButtonTapped(_ sender: Any) {
-        guard !nextButton.isHidden && nextButton.isEnabled else { return }
+        guard !nextButton.isHidden && nextButton.isEnabled else {
+            return }
         switchToNextState()
     }
     
     @IBAction func addScanButtonTapped(_ sender: Any) {
-        guard state == .testing else { return }
+        guard state == .testing else {
+            return }
 
         let title = "Merge another scan?"
         let message = """
@@ -202,9 +225,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             self.present(documentPicker, animated: true, completion: nil)
         }
     }
-    
+    //swiftlint:disable private_action
     @IBAction func loadModelButtonTapped(_ sender: Any) {
-        guard !loadModelButton.isHidden && loadModelButton.isEnabled else { return }
+        guard !loadModelButton.isHidden && loadModelButton.isEnabled else {
+            return }
         
         let documentPicker = UIDocumentPickerViewController(documentTypes: ["com.pixar.universal-scene-description-mobile"], in: .import)
         documentPicker.delegate = self
@@ -229,12 +253,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     @IBAction func toggleFlashlightButtonTapped(_ sender: Any) {
-        guard !flashlightButton.isHidden && flashlightButton.isEnabled else { return }
+        guard !flashlightButton.isHidden && flashlightButton.isEnabled else {
+            return }
         flashlightButton.toggledOn = !flashlightButton.toggledOn
     }
-    
+   
     @IBAction func toggleInstructionsButtonTapped(_ sender: Any) {
-        guard !toggleInstructionsButton.isHidden && toggleInstructionsButton.isEnabled else { return }
+        guard !toggleInstructionsButton.isHidden && toggleInstructionsButton.isEnabled else {
+            return }
         instructionsVisible.toggle()
     }
     
@@ -244,7 +270,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first else { return }
+        guard let url = urls.first else {
+            return }
         readFile(url)
     }
     
@@ -351,11 +378,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     var limitedTrackingTimer: Timer?
     
     func startLimitedTrackingTimer() {
-        guard limitedTrackingTimer == nil else { return }
+        guard limitedTrackingTimer == nil else {
+            return }
         
         limitedTrackingTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
             self.cancelLimitedTrackingTimer()
-            guard let scan = self.scan else { return }
+            guard let scan = self.scan else {
+                return }
             if scan.state == .defineBoundingBox || scan.state == .scanning || scan.state == .adjustingOrigin {
                 let title = "Limited Tracking"
                 let message = "Low tracking quality - it is unlikely that a good reference object can be generated from this scan."
@@ -376,13 +405,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     var maxScanTimeTimer: Timer?
     
     func startMaxScanTimeTimer() {
-        guard maxScanTimeTimer == nil else { return }
+        guard maxScanTimeTimer == nil else {
+            return }
         
         let timeout: TimeInterval = 60.0 * 5
         
         maxScanTimeTimer = Timer.scheduledTimer(withTimeInterval: timeout, repeats: false) { _ in
             self.cancelMaxScanTimeTimer()
-            guard self.state == .scanning else { return }
+            guard self.state == .scanning else {
+                return }
             let title = "Scan is taking too long"
             let message = "Scanning consumes a lot of resources. This scan has been running for \(Int(timeout)) s. Consider closing the app and letting the device rest for a few minutes."
             let buttonTitle = "OK"
@@ -396,7 +427,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     // MARK: - ARSessionDelegate
-    
+    //swiftlint:disable cyclomatic_complexity
     func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
         
         updateSessionInfoLabel(for: camera.trackingState)
@@ -450,7 +481,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        guard let frame = sceneView.session.currentFrame else { return }
+        guard let frame = sceneView.session.currentFrame else {
+            return }
         scan?.updateOnEveryFrame(frame)
         testRun?.updateOnEveryFrame()
     }
@@ -488,14 +520,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             ViewController.instance?.showAlert(title: "", message: "Merging other scan into this scan...", buttonTitle: nil)
             
             // Try to merge the object which was just scanned with the existing one.
-            self.testRun?.referenceObject?.mergeInBackground(with: referenceObject, completion: { (mergedObject, error) in
+            self.testRun?.referenceObject?.mergeInBackground(with: referenceObject, completion: { mergedObject, error in
                 let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
                 
                 if let mergedObject = mergedObject {
                     mergedObject.name = self.testRun?.referenceObject?.name
                     self.testRun?.setReferenceObject(mergedObject, screenshot: nil)
-                    self.showAlert(title: "Merge successful", message: "The other scan has been merged into this scan.",
-                                   buttonTitle: "OK", showCancel: false)
+                    self.showAlert(title: "Merge successful",
+                                   message: "The other scan has been merged into this scan.",
+                                   buttonTitle: "OK",
+                                   showCancel: false)
                     
                 } else {
                     print("Error: Failed to merge scans. \(error?.localizedDescription ?? "")")
@@ -544,15 +578,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             self.showAlert(title: title, message: message, actions: [merge, test])
             
         } catch {
-            self.showAlert(title: "File invalid", message: "Loading the scanned object file failed.",
-                           buttonTitle: "OK", showCancel: false)
+            self.showAlert(title: "File invalid",
+                           message: "Loading the scanned object file failed.",
+                           buttonTitle: "OK",
+                           showCancel: false)
         }
     }
     
     @objc
     func scanPercentageChanged(_ notification: Notification) {
-        guard let percentage = notification.userInfo?[ScanBoundingBox.scanPercentageUserInfoKey] as? Int else { return }
-        
+        guard let percentage = notification.userInfo?[ScanBoundingBox.scanPercentageUserInfoKey] as? Int else {
+            return
+        }
         // Switch to the next state if the scan is complete.
         if percentage >= 100 {
             switchToNextState()
@@ -577,8 +614,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     @objc
     func objectOriginPositionChanged(_ notification: Notification) {
-        guard let node = notification.object as? ObjectOrigin else { return }
-        
+        guard let node = notification.object as? ObjectOrigin else {
+            return
+        }
         // Display origin position w.r.t. bounding box
         let xString = String(format: "x: %.2f", node.position.x)
         let yString = String(format: "y: %.2f", node.position.y)

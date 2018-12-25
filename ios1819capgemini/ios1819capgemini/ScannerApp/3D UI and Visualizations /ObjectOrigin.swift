@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 An interactive visualization of x/y/z coordinate axes for use in placing the origin/anchor point of a scanned object.
 */
@@ -22,7 +26,7 @@ class ObjectOrigin: SCNNode {
     private let axisSizeToObjectSizeRatio: Float = 0.25
     private let minAxisSize: Float = 0.05
     private let maxAxisSize: Float = 0.2
-    
+    //swiftlint:disable implicitly_unwrapped_optional
     private var xAxis: ObjectOriginAxis!
     private var yAxis: ObjectOriginAxis!
     private var zAxis: ObjectOriginAxis!
@@ -55,11 +59,20 @@ class ObjectOrigin: SCNNode {
         let radius = CGFloat(axisThickness / 2.0)
         let handleSize = CGFloat(axisLength / 4)
         
-        xAxis = ObjectOriginAxis(axis: .x, length: length, thickness: thickness, radius: radius,
+        xAxis = ObjectOriginAxis(axis: .x,
+                                 length: length,
+                                 thickness: thickness,
+                                 radius: radius,
                                  handleSize: handleSize)
-        yAxis = ObjectOriginAxis(axis: .y, length: length, thickness: thickness, radius: radius,
+        yAxis = ObjectOriginAxis(axis: .y,
+                                 length: length,
+                                 thickness: thickness,
+                                 radius: radius,
                                  handleSize: handleSize)
-        zAxis = ObjectOriginAxis(axis: .z, length: length, thickness: thickness, radius: radius,
+        zAxis = ObjectOriginAxis(axis: .z,
+                                 length: length,
+                                 thickness: thickness,
+                                 radius: radius,
                                  handleSize: handleSize)
         
         addChildNode(xAxis)
@@ -68,10 +81,14 @@ class ObjectOrigin: SCNNode {
         
         set3DModel(ViewController.instance?.modelURL, extentForScaling: extent)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.scanningStateChanged(_:)),
-                                               name: Scan.stateChangedNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.boundingBoxExtentChanged(_:)),
-                                               name: ScanBoundingBox.extentChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.scanningStateChanged(_:)),
+                                               name: Scan.stateChangedNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.boundingBoxExtentChanged(_:)),
+                                               name: ScanBoundingBox.extentChangedNotification,
+                                               object: nil)
         isHidden = true
     }
     
@@ -99,7 +116,8 @@ class ObjectOrigin: SCNNode {
     
     @objc
     func boundingBoxExtentChanged(_ notification: Notification) {
-        guard let boundingBox = notification.object as? ScanBoundingBox else { return }
+        guard let boundingBox = notification.object as? ScanBoundingBox else {
+            return }
         self.adjustToExtent(boundingBox.extent)
     }
     
@@ -155,7 +173,8 @@ class ObjectOrigin: SCNNode {
     }
     
     func startAxisDrag(screenPos: CGPoint) {
-        guard let camera = sceneView.pointOfView else { return }
+        guard let camera = sceneView.pointOfView else {
+            return }
     
         // Check if the user is starting the drag on one of the axes. If so, drag along that axis.
         let hitResults = sceneView.hitTest(screenPos, options: [
@@ -190,7 +209,8 @@ class ObjectOrigin: SCNNode {
     }
     
     func updateAxisDrag(screenPos: CGPoint) {
-        guard let drag = currentAxisDrag else { return }
+        guard let drag = currentAxisDrag else {
+            return }
         
         if let hitPos = sceneView.unprojectPointLocal(screenPos, ontoPlane: drag.planeTransform) {
             // Project the result onto the plane's X axis & transform into world coordinates.
@@ -231,7 +251,8 @@ class ObjectOrigin: SCNNode {
     }
     
     func updatePlaneDrag(screenPos: CGPoint) {
-        guard let drag = currentPlaneDrag else { return }
+        guard let drag = currentPlaneDrag else {
+            return }
         
         if let hitPos = sceneView.unprojectPoint(screenPos, ontoPlane: drag.planeTransform) {
             self.simdWorldPosition = hitPos + drag.offset
@@ -279,7 +300,8 @@ class ObjectOrigin: SCNNode {
     }
     
     var isOutsideBoundingBox: Bool {
-        guard let boundingBox = self.parent as? ScanBoundingBox else { return true }
+        guard let boundingBox = self.parent as? ScanBoundingBox else {
+            return true }
         
         let threshold = float3(0.002)
         let extent = boundingBox.extent + threshold
@@ -291,7 +313,8 @@ class ObjectOrigin: SCNNode {
     
     @objc
     private func scanningStateChanged(_ notification: Notification) {
-        guard let state = notification.userInfo?[Scan.stateUserInfoKey] as? Scan.State else { return }
+        guard let state = notification.userInfo?[Scan.stateUserInfoKey] as? Scan.State else {
+            return }
         switch state {
         case .ready, .defineBoundingBox, .scanning:
             self.isHidden = true
@@ -299,7 +322,7 @@ class ObjectOrigin: SCNNode {
             self.isHidden = false
         }
     }
-    
+    //swiftlint:disable unavailable_function
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

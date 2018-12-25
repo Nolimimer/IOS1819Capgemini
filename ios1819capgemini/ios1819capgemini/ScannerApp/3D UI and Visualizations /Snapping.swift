@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 Extensions to BoundingBox and ObjectOrigin for snapping to significant locations.
 */
@@ -14,8 +18,10 @@ extension ScanBoundingBox {
         let snapThreshold: Float = 0.01
         var isWithinSnapThreshold = false
         let bottomY = simdWorldPosition.y - extent.y / 2
-        
-        guard let currentFrame = ViewController.instance!.sceneView.session.currentFrame else { return }
+
+        guard let instance = ViewController.instance,
+            let currentFrame = instance.sceneView.session.currentFrame else {
+                return }
         
         for anchor in currentFrame.anchors where anchor is ARPlaneAnchor {
             let distanceFromHorizontalPlane = abs(bottomY - anchor.transform.position.y)
@@ -41,7 +47,8 @@ extension ScanBoundingBox {
 extension ObjectOrigin {
     
     func snapToBoundingBoxSide() {
-        guard let boundingBox = self.parent as? ScanBoundingBox else { return }
+        guard let boundingBox = self.parent as? ScanBoundingBox else {
+            return }
         let extent = boundingBox.extent
         
         let snapThreshold: Float = 0.01
@@ -79,7 +86,8 @@ extension ObjectOrigin {
     }
     
     func snapToBoundingBoxCenter() {
-        guard let boundingBox = self.parent as? ScanBoundingBox else { return }
+        guard let boundingBox = self.parent as? ScanBoundingBox else {
+            return }
         
         let snapThreshold: Float = 0.01
         let boundingBoxPos = boundingBox.simdPosition

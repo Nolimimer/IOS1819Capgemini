@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 A representation of the object being scanned.
 */
@@ -91,10 +95,14 @@ class ScannedObject: SCNNode {
     func fitOverPointCloud(_ pointCloud: ARPointCloud) {
         // Do the automatic adjustment of the bounding box only if the user
         // hasn't adjusted it yet.
-        guard let boundingBox = self.boundingBox, !boundingBox.hasBeenAdjustedByUser else { return }
-        
-        let hitTestResults = sceneView.hitTest(ViewController.instance!.screenCenter, types: .featurePoint)
-        guard !hitTestResults.isEmpty else { return }
+        guard let boundingBox = self.boundingBox, !boundingBox.hasBeenAdjustedByUser else {
+            return }
+        guard let instance = ViewController.instance else {
+            return
+        }
+        let hitTestResults = sceneView.hitTest(instance.screenCenter, types: .featurePoint)
+        guard !hitTestResults.isEmpty else {
+            return }
         
         let userFocusPoint = hitTestResults[0].worldTransform.position
         boundingBox.fitOverPointCloud(pointCloud, focusPoint: userFocusPoint)
@@ -123,7 +131,10 @@ class ScannedObject: SCNNode {
         
         // Set the position of scanned object to a point on the ray which is offset
         // from the hit test result by half of the bounding boxes' extent.
-        let cameraToHit = result.worldTransform.position - sceneView.pointOfView!.simdWorldPosition
+        guard let pointOfView = sceneView.pointOfView else {
+            return
+        }
+        let cameraToHit = result.worldTransform.position - pointOfView.simdWorldPosition
         let normalizedDirection = normalize(cameraToHit)
         let boundingBoxOffset = normalizedDirection * newExtent / 2
         self.simdWorldPosition = result.worldTransform.position + boundingBoxOffset
@@ -137,7 +148,8 @@ class ScannedObject: SCNNode {
     
     private func updateOrCreateGhostBoundingBox() {
         // Perform a hit test against the feature point cloud.
-        guard let result = sceneView.smartHitTest(ViewController.instance!.screenCenter) else {
+        guard let instance = ViewController.instance,
+            let result = sceneView.smartHitTest(instance.screenCenter) else {
             if let ghostBoundingBox = ghostBoundingBox {
                 ghostBoundingBox.removeFromParentNode()
                 self.ghostBoundingBox = nil
@@ -150,7 +162,10 @@ class ScannedObject: SCNNode {
         
         // Set the position of scanned object to a point on the ray which is offset
         // from the hit test result by half of the bounding boxes' extent.
-        let cameraToHit = result.worldTransform.position - sceneView.pointOfView!.simdWorldPosition
+        guard let pointOfView = sceneView.pointOfView else {
+            return
+        }
+        let cameraToHit = result.worldTransform.position - pointOfView.simdWorldPosition
         let normalizedDirection = normalize(cameraToHit)
         let boundingBoxOffset = normalizedDirection * newExtent / 2
         self.simdWorldPosition = result.worldTransform.position + boundingBoxOffset
@@ -175,7 +190,8 @@ class ScannedObject: SCNNode {
     func moveOriginToBottomOfBoundingBox() {
         // Only move the origin to the bottom of the bounding box if it hasn't been
         // repositioned by the user yet.
-        guard let boundingBox = boundingBox, let origin = self.origin, !origin.positionHasBeenAdjustedByUser else { return }
+        guard let boundingBox = boundingBox, let origin = self.origin, !origin.positionHasBeenAdjustedByUser else {
+            return }
         origin.simdPosition.y = -boundingBox.extent.y / 2
     }
     
@@ -205,7 +221,8 @@ class ScannedObject: SCNNode {
     }
     
     func scaleBoundingBox(scale: CGFloat) {
-        guard let boundingBox = boundingBox else { return }
+        guard let boundingBox = boundingBox else {
+            return }
         
         let oldYExtent = boundingBox.extent.y
         
@@ -219,7 +236,8 @@ class ScannedObject: SCNNode {
     
     @objc
     private func scanningStateChanged(_ notification: Notification) {
-        guard let state = notification.userInfo?[Scan.stateUserInfoKey] as? Scan.State else { return }
+        guard let state = notification.userInfo?[Scan.stateUserInfoKey] as? Scan.State else {
+            return }
         switch state {
         case .ready:
             boundingBox?.removeFromParentNode()
@@ -236,7 +254,7 @@ class ScannedObject: SCNNode {
             moveOriginToBottomOfBoundingBox()
         }
     }
-    
+    //swiftlint:disable unavailable_function
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

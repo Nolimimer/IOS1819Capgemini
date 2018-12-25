@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 A visualization of the 3D point cloud data during object scanning.
 */
@@ -59,13 +63,15 @@ class ScannedPointCloud: SCNNode, PointCloud {
     
     @objc
     func boundingBoxPositionOrExtentChanged(_ notification: Notification) {
-        guard let boundingBox = notification.object as? ScanBoundingBox else { return }
+        guard let boundingBox = notification.object as? ScanBoundingBox else {
+            return }
         updateBoundingBox(boundingBox)
     }
     
     @objc
     func scannedObjectPositionChanged(_ notification: Notification) {
-        guard let scannedObject = notification.object as? ScannedObject else { return }
+        guard let scannedObject = notification.object as? ScannedObject else {
+            return }
         let boundingBox = scannedObject.boundingBox != nil ? scannedObject.boundingBox : scannedObject.ghostBoundingBox
         updateBoundingBox(boundingBox)
     }
@@ -90,19 +96,18 @@ class ScannedPointCloud: SCNNode, PointCloud {
     }
     
     func updateOnEveryFrame() {
-        guard !self.isHidden else { return }
+        guard !self.isHidden else {
+            return }
         guard !referenceObjectPoints.isEmpty, let boundingBox = boundingBox else {
             self.pointNode.geometry = nil
             self.preliminaryPointsNode.geometry = nil
             return
         }
-        
         renderedPoints = []
         renderedPreliminaryPoints = []
-        
         // Abort if the bounding box has no extent yet
-        guard boundingBox.extent.x > 0 else { return }
-        
+        guard boundingBox.extent.x > 0 else {
+            return }
         // Check which of the reference object's points and current frame's points are within the bounding box.
         // Note: The creation of the latest ARReferenceObject happens at a lower frequency
         //       than rendering and updates of the bounding box, so some of the points
@@ -117,14 +122,15 @@ class ScannedPointCloud: SCNNode, PointCloud {
     var count: Int {
         return renderedPoints.count
     }
-    
+    //swiftlint:disable unavailable_function
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     @objc
     private func scanningStateChanged(_ notification: Notification) {
-        guard let state = notification.userInfo?[Scan.stateUserInfoKey] as? Scan.State else { return }
+        guard let state = notification.userInfo?[Scan.stateUserInfoKey] as? Scan.State else {
+            return }
         switch state {
         case .ready, .scanning, .defineBoundingBox:
             self.isHidden = false

@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 Management of the UI steps for scanning an object in the main view controller.
 */
@@ -125,12 +129,12 @@ extension ViewController {
                                             userInfo: [ViewController.appStateUserInfoKey: self.state])
         }
     }
-    
-    @objc
-    func scanningStateChanged(_ notification: Notification) {
-        guard self.state == .scanning, let scan = notification.object as? Scan, scan === self.scan else { return }
-        guard let scanState = notification.userInfo?[Scan.stateUserInfoKey] as? Scan.State else { return }
-        
+    //swiftlint:disable function_body_length
+    @objc func scanningStateChanged(_ notification: Notification) {
+        guard self.state == .scanning, let scan = notification.object as? Scan, scan === self.scan else {
+            return }
+        guard let scanState = notification.userInfo?[Scan.stateUserInfoKey] as? Scan.State else {
+            return }
         DispatchQueue.main.async {
             switch scanState {
             case .ready:

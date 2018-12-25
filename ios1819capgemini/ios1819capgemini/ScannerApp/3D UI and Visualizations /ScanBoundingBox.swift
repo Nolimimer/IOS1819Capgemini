@@ -1,6 +1,10 @@
 /*
-See LICENSE folder for this sample’s licensing information.
-
+ Copyright © 2018 Apple Inc.
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
 Abstract:
 An interactive visualization of a bounding box in 3D space with movement and resizing controls.
 */
@@ -173,12 +177,16 @@ class ScanBoundingBox: SCNNode {
     private func createSides() {
         for position in BoundingBoxSide.Position.allCases {
             self.sides[position] = BoundingBoxSide(position, boundingBoxExtent: self.extent, color: self.color)
-            self.sidesNode.addChildNode(self.sides[position]!)
+            guard let position = self.sides[position] else {
+                return
+            }
+            self.sidesNode.addChildNode(position)
         }
     }
     
     func startSideDrag(screenPos: CGPoint) {
-        guard let camera = sceneView.pointOfView else { return }
+        guard let camera = sceneView.pointOfView else {
+            return }
 
         // Check if the user is starting the drag on one of the sides. If so, pull/push that side.
         let hitResults = sceneView.hitTest(screenPos, options: [
@@ -203,7 +211,8 @@ class ScanBoundingBox: SCNNode {
     }
     
     func updateSideDrag(screenPos: CGPoint) {
-        guard let drag = currentSideDrag else { return }
+        guard let drag = currentSideDrag else {
+            return }
         
         // Compute a new position for this side of the bounding box based on the given screen position.
         if let hitPos = sceneView.unprojectPointLocal(screenPos, ontoPlane: drag.planeTransform) {
@@ -216,7 +225,8 @@ class ScanBoundingBox: SCNNode {
             
             let extentOffset = drag.side.dragAxis.normal * movementAlongRay
             let newExtent = drag.beginExtent + extentOffset
-            guard newExtent.x >= minSize && newExtent.y >= minSize && newExtent.z >= minSize else { return }
+            guard newExtent.x >= minSize && newExtent.y >= minSize && newExtent.z >= minSize else {
+                return }
             
             // Push/pull a single side of the bounding box by a combination
             // of moving & changing the extent of the box.
@@ -226,13 +236,15 @@ class ScanBoundingBox: SCNNode {
     }
     
     func endSideDrag() {
-        guard let drag = currentSideDrag else { return }
+        guard let drag = currentSideDrag else {
+            return }
         drag.side.hideZAxisExtensions()
         currentSideDrag = nil
     }
     
     func startSidePlaneDrag(screenPos: CGPoint) {
-        guard let camera = sceneView.pointOfView else { return }
+        guard let camera = sceneView.pointOfView else {
+            return }
 
         let hitResults = sceneView.hitTest(screenPos, options: [
             .rootNode: sidesNode,
@@ -262,7 +274,8 @@ class ScanBoundingBox: SCNNode {
     }
     
     func updateSidePlaneDrag(screenPos: CGPoint) {
-        guard let drag = currentSidePlaneDrag else { return }
+        guard let drag = currentSidePlaneDrag else {
+            return }
         if let hitPos = sceneView.unprojectPoint(screenPos, ontoPlane: drag.planeTransform) {
             self.simdWorldPosition = hitPos + drag.offset
             
@@ -299,7 +312,8 @@ class ScanBoundingBox: SCNNode {
         sides[.bottom]?.showXAxisExtensions()
         sides[.bottom]?.showYAxisExtensions()
         
-        guard let drag = currentGroundPlaneDrag else { return }
+        guard let drag = currentGroundPlaneDrag else {
+            return }
         if let hitPos = sceneView.unprojectPoint(screenPos, ontoPlane: drag.planeTransform) {
             self.simdWorldPosition = hitPos + drag.offset
         }
@@ -334,7 +348,8 @@ class ScanBoundingBox: SCNNode {
     }
     
     func highlightCurrentTile() {
-        guard let camera = sceneView.pointOfView, !self.contains(camera.simdWorldPosition) else { return }
+        guard let camera = sceneView.pointOfView, !self.contains(camera.simdWorldPosition) else {
+            return }
 
         // Create a new hit test ray. A line segment defined by its start and end point
         // is used to hit test against bounding box tiles. The ray's length allows for
@@ -356,9 +371,10 @@ class ScanBoundingBox: SCNNode {
             side.tiles.forEach { $0.updateVisualization() }
         }
     }
-    
+    //swiftlint:disable cyclomatic_complexity
     func updateCapturingProgress() {
-        guard let camera = sceneView.pointOfView, !self.contains(camera.simdWorldPosition) else { return }
+        guard let camera = sceneView.pointOfView, !self.contains(camera.simdWorldPosition) else {
+            return }
         
         frameCounter += 1
 
@@ -382,7 +398,8 @@ class ScanBoundingBox: SCNNode {
         }
         
         // Update tiles at a frame rate that provides a trade-off between responsiveness and performance.
-        guard frameCounter % 10 == 0, !isUpdatingCapturingProgress else { return }
+        guard frameCounter % 10 == 0, !isUpdatingCapturingProgress else {
+            return }
         
         self.isUpdatingCapturingProgress = true
         
@@ -479,7 +496,8 @@ class ScanBoundingBox: SCNNode {
     }
     
     func tryToAlignWithPlanes(_ anchors: [ARAnchor]) {
-        guard !hasBeenAdjustedByUser, ViewController.instance?.scan?.state == .defineBoundingBox else { return }
+        guard !hasBeenAdjustedByUser, ViewController.instance?.scan?.state == .defineBoundingBox else {
+            return }
         
         let bottomCenter = float3(simdPosition.x, simdPosition.y - extent.y / 2, simdPosition.z)
 
@@ -520,11 +538,13 @@ class ScanBoundingBox: SCNNode {
             }
         }
         
-        guard planeFound else { return }
+        guard planeFound else {
+            return }
         
         // Check that the object is not already on the nearest plane (closer than 1 mm).
         let epsilon: Float = 0.001
-        guard distanceToNearestPlane > epsilon else { return }
+        guard distanceToNearestPlane > epsilon else {
+            return }
         
         // Check if the nearest plane is close enough to the bounding box to "snap" to that
         // plane. The threshold is half of the bounding box extent on the y axis.
@@ -548,7 +568,7 @@ class ScanBoundingBox: SCNNode {
             (localMin.y...localMax.y).contains(localPoint.y) &&
             (localMin.z...localMax.z).contains(localPoint.z)
     }
-    
+    //swiftlint:disable unavailable_function
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
