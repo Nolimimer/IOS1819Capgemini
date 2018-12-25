@@ -474,12 +474,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard let distancePOVVector = incidentPosToPOV(incident: incident) else {
             return "error"
         }
-        guard let distanceCamera = distanceCameraNode(incident: incident) else {
+        guard var distanceCamera = distanceCameraNode(incident: incident) else {
             return "error"
         }
-        
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 2
+        distanceCamera *= 100
+        guard let distance = formatter.string(from: NSNumber(value: distanceCamera)) else {
+            return "error"
+        }
         if visible {
-            return "Incident is \( (distanceCamera) * 100)cm from your device"
+            return "Incident is \(distance)cm from your device"
         }
             if abs(distancePOVVector.x) > abs(distancePOVVector.y) {
                 if distancePOVVector.x.isLess(than: 0.0) {
