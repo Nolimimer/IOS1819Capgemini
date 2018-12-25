@@ -17,7 +17,7 @@ import UICircularProgressRing
 var nodes = [SCNNode]()
 
 // MARK: - ARViewController
-// swiftlint:disable type_body_length
+// swiftlint:disable all
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
@@ -56,6 +56,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.showsStatistics = false
         sceneView.scene = scene
         
+        sceneView.debugOptions = [.showFeaturePoints, .showBoundingBoxes]
         sceneView.session.delegate = self
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
@@ -63,28 +64,60 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
-        sceneView.addGestureRecognizer(gestureRecognizer)
-        
         
         configureLighting()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      if let touch = touches.first {
-            let position = touch.location(in: view)
-        progressRing.frame.origin.x = position.x - 110
-        progressRing.frame.origin.y = position.y - 60
-        progressRing.isHidden = false
-        progressRing.maxValue = 100
-        progressRing.startProgress(to: 100, duration: 1.0) {
+        
+        let location = touches.first!.location(in: sceneView)
+        
+        let hitOptions = self.sceneView.hitTest(location, options: nil)
+        if let tappedNode = hitOptions.first?.node,
+            let _ = tappedNode.name {
+            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+        } else {
+            let hitResultsFeaturePoints: [ARHitTestResult] =
+                sceneView.hitTest(location, types: .featurePoint)
+            progressRing.frame.origin.x = location.x - 110
+            progressRing.frame.origin.y = location.y - 60
+            progressRing.isHidden = false
+            progressRing.maxValue = 100
+            progressRing.startProgress(to: 100, duration: 1.0) {
+                if let hitResult = hitResultsFeaturePoints.first {
+                    if self.detectedObjectNode != nil {
+                        let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
+                            SCNVector3(hitResult.worldTransform.columns.3.x,
+                                       hitResult.worldTransform.columns.3.y,
+                                       hitResult.worldTransform.columns.3.z),
+                            to: self.detectedObjectNode)
+                        let incident = Incident (type: .unknown,
+                                                 description: "New Incident",
+                                                 coordinate: Coordinate(vector: coordinateRelativeToObject))
+                        self.filterAllPins()
+                        let imageWithoutPin = self.sceneView.snapshot()
+                        self.saveImage(image: imageWithoutPin, incident: incident)
+                        self.add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                              hitResult.worldTransform.columns.3.y,
+                                                              hitResult.worldTransform.columns.3.z),
+                                 identifier: "\(incident.identifier)" )
+                        self.filter3DPins(identifier: "\(incident.identifier)")
+                        let imageWithPin = self.sceneView.snapshot()
+                        self.saveImage(image: imageWithPin, incident: incident)
+                        DataHandler.incidents.append(incident)
+                        self.descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
+                    }
+                }
+                self.progressRing.resetProgress()
+                self.progressRing.isHidden = true
+            }
+
         }
     }
-        }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
      progressRing.resetProgress()
-    progressRing.isHidden = true
+     progressRing.isHidden = true
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -279,55 +312,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
         scene.rootNode.addChildNode(planeNode)
     }
-    
-    /*
-    recognizes if the screen has been tapped, creates a new pin and a matching incident if the tapped location is not a pin, otherwise
-    opens the detail view for the tapped pin.
-    If a new pin is created a screenshot of the location is taken before/after placing the pin.
-    */
-    @objc func tapped(recognizer: UIGestureRecognizer) {
-        if recognizer.state == .ended {
-            let location: CGPoint = recognizer.location(in: sceneView)
-            let hits = self.sceneView.hitTest(location, options: nil)
-            if !hits.isEmpty {
-                let tappedNode = hits.first?.node
-                guard (tappedNode?.name) != nil else {
-                    let touchPosition = recognizer.location(in: sceneView)
-                    let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
-                    
-                    if !hitTestResult.isEmpty {
-                        guard let hitResult = hitTestResult.first else {
-                            return
-                        }
-                        if detectedObjectNode != nil {
-                            let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
-                                SCNVector3(hitResult.worldTransform.columns.3.x,
-                                           hitResult.worldTransform.columns.3.y,
-                                           hitResult.worldTransform.columns.3.z),
-                                to: detectedObjectNode)
-                            let incident = Incident (type: .unknown,
-                                                     description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            filterAllPins()
-                            let imageWithoutPin = sceneView.snapshot()
-                            saveImage(image: imageWithoutPin, incident: incident)
-                            add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                                  hitResult.worldTransform.columns.3.y,
-                                                                  hitResult.worldTransform.columns.3.z),
-                                     identifier: "\(incident.identifier)" )
-                            filter3DPins(identifier: "\(incident.identifier)")
-                            let imageWithPin = sceneView.snapshot()
-                            saveImage(image: imageWithPin, incident: incident)
-                            DataHandler.incidents.append(incident)
-                            descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-                        }
-                    }
-                    return
-                }
-                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-            }
-        }
-    }
+
     
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
