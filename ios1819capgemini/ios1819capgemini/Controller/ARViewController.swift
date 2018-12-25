@@ -15,12 +15,13 @@ import Vision
 
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
-
+//swiftlint:disable type_body_length
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
     var detectedObjectNode: SCNNode?
+    private var customARReferenceObjects: [ARReferenceObject] = []
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?
@@ -75,9 +76,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadCustomScans()
+        print("custom detected objects \(customARReferenceObjects.count)")
         let config = ARWorldTrackingConfiguration()
-        if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
+        if var detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
+            for object in customARReferenceObjects {
+                detectionObjects.insert(object)
+            }
+
             config.detectionObjects = detectionObjects
             sceneView.session.run(config)
         }
@@ -378,6 +384,23 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 })
             }
         }
+    }
+    
+    func loadCustomScans() {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                if file.lastPathComponent.hasSuffix(".arobject") {
+                    let arRefereceObject = try ARReferenceObject(archiveURL: file)
+                    customARReferenceObjects.append(arRefereceObject)
+                }
+            }
+        } catch {
+            print("Error loading custom scans")
+        }
+        
     }
 
     // MARK: Overridden/Lifecycle Methods

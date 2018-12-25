@@ -88,6 +88,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        blurView.isHidden = true
         sceneView.delegate = self
         sceneView.session.delegate = self
         
@@ -153,16 +154,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             let title = "Start over?"
             let message = "Discard the current scan and start over?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
-                self.state = .startARSession
+                //self.state = .startARSession
+                self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else if testRun != nil {
             let title = "Start over?"
             let message = "Discard this scan and start over?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
-                self.state = .startARSession
+                //self.state = .startARSession
+                self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else {
-            self.state = .startARSession
+            self.performSegue(withIdentifier: "Start screen", sender: nil)
+            //self.state = .startARSession
         }
     }
     
@@ -358,17 +362,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             return
         }
         
-        let documentURL = FileManager.default.temporaryDirectory.appendingPathComponent(name + ".arobject")
+        let documentShareURL = FileManager.default.temporaryDirectory.appendingPathComponent(name + ".arobject")
+        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
+        print("documentURL \(documentURL)")
         
         DispatchQueue.global().async {
             do {
+                try object.export(to: documentShareURL, previewImage: testRun.previewImage)
                 try object.export(to: documentURL, previewImage: testRun.previewImage)
             } catch {
-                fatalError("Failed to save the file to \(documentURL)")
+                fatalError("Failed to save the file to \(documentShareURL)")
             }
             
             // Initiate a share sheet for the scanned object
-            let airdropShareSheet = ShareScanViewController(sourceView: self.nextButton, sharedObject: documentURL)
+            let airdropShareSheet = ShareScanViewController(sourceView: self.nextButton, sharedObject: documentShareURL)
             DispatchQueue.main.async {
                 self.present(airdropShareSheet, animated: true, completion: nil)
             }
