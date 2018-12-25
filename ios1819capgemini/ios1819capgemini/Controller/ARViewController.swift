@@ -452,7 +452,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         return false
     }
-    
+    /*
+     returns a suggestion on where to look as a string
+    */
     func navigationSuggestion() -> String {
         
         guard let incident = closestOpenIncident() else {
@@ -476,7 +478,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         if visible {
-            print("Incident is \( (distanceCamera) * 100)cm from you")
+//            print("Incident is \( (distanceCamera) * 100)cm from you")
             return "visible"
         }
             if abs(distancePOVVector.x) > abs(distancePOVVector.y) {
