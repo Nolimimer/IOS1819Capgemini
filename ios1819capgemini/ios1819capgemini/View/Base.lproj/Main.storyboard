@@ -60,24 +60,56 @@
                                 </constraints>
                                 <blurEffect style="light"/>
                             </visualEffectView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chF-nx-2ED">
+                                <rect key="frame" x="323" y="290" width="36" height="30"/>
+                                <state key="normal" title="Right"/>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wZz-SJ-dPB">
+                                <rect key="frame" x="16" y="290" width="30" height="30"/>
+                                <state key="normal" title="Left"/>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NUe-iI-6dR">
+                                <rect key="frame" x="164" y="89" width="46" height="30"/>
+                                <state key="normal" title="Up"/>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J6b-SG-a97">
+                                <rect key="frame" x="164" y="545" width="46" height="30"/>
+                                <state key="normal" title="Down"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="J6b-SG-a97" secondAttribute="bottom" constant="92" id="022-3f-42g"/>
                             <constraint firstItem="dAU-gm-pmP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="2hv-wz-jGw"/>
                             <constraint firstItem="uDJ-JA-xze" firstAttribute="centerX" secondItem="zuy-y1-cIR" secondAttribute="centerX" id="3OA-iy-fds"/>
+                            <constraint firstItem="wZz-SJ-dPB" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="270" id="9ly-fb-tJY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8vs-jp-QKL" secondAttribute="bottom" constant="20" id="FnX-md-aRt"/>
+                            <constraint firstItem="wZz-SJ-dPB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="G5s-8T-BHY"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="J6b-SG-a97" secondAttribute="trailing" constant="165" id="IcS-V0-Eix"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
                             <constraint firstItem="uDJ-JA-xze" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="OVb-P8-78D"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dAU-gm-pmP" secondAttribute="bottom" constant="20" id="Oug-f9-ub7"/>
+                            <constraint firstItem="NUe-iI-6dR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="164" id="Pbk-2S-uIV"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="chF-nx-2ED" secondAttribute="trailing" constant="16" id="QFv-8h-yYs"/>
+                            <constraint firstItem="chF-nx-2ED" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="270" id="Sqz-zA-aBD"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ydv-fJ-Xpy"/>
+                            <constraint firstItem="dAU-gm-pmP" firstAttribute="top" secondItem="wZz-SJ-dPB" secondAttribute="bottom" constant="263" id="a6T-3l-7al"/>
+                            <constraint firstItem="NUe-iI-6dR" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="69" id="deO-Lz-XTk"/>
+                            <constraint firstItem="8vs-jp-QKL" firstAttribute="top" secondItem="chF-nx-2ED" secondAttribute="bottom" constant="285" id="jSL-9e-uJR"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="kaw-PZ-WL2"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="nW0-tZ-ukQ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="NUe-iI-6dR" secondAttribute="trailing" constant="165" id="rJN-L7-E07"/>
+                            <constraint firstItem="J6b-SG-a97" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="164" id="sXe-2h-ebY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="AR" id="vck-ZV-qqc"/>
                     <connections>
+                        <outlet property="navigationButtonDown" destination="J6b-SG-a97" id="NK5-Zx-apf"/>
+                        <outlet property="navigationButtonLeft" destination="wZz-SJ-dPB" id="hHy-40-0Af"/>
+                        <outlet property="navigationButtonRight" destination="chF-nx-2ED" id="5rE-y5-HpO"/>
+                        <outlet property="navigationButtonUp" destination="NUe-iI-6dR" id="crr-zP-W2B"/>
                         <outlet property="sceneView" destination="zuy-y1-cIR" id="6CW-Fu-tmc"/>
                     </connections>
                 </viewController>

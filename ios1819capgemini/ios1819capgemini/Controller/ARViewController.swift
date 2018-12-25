@@ -49,6 +49,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             isDetecting = true
         }
     }
+    @IBOutlet private weak var navigationButtonUp: UIButton!
+    @IBOutlet private weak var navigationButtonRight: UIButton!
+    @IBOutlet private weak var navigationButtonDown: UIButton!
+    @IBOutlet private weak var navigationButtonLeft: UIButton!
     
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
@@ -88,21 +92,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        
-//        print("camera x coordinate : \((frame.camera.transform.columns.3.x))")
-//        print("camera y coordinate : \((frame.camera.transform.columns.3.y))")
-//        print("camera z coordinate : \((frame.camera.transform.columns.3.z))")
-//        if let closestIncident = closestOpenIncident() {
-//            incidentPositionToCamera(incident: closestIncident)
-//            if let closestIncidentDistance = calculateNodeDistanceVectorToCamera(incident: closestIncident) {
-//                print("closestIncidentDistance : \(closestIncidentDistance)")
-//            }
-//            if let distance = distanceCameraNode(incident: closestIncident) {
-//                print("distance : \((distance) * 100)")
-//            }
-//        }
-        print("\(navigationSuggestion())")
-        
+        setNavigationButtons()
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         if isDetecting {
@@ -478,51 +468,54 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         })
 
-        guard let distancePOVVector = incidentPosToPOV(incident: incident),
-              let distanceCamVector = incidentPosToCamera(incident: incident) else {
+        guard let distancePOVVector = incidentPosToPOV(incident: incident) else {
             return "error"
         }
         guard let distanceCamera = distanceCameraNode(incident: incident) else {
             return "error"
         }
         
-        if distanceCamVector.z > 50.0 {
-            return "move backwards"
-        }
-        if distanceCamVector.z < -50.0 {
-            return "move forwards"
-        }
         if visible {
+            print("Incident is \( (distanceCamera) * 100)cm from you")
             return "visible"
         }
-        if (distanceCamera * 100) > 50.0 {
-            if abs(distanceCamVector.x) > abs(distanceCamVector.y) {
-                if distanceCamVector.x.isLess(than: 0.0) {
-                    return "move left"
-                } else {
-                    return "move right"
-                }
-            } else {
-                if distanceCamVector.y.isLess(than: 0.0) {
-                    return "move down"
-                } else {
-                    return "move up"
-                }
-            }
-        } else {
             if abs(distancePOVVector.x) > abs(distancePOVVector.y) {
                 if distancePOVVector.x.isLess(than: 0.0) {
-                    return "rotate left"
+                    return "left"
                 } else {
-                    return "rotate right"
+                    return "right"
                 }
             } else {
                 if distancePOVVector.y.isLess(than: 0.0) {
-                    return "rotate down"
+                    return "down"
                 } else {
-                    return "rotate up"
+                    return "up"
                 }
             }
+        
+    }
+    
+    /*
+     sets navigation buttons based on the navigation which is given
+    */
+    func setNavigationButtons() {
+        navigationButtonUp.isHidden = true
+        navigationButtonRight.isHidden = true
+        navigationButtonLeft.isHidden = true
+        navigationButtonDown.isHidden = true
+        
+        let suggestion =  navigationSuggestion()
+        switch suggestion {
+        case "up":
+            navigationButtonUp.isHidden = false
+        case "down":
+            navigationButtonDown.isHidden = false
+        case "right":
+            navigationButtonRight.isHidden = false
+        case "left":
+            navigationButtonLeft.isHidden = false
+        default:
+            return
         }
     }
     
