@@ -15,7 +15,7 @@ import Vision
 //swiftlint:disable all
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
-
+var nodesIdentifier = [String: SCNNode]()
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
@@ -88,12 +88,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        let closestIncident = closestOpenIncident()
-        if calculateNodeDistanceVectorToCamera(incident: closestIncident) != nil && closestIncident != nil {
-            print("\(closestIncident!.identifier)  \(String(describing: calculateNodeDistanceVectorToCamera(incident: closestIncident)))")
-        } else {
-            print("no closest incident found")
-        }
+        
+//        print("camera x coordinate : \((frame.camera.transform.columns.3.x))")
+//        print("camera y coordinate : \((frame.camera.transform.columns.3.y))")
+//        print("camera z coordinate : \((frame.camera.transform.columns.3.z))")
+//        if let closestIncident = closestOpenIncident() {
+//            incidentPositionToCamera(incident: closestIncident)
+//            if let closestIncidentDistance = calculateNodeDistanceVectorToCamera(incident: closestIncident) {
+//                print("closestIncidentDistance : \(closestIncidentDistance)")
+//            }
+//            if let distance = distanceCameraNode(incident: closestIncident) {
+//                print("distance : \((distance) * 100)")
+//            }
+//        }
+        print("\(navigationSuggestion())")
         
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
@@ -239,15 +247,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         
-                let sphere = SCNSphere(radius: 0.015)
-                let materialSphere = SCNMaterial()
-                materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
-                sphere.materials = [materialSphere]
-                let sphereNode = SCNNode(geometry: sphere)
-                sphereNode.name = identifier
-                sphereNode.position = vectorCoordinate
-                self.scene.rootNode.addChildNode(sphereNode)
-                nodes.append(sphereNode)
+        let sphere = SCNSphere(radius: 0.015)
+        let materialSphere = SCNMaterial()
+        materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
+        sphere.materials = [materialSphere]
+        let sphereNode = SCNNode(geometry: sphere)
+        sphereNode.name = identifier
+        sphereNode.position = vectorCoordinate
+        self.scene.rootNode.addChildNode(sphereNode)
+        nodes.append(sphereNode)
+        nodesIdentifier[identifier] = sphereNode
     }
     
     //adds the info plane which displays the detected object and the number of incidents
@@ -357,23 +366,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    // MARK: Helper methods
-    
-    /*
-    calculates the distance of an input node to the camera on each of the 3 axis, returns the value in centimeters
-    */
-    func calculateNodeDistanceVectorToCamera (incident: Incident?) -> SCNVector3? {
-        guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident else {
-            return nil
-        }
-        let worldCoordinate = sceneView.scene.rootNode.convertPosition(SCNVector3(incident.coordinate.pointX,
-                                                                                  incident.coordinate.pointY,
-                                                                                  incident.coordinate.pointZ),
-                                                                       to: nil)
-        return SCNVector3(x: (currentFrame.camera.transform.columns.3.x - worldCoordinate.x) * 100,
-                          y: (currentFrame.camera.transform.columns.3.y - worldCoordinate.y) * 100,
-                          z: (currentFrame.camera.transform.columns.3.z - worldCoordinate.z) * 100)
-    }
+    // MARK: Navigation methods
     
     /*
      Helper methods to calculate distances between incident and camera
@@ -404,6 +397,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                                                incident.coordinate.pointZ),
                                                                                     to: nil))
     }
+    
     /*
      return the closest incident with status open
     */
@@ -424,8 +418,104 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return incident.value
     }
     
+    /*
+     calculates the distance of an input node to the camera on each of the 3 axis,
+     */
+    func incidentPosToCamera (incident: Incident?) -> SCNVector3? {
+        guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident else {
+            return nil
+        }
+        let worldCoordinate = sceneView.scene.rootNode.convertPosition(SCNVector3(incident.coordinate.pointX,
+                                                                                  incident.coordinate.pointY,
+                                                                                  incident.coordinate.pointZ),
+                                                                       to: nil)
+        return SCNVector3(x: ((worldCoordinate.x - currentFrame.camera.transform.columns.3.x) * 100 ),
+                          y: ((worldCoordinate.y - currentFrame.camera.transform.columns.3.y) * 100 ),
+                          z: ((worldCoordinate.z - currentFrame.camera.transform.columns.3.z) * 100))
+    }
+    
+    /*
+     returns the position of the input incident to the point of view, useful for rotational purposes
+    */
+    func incidentPosToPOV(incident : Incident?) -> SCNVector3? {
+        guard let incident = incident else {
+            return nil
+        }
+        let position = SCNVector3(x: incident.coordinate.pointX,
+                                  y: incident.coordinate.pointY,
+                                  z: incident.coordinate.pointZ)
+        var incidentPositionToPOV = scene.rootNode.convertPosition(position, to: sceneView.pointOfView)
+        incidentPositionToPOV.x *= 100
+        incidentPositionToPOV.y *= 100
+        incidentPositionToPOV.z *= 100
+        return incidentPositionToPOV
+    }
+    
+    /*
+     returns true if the input node can be seen through the camera, otherwise false
+    */
+    func nodeVisibleToUser(node: SCNNode) -> Bool {
+        
+        if let pov  = sceneView.pointOfView {
+            let isVisible = sceneView.isNode(node, insideFrustumOf: pov)
+            return isVisible
+        }
+        return false
+    }
+    
+    func navigationSuggestion() -> String {
+        
+        guard let incident = closestOpenIncident() else {
+            return "no open incident"
+        }
+        var visible = false
+        nodes.forEach( {
+            guard let name = $0.name else {
+                return
+            }
+            if String(incident.identifier) == name {
+                visible = nodeVisibleToUser(node: $0)
+            }
+        })
+
+        guard let distancePOVVector = incidentPosToPOV(incident: incident),
+              let distanceCamVector = incidentPosToCamera(incident: incident) else {
+            return "error"
+        }
+        guard let distanceCamera = distanceCameraNode(incident: incident) else {
+            return "error"
+        }
+        
+        if distanceCamVector.z > 50.0 {
+            return "backwards"
+        }
+        if distanceCamVector.z < -50.0 {
+            return "forwards"
+        }
+        if visible {
+            return "visible"
+        }
+        if (distanceCamera * 100) > 50.0 {
+            if abs(distanceCamVector.x) > abs(distanceCamVector.y) {
+                if distanceCamVector.x.isLess(than: 0.0) {
+                    return "left"
+                } else {
+                    return "right"
+                }
+            } else {
+                if distanceCamVector.y.isLess(than: 0.0) {
+                    return "down"
+                } else {
+                    return "up"
+                }
+            }
+        } else {
+            return "distance POV : \(distancePOVVector)"
+        }
+    }
     
     
+    // MARK: screenshot methods
     func saveImage(image: UIImage, incident: Incident) {
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
@@ -453,34 +543,30 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private func filter3DPins (identifier: String) {
         
         self.scene.rootNode.childNodes.forEach { node in
-            if node.name != nil {
-                if node.name != identifier {
+                guard let name = node.name else {
+                    return
+                }
+                if name != identifier {
                     let tmpNode = node
-                    guard let name = node.name else {
-                        return
-                    }
                     self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                         self.scene.rootNode.addChildNode(tmpNode)
                     })
                 }
-            }
         }
     }
     // Temporarily deletes all the pins from the view and then adds them back again after 1 second
     private func filterAllPins () {
         
         self.scene.rootNode.childNodes.forEach { node in
-            if node.name != nil {
-                let tmpNode = node
                 guard let name = node.name else {
                     return
                 }
+                let tmpNode = node
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                     self.scene.rootNode.addChildNode(tmpNode)
                 })
-            }
         }
     }
 }

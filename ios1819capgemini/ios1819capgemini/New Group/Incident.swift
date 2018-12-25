@@ -76,7 +76,6 @@ public class Incident: Codable {
     
     func addAttachment(attachment: Attachment) {
         attachments.append(attachment)
-        print("\(attachment) added")
     }
     
 }
