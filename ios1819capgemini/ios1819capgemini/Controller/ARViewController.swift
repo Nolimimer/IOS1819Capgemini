@@ -21,7 +21,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
     var detectedObjectNode: SCNNode?
-    private var customARReferenceObjects: [ARReferenceObject] = []
+    private var detectionObjects = Set <ARReferenceObject>()
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?
@@ -76,17 +76,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadCustomScans()
-        print("custom detected objects \(customARReferenceObjects.count)")
+        
         let config = ARWorldTrackingConfiguration()
-        if var detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
-            for object in customARReferenceObjects {
-                detectionObjects.insert(object)
-            }
-
-            config.detectionObjects = detectionObjects
-            sceneView.session.run(config)
+        
+        loadCustomScans()
+        guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
+            return
         }
+        for object in testObjects {
+            detectionObjects.insert(object)
+        }
+        config.detectionObjects = detectionObjects
+        sceneView.session.run(config)
     }
 
     // MARK: ML methods
@@ -315,7 +316,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
-        
+        if detectedObjectNode == nil {
         if let objectAnchor = anchor as? ARObjectAnchor {
             
             let notification = UINotificationFeedbackGenerator()
@@ -331,6 +332,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+        }
         }
         return node
     }
@@ -394,7 +396,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             for file in fileURLs {
                 if file.lastPathComponent.hasSuffix(".arobject") {
                     let arRefereceObject = try ARReferenceObject(archiveURL: file)
-                    customARReferenceObjects.append(arRefereceObject)
+                    detectionObjects.insert(arRefereceObject)
                 }
             }
         } catch {

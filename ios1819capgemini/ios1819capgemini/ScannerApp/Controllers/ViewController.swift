@@ -148,25 +148,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     // MARK: - UI Event Handling
-    
+    //swiftlint:disable private_action
     @IBAction func restartButtonTapped(_ sender: Any) {
         if let scan = scan, scan.boundingBoxExists {
             let title = "Start over?"
             let message = "Discard the current scan and start over?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
-                //self.state = .startARSession
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else if testRun != nil {
             let title = "Start over?"
             let message = "Discard this scan and start over?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
-                //self.state = .startARSession
+                self.navigationController?.popViewController(animated: true)
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else {
             self.performSegue(withIdentifier: "Start screen", sender: nil)
-            //self.state = .startARSession
         }
     }
     
@@ -180,7 +178,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             }
         }
     }
-    //swiftlint:disable private_action
+
     @IBAction func previousButtonTapped(_ sender: Any) {
         switchToPreviousState()
     }

@@ -236,6 +236,7 @@ extension ViewController {
             }
         case .testing:
             // Testing is the last state, show the share sheet at the end.
+            
             createAndShareReferenceObject()
         }
     }
