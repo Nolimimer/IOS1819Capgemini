@@ -200,10 +200,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     guard let hitTest = hitTestResult.first else {
                         return
                     }
-                    if sigmoid(prediction.score) > 0.85 && calculateNodesInRadius(coordinate: position, radius: 20) {
+                    if sigmoid(prediction.score) > 0.80 && calculateNodesInRadius(coordinate: position, radius: 20) {
                         let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
                                              y: (hitTest.worldTransform.columns.3.y),
                                              z: (hitTest.worldTransform.columns.3.z))
+                        let length = rect.maxY - rect.minY
+                        let width = rect.maxX - rect.minX
+                        let formatter = NumberFormatter()
+                        formatter.maximumFractionDigits = 2
+                        let lengthCM = (length * 2.54) / 96
+                        let widthCM = (width * 2.54) / 96
+                        let formattedLength = formatter.string(from: NSNumber(value: Float(lengthCM)))
+                        let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM)))
                         automaticallyDetectedIncidents.append(position)
                         let sphere = SCNSphere(radius: 0.015)
                         let materialSphere = SCNMaterial()
@@ -211,17 +219,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         sphere.materials = [materialSphere]
                         let sphereNode = SCNNode(geometry: sphere)
                         sphereNode.position = tmp
-                        if detectedObjectNode != nil {
+//                        if detectedObjectNode != nil {
                             let coordinates = sceneView.scene.rootNode.convertPosition(
                                 SCNVector3(hitTest.worldTransform.columns.3.x,
                                            hitTest.worldTransform.columns.3.y,
                                            hitTest.worldTransform.columns.3.z),
                                 to: self.detectedObjectNode)
-                            let incident = Incident (type: .unknown,
-                                                     description: "",
+                            let incident = Incident (type: .scratch,
+                                                     description: "length : \(formattedLength!)cm\nwidth : \(formattedWidth!)cm",
                                                      coordinate: Coordinate(vector: coordinates))
+                            print(incident.description)
                             DataHandler.incidents.append(incident)
-                        }
+//                        }
                         sphereNode.runAction(imageHighlightAction)
                         self.scene.rootNode.addChildNode(sphereNode)
                         nodes.append(sphereNode)
