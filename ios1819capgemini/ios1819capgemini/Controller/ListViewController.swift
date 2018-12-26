@@ -8,9 +8,13 @@
 
 // MARK: Imports
 import UIKit
-
+//swiftlint:disable all
 // MARK: LastViewController
 class ListViewController: UIViewController {
+    
+    private var showOpen = true
+    private var showInProgress = false
+    private var showAll = false
 
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
@@ -42,7 +46,6 @@ class ListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        DataHandler.refreshOpenIncidents()
         tableView.reloadData()
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
@@ -60,29 +63,23 @@ class ListViewController: UIViewController {
     }
     
     @IBAction private func showButton(_ sender: UIBarButtonItem) {
-        if DataHandler.showAll {
-            print("all")
-            sender.title = "All"
-            DataHandler.refreshAllIncidents()
+        if showOpen {
+            sender.title = "Show All"
+            showAll = true
+            showOpen = false
             tableView.reloadData()
-            DataHandler.showAll = false
-            DataHandler.showInProgress = true
-        } else if DataHandler.showInProgress {
-            print("in progress")
-            sender.title = "In Progress"
-            DataHandler.refreshInProgressIncidents()
+        }
+        else if showAll {
+            sender.title = "Show in Progress"
+            showInProgress = true
+            showAll = false
             tableView.reloadData()
-            DataHandler.showInProgress = false
-            DataHandler.showOpen = true
-        } else if DataHandler.showOpen {
-            print("open")
-            sender.title = "Open"
-            DataHandler.refreshOpenIncidents()
+        }
+        else if showInProgress {
+            sender.title = "Show Open"
+            showOpen = true
+            showInProgress = false
             tableView.reloadData()
-            DataHandler.showOpen = false
-            DataHandler.showAll = true
-        } else {
-            //extended if necessary
         }
     }
   
@@ -119,39 +116,34 @@ class ListViewController: UIViewController {
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        // In show all incidents state
-        if DataHandler.showAll == true {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-            let incident = DataHandler.incidents[indexPath.row]
-            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
-            cell.tag = incident.identifier
-            cell.detailTextLabel?.text = incident.description
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
+        var incidents : [Incident]
+        if showOpen {
+            incidents = DataHandler.incidents.filter( {$0.status == .open})
         }
-        if DataHandler.showInProgress == true {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-            let incident = DataHandler.openIncidents[indexPath.row]
-            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
-            cell.tag = incident.identifier
-            cell.detailTextLabel?.text = incident.description
-            return cell
+        else if showInProgress {
+            incidents = DataHandler.incidents.filter( {$0.status == .progress})
         }
         else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-            let incident = DataHandler.openIncidents[indexPath.row]
-            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
-            cell.tag = incident.identifier
-            cell.detailTextLabel?.text = incident.description
-            return cell
+            incidents = DataHandler.incidents
         }
+        let incident = incidents[indexPath.row]
+        cell.textLabel?.text = incident.description
+        cell.tag = incident.identifier
+        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       if DataHandler.showAll == true {
-            return DataHandler.incidents.count
-       } else {
-            return DataHandler.openIncidents.count
+        var incidents: [Incident]
+        if showOpen {
+            incidents = DataHandler.incidents.filter( {$0.status == .open})
         }
+        else if showInProgress {
+            incidents = DataHandler.incidents.filter( {$0.status == .progress})
+        }
+        else {
+            incidents = DataHandler.incidents
+        }
+        return incidents.count
     }
 }
