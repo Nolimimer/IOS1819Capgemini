@@ -58,7 +58,7 @@ enum DataHandler {
             try jsonFileWrapper.write(to: Constants.localStorageURL,
                                       options: FileWrapper.WritingOptions.atomic,
                                       originalContentsURL: nil)
-            print("Saved incidents!")
+//            print("Saved incidents!") löscht mal einer diese kacke von develop bitte
         } catch _ {
             print("Could not save incidents")
         }

@@ -30,6 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         }
         // Override point for customization after application launch.
         
+        UserDefaults.registerDefaults()
         CUU.start()
         
         return true

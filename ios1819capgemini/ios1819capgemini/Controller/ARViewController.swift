@@ -90,11 +90,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
+        
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
-        if isDetecting {
-            classifyCurrentImage()
-        }
+        classifyCurrentImage()
         
     }
     // Create shape layers for the bounding boxes.
