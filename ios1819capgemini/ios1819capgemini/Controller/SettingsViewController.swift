@@ -59,7 +59,7 @@ extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
-    @objc func switchChanged(_ sender : UISwitch!){
+    @objc func switchChanged(_ sender : UISwitch!) {
         switch sender.tag {
         case 0:
             UserDefaults.standard.setNavigationArrows(value: sender.isOn)
@@ -77,6 +77,8 @@ extension SettingsViewController: UITableViewDataSource {
             UserDefaults.standard.setAutomaticDetection(value: sender.isOn)
         case 7:
             UserDefaults.standard.setHapticFeedback(value: sender.isOn)
+        case 8:
+            UserDefaults.standard.setScreenshot(value: sender.isOn)
         default:
             return
         }

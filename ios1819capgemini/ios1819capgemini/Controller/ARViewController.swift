@@ -15,7 +15,7 @@ import Vision
 
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
-
+//swiftlint:disable all
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
@@ -90,6 +90,23 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
+        if UserDefaults.standard.getFeaturePoints() && UserDefaults.standard.getBoundingBoxes() {
+            sceneView.debugOptions = [.showBoundingBoxes, .showFeaturePoints]
+        } else if UserDefaults.standard.getBoundingBoxes() {
+            sceneView.debugOptions = [.showBoundingBoxes, .showFeaturePoints]
+        } else if UserDefaults.standard.getFeaturePoints() {
+            sceneView.debugOptions = [.showFeaturePoints]
+        } else {
+            sceneView.debugOptions = []
+        }
+        if UserDefaults.standard.getAutomaticDetection() {
+            isDetecting = true
+            setupBoxes()
+        } else {
+            toggleBoxes()
+            isDetecting = false
+        }
+        
         
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
@@ -102,6 +119,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let box = BoundingBox()
             box.addToLayer(sceneView.layer)
             self.boundingBoxes.append(box)
+        }
+    }
+    func toggleBoxes() {
+        for box in boundingBoxes {
+            box.hide()
         }
     }
     //swiftlint:disable force_unwrapping
@@ -178,7 +200,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                imgHeight: imgWidth,
                                                                xOffset: 0,
                                                                yOffset: (imgHeight - imgWidth) / 2)
-                if detectedObjectNode != nil {
+                if isDetecting {
                     self.boundingBoxes[index].show(frame: rect,
                                                    label: textLabel,
                                                    color: UIColor.green,
@@ -275,7 +297,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         guard let hitResult = hitTestResult.first else {
                             return
                         }
-                        if detectedObjectNode != nil {
+                        if detectedObjectNode != nil || UserDefaults.standard.getPlacePinsBeforeDetection() {
                             let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
                                 SCNVector3(hitResult.worldTransform.columns.3.x,
                                            hitResult.worldTransform.columns.3.y,
@@ -284,16 +306,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            filterAllPins()
-                            let imageWithoutPin = sceneView.snapshot()
-                            saveImage(image: imageWithoutPin, incident: incident)
+                            if UserDefaults.standard.getScreenshot() {
+                                filterAllPins()
+                                let imageWithoutPin = sceneView.snapshot()
+                                saveImage(image: imageWithoutPin, incident: incident)
+                            }
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
                                                                   hitResult.worldTransform.columns.3.z),
                                      identifier: "\(incident.identifier)" )
-                            filter3DPins(identifier: "\(incident.identifier)")
-                            let imageWithPin = sceneView.snapshot()
-                            saveImage(image: imageWithPin, incident: incident)
+                            if UserDefaults.standard.getScreenshot() {
+                                filter3DPins(identifier: "\(incident.identifier)")
+                                let imageWithPin = sceneView.snapshot()
+                                saveImage(image: imageWithPin, incident: incident)
+                            }
                             DataHandler.incidents.append(incident)
                             descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
                         }
@@ -311,10 +337,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         if let objectAnchor = anchor as? ARObjectAnchor {
             
-            let notification = UINotificationFeedbackGenerator()
-            
-            DispatchQueue.main.async {
-                notification.notificationOccurred(.success)
+            if UserDefaults.standard.getHapticFeedback() {
+                let notification = UINotificationFeedbackGenerator()
+                
+                DispatchQueue.main.async {
+                    notification.notificationOccurred(.success)
+                }
             }
             detected = true
             self.node = node
@@ -323,7 +351,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
-            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+            if UserDefaults.standard.getInfoPlane() {
+                addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+            }
         }
         return node
     }
