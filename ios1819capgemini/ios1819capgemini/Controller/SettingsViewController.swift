@@ -15,6 +15,12 @@ class SettingsViewController: UIViewController {
     @IBAction func saveSettingsButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
+    @IBAction func defaultButtonPressed(_ sender: Any) {
+        UserDefaults.restoreDefaults()
+        data = UserDefaults.getCurrentSettingsFormalized()
+        tableView.reloadData()
+    }
+    
     var data = [Setting]()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +39,7 @@ class SettingsViewController: UIViewController {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.view.bringSubviewToFront(tableView)
     }
+    
 }
 extension SettingsViewController: UITableViewDataSource {
     

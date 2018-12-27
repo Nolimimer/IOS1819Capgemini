@@ -625,6 +625,11 @@
                         <viewLayoutGuide key="safeArea" id="4aA-yg-AXR"/>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="JwF-7N-UbV">
+                        <barButtonItem key="leftBarButtonItem" title="Default" id="Dkz-2h-Mrm" userLabel="Default">
+                            <connections>
+                                <action selector="defaultButtonPressed:" destination="Uaz-qe-5y3" id="ceN-Xj-xA8"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Save" id="zNf-uN-JBO" userLabel="Save">
                             <connections>
                                 <action selector="saveSettingsButtonPressed:" destination="Uaz-qe-5y3" id="6jg-Tl-ltX"/>
