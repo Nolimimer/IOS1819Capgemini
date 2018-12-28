@@ -1,5 +1,5 @@
 PODS:
-  - CUU (2.0.2)
+  - CUU (2.1.0)
   - INSPhotoGallery (1.2.7)
   - KeychainSwift (13.0.0)
   - Prototype (0.3.3)
@@ -24,7 +24,7 @@ SPEC REPOS:
     - SwiftLint
 
 SPEC CHECKSUMS:
-  CUU: d5b85393a172a6b63aabf80e4835d1da778a8089
+  CUU: a343f4f8a2b2aa20a98e24927abd2d98dd3de0b8
   INSPhotoGallery: a4e698e3d6338d9016328d6747488a2a111d94e2
   KeychainSwift: 23d6c16cbc33f20fafa30c3d783241b4b87d998c
   Prototype: 2009eb25fccdcbe5339d1cbe4f116eb6e68466aa

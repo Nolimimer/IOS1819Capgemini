@@ -48,7 +48,7 @@ enum DataHandler {
         inProgressIncidents = incidents.filter({ $0.status == Status.progress })
     }
     
-     // MARK: Type Methods
+    // MARK: Type Methods
     static func loadFromJSON() {
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)

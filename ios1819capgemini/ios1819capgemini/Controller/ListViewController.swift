@@ -8,9 +8,13 @@
 
 // MARK: Imports
 import UIKit
-
+//swiftlint:disable all
 // MARK: LastViewController
 class ListViewController: UIViewController {
+    
+    private var showOpen = true
+    private var showInProgress = false
+    private var showAll = false
 
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
@@ -78,7 +82,7 @@ class ListViewController: UIViewController {
             tableView.reloadData()
         default:
             break
-    }
+        }
 }
   
     

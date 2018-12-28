@@ -121,7 +121,6 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
         present(imagePicker, animated: true, completion: nil)
-        
     }
     
     @IBAction private func recordAudio(_ sender: Any) {

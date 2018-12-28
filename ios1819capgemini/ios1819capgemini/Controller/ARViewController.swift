@@ -11,7 +11,6 @@ import UIKit
 import ARKit
 import SceneKit
 import Vision
-
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
@@ -21,13 +20,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?
     var screenWidth: Double?
-    let semaphore = DispatchSemaphore(value: 1)
     let numBoxes = 100
     var boundingBoxes: [BoundingBox] = []
     let multiClass = true
     var model: VNCoreMLModel?
+    private var detected = false
+    private var descriptionNode = SKLabelNode(text: "")
     private var isDetecting = true
     private var anchorLabels = [UUID: String]()
+    private var objectAnchor: ARObjectAnchor?
+    private var node: SCNNode?
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
@@ -37,9 +39,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet private var sceneView: ARSCNView!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
         if sender.currentTitle == "Automatic Detection: On" {
-            // TODO not working yet
-            //sender.setTitle("Automatic Detection: Off", for: UIControl.State.normal)
-            //isDetecting = false
         } else {
             sender.setTitle("Automatic Detection: On", for: UIControl.State.normal)
             isDetecting = true
@@ -94,8 +93,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 
-
-    // MARK: Object Detection Functions
+    // MARK: ML methods
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         // Do not enqueue other buffers for processing while another Vision task is still running.
         // The camera stream has only a finite amount of buffers available; holding too many buffers for analysis would starve the camera.
@@ -118,11 +116,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.boundingBoxes.append(box)
         }
     }
-    
-    
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
-    
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
             //self?.processClassifications(for: request, error: error)
             guard let predictions = self?.processClassifications(for: request, error: error) else {
@@ -139,7 +134,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return request
     }()
-    
     // Run the Vision+ML classifier on the current image buffer.
     /// - Tag: ClassifyCurrentImage
     private func classifyCurrentImage() {
@@ -160,7 +154,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
-    
     // Handle completion of the Vision request and choose results to display.
     /// - Tag: ProcessClassifications
     private func processClassifications(for request: VNRequest, error: Error?) -> [Prediction]? {
@@ -219,8 +212,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.automaticallyUpdatesLighting = true
     }
     
+    // MARK: AR methods
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
-        
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
         materialSphere.diffuse.contents = UIColor.red
@@ -231,25 +224,44 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.scene.rootNode.addChildNode(sphereNode)
     }
     
-    private func addInfoPlane (node: SCNNode, objectAnchor: ARObjectAnchor) {
-        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
-                             height: CGFloat(objectAnchor.referenceObject.extent.y * 0.5))
+    //swiftlint:disable force_unwrapping
+    private func addInfoPlane (carPart: String) {
+        let plane = SCNPlane(width: CGFloat(self.objectAnchor!.referenceObject.extent.x * 0.8),
+                             height: CGFloat(self.objectAnchor!.referenceObject.extent.y * 0.3))
         plane.cornerRadius = plane.width / 8
-        let spriteKitScene = SKScene(fileNamed: "ObjectInfo")
+        let spriteKitScene = SKScene(size: CGSize(width: 300, height: 300))
+        spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
-        let planePosition = sceneView.scene.rootNode.convertPosition(
-            SCNVector3Make(objectAnchor.referenceObject.center.x,
-                           objectAnchor.referenceObject.center.y + objectAnchor.referenceObject.extent.y + 0.25,
-                           objectAnchor.referenceObject.center.z),
-            to: nil)
+        let absoluteObjectPosition = objectAnchor!.transform.columns.3
+        //swiftlint:disable line_length
+        let planePosition = SCNVector3(absoluteObjectPosition.x, absoluteObjectPosition.y + self.objectAnchor!.referenceObject.extent.y, absoluteObjectPosition.z)
         planeNode.position = planePosition
+        let labelNode = SKLabelNode(text: carPart)
+        labelNode.fontSize = 40
+        labelNode.color = UIColor.black
+        labelNode.fontName = "Helvetica-Bold"
+        labelNode.position = CGPoint(x: 120, y: 200)
         
+        descriptionNode = SKLabelNode(text: "Incidents: \(DataHandler.incidents.count)")
+        descriptionNode.fontSize = 30
+        //swiftlint:disable empty_count
+        if DataHandler.incidents.count == 0 {
+            descriptionNode.fontColor = UIColor.green
+        } else {
+            descriptionNode.fontColor = UIColor.red
+        }
+        descriptionNode.fontName = "Helvetica-Bold"
+        descriptionNode.position = CGPoint(x: 120, y: 50)
+        spriteKitScene.addChild(descriptionNode)
+        spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
+
         scene.rootNode.addChildNode(planeNode)
     }
+    //swiftlint:enable force_unwrapping
     
     @objc func tapped(recognizer: UIGestureRecognizer) {
         if recognizer.state == .ended {
@@ -258,9 +270,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             if !hits.isEmpty {
                 let tappedNode = hits.first?.node
                 guard (tappedNode?.name) != nil else {
-                    // Get exact position where touch happened on screen of iPhone (2D coordinate)
                     let touchPosition = recognizer.location(in: sceneView)
-                    // Conduct a hit test based on a feature point that ARKit detected to find out what 3D point this 2D coordinate relates to
                     let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
                     
                     if !hitTestResult.isEmpty {
@@ -276,11 +286,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            DataHandler.incidents.append(incident)
-                            print("new incident created")
+                            filterAllPins()
+                            let imageWithoutPin = sceneView.snapshot()
+                            saveImage(image: imageWithoutPin, incident: incident)
                             add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
                                                                   hitResult.worldTransform.columns.3.y,
-                                                                  hitResult.worldTransform.columns.3.z), identifier: "\(incident.identifier)" )
+                                                                  hitResult.worldTransform.columns.3.z),
+                                     identifier: "\(incident.identifier)" )
+                            filter3DPins(identifier: "\(incident.identifier)")
+                            let imageWithPin = sceneView.snapshot()
+                            saveImage(image: imageWithPin, incident: incident)
+                            DataHandler.incidents.append(incident)
+                            descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
                         }
                     }
                     return
@@ -289,28 +306,81 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
+    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
         if let objectAnchor = anchor as? ARObjectAnchor {
             
+            detected = true
+            self.node = node
+            self.objectAnchor = objectAnchor
             detectedObjectNode = node
             for incident in DataHandler.incidents {
-                print("is in loop")
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
-            //addInfoPlane(node: node, objectAnchor: objectAnchor)
-            
-            let alertController = UIAlertController(title: "Object detected",
-                                                    message: "Dashboard",
-                                                    preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alertController, animated: true)
+            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+//            let alertController = UIAlertController(title: "Object detected",
+//                                                    message: "\(objectAnchor.referenceObject.name!)",
+//                                                    preferredStyle: .alert)
+//            alertController.addAction(UIAlertAction(title: "OK", style: .default))
+//            present(alertController, animated: true)
         }
         return node
     }
     
+    // MARK: Screenshot methods
+    func saveImage(image: UIImage, incident: Incident) {
+        
+        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        
+        let paths = NSSearchPathForDirectoriesInDomains(
+            FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let documentsDirectory = URL(fileURLWithPath: paths[0])
+        
+        guard let data = image.jpegData(compressionQuality: 0.5) else {
+            return
+        }
+        do {
+            let defaults = UserDefaults.standard
+            let name = "cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"
+            let path = documentsDirectory.appendingPathComponent(name)
+            try data.write(to: path, options: [])
+            defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedPhotoName")
+            incident.addAttachment(attachment: Photo(name: name, photoPath: "\(paths[0])/\(name)"))
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+    }
+    //swiftlint:disable force_unwrapping
+    private func filter3DPins (identifier: String) {
+        self.scene.rootNode.childNodes.forEach { node in
+            if node.name != nil {
+                if node.name != identifier {
+                    let tmpNode = node
+                    self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                        self.scene.rootNode.addChildNode(tmpNode)
+                    })
+                }
+            }
+        }
+    }
     
+    private func filterAllPins () {
+        self.scene.rootNode.childNodes.forEach { node in
+            if node.name != nil {
+                let tmpNode = node
+                self.scene.rootNode.childNode(withName: node.name!, recursively: false)?.removeFromParentNode()
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    self.scene.rootNode.addChildNode(tmpNode)
+                })
+            }
+        }
+    }
+    //swiftlint:enable force_unwrapping
+
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -326,7 +396,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 }
-
 
 // MARK: Coordinate
 struct Coordinate: Codable {

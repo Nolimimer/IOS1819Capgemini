@@ -20,6 +20,7 @@ open class CUUNavigationController: UINavigationController {
     
     override open func viewDidLoad() {
         super.viewDidLoad()
+        
         emotionsKitSetupTracking()
     }
     
@@ -50,13 +51,15 @@ open class CUUNavigationController: UINavigationController {
 extension CUUNavigationController {
     
     private func emotionsKitSetupTracking() {
+        guard EmotionKit.isActive else { return }
+
         emotionsKitArSession.delegate = self
         emotionsKitResetTracking()
         emotionsKitFaceDetector = EKFaceDetectorFactory.instance
     }
     
     private func emotionsKitResetTracking() {
-        guard ARFaceTrackingConfiguration.isSupported else { return }
+        guard EmotionKit.isSupported else { return }
         let configuration = ARFaceTrackingConfiguration()
         emotionsKitArSession.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
