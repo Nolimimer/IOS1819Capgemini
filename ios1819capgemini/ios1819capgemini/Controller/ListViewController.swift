@@ -14,6 +14,7 @@ class ListViewController: UIViewController {
 
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var filterSegmentedControl: UISegmentedControl!
     
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -42,7 +43,9 @@ class ListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        DataHandler.refreshInProgressIncidents()
         DataHandler.refreshOpenIncidents()
+        filterSegmentedControl.selectedSegmentIndex = DataHandler.currentSegmentFilter
         tableView.reloadData()
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
@@ -59,37 +62,28 @@ class ListViewController: UIViewController {
         share()
     }
     
-    @IBAction private func showButton(_ sender: UIBarButtonItem) {
-        if DataHandler.showAll {
-            print("all")
-            sender.title = "All"
-            DataHandler.refreshAllIncidents()
+    
+    @IBAction private func selectedFilterSegment(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case Filter.showAll.rawValue: // All tab
+            DataHandler.currentSegmentFilter = Filter.showAll.rawValue
             tableView.reloadData()
-            DataHandler.showAll = false
-            DataHandler.showInProgress = true
-        } else if DataHandler.showInProgress {
-            print("in progress")
-            sender.title = "In Progress"
-            DataHandler.refreshInProgressIncidents()
-            tableView.reloadData()
-            DataHandler.showInProgress = false
-            DataHandler.showOpen = true
-        } else if DataHandler.showOpen {
-            print("open")
-            sender.title = "Open"
+        case Filter.showOpen.rawValue: // Open tab
+            DataHandler.currentSegmentFilter = Filter.showOpen.rawValue
             DataHandler.refreshOpenIncidents()
             tableView.reloadData()
-            DataHandler.showOpen = false
-            DataHandler.showAll = true
-        } else {
-            //extended if necessary
-        }
+        case Filter.showInProgress.rawValue: // In Progress tab
+            DataHandler.currentSegmentFilter = Filter.showInProgress.rawValue
+            DataHandler.refreshInProgressIncidents()
+            tableView.reloadData()
+        default:
+            break
     }
+}
   
     
     private func share() {
     let activityController = UIActivityViewController(activityItems: DataHandler.incidents, applicationActivities: nil)
-        
         let excludedActivities =
             [UIActivity.ActivityType.mail,
              UIActivity.ActivityType.addToReadingList,
@@ -104,54 +98,50 @@ class ListViewController: UIViewController {
              UIActivity.ActivityType.postToVimeo]
         
         activityController.excludedActivityTypes = excludedActivities
-        
         present(activityController, animated: true, completion: nil)
-    
     }
-    
     private func receive() {
-        
     }
-    
-    
+}
+
+// MARK: Segmented Filter Constants
+enum Filter: Int { // Remark: Need to match Segment in Story Board.
+    case showAll = 0
+    case showOpen
+    case showInProgress
 }
 
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        // In show all incidents state
-        if DataHandler.showAll == true {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-            let incident = DataHandler.incidents[indexPath.row]
-            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
-            cell.tag = incident.identifier
-            cell.detailTextLabel?.text = incident.description
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
+        let incident: Incident
+        switch filterSegmentedControl.selectedSegmentIndex {
+        case Filter.showAll.rawValue: // Filter by All Incidents.
+            incident = DataHandler.incidents[indexPath.row]
+        case Filter.showOpen.rawValue: // Filter by Open Incidents
+            incident = DataHandler.openIncidents[indexPath.row]
+        case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
+            incident = DataHandler.inProgressIncidents[indexPath.row]
+        default: // Default by All Incidents.
+            incident = DataHandler.incidents[indexPath.row]
         }
-        if DataHandler.showInProgress == true {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-            let incident = DataHandler.openIncidents[indexPath.row]
-            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
-            cell.tag = incident.identifier
-            cell.detailTextLabel?.text = incident.description
-            return cell
-        }
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-            let incident = DataHandler.openIncidents[indexPath.row]
-            cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
-            cell.tag = incident.identifier
-            cell.detailTextLabel?.text = incident.description
-            return cell
-        }
+        cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
+        cell.tag = incident.identifier
+        cell.detailTextLabel?.text = incident.description
+        return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       if DataHandler.showAll == true {
+        switch filterSegmentedControl.selectedSegmentIndex {
+        case Filter.showAll.rawValue: // Filter by All Incidents.
             return DataHandler.incidents.count
-       } else {
+        case Filter.showOpen.rawValue: // Filter by Open Incidents
             return DataHandler.openIncidents.count
+        case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
+            return DataHandler.inProgressIncidents.count
+        default: // Default by All Incidents.
+            return DataHandler.incidents.count
         }
     }
 }

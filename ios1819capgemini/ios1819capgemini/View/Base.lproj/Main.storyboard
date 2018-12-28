@@ -436,7 +436,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="dK4-vX-uxy">
+                            <tableView clipsSubviews="YES" alpha="0.94999999999999996" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="dK4-vX-uxy">
                                 <rect key="frame" x="0.0" y="116" width="375" height="551"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -476,22 +476,31 @@
                                     <outlet property="delegate" destination="qwB-cY-kiz" id="DgJ-aa-upA"/>
                                 </connections>
                             </tableView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Jz5-Se-vdJ">
+                                <rect key="frame" x="0.0" y="116" width="375" height="29"/>
+                                <segments>
+                                    <segment title="All"/>
+                                    <segment title="Open"/>
+                                    <segment title="In Progress"/>
+                                </segments>
+                                <connections>
+                                    <action selector="selectedFilterSegment:" destination="qwB-cY-kiz" eventType="valueChanged" id="FsS-15-v74"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Jz5-Se-vdJ" firstAttribute="top" secondItem="aL3-UY-sVh" secondAttribute="top" id="8M9-eR-SaW"/>
                             <constraint firstItem="dK4-vX-uxy" firstAttribute="leading" secondItem="aL3-UY-sVh" secondAttribute="leading" id="dQ4-d4-qy2"/>
                             <constraint firstItem="dK4-vX-uxy" firstAttribute="top" secondItem="aL3-UY-sVh" secondAttribute="top" id="hhi-pH-xA0"/>
+                            <constraint firstItem="Jz5-Se-vdJ" firstAttribute="trailing" secondItem="aL3-UY-sVh" secondAttribute="trailing" id="j0p-NU-YMJ"/>
+                            <constraint firstItem="Jz5-Se-vdJ" firstAttribute="leading" secondItem="aL3-UY-sVh" secondAttribute="leading" id="j0z-TG-3DM"/>
                             <constraint firstAttribute="bottom" secondItem="dK4-vX-uxy" secondAttribute="bottom" id="w7n-vO-omi"/>
                             <constraint firstItem="aL3-UY-sVh" firstAttribute="trailing" secondItem="dK4-vX-uxy" secondAttribute="trailing" id="wud-Lw-WKA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="aL3-UY-sVh"/>
                     </view>
                     <navigationItem key="navigationItem" title="Incident List" id="02i-px-RU8">
-                        <barButtonItem key="leftBarButtonItem" title="Show Open" id="VdJ-kt-XCE" userLabel="Show">
-                            <connections>
-                                <action selector="showButton:" destination="qwB-cY-kiz" id="Ctn-vt-nbW"/>
-                            </connections>
-                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="AZm-i1-5TK">
                                 <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -508,12 +517,13 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="filterSegmentedControl" destination="Jz5-Se-vdJ" id="3SR-Aq-k41"/>
                         <outlet property="tableView" destination="dK4-vX-uxy" id="qft-Pu-Nl4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOP-3e-YGO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4751.1999999999998" y="115.27093596059113"/>
+            <point key="canvasLocation" x="4751.1999999999998" y="114.69265367316342"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sg1-FG-o1E">
