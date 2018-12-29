@@ -67,9 +67,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         model = try? VNCoreMLModel(for: stickerTest().model)
         
         setupBoxes()
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
-        sceneView.addGestureRecognizer(gestureRecognizer)
-        
         
         configureLighting()
     }
@@ -269,46 +266,39 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     opens the detail view for the tapped pin.
     If a new pin is created a screenshot of the location is taken before/after placing the pin.
     */
-    @objc func tapped(recognizer: UIGestureRecognizer) {
-        if recognizer.state == .ended {
-            let location: CGPoint = recognizer.location(in: sceneView)
-            let hits = self.sceneView.hitTest(location, options: nil)
-            if !hits.isEmpty {
-                let tappedNode = hits.first?.node
-                guard (tappedNode?.name) != nil else {
-                    let touchPosition = recognizer.location(in: sceneView)
-                    let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
-                    
-                    if !hitTestResult.isEmpty {
-                        guard let hitResult = hitTestResult.first else {
-                            return
-                        }
-                        if detectedObjectNode != nil {
-                            let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
-                                SCNVector3(hitResult.worldTransform.columns.3.x,
-                                           hitResult.worldTransform.columns.3.y,
-                                           hitResult.worldTransform.columns.3.z),
-                                to: detectedObjectNode)
-                            let incident = Incident (type: .unknown,
-                                                     description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            filterAllPins()
-                            let imageWithoutPin = sceneView.snapshot()
-                            saveImage(image: imageWithoutPin, incident: incident)
-                            add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                                  hitResult.worldTransform.columns.3.y,
-                                                                  hitResult.worldTransform.columns.3.z),
-                                     identifier: "\(incident.identifier)" )
-                            filter3DPins(identifier: "\(incident.identifier)")
-                            let imageWithPin = sceneView.snapshot()
-                            saveImage(image: imageWithPin, incident: incident)
-                            DataHandler.incidents.append(incident)
-                            descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-                        }
-                    }
-                    return
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        let location = touches.first!.location(in: sceneView)
+        let hitOptions = self.sceneView.hitTest(location, options: nil)
+        if let tappedNode = hitOptions.first?.node,
+            let _ = tappedNode.name {
+            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+        } else {
+            let hitResultsFeaturePoints: [ARHitTestResult] =
+                sceneView.hitTest(location, types: .featurePoint)
+            if let hitResult = hitResultsFeaturePoints.first {
+                if detectedObjectNode != nil {
+                    let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
+                        SCNVector3(hitResult.worldTransform.columns.3.x,
+                                   hitResult.worldTransform.columns.3.y,
+                                   hitResult.worldTransform.columns.3.z),
+                        to: detectedObjectNode)
+                    let incident = Incident (type: .unknown,
+                                             description: "New Incident",
+                                             coordinate: Coordinate(vector: coordinateRelativeToObject))
+                    filterAllPins()
+                    let imageWithoutPin = sceneView.snapshot()
+                    saveImage(image: imageWithoutPin, incident: incident)
+                    add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                          hitResult.worldTransform.columns.3.y,
+                                                          hitResult.worldTransform.columns.3.z),
+                             identifier: "\(incident.identifier)" )
+                    filter3DPins(identifier: "\(incident.identifier)")
+                    let imageWithPin = sceneView.snapshot()
+                    saveImage(image: imageWithPin, incident: incident)
+                    DataHandler.incidents.append(incident)
+                    descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
                 }
-                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
             }
         }
     }
