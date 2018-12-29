@@ -46,11 +46,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
         
     }
-    @IBOutlet weak var rightNavigation: UILabel!
+    @IBOutlet private weak var rightNavigation: UILabel!
     
-    @IBOutlet weak var upNavigation: UILabel!
-    @IBOutlet weak var leftNavigation: UILabel!
-    @IBOutlet weak var distanceNavigation: UILabel!
+    @IBOutlet private weak var upNavigation: UILabel!
+    @IBOutlet private weak var leftNavigation: UILabel!
+    @IBOutlet private weak var distanceNavigation: UILabel!
     
     @IBOutlet private weak var progressRing: UICircularProgressRing!
     @IBOutlet weak var downNavigation: UILabel!
@@ -516,6 +516,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
      sets navigation buttons based on the navigation which is given
     */
     func setNavigationArrows() {
+        
         upNavigation.isHidden = true
         downNavigation.isHidden = true
         rightNavigation.isHidden = true
