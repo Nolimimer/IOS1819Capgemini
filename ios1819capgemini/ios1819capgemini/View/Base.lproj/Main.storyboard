@@ -95,14 +95,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Down" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mKQ-N7-Hho" userLabel="Down">
-                                <rect key="frame" x="166" y="583" width="60" height="21"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="goj-W6-Hmy">
+                                <rect key="frame" x="20" y="529" width="335" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="goj-W6-Hmy">
-                                <rect key="frame" x="20" y="529" width="335" height="21"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Down" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mKQ-N7-Hho" userLabel="Down">
+                                <rect key="frame" x="166" y="558" width="60" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -116,18 +116,18 @@
                             <constraint firstItem="goj-W6-Hmy" firstAttribute="top" secondItem="msR-1k-WLu" secondAttribute="bottom" constant="185" id="BX4-f5-2Hw"/>
                             <constraint firstItem="goj-W6-Hmy" firstAttribute="top" secondItem="kLV-9a-mF3" secondAttribute="bottom" constant="185" id="Chf-0I-Ilp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8vs-jp-QKL" secondAttribute="bottom" constant="20" id="FnX-md-aRt"/>
+                            <constraint firstItem="8vs-jp-QKL" firstAttribute="leading" secondItem="dAU-gm-pmP" secondAttribute="trailing" constant="197" id="GjX-g5-e9M"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
                             <constraint firstItem="mKQ-N7-Hho" firstAttribute="leading" secondItem="FUD-f2-h88" secondAttribute="leading" id="JmB-9A-Ygf"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mKQ-N7-Hho" secondAttribute="bottom" constant="88" id="Mgq-7p-nVV"/>
                             <constraint firstItem="uDJ-JA-xze" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="OVb-P8-78D"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dAU-gm-pmP" secondAttribute="bottom" constant="20" id="Oug-f9-ub7"/>
                             <constraint firstItem="FUD-f2-h88" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="166" id="Px9-R9-THL"/>
                             <constraint firstItem="msR-1k-WLu" firstAttribute="leading" secondItem="kLV-9a-mF3" secondAttribute="trailing" constant="259" id="Sb3-D1-OzA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="msR-1k-WLu" secondAttribute="trailing" constant="16" id="SqM-N1-mTS"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FUD-f2-h88" secondAttribute="trailing" constant="167" id="Upa-dt-L19"/>
-                            <constraint firstItem="mKQ-N7-Hho" firstAttribute="top" secondItem="dAU-gm-pmP" secondAttribute="top" id="XOS-sI-J6J"/>
                             <constraint firstItem="FUD-f2-h88" firstAttribute="top" secondItem="uDJ-JA-xze" secondAttribute="bottom" constant="8" id="Y0Z-C2-Lbq"/>
-                            <constraint firstItem="dAU-gm-pmP" firstAttribute="top" secondItem="goj-W6-Hmy" secondAttribute="bottom" constant="33" id="YKw-Ue-Xe3"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ydv-fJ-Xpy"/>
                             <constraint firstItem="kLV-9a-mF3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="bVh-Yd-fmT"/>
                             <constraint firstItem="goj-W6-Hmy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="jPb-5i-fNE"/>
@@ -141,10 +141,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="AR" id="vck-ZV-qqc"/>
                     <connections>
-                        <outlet property="progressRing" destination="dsO-Fy-ug4" id="WDm-t6-avZ"/>
                         <outlet property="distanceNavigation" destination="goj-W6-Hmy" id="hzH-HE-HvR"/>
                         <outlet property="downNavigation" destination="mKQ-N7-Hho" id="hoZ-C8-08m"/>
                         <outlet property="leftNavigation" destination="kLV-9a-mF3" id="xDs-Eg-bsP"/>
+                        <outlet property="progressRing" destination="dsO-Fy-ug4" id="WDm-t6-avZ"/>
                         <outlet property="rightNavigation" destination="msR-1k-WLu" id="2CC-0V-7QV"/>
                         <outlet property="sceneView" destination="zuy-y1-cIR" id="6CW-Fu-tmc"/>
                         <outlet property="upNavigation" destination="FUD-f2-h88" id="bxe-y3-ORF"/>
