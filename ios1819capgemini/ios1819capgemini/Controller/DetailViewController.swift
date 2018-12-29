@@ -261,7 +261,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             present(alertController, animated: true)
         } else {
             print("Saved picture")
-            let index = 0
             for child in view.subviews {
                 if child is AttachmentView {
                     child.removeFromSuperview()
@@ -269,7 +268,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             }
         }
     }
-    
 }
 
 // MARK: Extension

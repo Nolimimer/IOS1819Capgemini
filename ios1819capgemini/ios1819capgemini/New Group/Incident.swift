@@ -10,6 +10,7 @@
 import Foundation
 import SceneKit
 
+//swiftlint:disable all
 // MARK: - Incident
 public class Incident: Codable {
     
@@ -21,9 +22,7 @@ public class Incident: Codable {
     private(set) var description: String
     private(set) var status: Status
     private(set) var attachments = [Attachment]()
-    
     let coordinate: Coordinate
-    
     // MARK: Initializers
     init(type: IncidentType, description: String, coordinate: Coordinate) {
         
@@ -35,7 +34,6 @@ public class Incident: Codable {
         status = .open
         self.coordinate = coordinate
     }
-    
     // MARK: Instance Methods
     func edit(status: Status, description: String, modifiedDate: Date) {
         self.status = status
@@ -69,7 +67,11 @@ public class Incident: Codable {
     }
     
     func getCoordinateToVector() -> SCNVector3 {
-        return SCNVector3(x: coordinate.pointX, y: coordinate.pointY, z: coordinate.pointZ)
+        var res = SCNVector3.init()
+        res.x = coordinate.pointX
+        res.y = coordinate.pointY
+        res.z = coordinate.pointZ
+        return res
     }
     
     func addAttachment(attachment: Attachment) {
