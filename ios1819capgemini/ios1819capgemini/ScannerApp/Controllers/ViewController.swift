@@ -43,6 +43,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     var referenceObjectToMerge: ARReferenceObject?
     var referenceObjectToTest: ARReferenceObject?
+    private var saveCounter = 0
     
     internal var testRun: TestRun?
     
@@ -91,6 +92,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         blurView.isHidden = true
         sceneView.delegate = self
         sceneView.session.delegate = self
+        saveCounter = 0
         
         // Prevent the screen from being dimmed after a while.
         UIApplication.shared.isIdleTimerDisabled = true
@@ -157,10 +159,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else if testRun != nil {
-            let title = "Start over?"
-            let message = "Discard this scan and start over?"
+            let title = "Start reporting damages or create another scan?"
+            let message = "Return to start screen?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
-                self.navigationController?.popViewController(animated: true)
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else {
@@ -354,20 +355,37 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                     """))
     }
     
+    func saveToCARgemini() {
+        guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {
+            print("Error: Missing scanned object for saving to the app.")
+            return
+        }
+        
+        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
+        print("documentURL \(documentURL)")
+        
+        
+        DispatchQueue.global().async {
+            do {
+                try object.export(to: documentURL, previewImage: testRun.previewImage)
+            } catch {
+                fatalError("Failed to save the file to \(documentURL)")
+            }
+            
+        }
+    }
+    
     func createAndShareReferenceObject() {
         guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {
-            print("Error: Missing scanned object.")
+            print("Error: Missing scanned object for sharing.")
             return
         }
         
         let documentShareURL = FileManager.default.temporaryDirectory.appendingPathComponent(name + ".arobject")
-        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
-        print("documentURL \(documentURL)")
         
         DispatchQueue.global().async {
             do {
                 try object.export(to: documentShareURL, previewImage: testRun.previewImage)
-                try object.export(to: documentURL, previewImage: testRun.previewImage)
             } catch {
                 fatalError("Failed to save the file to \(documentShareURL)")
             }
@@ -496,11 +514,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         if let objectAnchor = anchor as? ARObjectAnchor {
             if let testRun = self.testRun, objectAnchor.referenceObject == testRun.referenceObject {
                 testRun.successfulDetection(objectAnchor)
+                if saveCounter == 0 {
+                    saveToCARgemini()
+                    saveCounter += 1
+                }
+                
                 let messageText = """
-                    Object successfully detected from this angle.
+                    Object successfully detected from this angle. Your scan was successfully saved. To start reporting incidents press Restart.
 
                     """ + testRun.statistics
                 displayMessage(messageText, expirationTime: testRun.resultDisplayDuration)
+                
             }
         } else if state == .scanning, let planeAnchor = anchor as? ARPlaneAnchor {
             scan?.scannedObject.tryToAlignWithPlanes([planeAnchor])
