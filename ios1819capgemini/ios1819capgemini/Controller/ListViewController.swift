@@ -11,7 +11,7 @@ import UIKit
 
 // MARK: LastViewController
 class ListViewController: UIViewController {
-
+    
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
     
@@ -32,8 +32,8 @@ class ListViewController: UIViewController {
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // add blurred subview
+        
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
