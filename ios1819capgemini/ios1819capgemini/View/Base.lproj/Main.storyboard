@@ -322,12 +322,19 @@
                                 <action selector="backButtonPressed:" destination="jav-cE-mj7" id="IOj-V0-6qs"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Edit" id="FYY-oh-I0S">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="editButtonPressed:" destination="jav-cE-mj7" id="8z5-VP-tsV"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Edit" id="FYY-oh-I0S">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="editButtonPressed:" destination="jav-cE-mj7" id="8z5-VP-tsV"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Delete" id="CEm-iU-S3H" userLabel="Delete Button">
+                                <connections>
+                                    <action selector="deleteButtonPressed:" destination="jav-cE-mj7" id="kEW-Vw-0gw"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="backButton" destination="SGL-Tv-lyn" id="uZG-7h-ChX"/>

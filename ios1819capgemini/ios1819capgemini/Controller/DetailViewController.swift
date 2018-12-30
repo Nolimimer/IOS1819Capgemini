@@ -45,6 +45,10 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     @IBAction private func backButtonPressed(_ sender: Any) {
          self.dismiss(animated: true, completion: nil)
     }
+    @IBAction private func deleteButtonPressed(_ sender: Any) {
+        DataHandler.removeIncident(incidentToDelete: incident)
+        self.dismiss(animated: true, completion: nil)
+    }
     
     @IBAction func showAllAttachments(_ sender: Any) {
         performSegue(withIdentifier: "attachmentSegue", sender: self)
