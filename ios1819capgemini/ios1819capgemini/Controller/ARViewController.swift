@@ -94,6 +94,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
+        refreshNodes()
         setNavigationArrows()
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
@@ -343,6 +344,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
+    
+    func refreshNodes() {
+        for node in nodes {
+            guard let name = node.name else {
+                return
+            }
+            if DataHandler.incident(withID: name) == nil {
+                self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+            }
+        }
+    }
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -571,7 +583,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // Temporarily deletes all the pins from the view and then adds them back again after 1 second
     private func filterAllPins () {
         
-        self.scene.rootNode.childNodes.forEach { node in
+        scene.rootNode.childNodes.forEach { node in
                 guard let name = node.name else {
                     return
                 }
@@ -580,6 +592,19 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                     self.scene.rootNode.addChildNode(tmpNode)
                 })
+        }
+    }
+    
+    func removeNode(incident: Incident) {
+        self.scene.rootNode.childNode(withName: "\(incident.identifier)", recursively: false)?.removeFromParentNode()
+        for (index, node) in nodes.enumerated() {
+            guard let name = node.name else {
+                return
+            }
+            if name == "\(incident.identifier)" {
+                nodes.remove(at: index)
+                return
+            }
         }
     }
 }

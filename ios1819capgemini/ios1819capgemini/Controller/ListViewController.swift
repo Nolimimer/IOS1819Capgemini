@@ -33,7 +33,6 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // add blurred subview
-        
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -95,4 +94,14 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return DataHandler.incidents.count
     }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let incident = DataHandler.incidents[indexPath.row]
+            DataHandler.removeIncident(incidentToDelete: incident)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            return
+        }
+    }
+    
+
 }
