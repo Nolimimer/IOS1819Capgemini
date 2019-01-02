@@ -159,7 +159,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else if testRun != nil {
-            let title = "Fnished?"
+            let title = "Finished?"
             let message = "Start reporting damages or create another scan?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
                 self.performSegue(withIdentifier: "Start screen", sender: nil)

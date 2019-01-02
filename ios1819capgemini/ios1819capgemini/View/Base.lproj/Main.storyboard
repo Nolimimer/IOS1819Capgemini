@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dcg-B5-UM8">
-    <device id="ipad9_7" orientation="portrait">
+    <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -14,21 +14,21 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ARViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <arscnView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zuy-y1-cIR">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAU-gm-pmP" customClass="List">
-                                <rect key="frame" x="20" y="940" width="64" height="64"/>
+                                <rect key="frame" x="20" y="583" width="64" height="64"/>
                                 <state key="normal" image="list"/>
                                 <connections>
                                     <segue destination="b3y-gK-GfZ" kind="presentation" modalPresentationStyle="overCurrentContext" id="dsP-mo-Jml"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vs-jp-QKL">
-                                <rect key="frame" x="674" y="962" width="74" height="42"/>
+                                <rect key="frame" x="281" y="605" width="74" height="42"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="Details"/>
                                 <connections>
@@ -36,7 +36,7 @@
                                 </connections>
                             </button>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uDJ-JA-xze">
-                                <rect key="frame" x="264" y="40" width="240" height="50"/>
+                                <rect key="frame" x="67.5" y="40" width="240" height="50"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="YbP-mb-QgW">
                                     <rect key="frame" x="0.0" y="0.0" width="240" height="50"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -90,61 +90,61 @@
             <objects>
                 <viewController id="jav-cE-mj7" customClass="DetailViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9eL-b9-ajH">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bk8-mG-5Uu">
-                                <rect key="frame" x="0.0" y="64" width="768" height="603"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bk8-mG-5Uu">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UKy-Lv-xeZ">
-                                        <rect key="frame" x="0.0" y="0.0" width="768" height="667"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UKy-Lv-xeZ">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                         <subviews>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uPK-r0-I5L">
-                                                <rect key="frame" x="16" y="67" width="736" height="29"/>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uPK-r0-I5L">
+                                                <rect key="frame" x="16" y="67" width="343" height="29"/>
                                                 <segments>
                                                     <segment title="Open"/>
                                                     <segment title="In Progress"/>
                                                     <segment title="Resolved"/>
                                                 </segments>
                                             </segmentedControl>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HV7-TB-qWr">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HV7-TB-qWr">
                                                 <rect key="frame" x="16" y="125" width="119.5" height="27"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8tk-Hj-sM2">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8tk-Hj-sM2">
                                                 <rect key="frame" x="16" y="261" width="49" height="27"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Attachments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tOs-XI-t5A">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Attachments" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tOs-XI-t5A">
                                                 <rect key="frame" x="16" y="404" width="134" height="27"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Created:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ur-jx-McY">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Created:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ur-jx-McY">
                                                 <rect key="frame" x="16" y="303" width="66" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Last Modified:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BCS-uW-z3A">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Modified:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BCS-uW-z3A">
                                                 <rect key="frame" x="16" y="336" width="109" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WSz-DG-4sS">
-                                                <rect key="frame" x="710" y="336" width="42" height="21"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WSz-DG-4sS">
+                                                <rect key="frame" x="317" y="336" width="42" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="z23-Qm-9Du">
-                                                <rect key="frame" x="0.0" y="453" width="768" height="128"/>
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="z23-Qm-9Du">
+                                                <rect key="frame" x="0.0" y="453" width="375" height="128"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="128" id="mLq-bo-Soi"/>
@@ -179,8 +179,8 @@
                                                     <outlet property="delegate" destination="jav-cE-mj7" id="jyd-dg-y62"/>
                                                 </connections>
                                             </collectionView>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="COY-aq-UVO">
-                                                <rect key="frame" x="16" y="167" width="736" height="69"/>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="COY-aq-UVO">
+                                                <rect key="frame" x="16" y="167" width="343" height="69"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="69" id="JDS-AW-oNX"/>
@@ -196,13 +196,13 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PcM-9Y-5y7">
-                                                <rect key="frame" x="710" y="303" width="42" height="21"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PcM-9Y-5y7">
+                                                <rect key="frame" x="317" y="303" width="42" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGE-4X-rly">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGE-4X-rly">
                                                 <rect key="frame" x="308" y="401" width="59" height="30"/>
                                                 <state key="normal" title="Show All"/>
                                                 <connections>
@@ -298,11 +298,11 @@
             <objects>
                 <viewController id="T6S-Pu-SFY" customClass="AttachmentViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ahL-qv-P1P">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6xp-nU-bii">
-                                <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <items>
@@ -431,26 +431,26 @@
         <!--Incident List-->
         <scene sceneID="dGz-cw-NzV">
             <objects>
-                <viewController id="qwB-cY-kiz" customClass="ListViewController" sceneMemberID="viewController">
+                <viewController id="qwB-cY-kiz" customClass="ListViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EEH-Ha-bvs">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="dK4-vX-uxy">
-                                <rect key="frame" x="0.0" y="122" width="768" height="902"/>
+                                <rect key="frame" x="0.0" y="116" width="375" height="551"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="incidentCell" textLabel="2A4-Rc-Wck" style="IBUITableViewCellStyleDefault" id="MjR-HB-Q3s" userLabel="incidentCell">
-                                        <rect key="frame" x="0.0" y="55.5" width="768" height="44"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MjR-HB-Q3s" id="N6v-hV-78g">
-                                            <rect key="frame" x="0.0" y="0.0" width="735" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Test" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2A4-Rc-Wck">
-                                                    <rect key="frame" x="15" y="0.0" width="718" height="43.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="325" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -509,7 +509,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="b3y-gK-GfZ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" largeTitles="YES" id="6sZ-lb-Y0v">
-                        <rect key="frame" x="0.0" y="20" width="768" height="102"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -530,7 +530,7 @@
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" largeTitles="YES" id="i6z-jy-PRR">
-                        <rect key="frame" x="0.0" y="20" width="768" height="102"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -552,11 +552,12 @@
             <objects>
                 <viewController id="dcg-B5-UM8" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8x9-6W-L7d">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DJL-Vc-tnw">
-                                <rect key="frame" x="16" y="82" width="736" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DJL-Vc-tnw">
+                                <rect key="frame" x="132" y="318" width="112" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Create incidents">
                                     <color key="titleColor" red="0.19607843459999999" green="0.19607843459999999" blue="0.19607843459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -564,8 +565,9 @@
                                     <segue destination="BYZ-38-t0r" kind="show" id="5Xx-Fu-l5i"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FLE-Ep-3gU">
-                                <rect key="frame" x="16" y="36" width="736" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FLE-Ep-3gU">
+                                <rect key="frame" x="154" y="234" width="67" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="New scan">
                                     <color key="titleColor" red="0.19607843459999999" green="0.19607843459999999" blue="0.19607843459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -575,47 +577,76 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="dYA-dF-z7m" firstAttribute="trailing" secondItem="FLE-Ep-3gU" secondAttribute="trailing" constant="16" id="Ccm-TK-CJI"/>
-                            <constraint firstItem="DJL-Vc-tnw" firstAttribute="top" secondItem="FLE-Ep-3gU" secondAttribute="bottom" constant="16" id="aYn-fV-baT"/>
-                            <constraint firstItem="FLE-Ep-3gU" firstAttribute="top" secondItem="dYA-dF-z7m" secondAttribute="top" constant="16" id="bFb-lR-l3s"/>
-                            <constraint firstItem="DJL-Vc-tnw" firstAttribute="leading" secondItem="dYA-dF-z7m" secondAttribute="leading" constant="16" id="g3c-Tw-QDS"/>
-                            <constraint firstItem="FLE-Ep-3gU" firstAttribute="leading" secondItem="dYA-dF-z7m" secondAttribute="leading" constant="16" id="mSK-Dy-z9V"/>
-                            <constraint firstItem="dYA-dF-z7m" firstAttribute="trailing" secondItem="DJL-Vc-tnw" secondAttribute="trailing" constant="16" id="xmu-mo-2VV"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="dYA-dF-z7m"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q6w-mo-XXu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1491.40625" y="114.84374999999999"/>
+            <point key="canvasLocation" x="1492" y="115"/>
         </scene>
-        <!--ScannerApp-->
+        <!--View Controller-->
         <scene sceneID="kR8-Kc-VqH">
             <objects>
-                <viewController id="dsx-8Z-4fu" userLabel="ScannerApp" customClass="ViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
+                <pinchGestureRecognizer id="DAc-qJ-2NR" customClass="ThresholdPinchGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
+                    <connections>
+                        <action selector="didPinch:" destination="dsx-8Z-4fu" id="5Ud-Qk-Wq9"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="nxG-PP-PZb"/>
+                    </connections>
+                </pinchGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.40000000000000002" id="vCo-n8-lDo">
+                    <connections>
+                        <action selector="didLongPress:" destination="dsx-8Z-4fu" id="HoB-o0-Ap2"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="NCA-u4-dKp"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="2" maximumNumberOfTouches="2" id="fU6-ab-02Z" customClass="ThresholdPanGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
+                    <connections>
+                        <action selector="didTwoFingerPan:" destination="dsx-8Z-4fu" id="Yzg-sX-RBv"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Fv2-5T-ltc"/>
+                    </connections>
+                </panGestureRecognizer>
+                <tapGestureRecognizer id="Jao-yv-cSS">
+                    <connections>
+                        <action selector="didTap:" destination="dsx-8Z-4fu" id="OcQ-li-yhw"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Rtk-dT-YcL"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <rotationGestureRecognizer id="Va0-ow-ccV" customClass="ThresholdRotationGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
+                    <connections>
+                        <action selector="didRotate:" destination="dsx-8Z-4fu" id="hZG-Ab-xLw"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="2Da-PI-vWh"/>
+                    </connections>
+                </rotationGestureRecognizer>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6cm-wG-cUD" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" maximumNumberOfTouches="1" id="aJg-Sb-qZg">
+                    <connections>
+                        <action selector="didOneFingerPan:" destination="dsx-8Z-4fu" id="8W0-d5-Lkg"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="jT2-9x-6aJ"/>
+                    </connections>
+                </panGestureRecognizer>
+                <viewController id="dsx-8Z-4fu" customClass="ViewController" customModule="ScanningApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="i2z-QK-3m4" customClass="ARSCNView">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mkg-0O-22m">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="70"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="els-Ez-x3j">
-                                    <rect key="frame" x="0.0" y="0.0" width="768" height="70"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DW7-5J-XOz" userLabel="Blur View">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="RQ5-78-qZI">
-                                    <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kEd-n9-73T" userLabel="Next Button Touch Area">
-                                <rect key="frame" x="319" y="934" width="130" height="130"/>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kEd-n9-73T" userLabel="Next Button Touch Area">
+                                <rect key="frame" x="291" y="695" width="84" height="83"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="130" id="EFM-Hl-pA5"/>
@@ -625,8 +656,8 @@
                                     <action selector="nextButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="0dU-uR-Eht"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CSi-Iw-mtF" userLabel="Next Button" customClass="RoundedButton" customModule="ios1819capgemini" customModuleProvider="target">
-                                <rect key="frame" x="334" y="939" width="100" height="45"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CSi-Iw-mtF" userLabel="Next Button" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                                <rect key="frame" x="334" y="582" width="100" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="4Mz-Oe-YFv"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="5il-4n-WMI"/>
@@ -636,8 +667,8 @@
                                     <action selector="nextButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="cEr-oV-FiP"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NMJ-sf-Y1D" userLabel="? Button Touch Area">
-                                <rect key="frame" x="678" y="934" width="90" height="130"/>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NMJ-sf-Y1D" userLabel="? Button Touch Area">
+                                <rect key="frame" x="291" y="695" width="84" height="83"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="130" id="IiI-Ax-Bng"/>
@@ -647,8 +678,8 @@
                                     <action selector="toggleInstructionsButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="Auc-ud-d7C"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wlu-xb-zjn" userLabel="? Button" customClass="RoundedButton" customModule="ios1819capgemini" customModuleProvider="target">
-                                <rect key="frame" x="703" y="939" width="45" height="45"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wlu-xb-zjn" userLabel="? Button" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                                <rect key="frame" x="310" y="582" width="45" height="45"/>
                                 <accessibility key="accessibilityConfiguration" label="Toggle instruction label"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="45" id="Lot-ym-rwF"/>
@@ -665,7 +696,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FST-S1-FNY" userLabel="Left Button Touch Area">
-                                <rect key="frame" x="0.0" y="934" width="130" height="130"/>
+                                <rect key="frame" x="0.0" y="577" width="130" height="130"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="130" id="Dst-gf-MQn"/>
@@ -675,8 +706,8 @@
                                     <action selector="leftButtonTouchAreaTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="nEv-8s-EEe"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttj-7h-ds9" userLabel="Load Model" customClass="RoundedButton" customModule="ios1819capgemini" customModuleProvider="target">
-                                <rect key="frame" x="20" y="939" width="110" height="45"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttj-7h-ds9" userLabel="Load Model" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                                <rect key="frame" x="20" y="582" width="110" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="110" id="QtQ-Rk-jWh"/>
                                     <constraint firstAttribute="height" constant="45" id="cbk-oh-Mqb"/>
@@ -688,8 +719,8 @@
                                     <action selector="loadModelButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="xrI-2f-4MB"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1nE-kK-KtM" userLabel="Flashlight toggle" customClass="FlashlightButton" customModule="ios1819capgemini" customModuleProvider="target">
-                                <rect key="frame" x="20" y="939" width="110" height="45"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1nE-kK-KtM" userLabel="Flashlight toggle" customClass="FlashlightButton" customModule="ScanningApp" customModuleProvider="target">
+                                <rect key="frame" x="20" y="582" width="110" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="110" id="IgK-wf-fJP"/>
                                     <constraint firstAttribute="height" constant="45" id="NEA-d0-LhR"/>
@@ -702,7 +733,7 @@
                                 </connections>
                             </button>
                             <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sg1-3l-5lD" userLabel="Session Info View">
-                                <rect key="frame" x="288.5" y="94" width="191" height="38"/>
+                                <rect key="frame" x="92" y="88" width="191" height="38"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="sil-Zm-enc">
                                     <rect key="frame" x="0.0" y="0.0" width="191" height="38"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -745,7 +776,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bg8-MN-qQo" customClass="MessageLabel" customModule="ios1819capgemini" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bg8-MN-qQo" customClass="MessageLabel" customModule="ScanningApp" customModuleProvider="target">
                                                         <rect key="frame" x="8" y="8" width="0.0" height="0.0"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -775,7 +806,7 @@
                                 </userDefinedRuntimeAttributes>
                             </visualEffectView>
                             <navigationBar opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="atN-ui-3yi">
-                                <rect key="frame" x="0.0" y="20" width="768" height="50"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <items>
                                     <navigationItem title="Title" id="u3P-Gm-9Y1"/>
@@ -848,43 +879,6 @@
                         <segue destination="dcg-B5-UM8" kind="show" identifier="Start screen" id="Ifl-TP-VUm"/>
                     </connections>
                 </viewController>
-                <pinchGestureRecognizer id="DAc-qJ-2NR" customClass="ThresholdPinchGestureRecognizer" customModule="ios1819capgemini" customModuleProvider="target">
-                    <connections>
-                        <action selector="didPinch:" destination="dsx-8Z-4fu" id="5Ud-Qk-Wq9"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="nxG-PP-PZb"/>
-                    </connections>
-                </pinchGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.40000000000000002" id="vCo-n8-lDo">
-                    <connections>
-                        <action selector="didLongPress:" destination="dsx-8Z-4fu" id="HoB-o0-Ap2"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="NCA-u4-dKp"/>
-                    </connections>
-                </pongPressGestureRecognizer>
-                <panGestureRecognizer minimumNumberOfTouches="2" maximumNumberOfTouches="2" id="fU6-ab-02Z" customClass="ThresholdPanGestureRecognizer" customModule="ios1819capgemini" customModuleProvider="target">
-                    <connections>
-                        <action selector="didTwoFingerPan:" destination="dsx-8Z-4fu" id="Yzg-sX-RBv"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Fv2-5T-ltc"/>
-                    </connections>
-                </panGestureRecognizer>
-                <tapGestureRecognizer id="Jao-yv-cSS">
-                    <connections>
-                        <action selector="didTap:" destination="dsx-8Z-4fu" id="OcQ-li-yhw"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Rtk-dT-YcL"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <rotationGestureRecognizer id="Va0-ow-ccV" customClass="ThresholdRotationGestureRecognizer" customModule="ios1819capgemini" customModuleProvider="target">
-                    <connections>
-                        <action selector="didRotate:" destination="dsx-8Z-4fu" id="hZG-Ab-xLw"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="2Da-PI-vWh"/>
-                    </connections>
-                </rotationGestureRecognizer>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6cm-wG-cUD" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" maximumNumberOfTouches="1" id="aJg-Sb-qZg">
-                    <connections>
-                        <action selector="didOneFingerPan:" destination="dsx-8Z-4fu" id="8W0-d5-Lkg"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="jT2-9x-6aJ"/>
-                    </connections>
-                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1492" y="1212"/>
         </scene>
