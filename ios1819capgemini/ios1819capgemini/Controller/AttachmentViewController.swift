@@ -78,7 +78,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .bottom, barMetrics: .default)
     }
     
-    // MARK: -IBActions
+    // MARK: - IBActions
     @IBAction private func takeVideo(_ sender: Any) {
         imagePicker =  UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate

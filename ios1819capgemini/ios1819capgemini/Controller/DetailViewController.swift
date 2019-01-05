@@ -30,7 +30,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
                             coordinate: Coordinate (vector: SCNVector3(0, 0, 0)))
     var attachments: [Attachment] = []
     var imagePicker: UIImagePickerController!
-
+    
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
     @IBOutlet private weak var generatedDateLabel: UILabel!
@@ -43,6 +43,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     // MARK: IBActions
     @IBAction private func backButtonPressed(_ sender: Any) {
+        for node in nodes {
+            node.opacity = 0.9
+        }
          self.dismiss(animated: true, completion: nil)
     }
     
@@ -168,12 +171,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        for node in nodes where node.name! != String(incident.identifier) {
+            node.opacity = 0.1
+        }
         attachments = computeAttachments()
-
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

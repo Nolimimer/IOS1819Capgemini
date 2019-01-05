@@ -34,6 +34,8 @@ public class Incident: Codable {
         status = .open
         self.coordinate = coordinate
     }
+    
+
     // MARK: Instance Methods
     func edit(status: Status, description: String, modifiedDate: Date) {
         self.status = status

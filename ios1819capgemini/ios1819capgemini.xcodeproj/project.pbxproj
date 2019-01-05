@@ -57,6 +57,13 @@
 		BA09652321CEEA0800174922 /* ARViewControllerStatusbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */; };
 		BA6972E621D854E200F919EF /* ARViewControllerScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */; };
 		BA6972E821D8557D00F919EF /* ARViewControllerNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */; };
+		BA09652321CEEA0800174922 /* ARViewControllerStatusbarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652221CEEA0800174922 /* ARViewControllerStatusbarExtension.swift */; };
+		BA2798CA21E0343C007F7C83 /* ARViewControllerDamageDetectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2798C921E0343C007F7C83 /* ARViewControllerDamageDetectionExtension.swift */; };
+		BA6972E621D854E200F919EF /* ARViewControllerScreenshotExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E521D854E200F919EF /* ARViewControllerScreenshotExtension.swift */; };
+		BA6972E821D8557D00F919EF /* ARViewControllerNavigationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E721D8557D00F919EF /* ARViewControllerNavigationExtension.swift */; };
+		BA6972EA21DBC60B00F919EF /* ARViewControllerNavigationCompassExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E921DBC60B00F919EF /* ARViewControllerNavigationCompassExtension.swift */; };
+		BA6972EC21DC344A00F919EF /* MultipeerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972EB21DC344900F919EF /* MultipeerSession.swift */; };
+		BA6972EE21DC349300F919EF /* ARViewControllerMultiUserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972ED21DC349300F919EF /* ARViewControllerMultiUserExtension.swift */; };
 		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
@@ -116,6 +123,13 @@
 		BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusbar.swift; sourceTree = "<group>"; };
 		BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerScreenshot.swift; sourceTree = "<group>"; };
 		BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNavigation.swift; sourceTree = "<group>"; };
+		BA09652221CEEA0800174922 /* ARViewControllerStatusbarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusbarExtension.swift; sourceTree = "<group>"; };
+		BA2798C921E0343C007F7C83 /* ARViewControllerDamageDetectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerDamageDetectionExtension.swift; sourceTree = "<group>"; };
+		BA6972E521D854E200F919EF /* ARViewControllerScreenshotExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerScreenshotExtension.swift; sourceTree = "<group>"; };
+		BA6972E721D8557D00F919EF /* ARViewControllerNavigationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNavigationExtension.swift; sourceTree = "<group>"; };
+		BA6972E921DBC60B00F919EF /* ARViewControllerNavigationCompassExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNavigationCompassExtension.swift; sourceTree = "<group>"; };
+		BA6972EB21DC344900F919EF /* MultipeerSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerSession.swift; sourceTree = "<group>"; };
+		BA6972ED21DC349300F919EF /* ARViewControllerMultiUserExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerMultiUserExtension.swift; sourceTree = "<group>"; };
 		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -140,6 +154,12 @@
 				BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */,
 				BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */,
 				BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */,
+				BA2798C921E0343C007F7C83 /* ARViewControllerDamageDetectionExtension.swift */,
+				BA6972ED21DC349300F919EF /* ARViewControllerMultiUserExtension.swift */,
+				BA6972E521D854E200F919EF /* ARViewControllerScreenshotExtension.swift */,
+				BA6972E721D8557D00F919EF /* ARViewControllerNavigationExtension.swift */,
+				BA6972E921DBC60B00F919EF /* ARViewControllerNavigationCompassExtension.swift */,
+				BA09652221CEEA0800174922 /* ARViewControllerStatusbarExtension.swift */,
 				0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */,
 				0D9DBF3121A33D39004D445B /* DetailViewController.swift */,
 				90D3451221B3FF29009EF79E /* AttachmentViewController.swift */,
@@ -266,6 +286,7 @@
 				90CB845621AD9D4100CA1C09 /* Scratch Detection */,
 				9082AF6321A5618100CA8E80 /* Model */,
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
+				BA6972EB21DC344900F919EF /* MultipeerSession.swift */,
 				0D5F4A7621A3121F00D443CC /* CUU.plist */,
 				A66447F32192121300B2D32B /* Info.plist */,
 				0D5F4A7921A317B500D443CC /* View */,
@@ -434,17 +455,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA2798CA21E0343C007F7C83 /* ARViewControllerDamageDetectionExtension.swift in Sources */,
 				90C7377E21B56C15008AD568 /* VideoCollectionViewCell.swift in Sources */,
 				90CB846E21ADAB2800CA1C09 /* Anchors6.swift in Sources */,
 				90CB847621ADAB8B00CA1C09 /* Anchors10.swift in Sources */,
 				9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */,
 				5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */,
 				90CB846821ADAB1100CA1C09 /* Anchors3.swift in Sources */,
+				BA6972EC21DC344A00F919EF /* MultipeerSession.swift in Sources */,
 				90CB847421ADAB3F00CA1C09 /* Anchors9.swift in Sources */,
 				90CB845E21AD9E1B00CA1C09 /* Anchors.swift in Sources */,
 				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
 				90CB846621ADAB0500CA1C09 /* Anchors2.swift in Sources */,
 				BA6972E821D8557D00F919EF /* ARViewControllerNavigation.swift in Sources */,
+				BA6972E821D8557D00F919EF /* ARViewControllerNavigationExtension.swift in Sources */,
 				908466F021B6C85B00A3C80C /* PhotoViewController.swift in Sources */,
 				0DF3077E21B7E070007D57D6 /* AttachmentView.swift in Sources */,
 				90903D1F21B68DE400DA4C7E /* CollectionViewCell.swift in Sources */,
@@ -454,8 +478,10 @@
 				90CB846A21ADAB1A00CA1C09 /* Anchors4.swift in Sources */,
 				90CB845B21AD9E1B00CA1C09 /* BoundingBox.swift in Sources */,
 				0DF3077421B7DBE0007D57D6 /* LineView.swift in Sources */,
+				BA6972EE21DC349300F919EF /* ARViewControllerMultiUserExtension.swift in Sources */,
 				9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */,
 				BA09652321CEEA0800174922 /* ARViewControllerStatusbar.swift in Sources */,
+				BA09652321CEEA0800174922 /* ARViewControllerStatusbarExtension.swift in Sources */,
 				90CB845D21AD9E1B00CA1C09 /* SSDPostprocessor.swift in Sources */,
 				90CB847221ADAB3700CA1C09 /* Anchors8.swift in Sources */,
 				90C7378021B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift in Sources */,
@@ -467,6 +493,7 @@
 				90D3453321B44C34009EF79E /* Video.swift in Sources */,
 				90C7377821B5368D008AD568 /* stickerTest.mlmodel in Sources */,
 				BA6972E621D854E200F919EF /* ARViewControllerScreenshot.swift in Sources */,
+				BA6972E621D854E200F919EF /* ARViewControllerScreenshotExtension.swift in Sources */,
 				9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */,
 				908466F221B6D11800A3C80C /* AttachmentViewCell.swift in Sources */,
 				90CB846C21ADAB2100CA1C09 /* Anchors5.swift in Sources */,
@@ -474,6 +501,7 @@
 				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,
 				9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */,
 				9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */,
+				BA6972EA21DBC60B00F919EF /* ARViewControllerNavigationCompassExtension.swift in Sources */,
 				90D3451321B3FF29009EF79E /* AttachmentViewController.swift in Sources */,
 				90CB847021ADAB3100CA1C09 /* Anchors7.swift in Sources */,
 				BA09652121CEE59F00174922 /* StatusViewController.swift in Sources */,

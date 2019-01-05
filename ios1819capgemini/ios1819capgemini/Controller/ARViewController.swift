@@ -11,12 +11,23 @@ import UIKit
 import ARKit
 import SceneKit
 import Vision
+import MultipeerConnectivity
 
 //swiftlint:disable all
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
 // MARK: - ARViewController
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
+    
+    // MARK: IBOutlets
+    //outlets bitte nicht private
+    @IBOutlet weak var arrowLabel: UILabel!
+    @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet weak var rightNavigation: UILabel!
+    @IBOutlet weak var upNavigation: UILabel!
+    @IBOutlet weak var leftNavigation: UILabel!
+    @IBOutlet weak var downNavigation: UILabel!
+    
     
     // MARK: Stored Instance Properties
     var detectedObjectNode: SCNNode?
@@ -27,15 +38,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     let numBoxes = 100
     var boundingBoxes: [BoundingBox] = []
     var model: VNCoreMLModel?
-    private var automaticallyDetectedIncidents = [CGPoint]()
-    private var descriptionNode = SKLabelNode(text: "")
-    private var anchorLabels = [UUID: String]()
-    private var objectAnchor: ARObjectAnchor?
-    private var node: SCNNode?
+    var multipeerSession: MultipeerSession!
+    var automaticallyDetectedIncidents = [CGPoint]()
+    var descriptionNode = SKLabelNode(text: "")
+    var anchorLabels = [UUID: String]()
+    var objectAnchor: ARObjectAnchor?
+    var mapProvider: MCPeerID?
+    
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
-
+    
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
@@ -49,14 +62,65 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             .fadeOpacity(to: 1, duration: 0.25),
             ])
     }
-    // MARK: IBOutlets
-    //sceneview bitte nicht private
-    @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet weak var rightNavigation: UILabel!
-    @IBOutlet weak var upNavigation: UILabel!
-    @IBOutlet weak var leftNavigation: UILabel!
-    @IBOutlet weak var downNavigation: UILabel!
+    
+    // MARK: IBActions
+    @IBAction private func shareButtonPressed(_ sender: Any) {
+        sceneView.session.getCurrentWorldMap { worldMap, error in
+            guard let map = worldMap
+                else { print("Error: \(error!.localizedDescription)"); return }
+            guard let data = try? NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
+                else { fatalError("can't encode map") }
+            self.multipeerSession.sendToAllPeers(data)
+        }
+        guard let anchor = objectAnchor, let node = detectedObjectNode else {
+            print("anchor and object node have not been detected yet")
+            return
+        }
+        guard let anchorData = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true) else {
+            return
+        }
+        self.multipeerSession.sendToAllPeers(anchorData)
+        statusViewController.showMessage("anchor data sent", autoHide: true)
+        guard let nodeData = try? NSKeyedArchiver.archivedData(withRootObject: node, requiringSecureCoding: true) else {
+            return
+        }
+        self.multipeerSession.sendToAllPeers(nodeData)
+        statusViewController.showMessage("node data sent", autoHide: true)
+        do {
+            let incidentsData = try JSONEncoder().encode(DataHandler.incidents)
+            self.multipeerSession.sendToAllPeers(incidentsData)
+        } catch {
+            print("DataHandler.incidents could not have been encoded")
+        }
+    }
+    
+    @IBAction private func resetButtonPressed(_ sender: Any) {
+        DataHandler.incidents = []
+        DataHandler.saveToJSON()
+        self.scene.rootNode.childNodes.forEach { node in
+            guard let name = node.name else {
+                return
+            }
+            self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+        }
+        nodes = []
+        automaticallyDetectedIncidents = []
+        self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
+        let configuration = ARWorldTrackingConfiguration()
+        if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
+            configuration.detectionObjects = detectionObjects
+            sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        }
+        do {
+            let data = try JSONEncoder().encode(DataHandler.incidents)
+            self.multipeerSession.sendToAllPeers(data)
+        } catch _ {
+            print("encoding DataHandler.incidents failed")
+        }
+    }
+    
     // MARK: Overridden/Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         sceneView.delegate = self
@@ -69,12 +133,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenHeight = Double(view.frame.height)
         sceneView.debugOptions = [.showFeaturePoints]
         model = try? VNCoreMLModel(for: stickerTest().model)
-        
         setupBoxes()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
         configureLighting()
+        multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
     }
+    
         override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         screenWidth = Double(size.width)
@@ -98,7 +163,19 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        setNavigationArrows(for: frame.camera.trackingState)
+        updateStatus(for: frame, trackingState: frame.camera.trackingState)
+
+//      uncomment for ar navigation compass
+//        if let incident = closestOpenIncident() {
+//            let angle = angleIncidentPOV(incident: incident)
+//            if let angle = angle {
+//                setArrow(angle: angle, incident: incident, for: frame.camera.trackingState)
+//            }
+//        }
+        
+//      uncomment for ar navigation arrow
+//      setNavigationArrows(for: frame.camera.trackingState)
+        updateInfoPlane()
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()
@@ -109,15 +186,25 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let node = SCNNode()
         
         if let objectAnchor = anchor as? ARObjectAnchor {
-            
             let notification = UINotificationFeedbackGenerator()
             
             DispatchQueue.main.async {
                 notification.notificationOccurred(.success)
             }
-            self.node = node
+
             self.objectAnchor = objectAnchor
             detectedObjectNode = node
+            guard let nodeData = try? NSKeyedArchiver.archivedData(withRootObject: node, requiringSecureCoding: true) else {
+                fatalError("Can't encode detected node")
+            }
+            self.multipeerSession.sendToAllPeers(nodeData)
+            //status view controller used for debug purposes
+            statusViewController.showMessage("node data sent", autoHide: true)
+            guard let anchorData = try? NSKeyedArchiver.archivedData(withRootObject: objectAnchor, requiringSecureCoding: true) else {
+                fatalError("Can't encode object anchor")
+            }
+            self.multipeerSession.sendToAllPeers(anchorData)
+            statusViewController.showMessage("anchor data sent", autoHide: true)
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
@@ -125,176 +212,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         return node
     }
-    
-    // Create shape layers for the bounding boxes.
-    func setupBoxes() {
-        for _ in 0..<numBoxes {
-            let box = BoundingBox()
-            box.addToLayer(sceneView.layer)
-            self.boundingBoxes.append(box)
-        }
-    }
-    /// - Tag: ClassificationRequest
-    private lazy var classificationRequest: VNCoreMLRequest = {
-        
-        //swiftlint:disable force_wrapping
-        let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
-            //self?.processClassifications(for: request, error: error)
-            guard let predictions = self?.processClassifications(for: request, error: error) else {
-                return
-            }
-            DispatchQueue.main.async {
-                self?.drawBoxes(predictions: predictions)
-            }
-        })
-        //swiftlint:enable force_wrapping
-        // Crop input images to square area at center, matching the way the ML model was trained.
-        request.imageCropAndScaleOption = .centerCrop
-        // Use CPU for Vision processing to ensure that there are adequate GPU resources for rendering.
-        request.usesCPUOnly = true
-        
-        return request
-    }()
-    // Run the Vision+ML classifier on the current image buffer.
-    /// - Tag: ClassifyCurrentImage
-    private func classifyCurrentImage() {
-        // Most computer vision tasks are not rotation agnostic so it is important to pass in the orientation of the image with respect to device.
-        let orientation = CGImagePropertyOrientation(UIDevice.current.orientation)
-        
-        guard let cvPixelBuffer = currentBuffer else {
-            return
-        }
-        let requestHandler = VNImageRequestHandler(cvPixelBuffer: cvPixelBuffer, orientation: orientation)
-        visionQueue.async {
-            do {
-                // Release the pixel buffer when done, allowing the next buffer to be processed.
-                defer { self.currentBuffer = nil }
-                try requestHandler.perform([self.classificationRequest])
-            } catch {
-                print("Error: Vision request failed with error \"\(error)\"")
-            }
-        }
-    }
-    // Handle completion of the Vision request and choose results to display.
-    /// - Tag: ProcessClassifications
-    private func processClassifications(for request: VNRequest, error: Error?) -> [Prediction]? {
-        
-        guard let results = request.results as? [VNCoreMLFeatureValueObservation], results.count == 2 else {
-            return nil
-        }
-        
-        guard let boxPredictions = results[1].featureValue.multiArrayValue,
-            let classPredictions = results[0].featureValue.multiArrayValue else {
-                return nil
-        }
-        
-        let predictions = self.ssdPostProcessor.postprocess(boxPredictions: boxPredictions, classPredictions: classPredictions)
-        return predictions
-    }
-    
-    // Draw Boxes which indicate if a sticker has been detected
-    func drawBoxes(predictions: [Prediction]) {
-        
-        for (index, prediction) in predictions.enumerated() {
-            if let classNames = self.ssdPostProcessor.classNames {
-                //print("Class: \(classNames[prediction.detectedClass])")
-                
-                let textColor: UIColor
-                let textLabel = String(format: "%.2f - %@", self.sigmoid(prediction.score),
-                                       classNames[prediction.detectedClass])
-                
-                textColor = UIColor.black
-                guard let imgWidth = self.screenWidth,
-                    let imgHeight = self.screenHeight else {
-                        return
-                }
-                
-                let rect = prediction.finalPrediction.toCGRect(imgWidth: imgWidth,
-                                                               imgHeight: imgWidth,
-                                                               xOffset: 0,
-                                                               yOffset: (imgHeight - imgWidth) / 2)
-                //uncomment if boxes should only appear after object has been detected
-//                if detectedObjectNode != nil {
-                    self.boundingBoxes[index].show(frame: rect,
-                                                   label: textLabel,
-                                                   color: UIColor.green,
-                                                   textColor: textColor)
-                    let position = CGPoint(x: rect.midX,
-                                           y: rect.midY)
-                    let hitTestResult = sceneView.hitTest(position, types: .featurePoint)
-                    guard let hitTest = hitTestResult.first else {
-                        return
-                    }
-                    if sigmoid(prediction.score) > 0.80 && calculateNodesInRadius(coordinate: position, radius: 40) {
-                        let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
-                                             y: (hitTest.worldTransform.columns.3.y),
-                                             z: (hitTest.worldTransform.columns.3.z))
-                        let length = rect.maxY - rect.minY
-                        let width = rect.maxX - rect.minX
-                        let formatter = NumberFormatter()
-                        formatter.maximumFractionDigits = 2
-                        let lengthCM = (length * 2.54) / 96
-                        let widthCM = (width * 2.54) / 96
-                        guard let formattedLength = formatter.string(from: NSNumber(value: Float(lengthCM))) else {
-                            return
-                        }
-                        guard let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM))) else {
-                            return
-                        }
-                        automaticallyDetectedIncidents.append(position)
-                        let sphere = SCNSphere(radius: 0.015)
-                        let materialSphere = SCNMaterial()
-                        materialSphere.diffuse.contents = UIColor(red: 0.0,
-                                                                  green: 0.0,
-                                                                  blue: 1.0,
-                                                                  alpha: CGFloat(Float(sigmoid(prediction.score))))
-                        sphere.materials = [materialSphere]
-                        let sphereNode = SCNNode(geometry: sphere)
-                        sphereNode.position = tmp
-                        let coordinates = sceneView.scene.rootNode.convertPosition(
-                            SCNVector3(hitTest.worldTransform.columns.3.x,
-                                        hitTest.worldTransform.columns.3.y,
-                                        hitTest.worldTransform.columns.3.z),
-                            to: self.detectedObjectNode)
-                        let incident = Incident (type: .scratch,
-                                                 description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
-                                                 coordinate: Coordinate(vector: coordinates))
-                        DataHandler.incidents.append(incident)
-                        sphereNode.runAction(imageHighlightAction)
-                        sphereNode.name = "\(incident.identifier)"
-                        self.scene.rootNode.addChildNode(sphereNode)
-                        nodes.append(sphereNode)
-                    }
-//                }
-                //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
-            }
-        }
-        for index in predictions.count..<self.numBoxes {
-            self.boundingBoxes[index].hide()
-        }
-    }
-    /*
-     returns true if there is a node in a certain radius from the coordinate
-    */
-    func calculateNodesInRadius(coordinate: CGPoint , radius: CGFloat) -> Bool {
-        for incident in automaticallyDetectedIncidents {
-            if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
-                return false
-            }
-        }
-        return true
-    }
-    
-    func sigmoid(_ val: Double) -> Double {
-        return 1.0 / (1.0 + exp(-val))
-    }
-    
-    private func configureLighting() {
-        sceneView.autoenablesDefaultLighting = true
-        sceneView.automaticallyUpdatesLighting = true
-    }
+
     //adds a 3D pin to the AR View
-    private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
+    //nicht private
+    func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
         materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
@@ -304,11 +225,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sphereNode.position = vectorCoordinate
         self.scene.rootNode.addChildNode(sphereNode)
         nodes.append(sphereNode)
+        updateInfoPlane()
     }
     
     //adds the info plane which displays the detected object and the number of incidents
-    private func addInfoPlane (carPart: String) {
-        
+    //nicht private
+    func addInfoPlane (carPart: String) {
         guard let objectAnchor = self.objectAnchor else {
             return
         }
@@ -326,6 +248,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                        absoluteObjectPosition.y + objectAnchor.referenceObject.extent.y,
                                        absoluteObjectPosition.z)
         planeNode.position = planePosition
+        planeNode.name = "info-plane"
         let labelNode = SKLabelNode(text: carPart)
         labelNode.fontSize = 40
         labelNode.color = UIColor.black
@@ -334,18 +257,23 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         descriptionNode = SKLabelNode(text: "Incidents: \(DataHandler.incidents.count)")
         descriptionNode.fontSize = 30
-        if DataHandler.incidents.count == 0 {
-            descriptionNode.fontColor = UIColor.green
-        } else {
-            descriptionNode.fontColor = UIColor.red
-        }
+        descriptionNode.fontColor = UIColor.green
         descriptionNode.fontName = "Helvetica-Bold"
         descriptionNode.position = CGPoint(x: 120, y: 50)
         spriteKitScene.addChild(descriptionNode)
         spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
-
         scene.rootNode.addChildNode(planeNode)
+    }
+    
+    private func updateInfoPlane() {
+        descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
+        let openIncidentsCount = DataHandler.incidents.filter { $0.status == .open }
+        if openIncidentsCount.isEmpty {
+            descriptionNode.fontColor = UIColor.green
+        } else {
+            descriptionNode.fontColor = UIColor.red
+        }
     }
     
     /*
@@ -354,7 +282,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     If a new pin is created a screenshot of the location is taken before/after placing the pin.
     */
     @objc func tapped(recognizer: UIGestureRecognizer) {
-        
         if recognizer.state == .ended {
             let location: CGPoint = recognizer.location(in: sceneView)
             let hits = self.sceneView.hitTest(location, options: nil)
@@ -363,12 +290,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 guard (tappedNode?.name) != nil else {
                     let touchPosition = recognizer.location(in: sceneView)
                     let hitTestResult = sceneView.hitTest(touchPosition, types: .featurePoint)
-                    
                     if !hitTestResult.isEmpty {
                         guard let hitResult = hitTestResult.first else {
                             return
                         }
-                        //if detectedObjectNode != nil {
+                        if detectedObjectNode != nil {
                             let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
                                 SCNVector3(hitResult.worldTransform.columns.3.x,
                                            hitResult.worldTransform.columns.3.y,
@@ -389,8 +315,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             let imageWithPin = sceneView.snapshot()
                             saveImage(image: imageWithPin, incident: incident)
                             DataHandler.incidents.append(incident)
-                            descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-                        //}
+                        do {
+                            let data = try JSONEncoder().encode(incident)
+                            self.multipeerSession.sendToAllPeers(data)
+                            statusViewController.showMessage("incident has been sent", autoHide: true)
+                        } catch _ {
+                            print("Encoding DataHandler.incidents failed")
+                        }
+                        }
                     }
                     return
                 }
@@ -398,6 +330,50 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
+    
+    //MARK: ML Methods
+    
+    /// - Tag: ClassificationRequest
+    lazy var classificationRequest: VNCoreMLRequest = {
+        
+        let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
+            //self?.processClassifications(for: request, error: error)
+            guard let predictions = self?.processClassifications(for: request, error: error) else {
+                return
+            }
+            DispatchQueue.main.async {
+                self?.drawBoxes(predictions: predictions)
+            }
+        })
+        // Crop input images to square area at center, matching the way the ML model was trained.
+        request.imageCropAndScaleOption = .centerCrop
+        // Use CPU for Vision processing to ensure that there are adequate GPU resources for rendering.
+        request.usesCPUOnly = true
+        
+        return request
+    }()
+    
+    // Run the Vision+ML classifier on the current image buffer.
+    /// - Tag: ClassifyCurrentImage
+    private func classifyCurrentImage() {
+        // Most computer vision tasks are not rotation agnostic so it is important to pass in the orientation of the image with respect to device.
+        let orientation = CGImagePropertyOrientation(UIDevice.current.orientation)
+        
+        guard let cvPixelBuffer = currentBuffer else {
+            return
+        }
+        let requestHandler = VNImageRequestHandler(cvPixelBuffer: cvPixelBuffer, orientation: orientation)
+        visionQueue.async {
+            do {
+                // Release the pixel buffer when done, allowing the next buffer to be processed.
+                defer { self.currentBuffer = nil }
+                try requestHandler.perform([self.classificationRequest])
+            } catch {
+                print("Error: Vision request failed with error \"\(error)\"")
+            }
+        }
+    }
+    
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
