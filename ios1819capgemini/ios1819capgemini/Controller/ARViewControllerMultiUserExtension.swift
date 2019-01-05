@@ -40,6 +40,10 @@ extension ARViewController {
                 do {
                     let incidents = try JSONDecoder().decode([Incident].self, from: data)
                     statusViewController.showMessage("incidents array received", autoHide: true)
+                    if incidents.isEmpty {
+                        nodes = []
+                        automaticallyDetectedIncidents = []
+                    }
                     DataHandler.incidents = incidents
                     for incident in DataHandler.incidents {
                         add3DPin(vectorCoordinate: incident.getCoordinateToVector(),

@@ -206,23 +206,23 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.objectAnchor = objectAnchor
             detectedObjectNode = node
             guard let nodeData = try? NSKeyedArchiver.archivedData(withRootObject: node, requiringSecureCoding: true) else {
-                fatalError("Can't encode detected node")
                 let notification = UINotificationFeedbackGenerator()
                 
                 DispatchQueue.main.async {
                     notification.notificationOccurred(.error)
                 }
+                fatalError("Can't encode detected node")
             }
             self.multipeerSession.sendToAllPeers(nodeData)
             //status view controller used for debug purposes
             statusViewController.showMessage("node data sent", autoHide: true)
             guard let anchorData = try? NSKeyedArchiver.archivedData(withRootObject: objectAnchor, requiringSecureCoding: true) else {
-                fatalError("Can't encode object anchor")
                 let notification = UINotificationFeedbackGenerator()
                 
                 DispatchQueue.main.async {
                     notification.notificationOccurred(.error)
                 }
+                fatalError("Can't encode object anchor")
             }
             self.multipeerSession.sendToAllPeers(anchorData)
             statusViewController.showMessage("anchor data sent", autoHide: true)
