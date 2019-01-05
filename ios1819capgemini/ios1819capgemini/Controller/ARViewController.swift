@@ -110,11 +110,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
             configuration.detectionObjects = detectionObjects
             sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.success)
+            }
+
         }
         do {
             let data = try JSONEncoder().encode(DataHandler.incidents)
             self.multipeerSession.sendToAllPeers(data)
         } catch _ {
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.error)
+            }
             print("encoding DataHandler.incidents failed")
         }
     }
@@ -196,12 +207,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             detectedObjectNode = node
             guard let nodeData = try? NSKeyedArchiver.archivedData(withRootObject: node, requiringSecureCoding: true) else {
                 fatalError("Can't encode detected node")
+                let notification = UINotificationFeedbackGenerator()
+                
+                DispatchQueue.main.async {
+                    notification.notificationOccurred(.error)
+                }
             }
             self.multipeerSession.sendToAllPeers(nodeData)
             //status view controller used for debug purposes
             statusViewController.showMessage("node data sent", autoHide: true)
             guard let anchorData = try? NSKeyedArchiver.archivedData(withRootObject: objectAnchor, requiringSecureCoding: true) else {
                 fatalError("Can't encode object anchor")
+                let notification = UINotificationFeedbackGenerator()
+                
+                DispatchQueue.main.async {
+                    notification.notificationOccurred(.error)
+                }
             }
             self.multipeerSession.sendToAllPeers(anchorData)
             statusViewController.showMessage("anchor data sent", autoHide: true)
@@ -321,6 +342,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             statusViewController.showMessage("incident has been sent", autoHide: true)
                         } catch _ {
                             print("Encoding DataHandler.incidents failed")
+                            let notification = UINotificationFeedbackGenerator()
+                            
+                            DispatchQueue.main.async {
+                                notification.notificationOccurred(.error)
+                            }
                         }
                         }
                     }

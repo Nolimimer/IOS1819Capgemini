@@ -59,6 +59,11 @@ extension ARViewController {
                 }
             }
         } catch _ {
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.error)
+            }
             print("can't decode data received from \(peer)")
         }
     }

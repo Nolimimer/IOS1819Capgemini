@@ -28,7 +28,7 @@ extension ARViewController {
         switch trackingState {
         case .normal where frame.anchors.isEmpty && multipeerSession.connectedPeers.isEmpty:
             // No planes detected; provide instructions for this app's AR interactions.
-            message = "Move around to map the environment, or wait to join a shared session."
+            message = "Detect a car part or wait to join a shared session."
             
         case .normal where !multipeerSession.connectedPeers.isEmpty && mapProvider == nil:
             let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
