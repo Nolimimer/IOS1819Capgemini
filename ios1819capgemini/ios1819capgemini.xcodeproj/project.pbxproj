@@ -53,6 +53,10 @@
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
 		A66447EF2192121300B2D32B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A66447EE2192121300B2D32B /* Assets.xcassets */; };
 		A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447F02192121300B2D32B /* LaunchScreen.storyboard */; };
+		BA09652121CEE59F00174922 /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652021CEE59F00174922 /* StatusViewController.swift */; };
+		BA09652321CEEA0800174922 /* ARViewControllerStatusbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */; };
+		BA6972E621D854E200F919EF /* ARViewControllerScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */; };
+		BA6972E821D8557D00F919EF /* ARViewControllerNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */; };
 		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
@@ -108,7 +112,10 @@
 		A66447EE2192121300B2D32B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A66447F12192121300B2D32B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A66447F32192121300B2D32B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BE5BAF7A21A16A0700CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA09652021CEE59F00174922 /* StatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewController.swift; sourceTree = "<group>"; };
+		BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusbar.swift; sourceTree = "<group>"; };
+		BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerScreenshot.swift; sourceTree = "<group>"; };
+		BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNavigation.swift; sourceTree = "<group>"; };
 		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -130,6 +137,9 @@
 			isa = PBXGroup;
 			children = (
 				A66447E92192121300B2D32B /* ARViewController.swift */,
+				BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */,
+				BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */,
+				BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */,
 				0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */,
 				0D9DBF3121A33D39004D445B /* DetailViewController.swift */,
 				90D3451221B3FF29009EF79E /* AttachmentViewController.swift */,
@@ -137,6 +147,7 @@
 				90C7377F21B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift */,
 				908466EF21B6C85B00A3C80C /* PhotoViewController.swift */,
 				908466F121B6D11800A3C80C /* AttachmentViewCell.swift */,
+				BA09652021CEE59F00174922 /* StatusViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -232,7 +243,6 @@
 		A66447DB2192121200B2D32B = {
 			isa = PBXGroup;
 			children = (
-				BE5BAF7A21A16A0700CEBB3C /* CUU.framework */,
 				A66447E62192121300B2D32B /* ios1819capgemini */,
 				A66447E52192121300B2D32B /* Products */,
 				D8D30B6BEE4E7F64DA26A3F4 /* Pods */,
@@ -434,6 +444,7 @@
 				90CB845E21AD9E1B00CA1C09 /* Anchors.swift in Sources */,
 				A66447EA2192121300B2D32B /* ARViewController.swift in Sources */,
 				90CB846621ADAB0500CA1C09 /* Anchors2.swift in Sources */,
+				BA6972E821D8557D00F919EF /* ARViewControllerNavigation.swift in Sources */,
 				908466F021B6C85B00A3C80C /* PhotoViewController.swift in Sources */,
 				0DF3077E21B7E070007D57D6 /* AttachmentView.swift in Sources */,
 				90903D1F21B68DE400DA4C7E /* CollectionViewCell.swift in Sources */,
@@ -444,6 +455,7 @@
 				90CB845B21AD9E1B00CA1C09 /* BoundingBox.swift in Sources */,
 				0DF3077421B7DBE0007D57D6 /* LineView.swift in Sources */,
 				9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */,
+				BA09652321CEEA0800174922 /* ARViewControllerStatusbar.swift in Sources */,
 				90CB845D21AD9E1B00CA1C09 /* SSDPostprocessor.swift in Sources */,
 				90CB847221ADAB3700CA1C09 /* Anchors8.swift in Sources */,
 				90C7378021B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift in Sources */,
@@ -454,6 +466,7 @@
 				90CB846221ADA08E00CA1C09 /* Utilities.swift in Sources */,
 				90D3453321B44C34009EF79E /* Video.swift in Sources */,
 				90C7377821B5368D008AD568 /* stickerTest.mlmodel in Sources */,
+				BA6972E621D854E200F919EF /* ARViewControllerScreenshot.swift in Sources */,
 				9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */,
 				908466F221B6D11800A3C80C /* AttachmentViewCell.swift in Sources */,
 				90CB846C21ADAB2100CA1C09 /* Anchors5.swift in Sources */,
@@ -463,6 +476,7 @@
 				9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */,
 				90D3451321B3FF29009EF79E /* AttachmentViewController.swift in Sources */,
 				90CB847021ADAB3100CA1C09 /* Anchors7.swift in Sources */,
+				BA09652121CEE59F00174922 /* StatusViewController.swift in Sources */,
 				0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
