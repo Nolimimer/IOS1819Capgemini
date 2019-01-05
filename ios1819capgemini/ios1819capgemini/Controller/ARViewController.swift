@@ -16,6 +16,7 @@ import UICircularProgressRing
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
 var nodesIdentifier = [String: SCNNode]()
+var creatingNodePossible = true
 // MARK: - ARViewController
 // swiftlint:disable all
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
@@ -47,7 +48,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
     }
     @IBOutlet private weak var rightNavigation: UILabel!
-    
     @IBOutlet private weak var upNavigation: UILabel!
     @IBOutlet private weak var leftNavigation: UILabel!
     @IBOutlet private weak var distanceNavigation: UILabel!
@@ -80,6 +80,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
      If a new pin is created a screenshot of the location is taken before/after placing the pin.
      */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !creatingNodePossible {
+            return
+        }
         let location = touches.first!.location(in: sceneView)
         let hitOptions = self.sceneView.hitTest(location, options: nil)
         if let tappedNode = hitOptions.first?.node, let _ = tappedNode.name {
@@ -139,7 +142,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         let config = ARWorldTrackingConfiguration()
         if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
             config.detectionObjects = detectionObjects
