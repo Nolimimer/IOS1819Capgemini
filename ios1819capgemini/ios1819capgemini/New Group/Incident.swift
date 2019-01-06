@@ -9,7 +9,6 @@
 // MARK: Imports
 import Foundation
 import SceneKit
-
 //swiftlint:disable all
 // MARK: - Incident
 public class Incident: Codable {

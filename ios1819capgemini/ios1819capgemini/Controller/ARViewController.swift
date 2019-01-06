@@ -44,6 +44,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var anchorLabels = [UUID: String]()
     var objectAnchor: ARObjectAnchor?
     var mapProvider: MCPeerID?
+    static var incidentEdited = false
     
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
@@ -174,7 +175,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        updateStatus(for: frame, trackingState: frame.camera.trackingState)
 
 //      uncomment for ar navigation compass
 //        if let incident = closestOpenIncident() {
@@ -186,6 +186,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
 //      uncomment for ar navigation arrow
 //      setNavigationArrows(for: frame.camera.trackingState)
+        updateStatus(for: frame, trackingState: frame.camera.trackingState)
+        updateIncidents()
         updateInfoPlane()
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage

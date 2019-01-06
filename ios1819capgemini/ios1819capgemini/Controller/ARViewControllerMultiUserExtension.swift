@@ -49,6 +49,7 @@ extension ARViewController {
                         add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
                                  identifier: String(incident.identifier))
                     }
+                    updatePinColour(incidents: DataHandler.incidents)
                 } catch _ {
                     print("Decoding incident array failed")
                 }
@@ -69,6 +70,39 @@ extension ARViewController {
                 notification.notificationOccurred(.error)
             }
             print("can't decode data received from \(peer)")
+        }
+    }
+    
+    //called after incident is editted by a peer
+    func updateIncidents() {
+        if !ARViewController.incidentEdited {
+            return
+        }
+        do {
+            let data = try JSONEncoder().encode(DataHandler.incidents)
+            multipeerSession.sendToAllPeers(data)
+            ARViewController.incidentEdited = false
+        } catch _ {
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.error)
+            }
+            print("sending editted incidents failed")
+        }
+    }
+    
+    private func updatePinColour(incidents: [Incident]) {
+        for incident in incidents {
+            for node in nodes {
+                if node.name! == String(incident.identifier) {
+                    switch incident.status {
+                    case .open: node.geometry?.materials.first?.diffuse.contents = UIColor.red
+                    case .progress: node.geometry?.materials.first?.diffuse.contents = UIColor.yellow
+                    case .resolved: node.geometry?.materials.first?.diffuse.contents = UIColor.green
+                    }
+                }
+            }
         }
     }
 }

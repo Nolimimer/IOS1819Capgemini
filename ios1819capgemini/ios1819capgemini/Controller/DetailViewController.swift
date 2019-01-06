@@ -75,7 +75,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
                 status = .resolved
             }
             incident.edit(status: status, description: textField.text, modifiedDate: Date())
-            
+            ARViewController.incidentEdited = true
             editButton.title = "Edit"
             textField.isEditable = false
             segmentControll.isEnabled = false
