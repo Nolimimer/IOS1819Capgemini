@@ -72,6 +72,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             guard let data = try? NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
                 else { fatalError("can't encode map") }
             self.multipeerSession.sendToAllPeers(data)
+            print("world map sent")
         }
         guard let anchor = objectAnchor, let node = detectedObjectNode else {
             print("anchor and object node have not been detected yet")
@@ -81,15 +82,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         self.multipeerSession.sendToAllPeers(anchorData)
+        print("anchor sent")
         statusViewController.showMessage("anchor data sent", autoHide: true)
         guard let nodeData = try? NSKeyedArchiver.archivedData(withRootObject: node, requiringSecureCoding: true) else {
             return
         }
         self.multipeerSession.sendToAllPeers(nodeData)
+        print("node sent")
         statusViewController.showMessage("node data sent", autoHide: true)
         do {
             let incidentsData = try JSONEncoder().encode(DataHandler.incidents)
             self.multipeerSession.sendToAllPeers(incidentsData)
+            print("datahandler.incidents sent")
         } catch {
             print("DataHandler.incidents could not have been encoded")
         }
@@ -215,7 +219,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 }
                 fatalError("Can't encode detected node")
             }
-            self.multipeerSession.sendToAllPeers(nodeData)
+//            self.multipeerSession.sendToAllPeers(nodeData)
             //status view controller used for debug purposes
             statusViewController.showMessage("node data sent", autoHide: true)
             guard let anchorData = try? NSKeyedArchiver.archivedData(withRootObject: objectAnchor, requiringSecureCoding: true) else {
@@ -226,7 +230,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 }
                 fatalError("Can't encode object anchor")
             }
-            self.multipeerSession.sendToAllPeers(anchorData)
+//            self.multipeerSession.sendToAllPeers(anchorData)
             statusViewController.showMessage("anchor data sent", autoHide: true)
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")

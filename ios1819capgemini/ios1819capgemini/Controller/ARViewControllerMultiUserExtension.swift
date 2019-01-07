@@ -14,9 +14,11 @@ extension ARViewController {
     
     
     func receivedData(_ data: Data, from peer: MCPeerID) {
+        print("received data executed")
         do {
-            //received world map
+//            received world map
             if let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data) {
+                print("world map decoded")
                 let configuration = ARWorldTrackingConfiguration()
                 configuration.planeDetection = .horizontal
                 configuration.initialWorldMap = worldMap
@@ -25,19 +27,22 @@ extension ARViewController {
                 mapProvider = peer
                 }
             //anchor of detected object has been set and sent
-            else if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARObjectAnchor.self, from: data) {
+            if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARObjectAnchor.self, from: data) {
+                print("anchor decoded")
                 // Add anchor to the session, ARSCNView delegate adds visible content.
                 statusViewController.showMessage("anchor received", autoHide: true)
-                self.objectAnchor = anchor
+                objectAnchor = anchor
                 addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
                 }
             //node of detected object has been sent (we only save and send 1 node)
             else if let node = try NSKeyedUnarchiver.unarchivedObject(ofClass: SCNNode.self, from: data) {
+                print("node decoded")
                 statusViewController.showMessage("detected object node received", autoHide: true)
                 self.detectedObjectNode = node
             } else {
-            //check if incident has been sent by peer (either as array or class) and react accordingly
+//            check if incident has been sent by peer (either as array or class) and react accordingly
                 do {
+                    print("trying to decode incident array ")
                     let incidents = try JSONDecoder().decode([Incident].self, from: data)
                     statusViewController.showMessage("incidents array received", autoHide: true)
                     if incidents.isEmpty {
@@ -54,6 +59,7 @@ extension ARViewController {
                     print("Decoding incident array failed")
                 }
                 do {
+                    print("trying to decode incident")
                     let incident = try JSONDecoder().decode(Incident.self, from: data)
                     statusViewController.showMessage("single incident received", autoHide: true)
                     DataHandler.incidents.append(incident)
@@ -62,10 +68,11 @@ extension ARViewController {
                 } catch _ {
                     print("Decoding single incident failed")
                 }
+                print("else")
             }
         } catch _ {
             let notification = UINotificationFeedbackGenerator()
-            
+
             DispatchQueue.main.async {
                 notification.notificationOccurred(.error)
             }
