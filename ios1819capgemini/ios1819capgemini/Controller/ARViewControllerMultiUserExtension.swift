@@ -34,7 +34,8 @@ extension ARViewController {
                 print("anchor decoded")
                 // Add anchor to the session, ARSCNView delegate adds visible content.
                 statusViewController.showMessage("anchor received", autoHide: true)
-                objectAnchor = anchor
+                self.objectAnchor = anchor
+                print("object anchor: \(objectAnchor)")
                 addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
             }
         } catch {
@@ -45,6 +46,7 @@ extension ARViewController {
                 print("node decoded")
                 statusViewController.showMessage("detected object node received", autoHide: true)
                 self.detectedObjectNode = node
+                print("detected object node: \(detectedObjectNode)")
             }
         } catch {
 //            print("not node")
@@ -61,8 +63,9 @@ extension ARViewController {
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
                          identifier: String(incident.identifier))
+                print("incident : \(incident.identifier) = \(incident.getCoordinateToVector())")
             }
-            updatePinColour(incidents: DataHandler.incidents)
+//            updatePinColour(incidents: DataHandler.incidents)
         } catch {
 //            print("not incident array")
         }
@@ -73,6 +76,7 @@ extension ARViewController {
             DataHandler.incidents.append(incident)
             add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
                      identifier: String(incident.identifier))
+            print("incident : \(incident.identifier) = \(incident.getCoordinateToVector())")
         } catch {
 //            print("not incident")
         }
