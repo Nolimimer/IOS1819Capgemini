@@ -83,7 +83,12 @@ extension ARViewController {
     }
     func updateNodes() {
         for incident in DataHandler.incidents {
-            add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: String(incident.identifier))
+            let coordinateRelativeToWorld = sceneView.scene.rootNode.convertPosition(
+                SCNVector3(incident.getCoordinateToVector().x,
+                           incident.getCoordinateToVector().y,
+                           incident.getCoordinateToVector().z),
+                to: nil)
+            add3DPin(vectorCoordinate: coordinateRelativeToWorld, identifier: String(incident.identifier))
         }
     }
     
