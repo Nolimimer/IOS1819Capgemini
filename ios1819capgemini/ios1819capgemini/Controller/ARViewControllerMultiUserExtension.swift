@@ -65,7 +65,7 @@ extension ARViewController {
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
                          identifier: String(incident.identifier))
-                print("incident : \(incident.identifier) = \(incident.getCoordinateToVector())")
+//                print("incident : \(incident.identifier) = \(incident.getCoordinateToVector())")
             }
 //            updatePinColour(incidents: DataHandler.incidents)
         } catch {
@@ -76,9 +76,7 @@ extension ARViewController {
             print("trying to decode incident")
             statusViewController.showMessage("single incident received", autoHide: true)
             DataHandler.incidents.append(incident)
-            add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
-                     identifier: String(incident.identifier))
-            print("incident : \(incident.identifier) = \(incident.getCoordinateToVector())")
+//            print("incident : \(incident.identifier) = \(incident.getCoordinateToVector())")
         } catch {
 //            print("not incident")
         }
@@ -89,7 +87,7 @@ extension ARViewController {
                 SCNVector3(incident.getCoordinateToVector().x,
                            incident.getCoordinateToVector().y,
                            incident.getCoordinateToVector().z),
-                to: nil)
+                to: detectedObjectNode)
             add3DPin(vectorCoordinate: coordinateRelativeToWorld, identifier: String(incident.identifier))
         }
     }
