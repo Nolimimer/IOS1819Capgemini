@@ -14,7 +14,7 @@ extension ARViewController {
     
     //swiftlint:disable all
     func receivedData(_ data: Data, from peer: MCPeerID) {
-        print("received data executed")
+//        print("received data executed")
         do {
 //            received world map
             if let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data) {
@@ -27,7 +27,7 @@ extension ARViewController {
                 mapProvider = peer
             }
         } catch {
-            print("not world map")
+//            print("not world map")
         }
         do {
             if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARObjectAnchor.self, from: data) {
@@ -38,7 +38,7 @@ extension ARViewController {
                 addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
             }
         } catch {
-            print("not anchor")
+//            print("not anchor")
         }
         do {
             if let node = try NSKeyedUnarchiver.unarchivedObject(ofClass: SCNNode.self, from: data) {
@@ -47,11 +47,11 @@ extension ARViewController {
                 self.detectedObjectNode = node
             }
         } catch {
-            print("not node")
+//            print("not node")
         }
         do {
-            print("trying to decode incident array ")
             let incidents = try JSONDecoder().decode([Incident].self, from: data)
+            print("incident array decoded")
             statusViewController.showMessage("incidents array received", autoHide: true)
             if incidents.isEmpty {
                 nodes = []
@@ -64,17 +64,17 @@ extension ARViewController {
             }
             updatePinColour(incidents: DataHandler.incidents)
         } catch {
-            print("not incident array")
+//            print("not incident array")
         }
         do {
-            print("trying to decode incident")
             let incident = try JSONDecoder().decode(Incident.self, from: data)
+            print("trying to decode incident")
             statusViewController.showMessage("single incident received", autoHide: true)
             DataHandler.incidents.append(incident)
             add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
                      identifier: String(incident.identifier))
         } catch {
-            print("not incident")
+//            print("not incident")
         }
     }
         
