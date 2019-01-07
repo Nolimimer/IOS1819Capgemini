@@ -193,6 +193,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
 //      uncomment for ar navigation arrow
 //      setNavigationArrows(for: frame.camera.trackingState)
+        updateNodes()
         updateStatus(for: frame, trackingState: frame.camera.trackingState)
         updateIncidents()
         updateInfoPlane()
