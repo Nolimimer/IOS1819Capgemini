@@ -45,7 +45,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var objectAnchor: ARObjectAnchor?
     var mapProvider: MCPeerID?
     static var incidentEdited = false
-    
+    private var infoPlanePlaced = false
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
@@ -74,22 +74,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.multipeerSession.sendToAllPeers(data)
 //            print("world map sent")
         }
-        guard let anchor = objectAnchor, let node = detectedObjectNode else {
-//            print("anchor and object node have not been detected yet")
-            return
-        }
-        guard let anchorData = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true) else {
-            return
-        }
-        self.multipeerSession.sendToAllPeers(anchorData)
-//        print("anchor sent")
-        statusViewController.showMessage("anchor data sent", autoHide: true)
-        guard let nodeData = try? NSKeyedArchiver.archivedData(withRootObject: node, requiringSecureCoding: true) else {
-            return
-        }
-        self.multipeerSession.sendToAllPeers(nodeData)
-//        print("node sent")
-        statusViewController.showMessage("node data sent", autoHide: true)
         do {
             let incidentsData = try JSONEncoder().encode(DataHandler.incidents)
             self.multipeerSession.sendToAllPeers(incidentsData)
@@ -212,30 +196,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             DispatchQueue.main.async {
                 notification.notificationOccurred(.success)
             }
-
             self.objectAnchor = objectAnchor
             detectedObjectNode = node
-            guard let nodeData = try? NSKeyedArchiver.archivedData(withRootObject: node, requiringSecureCoding: true) else {
-                let notification = UINotificationFeedbackGenerator()
-                
-                DispatchQueue.main.async {
-                    notification.notificationOccurred(.error)
-                }
-                fatalError("Can't encode detected node")
-            }
-//            self.multipeerSession.sendToAllPeers(nodeData)
-            //status view controller used for debug purposes
-            statusViewController.showMessage("node data sent", autoHide: true)
-            guard let anchorData = try? NSKeyedArchiver.archivedData(withRootObject: objectAnchor, requiringSecureCoding: true) else {
-                let notification = UINotificationFeedbackGenerator()
-                
-                DispatchQueue.main.async {
-                    notification.notificationOccurred(.error)
-                }
-                fatalError("Can't encode object anchor")
-            }
-//            self.multipeerSession.sendToAllPeers(anchorData)
-            statusViewController.showMessage("anchor data sent", autoHide: true)
             for incident in DataHandler.incidents {
                 add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
             }
@@ -263,6 +225,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     //nicht private
     func addInfoPlane (carPart: String) {
         guard let objectAnchor = self.objectAnchor else {
+            return
+        }
+        guard !infoPlanePlaced else {
             return
         }
         let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
@@ -295,6 +260,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
         scene.rootNode.addChildNode(planeNode)
+        infoPlanePlaced = true
     }
     
     private func updateInfoPlane() {
@@ -333,8 +299,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                 to: detectedObjectNode)
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject)
-                                                     )
+                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
                             filterAllPins()
                             let imageWithoutPin = sceneView.snapshot()
                             saveImage(image: imageWithoutPin, incident: incident)

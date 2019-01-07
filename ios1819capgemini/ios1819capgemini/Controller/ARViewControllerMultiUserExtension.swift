@@ -9,86 +9,56 @@
 import Foundation
 import ARKit
 import MultipeerConnectivity
-
+//swiftlint:disable all
 extension ARViewController {
     
-    //swiftlint:disable all
     func receivedData(_ data: Data, from peer: MCPeerID) {
-//        print("received data executed")
         do {
-//            received world map
             if let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data) {
                 print("world map decoded")
                 let configuration = ARWorldTrackingConfiguration()
                 configuration.planeDetection = .horizontal
                 configuration.initialWorldMap = worldMap
-                statusViewController.showMessage("world map received", autoHide: true)
                 sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                 mapProvider = peer
                 print("world map: \(worldMap)")
-            }
-        } catch {
-//            print("not world map")
-        }
-        do {
-            if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARObjectAnchor.self, from: data) {
-                print("anchor decoded")
-                // Add anchor to the session, ARSCNView delegate adds visible content.
-                statusViewController.showMessage("anchor received", autoHide: true)
-                self.objectAnchor = anchor
-                self.sceneView.session.add(anchor: anchor)
-                print("object anchor: \(objectAnchor)")
+                self.objectAnchor = worldMap.anchors.first as? ARObjectAnchor
+//                self.detectedObjectNode = SCNNode()
+//                detectedObjectNode?.position = SCNVector3(x: (worldMap.anchors.first?.transform.columns.3.x)!,
+//                                                          y: (worldMap.anchors.first?.transform.columns.3.y)!,
+//                                                          z: (worldMap.anchors.first?.transform.columns.3.z)!)
                 addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
             }
         } catch {
-//            print("not anchor")
-        }
-        do {
-            if let node = try NSKeyedUnarchiver.unarchivedObject(ofClass: SCNNode.self, from: data) {
-                print("node decoded")
-                statusViewController.showMessage("detected object node received", autoHide: true)
-                self.detectedObjectNode = node
-                print("detected object node: \(detectedObjectNode)")
-            }
-        } catch {
-//            print("not node")
+            
         }
         do {
             let incidents = try JSONDecoder().decode([Incident].self, from: data)
             print("incident array decoded")
-            statusViewController.showMessage("incidents array received", autoHide: true)
             if incidents.isEmpty {
                 nodes = []
                 automaticallyDetectedIncidents = []
             }
             DataHandler.incidents = incidents
-            for incident in DataHandler.incidents {
-                add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
-                         identifier: String(incident.identifier))
-//                print("incident : \(incident.identifier) = \(incident.getCoordinateToVector())")
-            }
-//            updatePinColour(incidents: DataHandler.incidents)
         } catch {
-//            print("not incident array")
+
         }
         do {
             let incident = try JSONDecoder().decode(Incident.self, from: data)
-            print("trying to decode incident")
-            statusViewController.showMessage("single incident received", autoHide: true)
             DataHandler.incidents.append(incident)
 //            print("incident : \(incident.identifier) = \(incident.getCoordinateToVector())")
         } catch {
-//            print("not incident")
+
         }
     }
     func updateNodes() {
+        if detectedObjectNode == nil {
+            return
+        }
         for incident in DataHandler.incidents {
-            let coordinateRelativeToWorld = sceneView.scene.rootNode.convertPosition(
-                SCNVector3(incident.getCoordinateToVector().x,
-                           incident.getCoordinateToVector().y,
-                           incident.getCoordinateToVector().z),
-                to: detectedObjectNode)
-            add3DPin(vectorCoordinate: coordinateRelativeToWorld, identifier: String(incident.identifier))
+            if !existingIncidentNode(incident: incident) {
+                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: String(incident.identifier))
+            }
         }
     }
     
@@ -109,6 +79,16 @@ extension ARViewController {
             }
             print("sending editted incidents failed")
         }
+    }
+    
+    private func existingIncidentNode(incident: Incident) -> Bool {
+        
+        for node in nodes {
+            if node.name == String(incident.identifier) {
+                return true
+            }
+        }
+        return false
     }
     
     private func updatePinColour(incidents: [Incident]) {
