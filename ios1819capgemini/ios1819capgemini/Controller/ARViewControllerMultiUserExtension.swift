@@ -25,6 +25,7 @@ extension ARViewController {
                 statusViewController.showMessage("world map received", autoHide: true)
                 sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                 mapProvider = peer
+                print("world map: \(worldMap)")
             }
         } catch {
 //            print("not world map")
@@ -35,6 +36,7 @@ extension ARViewController {
                 // Add anchor to the session, ARSCNView delegate adds visible content.
                 statusViewController.showMessage("anchor received", autoHide: true)
                 self.objectAnchor = anchor
+                self.sceneView.session.add(anchor: anchor)
                 print("object anchor: \(objectAnchor)")
                 addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
             }
