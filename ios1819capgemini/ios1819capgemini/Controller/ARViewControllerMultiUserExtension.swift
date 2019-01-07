@@ -12,7 +12,7 @@ import MultipeerConnectivity
 
 extension ARViewController {
     
-    
+    //swiftlint:disable all
     func receivedData(_ data: Data, from peer: MCPeerID) {
         print("received data executed")
         do {
@@ -27,6 +27,7 @@ extension ARViewController {
                 mapProvider = peer
                 }
             //anchor of detected object has been set and sent
+            else
             if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARObjectAnchor.self, from: data) {
                 print("anchor decoded")
                 // Add anchor to the session, ARSCNView delegate adds visible content.
@@ -35,7 +36,8 @@ extension ARViewController {
                 addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
                 }
             //node of detected object has been sent (we only save and send 1 node)
-            else if let node = try NSKeyedUnarchiver.unarchivedObject(ofClass: SCNNode.self, from: data) {
+            else
+            if let node = try NSKeyedUnarchiver.unarchivedObject(ofClass: SCNNode.self, from: data) {
                 print("node decoded")
                 statusViewController.showMessage("detected object node received", autoHide: true)
                 self.detectedObjectNode = node
