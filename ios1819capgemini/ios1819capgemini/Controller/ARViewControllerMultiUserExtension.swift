@@ -25,62 +25,116 @@ extension ARViewController {
                 statusViewController.showMessage("world map received", autoHide: true)
                 sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                 mapProvider = peer
-                }
-            //anchor of detected object has been set and sent
-            else
+            }
+        } catch {
+            print("not world map")
+        }
+        do {
             if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARObjectAnchor.self, from: data) {
                 print("anchor decoded")
                 // Add anchor to the session, ARSCNView delegate adds visible content.
                 statusViewController.showMessage("anchor received", autoHide: true)
                 objectAnchor = anchor
                 addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
-                }
-            //node of detected object has been sent (we only save and send 1 node)
-            else
+            }
+        } catch {
+            print("not anchor")
+        }
+        do {
             if let node = try NSKeyedUnarchiver.unarchivedObject(ofClass: SCNNode.self, from: data) {
                 print("node decoded")
                 statusViewController.showMessage("detected object node received", autoHide: true)
                 self.detectedObjectNode = node
-            } else {
-//            check if incident has been sent by peer (either as array or class) and react accordingly
-                do {
-                    print("trying to decode incident array ")
-                    let incidents = try JSONDecoder().decode([Incident].self, from: data)
-                    statusViewController.showMessage("incidents array received", autoHide: true)
-                    if incidents.isEmpty {
-                        nodes = []
-                        automaticallyDetectedIncidents = []
-                    }
-                    DataHandler.incidents = incidents
-                    for incident in DataHandler.incidents {
-                        add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
-                                 identifier: String(incident.identifier))
-                    }
-                    updatePinColour(incidents: DataHandler.incidents)
-                } catch _ {
-                    print("Decoding incident array failed")
-                }
-                do {
-                    print("trying to decode incident")
-                    let incident = try JSONDecoder().decode(Incident.self, from: data)
-                    statusViewController.showMessage("single incident received", autoHide: true)
-                    DataHandler.incidents.append(incident)
-                    add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
-                             identifier: String(incident.identifier))
-                } catch _ {
-                    print("Decoding single incident failed")
-                }
-                print("else")
             }
-        } catch _ {
-            let notification = UINotificationFeedbackGenerator()
-
-            DispatchQueue.main.async {
-                notification.notificationOccurred(.error)
+        } catch {
+            print("not node")
+        }
+        do {
+            print("trying to decode incident array ")
+            let incidents = try JSONDecoder().decode([Incident].self, from: data)
+            statusViewController.showMessage("incidents array received", autoHide: true)
+            if incidents.isEmpty {
+                nodes = []
+                automaticallyDetectedIncidents = []
             }
-            print("can't decode data received from \(peer)")
+            DataHandler.incidents = incidents
+            for incident in DataHandler.incidents {
+                add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
+                         identifier: String(incident.identifier))
+            }
+            updatePinColour(incidents: DataHandler.incidents)
+        } catch {
+            print("not incident array")
+        }
+        do {
+            print("trying to decode incident")
+            let incident = try JSONDecoder().decode(Incident.self, from: data)
+            statusViewController.showMessage("single incident received", autoHide: true)
+            DataHandler.incidents.append(incident)
+            add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
+                     identifier: String(incident.identifier))
+        } catch {
+            print("not incident")
         }
     }
+        
+//
+//
+//            //anchor of detected object has been set and sent
+//            else
+//            if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARObjectAnchor.self, from: data) {
+//                print("anchor decoded")
+//                // Add anchor to the session, ARSCNView delegate adds visible content.
+//                statusViewController.showMessage("anchor received", autoHide: true)
+//                objectAnchor = anchor
+//                addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
+//                }
+//            //node of detected object has been sent (we only save and send 1 node)
+//            else
+//            if let node = try NSKeyedUnarchiver.unarchivedObject(ofClass: SCNNode.self, from: data) {
+//                print("node decoded")
+//                statusViewController.showMessage("detected object node received", autoHide: true)
+//                self.detectedObjectNode = node
+//            } else {
+////            check if incident has been sent by peer (either as array or class) and react accordingly
+//                do {
+//                    print("trying to decode incident array ")
+//                    let incidents = try JSONDecoder().decode([Incident].self, from: data)
+//                    statusViewController.showMessage("incidents array received", autoHide: true)
+//                    if incidents.isEmpty {
+//                        nodes = []
+//                        automaticallyDetectedIncidents = []
+//                    }
+//                    DataHandler.incidents = incidents
+//                    for incident in DataHandler.incidents {
+//                        add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
+//                                 identifier: String(incident.identifier))
+//                    }
+//                    updatePinColour(incidents: DataHandler.incidents)
+//                } catch _ {
+//                    print("Decoding incident array failed")
+//                }
+//                do {
+//                    print("trying to decode incident")
+//                    let incident = try JSONDecoder().decode(Incident.self, from: data)
+//                    statusViewController.showMessage("single incident received", autoHide: true)
+//                    DataHandler.incidents.append(incident)
+//                    add3DPin(vectorCoordinate: incident.getCoordinateToVector(),
+//                             identifier: String(incident.identifier))
+//                } catch _ {
+//                    print("Decoding single incident failed")
+//                }
+//                print("else")
+//            }
+//        } catch _ {
+//            let notification = UINotificationFeedbackGenerator()
+//
+//            DispatchQueue.main.async {
+//                notification.notificationOccurred(.error)
+//            }
+//            print("can't decode data received from \(peer)")
+//        }
+//    }
     
     //called after incident is editted by a peer
     func updateIncidents() {
