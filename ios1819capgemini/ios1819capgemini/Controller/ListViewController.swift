@@ -11,10 +11,6 @@ import UIKit
 //swiftlint:disable all
 // MARK: LastViewController
 class ListViewController: UIViewController {
-    
-    private var showOpen = true
-    private var showInProgress = false
-    private var showAll = false
 
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
@@ -47,8 +43,9 @@ class ListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        DataHandler.refreshInProgressIncidents()
         DataHandler.refreshOpenIncidents()
+        DataHandler.refreshInProgressIncidents()
+        DataHandler.refreshResolvedIncidents()
         filterSegmentedControl.selectedSegmentIndex = DataHandler.currentSegmentFilter
         tableView.reloadData()
         super.viewWillAppear(animated)
@@ -79,6 +76,10 @@ class ListViewController: UIViewController {
         case Filter.showInProgress.rawValue: // In Progress tab
             DataHandler.currentSegmentFilter = Filter.showInProgress.rawValue
             DataHandler.refreshInProgressIncidents()
+            tableView.reloadData()
+        case Filter.showResolved.rawValue: // Resolved tab
+            DataHandler.currentSegmentFilter = Filter.showResolved.rawValue
+            DataHandler.refreshResolvedIncidents()
             tableView.reloadData()
         default:
             break
@@ -113,6 +114,7 @@ enum Filter: Int { // Remark: Need to match Segment in Story Board.
     case showAll = 0
     case showOpen
     case showInProgress
+    case showResolved
 }
 
 // MARK: Extension - UITableViewDelegate
@@ -127,6 +129,8 @@ extension ListViewController: UITableViewDataSource {
             incident = DataHandler.openIncidents[indexPath.row]
         case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
             incident = DataHandler.inProgressIncidents[indexPath.row]
+        case Filter.showResolved.rawValue: // Filter by Resolved Incidents
+            incident = DataHandler.resolvedIncidents[indexPath.row]
         default: // Default by All Incidents.
             incident = DataHandler.incidents[indexPath.row]
         }
@@ -144,6 +148,8 @@ extension ListViewController: UITableViewDataSource {
             return DataHandler.openIncidents.count
         case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
             return DataHandler.inProgressIncidents.count
+        case Filter.showResolved.rawValue: // Filter by Resolved Incidents
+            return DataHandler.resolvedIncidents.count
         default: // Default by All Incidents.
             return DataHandler.incidents.count
         }

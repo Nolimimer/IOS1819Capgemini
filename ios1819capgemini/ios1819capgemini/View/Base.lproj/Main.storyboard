@@ -482,6 +482,7 @@
                                     <segment title="All"/>
                                     <segment title="Open"/>
                                     <segment title="In Progress"/>
+                                    <segment title="Resolved"/>
                                 </segments>
                                 <connections>
                                     <action selector="selectedFilterSegment:" destination="qwB-cY-kiz" eventType="valueChanged" id="FsS-15-v74"/>

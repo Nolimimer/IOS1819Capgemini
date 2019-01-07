@@ -29,6 +29,7 @@ enum DataHandler {
     static var currentSegmentFilter = Filter.showAll.rawValue // Show All by default
     static var openIncidents = [Incident]()
     static var inProgressIncidents = [Incident]()
+    static var resolvedIncidents = [Incident]()
     
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
@@ -46,6 +47,10 @@ enum DataHandler {
     
     static func refreshInProgressIncidents() {
         inProgressIncidents = incidents.filter({ $0.status == Status.progress })
+    }
+    
+    static func refreshResolvedIncidents() {
+        resolvedIncidents = incidents.filter({ $0.status == Status.resolved })
     }
     
     // MARK: Type Methods
