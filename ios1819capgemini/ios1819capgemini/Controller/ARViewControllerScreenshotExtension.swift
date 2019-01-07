@@ -37,7 +37,7 @@ extension ARViewController {
     // Temporarily deletes all the pins except for the pin in the method call from the view and then adds them back again after 1 second
     func filter3DPins (identifier: String) {
         self.scene.rootNode.childNodes.forEach { node in
-            guard let name = node.name else {
+            guard let name = node.name, name != "info-plane" else {
                 return
             }
             if name != identifier {
@@ -52,7 +52,7 @@ extension ARViewController {
     // Temporarily deletes all the pins from the view and then adds them back again after 1 second
     func filterAllPins () {
         self.scene.rootNode.childNodes.forEach { node in
-            guard let name = node.name else {
+            guard let name = node.name, name != "info-plane" else {
                 return
             }
             let tmpNode = node
