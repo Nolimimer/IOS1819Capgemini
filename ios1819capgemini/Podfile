@@ -10,6 +10,7 @@ pod 'Prototyper'
 pod 'CUU'
 pod 'SwiftLint'
 pod 'INSPhotoGallery'
+pod 'UICircularProgressRing'
 
 end
 

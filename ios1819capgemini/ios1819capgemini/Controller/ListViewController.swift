@@ -42,6 +42,7 @@ class ListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
+        creatingNodePossible = false
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -50,6 +51,7 @@ class ListViewController: UIViewController {
 
     // MARK: IBActions
     @IBAction private func didPressAddButton(_ sender: Any) {
+         creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
     
