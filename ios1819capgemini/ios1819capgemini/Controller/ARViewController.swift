@@ -78,6 +78,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         setupBoxes()
         configureLighting()
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
+        sceneView.addGestureRecognizer(gestureRecognizer)
     }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
