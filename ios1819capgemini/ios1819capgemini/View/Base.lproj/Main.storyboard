@@ -477,7 +477,7 @@
                                 </connections>
                             </tableView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Jz5-Se-vdJ">
-                                <rect key="frame" x="0.0" y="116" width="375" height="29"/>
+                                <rect key="frame" x="16" y="116" width="343" height="29"/>
                                 <segments>
                                     <segment title="All"/>
                                     <segment title="Open"/>
@@ -494,9 +494,9 @@
                             <constraint firstItem="Jz5-Se-vdJ" firstAttribute="top" secondItem="aL3-UY-sVh" secondAttribute="top" id="8M9-eR-SaW"/>
                             <constraint firstItem="dK4-vX-uxy" firstAttribute="leading" secondItem="aL3-UY-sVh" secondAttribute="leading" id="dQ4-d4-qy2"/>
                             <constraint firstItem="dK4-vX-uxy" firstAttribute="top" secondItem="aL3-UY-sVh" secondAttribute="top" id="hhi-pH-xA0"/>
-                            <constraint firstItem="Jz5-Se-vdJ" firstAttribute="trailing" secondItem="aL3-UY-sVh" secondAttribute="trailing" id="j0p-NU-YMJ"/>
-                            <constraint firstItem="Jz5-Se-vdJ" firstAttribute="leading" secondItem="aL3-UY-sVh" secondAttribute="leading" id="j0z-TG-3DM"/>
+                            <constraint firstItem="aL3-UY-sVh" firstAttribute="trailing" secondItem="Jz5-Se-vdJ" secondAttribute="trailing" constant="16" id="pdD-pQ-tc9"/>
                             <constraint firstAttribute="bottom" secondItem="dK4-vX-uxy" secondAttribute="bottom" id="w7n-vO-omi"/>
+                            <constraint firstItem="Jz5-Se-vdJ" firstAttribute="leading" secondItem="aL3-UY-sVh" secondAttribute="leading" constant="16" id="wqC-u5-ZWc"/>
                             <constraint firstItem="aL3-UY-sVh" firstAttribute="trailing" secondItem="dK4-vX-uxy" secondAttribute="trailing" id="wud-Lw-WKA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="aL3-UY-sVh"/>
