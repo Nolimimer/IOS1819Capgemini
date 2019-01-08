@@ -43,7 +43,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     var referenceObjectToMerge: ARReferenceObject?
     var referenceObjectToTest: ARReferenceObject?
-    private var saved = false
+    private var saveCounter = 0
     
     internal var testRun: TestRun?
     
@@ -92,7 +92,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         blurView.isHidden = true
         sceneView.delegate = self
         sceneView.session.delegate = self
-        saved = false
+        saveCounter = 0
         
         // Prevent the screen from being dimmed after a while.
         UIApplication.shared.isIdleTimerDisabled = true
@@ -514,9 +514,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         if let objectAnchor = anchor as? ARObjectAnchor {
             if let testRun = self.testRun, objectAnchor.referenceObject == testRun.referenceObject {
                 testRun.successfulDetection(objectAnchor)
-                if saved == false {
+                if saveCounter == 0 {
                     saveToCARgemini()
-                    saved = true
+                    saveCounter += 1
                 }
                 
                 let messageText = """
