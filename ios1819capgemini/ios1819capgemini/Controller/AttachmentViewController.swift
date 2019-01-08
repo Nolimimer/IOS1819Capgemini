@@ -15,7 +15,7 @@ import INSPhotoGallery
 
 class AttachmentViewController: UIViewController, UINavigationControllerDelegate {
     //@IBOutlet var view: UIView!
-    
+    // swiftlint:disable implicitly_unwrapped_optional
     var imagePicker: UIImagePickerController!
     var recordButton: UIButton!
     var audioRecorder: AVAudioRecorder!
