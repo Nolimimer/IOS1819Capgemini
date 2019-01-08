@@ -43,6 +43,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     // MARK: IBActions
     @IBAction private func backButtonPressed(_ sender: Any) {
+         creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
     
@@ -142,9 +143,10 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        creatingNodePossible = false
         modalPresentationStyle = .overCurrentContext
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        
+
         navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int

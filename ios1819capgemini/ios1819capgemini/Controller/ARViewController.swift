@@ -11,13 +11,15 @@ import UIKit
 import ARKit
 import SceneKit
 import Vision
+import UICircularProgressRing
 
-//swiftlint:disable all
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
 //swiftlint:disable type_body_length
 var nodesIdentifier = [String: SCNNode]()
+var creatingNodePossible = true
 // MARK: - ARViewController
+// swiftlint:disable all
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
@@ -58,6 +60,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet weak var rightNavigation: UILabel!
     @IBOutlet weak var upNavigation: UILabel!
     @IBOutlet weak var leftNavigation: UILabel!
+    @IBOutlet private weak var progressRing: UICircularProgressRing!
     @IBOutlet weak var downNavigation: UILabel!
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
@@ -72,19 +75,93 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenHeight = Double(view.frame.height)
         sceneView.debugOptions = [.showFeaturePoints]
         model = try? VNCoreMLModel(for: stickerTest().model)
-        
         setupBoxes()
         configureLighting()
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
+        sceneView.addGestureRecognizer(gestureRecognizer)
     }
-        override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         screenWidth = Double(size.width)
         screenHeight = Double(size.height)
+        if UIDevice.current.orientation.isLandscape {
+        } else {
+        }
     }
     
+    /*
+     recognizes if the screen has been tapped, creates a new pin and a matching incident if the tapped location is not a pin, otherwise
+     opens the detail view for the tapped pin.
+     If a new pin is created a screenshot of the location is taken before/after placing the pin.
+     */
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !creatingNodePossible {
+            return
+        }
+        let location = touches.first!.location(in: sceneView)
+        let hitOptions = self.sceneView.hitTest(location, options: nil)
+        if let tappedNode = hitOptions.first?.node, let _ = tappedNode.name {
+            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+        } else {
+            let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
+            if let touch = touches.first {
+                let position = touch.location(in: view)
+                progressRing.frame.origin.x = position.x - 110
+                progressRing.frame.origin.y = position.y - 60
+                progressRing.isHidden = false
+                progressRing.maxValue = 100
+                progressRing.startProgress(to: 100, duration: 1.0) {
+                    if let hitResult = hitResultsFeaturePoints.first {
+//                        if self.detectedObjectNode != nil {
+                            let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
+                                SCNVector3(hitResult.worldTransform.columns.3.x,
+                                           hitResult.worldTransform.columns.3.y,
+                                           hitResult.worldTransform.columns.3.z),
+                                to: self.detectedObjectNode)
+                            let incident = Incident (type: .unknown,
+                                                     description: "New Incident",
+                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
+                            self.filterAllPins()
+                            let imageWithoutPin = self.sceneView.snapshot()
+                            self.saveImage(image: imageWithoutPin, incident: incident)
+                            self.add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                                       hitResult.worldTransform.columns.3.y,
+                                                                       hitResult.worldTransform.columns.3.z),
+                                          identifier: "\(incident.identifier)" )
+                            self.filter3DPins(identifier: "\(incident.identifier)")
+                            let imageWithPin = self.sceneView.snapshot()
+                            self.saveImage(image: imageWithPin, incident: incident)
+                            DataHandler.incidents.append(incident)
+                            self.descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
+//                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        progressRing.resetProgress()
+        progressRing.isHidden = true
+    }
+    func loadCustomScans() {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                if file.lastPathComponent.hasSuffix(".arobject") {
+                    let arRefereceObject = try ARReferenceObject(archiveURL: file)
+                    detectionObjects.insert(arRefereceObject)
+                }
+            }
+        } catch {
+            print("Error loading custom scans")
+        }
+
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         let config = ARWorldTrackingConfiguration()
         
         loadCustomScans()
@@ -354,65 +431,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         scene.rootNode.addChildNode(planeNode)
     }
-    
-    /*
-     recognizes if the screen has been tapped, creates a new pin and a matching incident if the tapped location is not a pin, otherwise
-     opens the detail view for the tapped pin.
-     If a new pin is created a screenshot of the location is taken before/after placing the pin.
-     */
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        let location = touches.first!.location(in: sceneView)
-        let hitOptions = self.sceneView.hitTest(location, options: nil)
-        if let tappedNode = hitOptions.first?.node,
-            let _ = tappedNode.name {
-            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-        } else {
-            let hitResultsFeaturePoints: [ARHitTestResult] =
-                sceneView.hitTest(location, types: .featurePoint)
-            if let hitResult = hitResultsFeaturePoints.first {
-                let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
-                    SCNVector3(hitResult.worldTransform.columns.3.x,
-                               hitResult.worldTransform.columns.3.y,
-                               hitResult.worldTransform.columns.3.z),
-                    to: detectedObjectNode)
-                let incident = Incident (type: .unknown,
-                                         description: "New Incident",
-                                         coordinate: Coordinate(vector: coordinateRelativeToObject)
-                )
-                filterAllPins()
-                let imageWithoutPin = sceneView.snapshot()
-                saveImage(image: imageWithoutPin, incident: incident)
-                add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                      hitResult.worldTransform.columns.3.y,
-                                                      hitResult.worldTransform.columns.3.z),
-                         identifier: "\(incident.identifier)" )
-                filter3DPins(identifier: "\(incident.identifier)")
-                let imageWithPin = sceneView.snapshot()
-                saveImage(image: imageWithPin, incident: incident)
-                DataHandler.incidents.append(incident)
-                descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-                
-            }
-            return
-        }
-    }
 
-    func loadCustomScans() {
-        let fileManager = FileManager.default
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
-            for file in fileURLs {
-                if file.lastPathComponent.hasSuffix(".arobject") {
-                    let arRefereceObject = try ARReferenceObject(archiveURL: file)
-                    detectionObjects.insert(arRefereceObject)
-                }
-            }
-        } catch {
-            print("Error loading custom scans")
-        }
-        
+    @objc func tapped(recognizer: UIGestureRecognizer) {
     }
     
     // MARK: Overridden/Lifecycle Methods
