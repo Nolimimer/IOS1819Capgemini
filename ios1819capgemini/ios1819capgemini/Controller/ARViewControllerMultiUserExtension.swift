@@ -23,7 +23,11 @@ extension ARViewController {
                 mapProvider = peer
                 print("world map: \(worldMap)")
                 print("anchors: \(worldMap.anchors)")
-                sceneView.session.add(anchor: (worldMap.anchors.first as? ARObjectAnchor)!)
+                for anchor in worldMap.anchors {
+                    sceneView.session.add(anchor: (anchor))
+                    print("anchor : \(anchor.name) added")
+                }
+                
                 self.objectAnchor = worldMap.anchors.first as? ARObjectAnchor
 //                self.detectedObjectNode = SCNNode()
 //                detectedObjectNode?.position = SCNVector3(x: (worldMap.anchors.first?.transform.columns.3.x)!,
@@ -33,6 +37,7 @@ extension ARViewController {
             } else
                 if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARAnchor.self, from: data) {
                     // Add anchor to the session, ARSCNView delegate adds visible content.
+                    print("anchor decoded")
                     sceneView.session.add(anchor: anchor)
             }
         } catch {

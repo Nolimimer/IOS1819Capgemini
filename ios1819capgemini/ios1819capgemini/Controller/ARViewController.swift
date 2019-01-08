@@ -198,10 +198,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             self.objectAnchor = objectAnchor
             detectedObjectNode = node
-            for incident in DataHandler.incidents {
-                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
-            }
-            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+//            for incident in DataHandler.incidents {
+//                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
+//            }
+//            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
         }
         return node
     }
