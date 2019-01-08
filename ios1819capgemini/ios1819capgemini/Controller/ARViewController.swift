@@ -300,6 +300,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             let incident = Incident (type: .unknown,
                                                      description: "New Incident",
                                                      coordinate: Coordinate(vector: coordinateRelativeToObject))
+                            //add aranchor for multiuser
+                            let anchor = ARAnchor(name: "pin \(incident.identifier)", transform: hitResult.worldTransform)
+                            
+                            guard let data = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true)
+                                else { fatalError("can't encode anchor") }
+                            self.multipeerSession.sendToAllPeers(data)
+                            
+                            sceneView.session.add(anchor: anchor)
                             filterAllPins()
                             let imageWithoutPin = sceneView.snapshot()
                             saveImage(image: imageWithoutPin, incident: incident)

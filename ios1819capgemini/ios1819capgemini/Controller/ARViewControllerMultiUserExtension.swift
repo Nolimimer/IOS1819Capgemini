@@ -22,6 +22,7 @@ extension ARViewController {
                 sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                 mapProvider = peer
                 print("world map: \(worldMap)")
+                print("anchors: \(worldMap.anchors)")
                 sceneView.session.add(anchor: (worldMap.anchors.first as? ARObjectAnchor)!)
                 self.objectAnchor = worldMap.anchors.first as? ARObjectAnchor
 //                self.detectedObjectNode = SCNNode()
@@ -29,6 +30,10 @@ extension ARViewController {
 //                                                          y: (worldMap.anchors.first?.transform.columns.3.y)!,
 //                                                          z: (worldMap.anchors.first?.transform.columns.3.z)!)
                 addInfoPlane(carPart: objectAnchor?.referenceObject.name ?? "Unknown Car Part")
+            } else
+                if let anchor = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARAnchor.self, from: data) {
+                    // Add anchor to the session, ARSCNView delegate adds visible content.
+                    sceneView.session.add(anchor: anchor)
             }
         } catch {
             
