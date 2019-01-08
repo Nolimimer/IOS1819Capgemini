@@ -43,7 +43,6 @@
                                 <connections>
                                     <segue destination="iNR-TU-aP6" kind="embed" id="tJa-dk-vD9"/>
                                 </connections>
-                                    <blurEffect style="light"/>
                             </containerView>
                             <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsO-Fy-ug4" customClass="UICircularProgressRing" customModule="UICircularProgressRing">
                                 <rect key="frame" x="73" y="270" width="228" height="127"/>
@@ -62,65 +61,58 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="showsValueKnob" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Left" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kLV-9a-mF3" userLabel="Left">
-                                <rect key="frame" x="16" y="323" width="30" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="⬅️" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kLV-9a-mF3" userLabel="Left">
+                                <rect key="frame" x="16" y="322" width="49" height="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Right" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="msR-1k-WLu" userLabel="Right">
-                                <rect key="frame" x="305" y="323" width="54" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="➡️" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="msR-1k-WLu" userLabel="Right">
+                                <rect key="frame" x="292" y="317" width="67" height="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Up" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FUD-f2-h88" userLabel="Up">
-                                <rect key="frame" x="166" y="98" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⬇" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mKQ-N7-Hho" userLabel="Down">
+                                <rect key="frame" x="166" y="529" width="54" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="goj-W6-Hmy">
-                                <rect key="frame" x="20" y="529" width="335" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Down" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mKQ-N7-Hho" userLabel="Down">
-                                <rect key="frame" x="166" y="558" width="60" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⬆" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FUD-f2-h88" userLabel="Up">
+                                <rect key="frame" x="166" y="108" width="54" height="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="FUD-f2-h88" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="78" id="19P-7I-Fme"/>
                             <constraint firstItem="dAU-gm-pmP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="2hv-wz-jGw"/>
                             <constraint firstAttribute="centerX" secondItem="zuy-y1-cIR" secondAttribute="centerX" id="3OA-iy-fds"/>
+                            <constraint firstItem="FUD-f2-h88" firstAttribute="top" secondItem="QGm-iK-VvE" secondAttribute="bottom" constant="8" id="8LM-Iq-PBo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8vs-jp-QKL" secondAttribute="bottom" constant="20" id="FnX-md-aRt"/>
+                            <constraint firstItem="dAU-gm-pmP" firstAttribute="top" secondItem="kLV-9a-mF3" secondAttribute="bottom" constant="229" id="GXk-UN-ohG"/>
                             <constraint firstItem="8vs-jp-QKL" firstAttribute="leading" secondItem="dAU-gm-pmP" secondAttribute="trailing" constant="197" id="GjX-g5-e9M"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mKQ-N7-Hho" secondAttribute="bottom" constant="88" id="Mgq-7p-nVV"/>
-                            <constraint firstItem="uDJ-JA-xze" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="OVb-P8-78D"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IBe-6n-2Hy"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mKQ-N7-Hho" secondAttribute="bottom" constant="63" id="IVO-G0-OMR"/>
-                            <constraint firstItem="mKQ-N7-Hho" firstAttribute="leading" secondItem="FUD-f2-h88" secondAttribute="leading" id="JmB-9A-Ygf"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
+                            <constraint firstItem="kLV-9a-mF3" firstAttribute="top" secondItem="QGm-iK-VvE" secondAttribute="bottom" constant="222" id="NbL-WX-P5b"/>
+                            <constraint firstItem="FUD-f2-h88" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="166" id="OUK-fD-Gfm"/>
+                            <constraint firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="OVb-P8-78D"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dAU-gm-pmP" secondAttribute="bottom" constant="20" id="Oug-f9-ub7"/>
-                            <constraint firstItem="FUD-f2-h88" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="166" id="Px9-R9-THL"/>
-                            <constraint firstItem="msR-1k-WLu" firstAttribute="leading" secondItem="kLV-9a-mF3" secondAttribute="trailing" constant="259" id="Sb3-D1-OzA"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="msR-1k-WLu" secondAttribute="trailing" constant="16" id="SqM-N1-mTS"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FUD-f2-h88" secondAttribute="trailing" constant="167" id="Upa-dt-L19"/>
-                            <constraint firstItem="FUD-f2-h88" firstAttribute="top" secondItem="uDJ-JA-xze" secondAttribute="bottom" constant="8" id="Y0Z-C2-Lbq"/>
+                            <constraint firstItem="msR-1k-WLu" firstAttribute="top" secondItem="QGm-iK-VvE" secondAttribute="bottom" constant="217" id="Xem-dD-Qq5"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ydv-fJ-Xpy"/>
-                            <constraint firstItem="kLV-9a-mF3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="bVh-Yd-fmT"/>
+                            <constraint firstItem="8vs-jp-QKL" firstAttribute="top" secondItem="msR-1k-WLu" secondAttribute="bottom" constant="256" id="bNX-OY-ZI0"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mKQ-N7-Hho" secondAttribute="bottom" constant="90" id="blb-CN-wKh"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="kaw-PZ-WL2"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="lWY-SP-Ifl"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="FUD-f2-h88" secondAttribute="trailing" constant="155" id="lcf-De-c65"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="nW0-tZ-ukQ"/>
-                            <constraint firstItem="kLV-9a-mF3" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="303" id="pu2-oy-Pm7"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="mKQ-N7-Hho" secondAttribute="trailing" constant="155" id="oCi-aC-tBY"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="r1j-wH-Wgj"/>
-                            <constraint firstItem="msR-1k-WLu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="303" id="vJl-Pi-rOV"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="mKQ-N7-Hho" secondAttribute="trailing" constant="149" id="zGX-wc-M0y"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="msR-1k-WLu" secondAttribute="trailing" constant="16" id="uJ6-ug-6DM"/>
+                            <constraint firstItem="kLV-9a-mF3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="xuk-Gy-LRI"/>
+                            <constraint firstItem="mKQ-N7-Hho" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="166" id="yDZ-Pe-YUq"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -640,44 +632,7 @@
         <!--View Controller-->
         <scene sceneID="kR8-Kc-VqH">
             <objects>
-                <pinchGestureRecognizer id="DAc-qJ-2NR" customClass="ThresholdPinchGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
-                    <connections>
-                        <action selector="didPinch:" destination="dsx-8Z-4fu" id="5Ud-Qk-Wq9"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="nxG-PP-PZb"/>
-                    </connections>
-                </pinchGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.40000000000000002" id="vCo-n8-lDo">
-                    <connections>
-                        <action selector="didLongPress:" destination="dsx-8Z-4fu" id="HoB-o0-Ap2"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="NCA-u4-dKp"/>
-                    </connections>
-                </pongPressGestureRecognizer>
-                <panGestureRecognizer minimumNumberOfTouches="2" maximumNumberOfTouches="2" id="fU6-ab-02Z" customClass="ThresholdPanGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
-                    <connections>
-                        <action selector="didTwoFingerPan:" destination="dsx-8Z-4fu" id="Yzg-sX-RBv"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Fv2-5T-ltc"/>
-                    </connections>
-                </panGestureRecognizer>
-                <tapGestureRecognizer id="Jao-yv-cSS">
-                    <connections>
-                        <action selector="didTap:" destination="dsx-8Z-4fu" id="OcQ-li-yhw"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Rtk-dT-YcL"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <rotationGestureRecognizer id="Va0-ow-ccV" customClass="ThresholdRotationGestureRecognizer" customModule="ScanningApp" customModuleProvider="target">
-                    <connections>
-                        <action selector="didRotate:" destination="dsx-8Z-4fu" id="hZG-Ab-xLw"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="2Da-PI-vWh"/>
-                    </connections>
-                </rotationGestureRecognizer>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6cm-wG-cUD" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" maximumNumberOfTouches="1" id="aJg-Sb-qZg">
-                    <connections>
-                        <action selector="didOneFingerPan:" destination="dsx-8Z-4fu" id="8W0-d5-Lkg"/>
-                        <outlet property="delegate" destination="dsx-8Z-4fu" id="jT2-9x-6aJ"/>
-                    </connections>
-                </panGestureRecognizer>
-                <viewController id="dsx-8Z-4fu" customClass="ViewController" customModule="ScanningApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dsx-8Z-4fu" customClass="ViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="i2z-QK-3m4" customClass="ARSCNView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -709,7 +664,7 @@
                                     <action selector="nextButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="0dU-uR-Eht"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CSi-Iw-mtF" userLabel="Next Button" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CSi-Iw-mtF" userLabel="Next Button" customClass="RoundedButton" customModule="ios1819capgemini" customModuleProvider="target">
                                 <rect key="frame" x="334" y="582" width="100" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="4Mz-Oe-YFv"/>
@@ -731,7 +686,7 @@
                                     <action selector="toggleInstructionsButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="Auc-ud-d7C"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wlu-xb-zjn" userLabel="? Button" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wlu-xb-zjn" userLabel="? Button" customClass="RoundedButton" customModule="ios1819capgemini" customModuleProvider="target">
                                 <rect key="frame" x="310" y="582" width="45" height="45"/>
                                 <accessibility key="accessibilityConfiguration" label="Toggle instruction label"/>
                                 <constraints>
@@ -759,7 +714,7 @@
                                     <action selector="leftButtonTouchAreaTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="nEv-8s-EEe"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttj-7h-ds9" userLabel="Load Model" customClass="RoundedButton" customModule="ScanningApp" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ttj-7h-ds9" userLabel="Load Model" customClass="RoundedButton" customModule="ios1819capgemini" customModuleProvider="target">
                                 <rect key="frame" x="20" y="582" width="110" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="110" id="QtQ-Rk-jWh"/>
@@ -772,7 +727,7 @@
                                     <action selector="loadModelButtonTapped:" destination="dsx-8Z-4fu" eventType="touchUpInside" id="xrI-2f-4MB"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1nE-kK-KtM" userLabel="Flashlight toggle" customClass="FlashlightButton" customModule="ScanningApp" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1nE-kK-KtM" userLabel="Flashlight toggle" customClass="FlashlightButton" customModule="ios1819capgemini" customModuleProvider="target">
                                 <rect key="frame" x="20" y="582" width="110" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="110" id="IgK-wf-fJP"/>
@@ -829,7 +784,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bg8-MN-qQo" customClass="MessageLabel" customModule="ScanningApp" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bg8-MN-qQo" customClass="MessageLabel" customModule="ios1819capgemini" customModuleProvider="target">
                                                         <rect key="frame" x="8" y="8" width="0.0" height="0.0"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -850,7 +805,7 @@
                                 </view>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="Euq-cb-pbM"/>
-                                    </constraints>
+                                </constraints>
                                 <blurEffect style="light"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -932,6 +887,43 @@
                         <segue destination="dcg-B5-UM8" kind="show" identifier="Start screen" id="Ifl-TP-VUm"/>
                     </connections>
                 </viewController>
+                <pinchGestureRecognizer id="DAc-qJ-2NR" customClass="ThresholdPinchGestureRecognizer" customModule="ios1819capgemini" customModuleProvider="target">
+                    <connections>
+                        <action selector="didPinch:" destination="dsx-8Z-4fu" id="5Ud-Qk-Wq9"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="nxG-PP-PZb"/>
+                    </connections>
+                </pinchGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.40000000000000002" id="vCo-n8-lDo">
+                    <connections>
+                        <action selector="didLongPress:" destination="dsx-8Z-4fu" id="HoB-o0-Ap2"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="NCA-u4-dKp"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="2" maximumNumberOfTouches="2" id="fU6-ab-02Z" customClass="ThresholdPanGestureRecognizer" customModule="ios1819capgemini" customModuleProvider="target">
+                    <connections>
+                        <action selector="didTwoFingerPan:" destination="dsx-8Z-4fu" id="Yzg-sX-RBv"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Fv2-5T-ltc"/>
+                    </connections>
+                </panGestureRecognizer>
+                <tapGestureRecognizer id="Jao-yv-cSS">
+                    <connections>
+                        <action selector="didTap:" destination="dsx-8Z-4fu" id="OcQ-li-yhw"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="Rtk-dT-YcL"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <rotationGestureRecognizer id="Va0-ow-ccV" customClass="ThresholdRotationGestureRecognizer" customModule="ios1819capgemini" customModuleProvider="target">
+                    <connections>
+                        <action selector="didRotate:" destination="dsx-8Z-4fu" id="hZG-Ab-xLw"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="2Da-PI-vWh"/>
+                    </connections>
+                </rotationGestureRecognizer>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6cm-wG-cUD" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" maximumNumberOfTouches="1" id="aJg-Sb-qZg">
+                    <connections>
+                        <action selector="didOneFingerPan:" destination="dsx-8Z-4fu" id="8W0-d5-Lkg"/>
+                        <outlet property="delegate" destination="dsx-8Z-4fu" id="jT2-9x-6aJ"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1492" y="1212"/>
         </scene>
