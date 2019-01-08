@@ -427,7 +427,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             detailVC.incident = incident
         default :
             return
-            
         }
     }
 }
