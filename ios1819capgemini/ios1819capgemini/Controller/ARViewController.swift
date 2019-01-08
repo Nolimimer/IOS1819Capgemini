@@ -434,6 +434,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     @objc func tapped(recognizer: UIGestureRecognizer) {
+        
     }
     
     func refreshNodes() {

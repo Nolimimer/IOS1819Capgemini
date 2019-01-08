@@ -11,6 +11,7 @@ import ARKit
 
 //swiftlint:disable all
 extension ARViewController {
+    
     // MARK: Navigation methods
     /*
      Helper methods to calculate distances between incident and camera
@@ -76,7 +77,7 @@ extension ARViewController {
                           y: ((worldCoordinate.y - currentFrame.camera.transform.columns.3.y) * 100 ),
                           z: ((worldCoordinate.z - currentFrame.camera.transform.columns.3.z) * 100))
     }
-    
+
     /*
      returns the position of the input incident to the point of view, useful for rotational purposes
      */
