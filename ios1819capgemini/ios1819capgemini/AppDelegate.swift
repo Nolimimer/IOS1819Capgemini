@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         PrototyperController.showFeedbackButton = false
         let defaults = UserDefaults.standard
@@ -76,5 +75,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         CUU.stop()
     }
 
-
+    
 }

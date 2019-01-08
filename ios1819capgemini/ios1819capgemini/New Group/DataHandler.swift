@@ -36,6 +36,9 @@ enum DataHandler {
     static func incident(withId id: Int) -> Incident? {
         return incidents.first(where: { $0.identifier == id })
     }
+    static func incident(withID id: String) -> Incident? {
+        return incidents.first(where: { "\($0.identifier)" == id})
+    }
     
      // MARK: Type Methods
     static func loadFromJSON() {
@@ -82,6 +85,16 @@ enum DataHandler {
             incidents = try JSONDecoder().decode([Incident].self, from: data)
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
+        }
+    }
+    
+    static func removeIncident(incidentToDelete : Incident) {
+        for (index, incident) in incidents.enumerated() {
+            if incident.identifier == incidentToDelete.identifier {
+                incidents.remove(at: index)
+                saveToJSON()
+                return
+            }
         }
     }
 

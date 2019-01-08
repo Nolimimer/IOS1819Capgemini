@@ -182,6 +182,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
+        refreshNodes()
         setNavigationArrows(for: frame.camera.trackingState)
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
@@ -436,6 +437,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
     }
     
+    func refreshNodes() {
+        for node in nodes {
+            guard let name = node.name else {
+                return
+            }
+            if DataHandler.incident(withID: name) == nil {
+                self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+            }
+        }
+    }
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {

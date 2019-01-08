@@ -46,7 +46,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
          creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
-    
     @IBAction func showAllAttachments(_ sender: Any) {
         performSegue(withIdentifier: "attachmentSegue", sender: self)
     }

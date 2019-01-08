@@ -96,4 +96,14 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return DataHandler.incidents.count
     }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let incident = DataHandler.incidents[indexPath.row]
+            DataHandler.removeIncident(incidentToDelete: incident)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            return
+        }
+    }
+    
+
 }
