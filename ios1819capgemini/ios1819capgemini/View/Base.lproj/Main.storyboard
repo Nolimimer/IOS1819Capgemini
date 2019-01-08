@@ -58,6 +58,10 @@
                                     <constraint firstAttribute="height" constant="50" id="96A-wr-P1x"/>
                                     <constraint firstAttribute="width" constant="240" id="Ilc-hQ-vxx"/>
                                 </constraints>
+                                <connections>
+                                    <segue destination="iNR-TU-aP6" kind="embed" id="tJa-dk-vD9"/>
+                                </connections>
+                            </containerView>
                                 <blurEffect style="light"/>
                             </visualEffectView>
                             <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsO-Fy-ug4" customClass="UICircularProgressRing" customModule="UICircularProgressRing">
@@ -116,6 +120,10 @@
                             <constraint firstItem="goj-W6-Hmy" firstAttribute="top" secondItem="msR-1k-WLu" secondAttribute="bottom" constant="185" id="BX4-f5-2Hw"/>
                             <constraint firstItem="goj-W6-Hmy" firstAttribute="top" secondItem="kLV-9a-mF3" secondAttribute="bottom" constant="185" id="Chf-0I-Ilp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8vs-jp-QKL" secondAttribute="bottom" constant="20" id="FnX-md-aRt"/>
+                            <constraint firstItem="8vs-jp-QKL" firstAttribute="leading" secondItem="dAU-gm-pmP" secondAttribute="trailing" constant="197" id="GjX-g5-e9M"/>
+                            <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
+                            <constraint firstItem="mKQ-N7-Hho" firstAttribute="leading" secondItem="FUD-f2-h88" secondAttribute="leading" id="JmB-9A-Ygf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
                             <constraint firstItem="8vs-jp-QKL" firstAttribute="leading" secondItem="dAU-gm-pmP" secondAttribute="trailing" constant="197" id="GjX-g5-e9M"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
                             <constraint firstItem="mKQ-N7-Hho" firstAttribute="leading" secondItem="FUD-f2-h88" secondAttribute="leading" id="JmB-9A-Ygf"/>

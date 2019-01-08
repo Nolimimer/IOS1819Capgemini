@@ -43,15 +43,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
     
     // MARK: IBOutlets
-    @IBOutlet private var sceneView: ARSCNView!
-    @IBAction private func detectionButtonTapped(_ sender: UIButton) {
-        
-    }
-    @IBOutlet private weak var rightNavigation: UILabel!
-    @IBOutlet private weak var upNavigation: UILabel!
-    @IBOutlet private weak var leftNavigation: UILabel!
-    @IBOutlet private weak var distanceNavigation: UILabel!
-    
+    //sceneview bitte nicht private
+    @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet weak var rightNavigation: UILabel!
+    @IBOutlet weak var upNavigation: UILabel!
+    @IBOutlet weak var leftNavigation: UILabel!
     @IBOutlet private weak var progressRing: UICircularProgressRing!
     @IBOutlet weak var downNavigation: UILabel!
     // MARK: Overridden/Lifecycle Methods
@@ -72,6 +68,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
         configureLighting()
+    }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        screenWidth = Double(size.width)
+        screenHeight = Double(size.height)
+        if UIDevice.current.orientation.isLandscape {
+        } else {
+        }
     }
     
     /*
@@ -129,17 +133,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         progressRing.resetProgress()
         progressRing.isHidden = true
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        screenWidth = Double(size.width)
-        screenHeight = Double(size.height)
-        if UIDevice.current.orientation.isLandscape {
-        } else {
+    func loadCustomScans() {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                if file.lastPathComponent.hasSuffix(".arobject") {
+                    let arRefereceObject = try ARReferenceObject(archiveURL: file)
+                    detectionObjects.insert(arRefereceObject)
+                }
+            }
+        } catch {
+            print("Error loading custom scans")
         }
-    }
-    
 
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let config = ARWorldTrackingConfiguration()
