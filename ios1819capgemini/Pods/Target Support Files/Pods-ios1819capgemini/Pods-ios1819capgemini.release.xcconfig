@@ -1,9 +1,9 @@
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CUU" "${PODS_CONFIGURATION_BUILD_DIR}/INSPhotoGallery" "${PODS_CONFIGURATION_BUILD_DIR}/KeychainSwift" "${PODS_CONFIGURATION_BUILD_DIR}/Prototype" "${PODS_CONFIGURATION_BUILD_DIR}/Prototyper"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CUU" "${PODS_CONFIGURATION_BUILD_DIR}/INSPhotoGallery" "${PODS_CONFIGURATION_BUILD_DIR}/KeychainSwift" "${PODS_CONFIGURATION_BUILD_DIR}/Prototype" "${PODS_CONFIGURATION_BUILD_DIR}/Prototyper" "${PODS_CONFIGURATION_BUILD_DIR}/UICircularProgressRing"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_CFLAGS = $(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/CUU/CUU.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/INSPhotoGallery/INSPhotoGallery.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/KeychainSwift/KeychainSwift.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/Prototype/Prototype.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/Prototyper/Prototyper.framework/Headers"
-OTHER_LDFLAGS = $(inherited) -framework "CUU" -framework "INSPhotoGallery" -framework "KeychainSwift" -framework "Prototype" -framework "Prototyper"
+OTHER_CFLAGS = $(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/CUU/CUU.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/INSPhotoGallery/INSPhotoGallery.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/KeychainSwift/KeychainSwift.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/Prototype/Prototype.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/Prototyper/Prototyper.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/UICircularProgressRing/UICircularProgressRing.framework/Headers"
+OTHER_LDFLAGS = $(inherited) -framework "CUU" -framework "INSPhotoGallery" -framework "KeychainSwift" -framework "Prototype" -framework "Prototyper" -framework "UICircularProgressRing"
 OTHER_SWIFT_FLAGS = $(inherited) "-D" "COCOAPODS"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)

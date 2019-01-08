@@ -11,7 +11,7 @@ import UIKit
 //swiftlint:disable all
 // MARK: LastViewController
 class ListViewController: UIViewController {
-
+    
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var filterSegmentedControl: UISegmentedControl!
@@ -33,7 +33,6 @@ class ListViewController: UIViewController {
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -48,6 +47,7 @@ class ListViewController: UIViewController {
         DataHandler.refreshResolvedIncidents()
         filterSegmentedControl.selectedSegmentIndex = DataHandler.currentSegmentFilter
         tableView.reloadData()
+        creatingNodePossible = false
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -56,6 +56,7 @@ class ListViewController: UIViewController {
 
     // MARK: IBActions
     @IBAction private func didPressAddButton(_ sender: Any) {
+         creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
     
@@ -88,7 +89,9 @@ class ListViewController: UIViewController {
   
     
     private func share() {
-    let activityController = UIActivityViewController(activityItems: DataHandler.incidents, applicationActivities: nil)
+    DataHandler.saveToJSON()
+    let activityController = UIActivityViewController(activityItems: [DataHandler.getJSON()!], applicationActivities: nil)
+        
         let excludedActivities =
             [UIActivity.ActivityType.mail,
              UIActivity.ActivityType.addToReadingList,
@@ -103,13 +106,10 @@ class ListViewController: UIViewController {
              UIActivity.ActivityType.postToVimeo]
         
         activityController.excludedActivityTypes = excludedActivities
-        present(activityController, animated: true, completion: nil)
-    }
-    private func receive() {
+        self.present(activityController, animated: true, completion: nil)
     }
 }
 
-// MARK: Segmented Filter Constants
 enum Filter: Int { // Remark: Need to match Segment in Story Board.
     case showAll = 0
     case showOpen
@@ -154,4 +154,14 @@ extension ListViewController: UITableViewDataSource {
             return DataHandler.incidents.count
         }
     }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let incident = DataHandler.incidents[indexPath.row]
+            DataHandler.removeIncident(incidentToDelete: incident)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            return
+        }
+    }
+    
+
 }

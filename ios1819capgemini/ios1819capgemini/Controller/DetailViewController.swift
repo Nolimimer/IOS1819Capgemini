@@ -31,7 +31,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     var attachments: [Attachment] = []
     var imagePicker: UIImagePickerController!
 
-    
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
     @IBOutlet private weak var generatedDateLabel: UILabel!
@@ -44,9 +43,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     // MARK: IBActions
     @IBAction private func backButtonPressed(_ sender: Any) {
+         creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
-    
     @IBAction func showAllAttachments(_ sender: Any) {
         performSegue(withIdentifier: "attachmentSegue", sender: self)
     }
@@ -95,7 +94,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             }
             if hitView != attachmentView {
                 attachmentView?.removeFromSuperview()
-            } 
+            }
         }
     }
     
@@ -141,12 +140,12 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        creatingNodePossible = false
         modalPresentationStyle = .overCurrentContext
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        
+
         navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int
@@ -175,10 +174,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidLoad()
         
         attachments = computeAttachments()
-        
-//        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.handleTap(recognizer:)))
-//        self.view.addGestureRecognizer(gesture)
-        // add blurred subview
+
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -224,7 +220,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         return []
     }
     
-    @objc func handleTap(recognizer: UITapGestureRecognizer){
+    @objc func handleTap(recognizer: UITapGestureRecognizer) {
         self.view.endEditing(true)
         let location = recognizer.location(in: view)
 
@@ -239,7 +235,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
 
     
     @objc private func takePhoto() {
-        imagePicker =  UIImagePickerController()
+        imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
         present(imagePicker, animated: true, completion: nil)
@@ -247,7 +243,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @objc private func takeVideo() {
-        imagePicker =  UIImagePickerController()
+        imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
         imagePicker.mediaTypes = [kUTTypeMovie as String]
@@ -266,7 +262,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             present(alertController, animated: true)
         } else {
             print("Saved picture")
-            let index = 0
             for child in view.subviews {
                 if child is AttachmentView {
                     child.removeFromSuperview()
@@ -274,7 +269,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             }
         }
     }
-    
 }
 
 // MARK: Extension
@@ -371,8 +365,6 @@ extension DetailViewController: UIImagePickerControllerDelegate {
             DispatchQueue.main.async(execute: { () -> Void in })
         }
     }
-        
-        
     
     func saveImage(image: UIImage) -> Bool {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
@@ -396,7 +388,6 @@ extension DetailViewController: UIImagePickerControllerDelegate {
     }
     
 }
-
 
 // MARK: Constants
 enum Modus {

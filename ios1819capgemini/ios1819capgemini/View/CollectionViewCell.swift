@@ -12,10 +12,6 @@ import UIKit
 // MARK: - CollectionViewCell
 class CollectionViewCell: UICollectionViewCell {
     
-    // Nicht private!
-    // Diese Cell muss von DetailViewController
-    // aufgerufen werden, um die Funktionalität
-    // in diese Klasse zu delegieren.
     @IBOutlet private weak var imageView: UIImageView!
     
     func populateWithAttachment(_ attachment: Attachment) {

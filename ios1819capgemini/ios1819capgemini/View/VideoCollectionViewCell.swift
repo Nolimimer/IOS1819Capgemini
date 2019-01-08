@@ -18,9 +18,9 @@ class VideoCollectionViewCell: UICollectionViewCell {
 
         attachmentWrapper.loadThumbnailImage()
         
-        let frontImage = UIImage(named: "play") // The image in the foreground
-        let frontImageView = UIImageView(image: frontImage) // Create the view holding the image
-        frontImageView.frame = self.imageView.frame // The size and position of the front image
+        let frontImage = UIImage(named: "play")
+        let frontImageView = UIImageView(image: frontImage)
+        frontImageView.frame = self.imageView.frame 
         
         self.imageView.image = attachmentWrapper.thumbnail
         self.imageView.addSubview(frontImageView)
