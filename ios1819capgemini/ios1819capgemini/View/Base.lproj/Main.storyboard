@@ -43,9 +43,8 @@
                                 <connections>
                                     <segue destination="iNR-TU-aP6" kind="embed" id="tJa-dk-vD9"/>
                                 </connections>
+                                    <blurEffect style="light"/>
                             </containerView>
-                                <blurEffect style="light"/>
-                            </visualEffectView>
                             <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsO-Fy-ug4" customClass="UICircularProgressRing" customModule="UICircularProgressRing">
                                 <rect key="frame" x="73" y="270" width="228" height="127"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -101,18 +100,10 @@
                             <constraint firstAttribute="centerX" secondItem="zuy-y1-cIR" secondAttribute="centerX" id="3OA-iy-fds"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="8vs-jp-QKL" secondAttribute="bottom" constant="20" id="FnX-md-aRt"/>
                             <constraint firstItem="8vs-jp-QKL" firstAttribute="leading" secondItem="dAU-gm-pmP" secondAttribute="trailing" constant="197" id="GjX-g5-e9M"/>
-                            <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
-                            <constraint firstItem="mKQ-N7-Hho" firstAttribute="leading" secondItem="FUD-f2-h88" secondAttribute="leading" id="JmB-9A-Ygf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
-                            <constraint firstItem="8vs-jp-QKL" firstAttribute="leading" secondItem="dAU-gm-pmP" secondAttribute="trailing" constant="197" id="GjX-g5-e9M"/>
-                            <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
-                            <constraint firstItem="mKQ-N7-Hho" firstAttribute="leading" secondItem="FUD-f2-h88" secondAttribute="leading" id="JmB-9A-Ygf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mKQ-N7-Hho" secondAttribute="bottom" constant="88" id="Mgq-7p-nVV"/>
                             <constraint firstItem="uDJ-JA-xze" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="OVb-P8-78D"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IBe-6n-2Hy"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="mKQ-N7-Hho" secondAttribute="bottom" constant="63" id="IVO-G0-OMR"/>
-                            <constraint firstItem="zuy-y1-cIR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IYL-aA-6QP"/>
                             <constraint firstItem="mKQ-N7-Hho" firstAttribute="leading" secondItem="FUD-f2-h88" secondAttribute="leading" id="JmB-9A-Ygf"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vs-jp-QKL" secondAttribute="trailing" constant="20" id="Lj0-nE-BvY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dAU-gm-pmP" secondAttribute="bottom" constant="20" id="Oug-f9-ub7"/>
