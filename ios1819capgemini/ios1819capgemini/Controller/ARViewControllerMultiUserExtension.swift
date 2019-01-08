@@ -22,6 +22,7 @@ extension ARViewController {
                 sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                 mapProvider = peer
                 print("world map: \(worldMap)")
+                sceneView.session.add(anchor: (worldMap.anchors.first as? ARObjectAnchor)!)
                 self.objectAnchor = worldMap.anchors.first as? ARObjectAnchor
 //                self.detectedObjectNode = SCNNode()
 //                detectedObjectNode?.position = SCNVector3(x: (worldMap.anchors.first?.transform.columns.3.x)!,
