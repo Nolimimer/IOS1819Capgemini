@@ -22,10 +22,14 @@ enum DataHandler {
             return documentsDirectory.appendingPathComponent(Constants.fileName)
         }
     }
-    
+
     // MARK: Stored Type Properties
     static var incidents: [Incident] = []
     static var largestID = 0
+    static var currentSegmentFilter = Filter.showAll.rawValue // Show All by default
+    static var openIncidents = [Incident]()
+    static var inProgressIncidents = [Incident]()
+    static var resolvedIncidents = [Incident]()
     
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
@@ -36,11 +40,23 @@ enum DataHandler {
     static func incident(withId id: Int) -> Incident? {
         return incidents.first(where: { $0.identifier == id })
     }
-    static func incident(withID id: String) -> Incident? {
-        return incidents.first(where: { "\($0.identifier)" == id})
+    static func incident(withId id: String) -> Incident? {
+        return incidents.first(where: { "\($0.identifier)" == id })
+    }
+
+    static func refreshOpenIncidents() {
+        openIncidents = incidents.filter({ $0.status == Status.open })
     }
     
-     // MARK: Type Methods
+    static func refreshInProgressIncidents() {
+        inProgressIncidents = incidents.filter({ $0.status == Status.progress })
+    }
+    
+    static func refreshResolvedIncidents() {
+        resolvedIncidents = incidents.filter({ $0.status == Status.resolved })
+    }
+    
+    // MARK: Type Methods
     static func loadFromJSON() {
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)

@@ -442,7 +442,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             guard let name = node.name else {
                 return
             }
-            if DataHandler.incident(withID: name) == nil {
+            if DataHandler.incident(withId: name) == nil {
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
             }
         }
