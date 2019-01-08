@@ -45,7 +45,6 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
-            print("Decoded \(incidents.count) incidents.")
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
@@ -55,8 +54,10 @@ enum DataHandler {
         do {
             let data = try JSONEncoder().encode(incidents)
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
-            try jsonFileWrapper.write(to: Constants.localStorageURL, options: FileWrapper.WritingOptions.atomic, originalContentsURL: nil)
-            print("Saved incidents!")
+            try jsonFileWrapper.write(to: Constants.localStorageURL,
+                                      options: FileWrapper.WritingOptions.atomic,
+                                      originalContentsURL: nil)
+//            print("Saved incidents!")
         } catch _ {
             print("Could not save incidents")
         }
@@ -79,7 +80,6 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
-            print("Decoded \(incidents.count) incidents.")
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }

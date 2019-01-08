@@ -20,7 +20,6 @@ class LineView: UIView {
     var lineCGColor: CGColor?
     
     override func draw(_ rect: CGRect) {
-        // Draw a line from the left to the right at the midpoint of the view's rect height.
         let midpoint = self.bounds.size.height / 2.0
         if let context = UIGraphicsGetCurrentContext() {
             context.setLineWidth(lineWidth)

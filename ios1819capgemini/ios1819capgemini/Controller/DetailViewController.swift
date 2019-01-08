@@ -35,7 +35,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     var attachments: [Attachment] = []
     var imagePicker: UIImagePickerController!
 
-    
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
     @IBOutlet private weak var generatedDateLabel: UILabel!
@@ -145,7 +144,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         modalPresentationStyle = .overCurrentContext
@@ -179,7 +177,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         recordingSession = AVAudioSession.sharedInstance()
         
@@ -284,11 +281,18 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             present(alertController, animated: true)
         } else {
             print("Saved picture")
+<<<<<<< HEAD
             let index = 0
             hidePopup()
+=======
+            for child in view.subviews {
+                if child is AttachmentView {
+                    child.removeFromSuperview()
+                }
+            }
+>>>>>>> 38d12e6153474a8dcf0928dee0803c49ec393e66
         }
     }
-    
 }
 
 // MARK: Extension
