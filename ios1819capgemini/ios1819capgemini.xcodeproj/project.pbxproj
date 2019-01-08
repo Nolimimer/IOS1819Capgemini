@@ -55,7 +55,6 @@
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
 		A66447EF2192121300B2D32B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A66447EE2192121300B2D32B /* Assets.xcassets */; };
 		A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447F02192121300B2D32B /* LaunchScreen.storyboard */; };
-		B316D16021B6CC9E007097D3 /* ObjectInfo.sks in Resources */ = {isa = PBXBuildFile; fileRef = B316D15F21B6CC9E007097D3 /* ObjectInfo.sks */; };
 		B363B8DB21C58BCF00754EF1 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = B363B8DA21C58BCF00754EF1 /* art.scnassets */; };
 		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
@@ -114,7 +113,6 @@
 		A66447EE2192121300B2D32B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A66447F12192121300B2D32B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A66447F32192121300B2D32B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B316D15F21B6CC9E007097D3 /* ObjectInfo.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ObjectInfo.sks; sourceTree = "<group>"; };
 		B363B8DA21C58BCF00754EF1 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		BE5BAF7A21A16A0700CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,13 +187,6 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
-		90903D1721B688B200DA4C7E /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		90CB845621AD9D4100CA1C09 /* Scratch Detection */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,7 +253,6 @@
 		A66447E62192121300B2D32B /* ios1819capgemini */ = {
 			isa = PBXGroup;
 			children = (
-				A66447EE2192121300B2D32B /* Assets.xcassets */,
 				90D3452E21B44C03009EF79E /* Attachment */,
 				90CB845621AD9D4100CA1C09 /* Scratch Detection */,
 				9082AF6321A5618100CA8E80 /* Model */,
@@ -350,7 +340,6 @@
 			files = (
 				0D5F4A7721A3121F00D443CC /* CUU.plist in Resources */,
 				A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */,
-				B316D16021B6CC9E007097D3 /* ObjectInfo.sks in Resources */,
 				A66447EF2192121300B2D32B /* Assets.xcassets in Resources */,
 				B363B8DB21C58BCF00754EF1 /* art.scnassets in Resources */,
 				0DF3077221B7DBC4007D57D6 /* LineView.xib in Resources */,

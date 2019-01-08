@@ -203,9 +203,18 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         self.navigationController?.view.sendSubviewToBack(blurView)
     }
     
+    func hidePopup() {
+        for child in view.subviews {
+            if child is AttachmentView {
+                child.removeFromSuperview()
+            }
+        }
+    }
+    
     func finishRecording(success: Bool) {
         
         audioRecorder?.stop()
+        let duration = audioRecorder.currentTime
         audioRecorder = nil
         if success {
             let paths = NSSearchPathForDirectoriesInDomains(
@@ -213,13 +222,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             let defaults = UserDefaults.standard
             let name = "cARgeminiAudioAsset\(defaults.integer(forKey: "AttachedAudioName") - 1).m4a"
             let audioFilename = getDocumentsDirectory().appendingPathComponent(name)
-            incident.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)"))
+            incident.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
             recordButton.setTitle("Audio", for: .normal)
-            for child in view.subviews {
-                if child is AttachmentView {
-                    child.removeFromSuperview()
-                }
-            }
+            hidePopup()
             attachments = []
             attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
             attachments.append(contentsOf: (incident.attachments))
@@ -280,11 +285,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         } else {
             print("Saved picture")
             let index = 0
-            for child in view.subviews {
-                if child is AttachmentView {
-                    child.removeFromSuperview()
-                }
-            }
+            hidePopup()
         }
     }
     
@@ -362,25 +363,27 @@ extension DetailViewController: UIImagePickerControllerDelegate {
                 print("Saved image")
             }
         }
-        
         if let selectedVideo: URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
             // Save video to the main photo album
             let selectorToCall = #selector(AttachmentViewController.videoSaved(_:didFinishSavingWithError:context:))
             
             // 2
             UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
+
             // Save the video to the app directory
             let videoData = try? Data(contentsOf: selectedVideo)
+            //let a = Data
             let paths = NSSearchPathForDirectoriesInDomains(
                 FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
             let documentsDirectory = URL(fileURLWithPath: paths[0])
             let defaults = UserDefaults.standard
             let name = "cARgeminiVideoAsset\(defaults.integer(forKey: "AttachedVideoName")).mov"
+            
             let dataPath = documentsDirectory.appendingPathComponent(name)
             defaults.set(defaults.integer(forKey: "AttachedVideoName") + 1, forKey: "AttachedVideoName")
             do {
                 try videoData?.write(to: dataPath, options: [])
-                incident.addAttachment(attachment: Video(name: name, videoPath: "\(paths[0])/\(name)"))
+                incident.addAttachment(attachment: Video(name: name, videoPath: "\(paths[0])/\(name)", duration: 3.0))
             } catch {
                 print(Error.self)
             }
@@ -393,6 +396,7 @@ extension DetailViewController: UIImagePickerControllerDelegate {
         } else {
             DispatchQueue.main.async(execute: { () -> Void in })
         }
+        hidePopup()
     }
     
     func saveImage(image: UIImage) -> Bool {

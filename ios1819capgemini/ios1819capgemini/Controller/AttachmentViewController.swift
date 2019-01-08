@@ -180,7 +180,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
                 }
                 let strings = val.split(separator: "/")
                 let name = strings[strings.count - 1]
-                result.append(Video(name: String(name), videoPath: val))
+                //result.append(Video(name: String(name), videoPath: val, duration: ))
             }
             return result
         }

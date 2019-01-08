@@ -19,26 +19,36 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var imageView: UIImageView!
     
     func populateWithAttachment(_ attachment: Attachment) {
-        
         let attachmentWrapper = AttachmentWrapper(attachment: attachment)
+        
+        for view in imageView.subviews {
+            view.removeFromSuperview()
+        }
+        imageView.reloadInputViews()
         
         attachmentWrapper.loadThumbnailImage()
         self.imageView.image = nil
         self.imageView.image = cropToBounds(image: attachmentWrapper.thumbnail!, width: 90, height: 88)
         if attachment is Photo {
+            //imageView.transform = imageView.transform.rotated(by: CGFloat(M_PI_2))
             let image = makeRoundImg(img: self.imageView)
-            imageView.transform = imageView.transform.rotated(by: CGFloat(M_PI_2))
             self.imageView.image = image
             return
         }
         if attachment is Video {
-            let frontImage = UIImage(named: "play2") // The image in the foreground
+            let frontImage = UIImage(named: "play5") // The image in the foreground
             let frontImageView = UIImageView(image: frontImage) // Create the view holding the image
-            frontImageView.frame = self.imageView.frame // The size and position of the front image
+            let xCoord = self.imageView.center.x - 30
+            let yCoord = self.imageView.center.y - 30
+            frontImageView.frame = CGRect(x: xCoord, y: yCoord, width: 20, height: 20)
+//            let x =  (self.imageView.frame.minX - self.imageView.frame.maxX)/2
+//            let y = (self.imageView.frame.minY - self.imageView.frame.maxY)/2
+//            let triangle = CGRect(x: x, y: y, width: 2m0, height: 20)
             self.imageView.addSubview(frontImageView)
-            self.imageView.image = cropToBounds(image: imageView.image ?? UIImage(), width: 90, height: 88)
+//            self.imageView.image = cropToBounds(image: imageView.image ?? UIImage(), width: 90, height: 88)
             let image = makeRoundImg(img: self.imageView)
             self.imageView.image = image
+            return
         }
         if attachment is Audio {
             let image = makeRoundImg(img: self.imageView)
