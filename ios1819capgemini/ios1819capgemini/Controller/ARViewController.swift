@@ -433,6 +433,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     @objc func tapped(recognizer: UIGestureRecognizer) {
+        
     }
     
     // MARK: Overridden/Lifecycle Methods
