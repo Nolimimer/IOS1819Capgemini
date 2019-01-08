@@ -38,7 +38,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
-    
+
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
@@ -75,11 +75,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         setupBoxes()
         configureLighting()
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
-        sceneView.addGestureRecognizer(gestureRecognizer)
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         screenWidth = Double(size.width)
         screenHeight = Double(size.height)
@@ -224,58 +221,58 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                xOffset: 0,
                                                                yOffset: (imgHeight - imgWidth) / 2)
                 //uncomment if boxes should only appear after object has been detected
-                //                if detectedObjectNode != nil {
-                self.boundingBoxes[index].show(frame: rect,
-                                               label: textLabel,
-                                               color: UIColor.green,
-                                               textColor: textColor)
-                let position = CGPoint(x: rect.midX,
-                                       y: rect.midY)
-                let hitTestResult = sceneView.hitTest(position, types: .featurePoint)
-                guard let hitTest = hitTestResult.first else {
-                    return
-                }
-                if sigmoid(prediction.score) > 0.80 && calculateNodesInRadius(coordinate: position, radius: 40) {
-                    let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
-                                         y: (hitTest.worldTransform.columns.3.y),
-                                         z: (hitTest.worldTransform.columns.3.z))
-                    let length = rect.maxY - rect.minY
-                    let width = rect.maxX - rect.minX
-                    let formatter = NumberFormatter()
-                    formatter.maximumFractionDigits = 2
-                    let lengthCM = (length * 2.54) / 96
-                    let widthCM = (width * 2.54) / 96
-                    guard let formattedLength = formatter.string(from: NSNumber(value: Float(lengthCM))) else {
+//                if detectedObjectNode != nil {
+                    self.boundingBoxes[index].show(frame: rect,
+                                                   label: textLabel,
+                                                   color: UIColor.green,
+                                                   textColor: textColor)
+                    let position = CGPoint(x: rect.midX,
+                                           y: rect.midY)
+                    let hitTestResult = sceneView.hitTest(position, types: .featurePoint)
+                    guard let hitTest = hitTestResult.first else {
                         return
                     }
-                    guard let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM))) else {
-                        return
+                    if sigmoid(prediction.score) > 0.80 && calculateNodesInRadius(coordinate: position, radius: 40) {
+                        let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
+                                             y: (hitTest.worldTransform.columns.3.y),
+                                             z: (hitTest.worldTransform.columns.3.z))
+                        let length = rect.maxY - rect.minY
+                        let width = rect.maxX - rect.minX
+                        let formatter = NumberFormatter()
+                        formatter.maximumFractionDigits = 2
+                        let lengthCM = (length * 2.54) / 96
+                        let widthCM = (width * 2.54) / 96
+                        guard let formattedLength = formatter.string(from: NSNumber(value: Float(lengthCM))) else {
+                            return
+                        }
+                        guard let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM))) else {
+                            return
+                        }
+                        automaticallyDetectedIncidents.append(position)
+                        let sphere = SCNSphere(radius: 0.015)
+                        let materialSphere = SCNMaterial()
+                        materialSphere.diffuse.contents = UIColor(red: 0.0,
+                                                                  green: 0.0,
+                                                                  blue: 1.0,
+                                                                  alpha: CGFloat(Float(sigmoid(prediction.score))))
+                        sphere.materials = [materialSphere]
+                        let sphereNode = SCNNode(geometry: sphere)
+                        sphereNode.position = tmp
+                        let coordinates = sceneView.scene.rootNode.convertPosition(
+                            SCNVector3(hitTest.worldTransform.columns.3.x,
+                                        hitTest.worldTransform.columns.3.y,
+                                        hitTest.worldTransform.columns.3.z),
+                            to: self.detectedObjectNode)
+                        let incident = Incident (type: .scratch,
+                                                 description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
+                                                 coordinate: Coordinate(vector: coordinates))
+                        DataHandler.incidents.append(incident)
+                        sphereNode.runAction(imageHighlightAction)
+                        sphereNode.name = "\(incident.identifier)"
+                        self.scene.rootNode.addChildNode(sphereNode)
+                        nodes.append(sphereNode)
                     }
-                    automaticallyDetectedIncidents.append(position)
-                    let sphere = SCNSphere(radius: 0.015)
-                    let materialSphere = SCNMaterial()
-                    materialSphere.diffuse.contents = UIColor(red: 0.0,
-                                                              green: 0.0,
-                                                              blue: 1.0,
-                                                              alpha: CGFloat(Float(sigmoid(prediction.score))))
-                    sphere.materials = [materialSphere]
-                    let sphereNode = SCNNode(geometry: sphere)
-                    sphereNode.position = tmp
-                    let coordinates = sceneView.scene.rootNode.convertPosition(
-                        SCNVector3(hitTest.worldTransform.columns.3.x,
-                                   hitTest.worldTransform.columns.3.y,
-                                   hitTest.worldTransform.columns.3.z),
-                        to: self.detectedObjectNode)
-                    let incident = Incident (type: .scratch,
-                                             description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
-                        coordinate: Coordinate(vector: coordinates))
-                    DataHandler.incidents.append(incident)
-                    sphereNode.runAction(imageHighlightAction)
-                    sphereNode.name = "\(incident.identifier)"
-                    self.scene.rootNode.addChildNode(sphereNode)
-                    nodes.append(sphereNode)
-                }
-                //                }
+//                }
                 //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
             }
         }
@@ -285,7 +282,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     /*
      returns true if there is a node in a certain radius from the coordinate
-     */
+    */
     func calculateNodesInRadius(coordinate: CGPoint , radius: CGFloat) -> Bool {
         for incident in automaticallyDetectedIncidents {
             if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
@@ -363,45 +360,44 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
      opens the detail view for the tapped pin.
      If a new pin is created a screenshot of the location is taken before/after placing the pin.
      */
-    @objc func tapped(recognizer: UIGestureRecognizer) {
-        if recognizer.state == .ended {
-            let location: CGPoint = recognizer.location(in: sceneView)
-            let hitOptions = self.sceneView.hitTest(location, options: nil)
-            if let tappedNode = hitOptions.first?.node,
-                let _ = tappedNode.name {
-                self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-            } else {
-                let hitResultsFeaturePoints: [ARHitTestResult] =
-                    sceneView.hitTest(location, types: .featurePoint)
-                if let hitResult = hitResultsFeaturePoints.first {
-                    let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
-                        SCNVector3(hitResult.worldTransform.columns.3.x,
-                                   hitResult.worldTransform.columns.3.y,
-                                   hitResult.worldTransform.columns.3.z),
-                        to: detectedObjectNode)
-                    let incident = Incident (type: .unknown,
-                                             description: "New Incident",
-                                             coordinate: Coordinate(vector: coordinateRelativeToObject)
-                    )
-                    filterAllPins()
-                    let imageWithoutPin = sceneView.snapshot()
-                    saveImage(image: imageWithoutPin, incident: incident)
-                    add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                          hitResult.worldTransform.columns.3.y,
-                                                          hitResult.worldTransform.columns.3.z),
-                             identifier: "\(incident.identifier)" )
-                    filter3DPins(identifier: "\(incident.identifier)")
-                    let imageWithPin = sceneView.snapshot()
-                    saveImage(image: imageWithPin, incident: incident)
-                    DataHandler.incidents.append(incident)
-                    descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-                    
-                }
-                return
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        let location = touches.first!.location(in: sceneView)
+        let hitOptions = self.sceneView.hitTest(location, options: nil)
+        if let tappedNode = hitOptions.first?.node,
+            let _ = tappedNode.name {
+            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+        } else {
+            let hitResultsFeaturePoints: [ARHitTestResult] =
+                sceneView.hitTest(location, types: .featurePoint)
+            if let hitResult = hitResultsFeaturePoints.first {
+                let coordinateRelativeToObject = sceneView.scene.rootNode.convertPosition(
+                    SCNVector3(hitResult.worldTransform.columns.3.x,
+                               hitResult.worldTransform.columns.3.y,
+                               hitResult.worldTransform.columns.3.z),
+                    to: detectedObjectNode)
+                let incident = Incident (type: .unknown,
+                                         description: "New Incident",
+                                         coordinate: Coordinate(vector: coordinateRelativeToObject)
+                )
+                filterAllPins()
+                let imageWithoutPin = sceneView.snapshot()
+                saveImage(image: imageWithoutPin, incident: incident)
+                add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                      hitResult.worldTransform.columns.3.y,
+                                                      hitResult.worldTransform.columns.3.z),
+                         identifier: "\(incident.identifier)" )
+                filter3DPins(identifier: "\(incident.identifier)")
+                let imageWithPin = sceneView.snapshot()
+                saveImage(image: imageWithPin, incident: incident)
+                DataHandler.incidents.append(incident)
+                descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
+                
             }
+            return
         }
     }
-    
+
     func loadCustomScans() {
         let fileManager = FileManager.default
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
