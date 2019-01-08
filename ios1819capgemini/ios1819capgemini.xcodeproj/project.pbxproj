@@ -15,7 +15,7 @@
 		0DF3077C21B7E067007D57D6 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DF3077B21B7E067007D57D6 /* AttachmentView.xib */; };
 		0DF3077E21B7E070007D57D6 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF3077D21B7E070007D57D6 /* AttachmentView.swift */; };
 		5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC4072921A8331100A64106 /* DataHandler.swift */; };
-		905C158F21C9CD9800182B14 /* DetailViewController+AVAudioRecorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905C158E21C9CD9800182B14 /* DetailViewController+AVAudioRecorderDelegate.swift */; };
+		904AA43521E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */; };
 		905C159121C9D08400182B14 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905C159021C9D08400182B14 /* Audio.swift */; };
 		9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6421A561D200CA8E80 /* CarPart.swift */; };
 		9082AF6B21A561D200CA8E80 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6521A561D200CA8E80 /* Car.swift */; };
@@ -74,6 +74,7 @@
 		0DF3077D21B7E070007D57D6 /* AttachmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		5EC4072921A8331100A64106 /* DataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
 		67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios1819capgemini.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DetailViewController+AVAudioRecorderDelegate.swift"; sourceTree = "<group>"; };
 		905C158E21C9CD9800182B14 /* DetailViewController+AVAudioRecorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DetailViewController+AVAudioRecorderDelegate.swift"; sourceTree = "<group>"; };
 		905C159021C9D08400182B14 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		9082AF6421A561D200CA8E80 /* CarPart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPart.swift; sourceTree = "<group>"; };
@@ -140,6 +141,7 @@
 		0D5F4A7821A317AB00D443CC /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */,
 				A66447E92192121300B2D32B /* ARViewController.swift */,
 				BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */,
 				BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */,
@@ -179,6 +181,14 @@
 				67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		904AA43121E4871F0027D29E /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				905C158E21C9CD9800182B14 /* DetailViewController+AVAudioRecorderDelegate.swift */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		9082AF6321A5618100CA8E80 /* Model */ = {
@@ -245,7 +255,7 @@
 				A66447E52192121300B2D32B /* Products */,
 				D8D30B6BEE4E7F64DA26A3F4 /* Pods */,
 				253FA3086DD92FE99E3DF7A7 /* Frameworks */,
-				90903D1721B688B200DA4C7E /* Recovered References */,
+				904AA43121E4871F0027D29E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -460,7 +470,6 @@
 				90C7378021B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift in Sources */,
 				9082AF6B21A561D200CA8E80 /* Car.swift in Sources */,
 				90C7377A21B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift in Sources */,
-				905C158F21C9CD9800182B14 /* DetailViewController+AVAudioRecorderDelegate.swift in Sources */,
 				90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */,
 				90CB846421ADAAF700CA1C09 /* Anchors1.swift in Sources */,
 				90CB846221ADA08E00CA1C09 /* Utilities.swift in Sources */,
@@ -473,6 +482,7 @@
 				A66447E82192121300B2D32B /* AppDelegate.swift in Sources */,
 				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,
 				9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */,
+				904AA43521E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift in Sources */,
 				9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */,
 				90D3451321B3FF29009EF79E /* AttachmentViewController.swift in Sources */,
 				90CB847021ADAB3100CA1C09 /* Anchors7.swift in Sources */,

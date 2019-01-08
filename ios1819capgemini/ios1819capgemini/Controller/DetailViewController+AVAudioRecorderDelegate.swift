@@ -11,8 +11,7 @@ import AVKit
 
 extension DetailViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
-    
-    func startRecording() {
+    public func startRecording() {
         let defaults = UserDefaults.standard
         let audioFilename = getDocumentsDirectory().appendingPathComponent("cARgeminiAudioAsset\(defaults.integer(forKey: "AttachedAudioName")).m4a")
         defaults.set(defaults.integer(forKey: "AttachedAudioName") + 1, forKey: "AttachedAudioName")

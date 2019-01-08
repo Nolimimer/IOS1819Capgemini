@@ -281,16 +281,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             present(alertController, animated: true)
         } else {
             print("Saved picture")
-<<<<<<< HEAD
             let index = 0
             hidePopup()
-=======
-            for child in view.subviews {
-                if child is AttachmentView {
-                    child.removeFromSuperview()
-                }
-            }
->>>>>>> 38d12e6153474a8dcf0928dee0803c49ec393e66
+            
         }
     }
 }
