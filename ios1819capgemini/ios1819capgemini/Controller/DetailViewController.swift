@@ -51,7 +51,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func showAllAttachments(_ sender: Any) {
-        performSegue(withIdentifier: "attachmentSegue", sender: self)
+        //performSegue(withIdentifier: "attachmentSegue", sender: self)
     }
     
     @IBAction private func editButtonPressed(_ sender: Any) {
