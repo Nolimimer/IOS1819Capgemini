@@ -212,6 +212,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if !ARViewController.objectDetected {
             return
         }
+        print("detected object node : \(detectedObjectNode)")
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
                 let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
