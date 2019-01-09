@@ -158,7 +158,9 @@ extension ARViewController {
      sets navigation buttons based on the navigation which is given
      */
     func setNavigationArrows(for trackingState: ARCamera.TrackingState) {
-        
+        if !ARViewController.objectDetected {
+            return 
+        }
         upNavigation.isHidden = true
         downNavigation.isHidden = true
         rightNavigation.isHidden = true
