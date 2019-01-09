@@ -178,7 +178,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
 //      uncomment for ar navigation arrow
 //      setNavigationArrows(for: frame.camera.trackingState)
-        updateNodes()
         updateStatus(for: frame, trackingState: frame.camera.trackingState)
         updateIncidents()
         updateInfoPlane()
@@ -214,11 +213,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
-                let coordinateRelativeObject = self.sceneView.scene.rootNode.convertPosition(incident.getCoordinateToVector(), to: detectedObjectNode)
-                let coordinateRelativeWorld = self.sceneView.scene.rootNode.convertPosition(incident.getCoordinateToVector(), to: nil)
-                add3DPin(vectorCoordinate: coordinateRelativeWorld, identifier: "\(incident.identifier)")
-                print("detected object node : \(detectedObjectNode)")
-                print("coordinate relative object : \(coordinateRelativeObject)")
+//              let coordinateRelativeObject = self.sceneView.scene.rootNode.convertPosition(incident.getCoordinateToVector(), to: detectedObjectNode)
+//              let coordinateRelativeWorld = self.sceneView.scene.rootNode.convertPosition(incident.getCoordinateToVector(), to: nil)
+                let coordinateRelativeObject = detectedObjectNode?.convertPosition(incident.getCoordinateToVector(), to: nil)
+                add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
             }
         }
     }
