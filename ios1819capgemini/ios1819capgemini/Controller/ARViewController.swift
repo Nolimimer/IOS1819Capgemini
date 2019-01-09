@@ -23,6 +23,7 @@ var creatingNodePossible = true
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
+    static var objectDetected = false
     var detectedObjectNode: SCNNode?
     private var detectionObjects = Set <ARReferenceObject>()
     let scene = SCNScene()
@@ -40,7 +41,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
-
+    
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
@@ -112,7 +113,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 progressRing.maxValue = 100
                 progressRing.startProgress(to: 100, duration: 1.0) {
                     if let hitResult = hitResultsFeaturePoints.first {
-//                        if self.detectedObjectNode != nil {
+                        if self.detectedObjectNode != nil {
                             let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
                                 SCNVector3(hitResult.worldTransform.columns.3.x,
                                            hitResult.worldTransform.columns.3.y,
@@ -133,7 +134,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             self.saveImage(image: imageWithPin, incident: incident)
                             DataHandler.incidents.append(incident)
                             self.descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-//                        }
+                        }
                     }
                 }
             }
@@ -158,7 +159,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         } catch {
             print("Error loading custom scans")
         }
-
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -182,6 +182,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
+        updateIncidents()
         refreshNodes()
         setNavigationArrows(for: frame.camera.trackingState)
         // Retain the image buffer for Vision processing.
@@ -202,13 +203,41 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             self.node = node
             self.objectAnchor = objectAnchor
-            detectedObjectNode = node
-            for incident in DataHandler.incidents {
-                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
-            }
+            /*
+            node nimmt erst einen wert an nachdem die methode ausgeführt wurde, deswegen ist
+            detected object node hier eine nicht mit werten initialisierte node und ein transformieren der koordinaten in der methode selbst ist nicht möglich
+            (bzw. produziert falsche werte)
+            */
+            self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+            ARViewController.objectDetected = true
         }
         return node
+    }
+    
+    func updateIncidents() {
+        if !ARViewController.objectDetected {
+            return
+        }
+        for incident in DataHandler.incidents {
+            if incidentHasNotBeenPlaced(incident: incident) {
+                /*
+                let coordianteRelativeObject = self.sceneView.rootNode.convertPosition(incident.getCoordinateToVector(), to: detectedObjectNode)
+                let coordinateRelativeWorld = self.sceneView.rootNode.convertPosition(coordinateRelativeObject, to: nil)
+                */
+                let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
+                add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
+            }
+        }
+    }
+    
+    func incidentHasNotBeenPlaced (incident: Incident) -> Bool {
+        for node in nodes {
+            if String(incident.identifier) == node.name {
+                return false
+            }
+        }
+        return true
     }
     
     // Create shape layers for the bounding boxes.
