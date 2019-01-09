@@ -212,13 +212,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if !ARViewController.objectDetected {
             return
         }
-        print("detected object node : \(detectedObjectNode)")
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
-                let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
-                add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
+                let coordinateRelativeObject = self.sceneView.scene.rootNode.convertPosition(incident.getCoordinateToVector(), to: detectedObjectNode)
+                let coordinateRelativeWorld = self.sceneView.scene.rootNode.convertPosition(incident.getCoordinateToVector(), to: nil)
+                add3DPin(vectorCoordinate: coordinateRelativeWorld, identifier: "\(incident.identifier)")
+                print("detected object node : \(detectedObjectNode)")
+                print("coordinate relative object : \(coordinateRelativeObject)")
             }
-
         }
     }
     
