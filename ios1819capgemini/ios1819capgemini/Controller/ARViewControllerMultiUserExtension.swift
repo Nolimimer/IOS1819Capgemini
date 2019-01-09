@@ -21,13 +21,6 @@ extension ARViewController {
                 configuration.initialWorldMap = worldMap
                 sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
                 mapProvider = peer
-                print("world map: \(worldMap)")
-                print("anchors: \(worldMap.anchors)")
-                for anchor in worldMap.anchors {
-                    sceneView.session.add(anchor: (anchor))
-                    print("anchor : \(anchor.name) added")
-                }
-                
                 self.objectAnchor = worldMap.anchors.first as? ARObjectAnchor
 //                self.detectedObjectNode = SCNNode()
 //                detectedObjectNode?.position = SCNVector3(x: (worldMap.anchors.first?.transform.columns.3.x)!,
@@ -46,10 +39,6 @@ extension ARViewController {
         do {
             let incidents = try JSONDecoder().decode([Incident].self, from: data)
             print("incident array decoded")
-            if incidents.isEmpty {
-                nodes = []
-                automaticallyDetectedIncidents = []
-            }
             DataHandler.incidents = incidents
         } catch {
 
@@ -74,7 +63,7 @@ extension ARViewController {
     }
     
     //called after incident is editted by a peer
-    func updateIncidents() {
+    func incidentEditted() {
         if !ARViewController.incidentEdited {
             return
         }

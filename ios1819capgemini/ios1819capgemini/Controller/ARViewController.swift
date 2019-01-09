@@ -30,6 +30,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     
     // MARK: Stored Instance Properties
+    static var objectDetected = false
     var detectedObjectNode: SCNNode?
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
@@ -197,13 +198,36 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 notification.notificationOccurred(.success)
             }
             self.objectAnchor = objectAnchor
-            detectedObjectNode = node
+            self.detectedObjectNode = node
+            ARViewController.objectDetected = true
 //            for incident in DataHandler.incidents {
 //                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
 //            }
 //            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
         }
         return node
+    }
+    
+    func updateIncidents() {
+        if !ARViewController.objectDetected {
+            return
+        }
+        for incident in DataHandler.incidents {
+            if incidentHasNotBeenPlaced(incident: incident) {
+                let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
+                add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
+            }
+
+        }
+    }
+    
+    func incidentHasNotBeenPlaced (incident: Incident) -> Bool {
+        for node in nodes {
+            if String(incident.identifier) == node.name {
+                return false
+            }
+        }
+        return true
     }
 
     //adds a 3D pin to the AR View
