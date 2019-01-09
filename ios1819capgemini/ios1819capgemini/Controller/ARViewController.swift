@@ -216,7 +216,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //              let coordinateRelativeObject = self.sceneView.scene.rootNode.convertPosition(incident.getCoordinateToVector(), to: detectedObjectNode)
 //              let coordinateRelativeWorld = self.sceneView.scene.rootNode.convertPosition(incident.getCoordinateToVector(), to: nil)
                 let coordinateRelativeObject = detectedObjectNode?.convertPosition(incident.getCoordinateToVector(), to: nil)
-                add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
+                add3DPin(vectorCoordinate: coordinateRelativeObject!, identifier: "\(incident.identifier)")
             }
         }
     }
