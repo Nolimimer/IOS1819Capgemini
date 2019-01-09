@@ -203,7 +203,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //            for incident in DataHandler.incidents {
 //                add3DPin(vectorCoordinate: incident.getCoordinateToVector(), identifier: "\(incident.identifier)")
 //            }
-//            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
         }
         return node
     }
