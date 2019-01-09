@@ -174,7 +174,6 @@
 		B30A477421CFBC59007049F8 /* ViewController+ApplicationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+ApplicationState.swift"; sourceTree = "<group>"; };
 		B30A477621CFBC59007049F8 /* ScannerAppUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerAppUtilities.swift; sourceTree = "<group>"; };
 		B30A477721CFBC59007049F8 /* ARCameraTrackingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARCameraTrackingState.swift; sourceTree = "<group>"; };
-		BE5BAF7A21A16A0700CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA09652021CEE59F00174922 /* StatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewController.swift; sourceTree = "<group>"; };
 		BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusbar.swift; sourceTree = "<group>"; };
 		BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerScreenshot.swift; sourceTree = "<group>"; };
@@ -831,7 +830,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.www1.ios1819capgemini;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "de.tum.in.www1.ios1819capgemini InHouse";
+				PROVISIONING_PROFILE_SPECIFIER = $SIGH_NAME;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
