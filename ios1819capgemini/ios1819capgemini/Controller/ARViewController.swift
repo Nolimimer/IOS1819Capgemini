@@ -505,7 +505,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     @objc func tapped(recognizer: UIGestureRecognizer) {
         if recognizer.state != .began  {
-            print("HERE")
             progressRing.resetProgress()
             progressRing.isHidden = true
         }
