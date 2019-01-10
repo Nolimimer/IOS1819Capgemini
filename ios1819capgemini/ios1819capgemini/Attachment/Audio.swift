@@ -10,12 +10,34 @@ import Foundation
 import UIKit
 
 class Audio: Attachment {
+    static var type = AttachmentType.audio
+    
+    var data: Data?
+    
+    var identifier: Int
+    
+    var date: Date
+    
+    var filePath: String
+    
+    var name: String
+    
     
     let duration: TimeInterval
     
     init(name: String, filePath: String, duration: TimeInterval) {
         self.duration = duration
-        super.init(name: name, filePath: filePath)
+        do {
+            try data = Data(contentsOf: URL(fileURLWithPath: filePath))
+        } catch {
+            data = nil
+        }
+        date = Date()
+        self.name = name
+        self.filePath = videoPath
+        let defaults = UserDefaults.standard
+        identifier = defaults.integer(forKey: "AttachmentIdentifer")
+        defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
     }
     
     required init(from decoder: Decoder) throws {

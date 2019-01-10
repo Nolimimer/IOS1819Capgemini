@@ -4,22 +4,39 @@
 //
 //  Created by MembrainDev on 04.12.18.
 //  Copyright © 2018 TUM LS1. All rights reserved.
-//
 
 import Foundation
 import INSPhotoGallery
 
 class Photo: Attachment {
+    static var type = AttachmentType.photo
+    
+    var data: Data?
+    
+    var identifier: Int
+    
+    var date: Date
+    
+    var filePath: String
+    
+    var name: String
+    
 
     init(name: String, photoPath: String) {
-        super.init(name: name, filePath: photoPath)
-    }
-
-    required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
+        do {
+            try data = Data(contentsOf: URL(fileURLWithPath: photoPath))
+        } catch {
+            data = nil
+        }
+        date = Date()
+        self.name = name
+        self.filePath = photoPath
+        let defaults = UserDefaults.standard
+        identifier = defaults.integer(forKey: "AttachmentIdentifer")
+        defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
     }
     
-    override func computeThumbnail() -> UIImage {
+    func computeThumbnail() -> UIImage {
         if name == "plusButton" {
             guard let result = UIImage(named: "plusbutton") else {
                 return UIImage()
@@ -46,8 +63,6 @@ class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
         super.init(attachment: photo)
     }
     
-   
-    
     @objc open func loadImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
         if let image = image {
             completion(image, nil)
@@ -55,6 +70,7 @@ class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
         }
         loadImageWithURL(URL(fileURLWithPath: photo.filePath), completion: completion)
     }
+    
     @objc open func loadThumbnailImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
         let thumbnailImage = photo.computeThumbnail()
         completion(image, nil)

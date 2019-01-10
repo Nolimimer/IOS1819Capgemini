@@ -2,21 +2,38 @@ import UIKit
 import Photos
 
 /// Wrap a PHAsset for video
-public class Video: Attachment {
+class Video: Attachment {
+    static let type = AttachmentType.video
+    
+    var data: Data?
+    
+    var identifier: Int
+    
+    var date: Date
+    
+    var filePath: String
+    
+    var name: String
+    
     
     let duration: TimeInterval
     
     init(name: String, videoPath: String, duration: TimeInterval) {
         self.duration = duration
-        super.init(name: name, filePath: videoPath)
+        do {
+            try data = Data(contentsOf: URL(fileURLWithPath: videoPath))
+        } catch {
+            data = nil
+        }
+        date = Date()
+        self.name = name
+        self.filePath = videoPath
+        let defaults = UserDefaults.standard
+        identifier = defaults.integer(forKey: "AttachmentIdentifer")
+        defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
     }
     
-    required init(from decoder: Decoder) throws {
-        self.duration = 0.0
-        try super.init(from: decoder)
-    }
-    
-    override func computeThumbnail() -> UIImage {
+    func computeThumbnail() -> UIImage {
         guard let createdThumbnail = createThumbnailOfVideoFromRemoteUrl(url: filePath) else {
             guard let result = UIImage(named: "videoPreview") else {
                 return UIImage()

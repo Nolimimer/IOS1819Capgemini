@@ -175,9 +175,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         attachments.append(contentsOf: (incident.attachments))
         collectionView.reloadData()
     }
-    
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -334,8 +332,8 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                                                               width: 150,
                                                               height: 200))
             attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
-             attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
-             attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+            attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
+            attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
             attachmentView.documentButton.addTarget(self, action: #selector(pickDocument), for: .touchUpInside)
             recordButton = attachmentView.audioButton
             view.addSubview(attachmentView)

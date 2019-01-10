@@ -22,9 +22,8 @@ extension DetailViewController: UIDocumentMenuDelegate,UIDocumentPickerDelegate 
                 FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
             let documentsDirectory = URL(fileURLWithPath: paths[0])
             let defaults = UserDefaults.standard
-            let name = "cARgeminiasset\(defaults.integer(forKey: "AttachedTextDocumentName")).pdf"
+            let name = String(myURL.lastPathComponent)
             let path = documentsDirectory.appendingPathComponent(name)
-            defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedTextDocumentName")
             let data = try? Data.init(contentsOf: myURL)
             do {
                 try data?.write(to: path)
@@ -38,6 +37,7 @@ extension DetailViewController: UIDocumentMenuDelegate,UIDocumentPickerDelegate 
         } else {
             print("I only save pdfs")
         }
+        hidePopup()
     }
     
     
