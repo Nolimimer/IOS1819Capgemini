@@ -58,11 +58,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: IBOutlets
     //sceneview bitte nicht private
     @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet weak var rightNavigation: UILabel!
-    @IBOutlet weak var upNavigation: UILabel!
-    @IBOutlet weak var leftNavigation: UILabel!
+ 
+    @IBOutlet weak var arrowUp: UIImageView!
+    @IBOutlet weak var arrowRight: UIImageView!
+    @IBOutlet weak var arrowLeft: UIImageView!
+    @IBOutlet weak var arrowDown: UIImageView!
+    
     @IBOutlet private weak var progressRing: UICircularProgressRing!
-    @IBOutlet weak var downNavigation: UILabel!
+
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
