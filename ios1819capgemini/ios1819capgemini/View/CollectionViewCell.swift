@@ -46,12 +46,11 @@ class CollectionViewCell: UICollectionViewCell {
             self.imageView.image = image
             return
         }
-        if attachment is Audio {
+        if attachment is Audio || attachment is TextDocument {
             let image = makeRoundImg(img: self.imageView)
             self.imageView.image = image
             return
         }
-       
     }
 
     func makeRoundImg(img: UIImageView) -> UIImage {
@@ -101,5 +100,13 @@ class CollectionViewCell: UICollectionViewCell {
         let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
         
         return image
+    }
+}
+
+extension UIImageView {
+    func setImageColor(color: UIColor) {
+        let templateImage = self.image?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+        self.image = templateImage
+        self.tintColor = color
     }
 }

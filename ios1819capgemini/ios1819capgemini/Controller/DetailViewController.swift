@@ -13,8 +13,9 @@ import INSPhotoGallery
 import MobileCoreServices
 import SceneKit
 
+
 // MARK: - DetailViewController
-class DetailViewController: UIViewController, UINavigationControllerDelegate {
+class DetailViewController: UIViewController, UINavigationControllerDelegate, UIDocumentInteractionControllerDelegate {
     
     private var modus = Modus.view
     var recordButton: UIButton!
@@ -34,6 +35,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
                             coordinate: Coordinate (vector: SCNVector3(0, 0, 0)))
     var attachments: [Attachment] = []
     var imagePicker: UIImagePickerController!
+    var documentInteractionController: UIDocumentInteractionController!
 
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
@@ -208,6 +210,27 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
     
+    
+    func reloadCollectionView() {
+        attachments = []
+        attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
+        attachments.append(contentsOf: (incident.attachments))
+        collectionView.reloadData()
+    }
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
+    
+    func documentInteractionControllerViewForPreview(_ controller: UIDocumentInteractionController) -> UIView? {
+        return self.view
+    }
+    
+    func documentInteractionControllerRectForPreview(_ controller: UIDocumentInteractionController) -> CGRect {
+        return self.view.frame
+    }
+
+    
     func finishRecording(success: Bool) {
         
         audioRecorder?.stop()
@@ -286,6 +309,15 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             
         }
     }
+    
+    
+    @objc private func pickDocument() {
+        let importMenu = UIDocumentMenuViewController(documentTypes: [String(kUTTypePDF)], in: .import)
+        importMenu.delegate = self
+        importMenu.modalPresentationStyle = .formSheet
+        self.present(importMenu, animated: true, completion: nil)
+    }
+    
 }
 
 // MARK: Extension
@@ -303,6 +335,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
              attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
              attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+            attachmentView.documentButton.addTarget(self, action: #selector(pickDocument), for: .touchUpInside)
             recordButton = attachmentView.audioButton
             view.addSubview(attachmentView)
             return
@@ -341,6 +374,15 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 return
             }
             playSound(audio: audio)
+        }
+        if currentAttachment is TextDocument {
+            let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell
+            guard let textDocument = currentAttachment as? TextDocument else {
+                return
+            }
+            self.documentInteractionController = UIDocumentInteractionController.init(url: URL(fileURLWithPath: textDocument.filePath))
+            self.documentInteractionController.delegate = self
+            self.documentInteractionController.presentPreview(animated: true)
         }
     }
     

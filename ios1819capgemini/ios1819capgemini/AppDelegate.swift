@@ -31,6 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         if defaults.integer(forKey: "AttachedAudioName") == 0 {
             defaults.set(1, forKey: "AttachedAudioName")
         }
+        if defaults.integer(forKey: "AttachedTextDocumentName") == 0 {
+            defaults.set(1, forKey: "AttachedTextDocumentName")
+        }
         // Override point for customization after application launch.
         
         CUU.start()
