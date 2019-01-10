@@ -38,6 +38,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?
+    private var isDetecting = true
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
@@ -45,7 +46,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
     // Queue for dispatching vision classification requests
-    private let visionQueue = DispatchQueue(label: "com.example.apple-samplecode.ARKitVision.serialVisionQueue")
+    private let visionQueue = DispatchQueue(label: "serialVisionQueue")
     
     var imageHighlightAction: SCNAction {
         return .sequence([
@@ -90,6 +91,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenHeight = Double(size.height)
         if UIDevice.current.orientation.isLandscape {
         } else {
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "ShowDetailSegue":
+            guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
+                let pin = sender as? SCNNode,
+                let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
+                    return
+            }
+            detailVC.incident = incident
+        default :
+            return
         }
     }
     
@@ -185,12 +200,35 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
+        
+        // Check settings
+        if UserDefaults.standard.bool(forKey: "enable_boundingboxes") {
+            sceneView.debugOptions = [.showFeaturePoints, .showBoundingBoxes]
+        } else if UserDefaults.standard.bool(forKey: "enable_featurepoints") {
+            sceneView.debugOptions = [.showFeaturePoints]
+        } else {
+            sceneView.debugOptions = []
+        }
+        if UserDefaults.standard.bool(forKey: "enable_detection") {
+            isDetecting = true
+            setupBoxes()
+        } else {
+            hideBoxes()
+            isDetecting = false
+        }
+        
         updateIncidents()
         refreshNodes()
         setNavigationArrows(for: frame.camera.trackingState)
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()
+    }
+    
+    func hideBoxes() {
+        for box in boundingBoxes {
+            box.hide()
+        }
     }
     
     //method is automatically executed. scans the AR View for the object which should be detected
@@ -331,7 +369,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                                                xOffset: 0,
                                                                yOffset: (imgHeight - imgWidth) / 2)
                 //uncomment if boxes should only appear after object has been detected
-//                if detectedObjectNode != nil {
+                if isDetecting {
                     self.boundingBoxes[index].show(frame: rect,
                                                    label: textLabel,
                                                    color: UIColor.green,
@@ -382,7 +420,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         self.scene.rootNode.addChildNode(sphereNode)
                         nodes.append(sphereNode)
                     }
-//                }
+                }
                 //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
             }
         }
@@ -477,20 +515,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             if DataHandler.incident(withId: name) == nil {
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
             }
-        }
-    }
-    // MARK: Overridden/Lifecycle Methods
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "ShowDetailSegue":
-            guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
-                let pin = sender as? SCNNode,
-                let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
-                    return
-            }
-            detailVC.incident = incident
-        default :
-            return
         }
     }
 }
