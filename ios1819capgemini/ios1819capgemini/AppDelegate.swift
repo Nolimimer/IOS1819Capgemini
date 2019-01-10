@@ -66,6 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         if let viewController = self.window?.rootViewController as? ViewController {
             viewController.blurView?.isHidden = true
         }
+        registerSettingsBundle()
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 
@@ -75,5 +76,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         CUU.stop()
     }
 
+    // Register all settings with default values
+    func registerSettingsBundle() {
+        UserDefaults.standard.register(defaults: ["enable_featurepoints": true,
+                                                  "enable_boundingboxes": false,
+                                                  "enable_detection": true])
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(defaultsChanged),
+                                               name: UserDefaults.didChangeNotification,
+                                               object: nil)
+    }
     
+    // Called when settings changed
+    @objc func defaultsChanged() {
+        //print("Defaults changed!")
+    }
 }
