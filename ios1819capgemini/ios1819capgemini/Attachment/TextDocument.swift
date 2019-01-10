@@ -10,16 +10,29 @@ import Foundation
 import UIKit
 
 class TextDocument: Attachment {
+    static var type = AttachmentType.textDocument
+    var data: Data?
+    var identifier: Int
+    var date: Date
+    var filePath: String
+    var name: String
+    
  
-    override init(name: String, filePath: String) {
-        super.init(name: name, filePath: filePath)
+    init(name: String, filePath: String) {
+        do {
+            try data = Data(contentsOf: URL(fileURLWithPath: filePath))
+        } catch {
+            data = nil
+        }
+        date = Date()
+        self.name = name
+        self.filePath = filePath
+        let defaults = UserDefaults.standard
+        identifier = defaults.integer(forKey: "AttachmentIdentifer")
+        defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
     }
     
-    required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-    }
-    
-    override func computeThumbnail() -> UIImage {
+   func computeThumbnail() -> UIImage {
         let frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 120, height: 120))
         let cgImage = CIContext().createCGImage(CIImage(color: .red), from: frame)!
         let uiImage = UIImage(cgImage: cgImage)

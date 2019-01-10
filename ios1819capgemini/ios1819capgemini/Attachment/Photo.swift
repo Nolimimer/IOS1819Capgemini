@@ -10,15 +10,10 @@ import INSPhotoGallery
 
 class Photo: Attachment {
     static var type = AttachmentType.photo
-    
     var data: Data?
-    
     var identifier: Int
-    
     var date: Date
-    
     var filePath: String
-    
     var name: String
     
 

@@ -34,18 +34,13 @@ class Audio: Attachment {
         }
         date = Date()
         self.name = name
-        self.filePath = videoPath
+        self.filePath = filePath
         let defaults = UserDefaults.standard
         identifier = defaults.integer(forKey: "AttachmentIdentifer")
         defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
     }
     
-    required init(from decoder: Decoder) throws {
-        duration = 0.0
-        try super.init(from: decoder)
-    }
-    
-    override func computeThumbnail() -> UIImage {
+    func computeThumbnail() -> UIImage {
         let frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 120, height: 120))
         let cgImage = CIContext().createCGImage(CIImage(color: .black), from: frame)!
         let uiImage = UIImage(cgImage: cgImage)

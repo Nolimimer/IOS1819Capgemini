@@ -8,11 +8,15 @@
 
 import Foundation
 
-class AnyAttachment: Encodable {
+class AnyAttachment: Codable {
     var attachment: Attachment
     
     init(_ attachment: Attachment) {
         self.attachment = attachment
+    }
+    
+    required init(from decoder: Decoder) throws {
+        super.init(from: decoder)
     }
     
     private enum CodingKeys : CodingKey {
