@@ -28,6 +28,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     @IBOutlet weak var nextButton: RoundedButton!
     var backButton: UIBarButtonItem!
     var mergeScanButton: UIBarButtonItem!
+    var doneButton: UIBarButtonItem!
     @IBOutlet weak var instructionView: UIVisualEffectView!
     @IBOutlet weak var instructionLabel: MessageLabel!
     @IBOutlet weak var loadModelButton: RoundedButton!
@@ -541,8 +542,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                 }
                 
                 let messageText = """
-                    Object successfully detected from this angle. Your scan was successfully saved. To start reporting incidents press Restart.
-
+                    Object successfully detected from this angle. Your scan was succussfully saved.
                     """ + testRun.statistics
                 displayMessage(messageText, expirationTime: testRun.resultDisplayDuration)
                 
