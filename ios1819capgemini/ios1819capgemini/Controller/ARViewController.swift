@@ -133,7 +133,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             let imageWithPin = self.sceneView.snapshot()
                             self.saveImage(image: imageWithPin, incident: incident)
                             DataHandler.incidents.append(incident)
-                            self.descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
                         }
                     }
                 }
@@ -183,6 +182,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         updateIncidents()
+        setDescriptionLabel()
         refreshNodes()
         setNavigationArrows(for: frame.camera.trackingState)
         // Retain the image buffer for Vision processing.
@@ -420,41 +420,56 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         nodes.append(sphereNode)
     }
     
+    private func setDescriptionLabel() {
+        let openIncidents = (DataHandler.incidents.filter { $0.status == .open}).count
+        let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress}).count
+        let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved}).count
+        descriptionNode.text = """
+        Number of incidents: \(DataHandler.incidents.count)\r\n
+        Open: \(openIncidents)\r\n
+        In progress: \(incidentsInProgress)\r\n
+        Resolved: \(resolvedIncidents)
+        """
+    }
+    
     //adds the info plane which displays the detected object and the number of incidents
     private func addInfoPlane (carPart: String) {
         
-        guard let objectAnchor = self.objectAnchor else {
+        guard let objectAnchor = self.objectAnchor,
+        let name = objectAnchor.referenceObject.name else {
+            print("no object anchor found or its reference object has no name")
             return
         }
-        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
-                             height: CGFloat(objectAnchor.referenceObject.extent.y * 0.3))
-        plane.cornerRadius = plane.width / 8
-        let spriteKitScene = SKScene(size: CGSize(width: 300, height: 300))
-        spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
+        let width = objectAnchor.referenceObject.extent.x * 0.8
+        let height = objectAnchor.referenceObject.extent.y * 0.5
+        let plane = SCNPlane(width: CGFloat(width),
+                             height: CGFloat(height))
+        plane.cornerRadius = plane.width / 45
+        let spriteKitScene = SKScene(size: CGSize(width: 500, height: 500))
+        spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.9)
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
         let absoluteObjectPosition = objectAnchor.transform.columns.3
         let planePosition = SCNVector3(absoluteObjectPosition.x,
-                                       absoluteObjectPosition.y + objectAnchor.referenceObject.extent.y,
+                                       absoluteObjectPosition.y + 1.5 * objectAnchor.referenceObject.extent.y,
                                        absoluteObjectPosition.z)
         planeNode.position = planePosition
-        let labelNode = SKLabelNode(text: carPart)
+        let labelNode = SKLabelNode(text: name)
         labelNode.fontSize = 40
-        labelNode.color = UIColor.black
-        labelNode.fontName = "Helvetica-Bold"
-        labelNode.position = CGPoint(x: 120, y: 200)
+        labelNode.fontName = "HelveticaNeue-Medium"
+        labelNode.position = CGPoint(x: 250, y: 400)
+        labelNode.numberOfLines = 2
+        labelNode.preferredMaxLayoutWidth = CGFloat(450)
+        labelNode.lineBreakMode = .byWordWrapping
         
-        descriptionNode = SKLabelNode(text: "Incidents: \(DataHandler.incidents.count)")
+        setDescriptionLabel()
         descriptionNode.fontSize = 30
-        if DataHandler.incidents.count == 0 {
-            descriptionNode.fontColor = UIColor.green
-        } else {
-            descriptionNode.fontColor = UIColor.red
-        }
-        descriptionNode.fontName = "Helvetica-Bold"
-        descriptionNode.position = CGPoint(x: 120, y: 50)
+        descriptionNode.fontName = "HelveticaNeue-Light"
+        descriptionNode.position = CGPoint(x: 200, y: 100)
+        descriptionNode.numberOfLines = 4
+        descriptionNode.lineBreakMode = NSLineBreakMode.byWordWrapping
         spriteKitScene.addChild(descriptionNode)
         spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
