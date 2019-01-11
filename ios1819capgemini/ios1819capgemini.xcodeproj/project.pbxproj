@@ -216,7 +216,6 @@
 		0D5F4A7821A317AB00D443CC /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */,
 				A66447E92192121300B2D32B /* ARViewController.swift */,
 				BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */,
 				BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */,
@@ -231,6 +230,7 @@
 				908466EF21B6C85B00A3C80C /* PhotoViewController.swift */,
 				908466F121B6D11800A3C80C /* AttachmentViewCell.swift */,
 				BA09652021CEE59F00174922 /* StatusViewController.swift */,
+				904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */,
 				904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */,
 			);
 			path = Controller;
@@ -876,7 +876,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.www1.ios1819capgemini;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$SIGH_NAME";
+				PROVISIONING_PROFILE_SPECIFIER = $SIGH_NAME;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
