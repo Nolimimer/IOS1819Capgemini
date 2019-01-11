@@ -156,7 +156,6 @@ extension ListViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            print("connected to peer : \(ARViewController.connectedToPeer)")
             if ARViewController.connectedToPeer {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can't be deleted if Peer is connected",
