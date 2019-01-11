@@ -118,6 +118,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     }
    
     // MARK: Overridden/Lifecycle Methods
+    /*
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
         if let firstTouch = touches.first {
@@ -173,7 +174,20 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             }
         }
     }
-    
+     
+     @objc func handleTap(recognizer: UITapGestureRecognizer) {
+     self.view.endEditing(true)
+     let location = recognizer.location(in: view)
+     
+     let attachmentView = view.subviews.first {
+     $0 is AttachmentView
+     }
+     
+     if attachmentView?.frame.contains(location) ?? false {
+     attachmentView?.removeFromSuperview()
+     }
+     }
+    */
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         creatingNodePossible = false
@@ -292,18 +306,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         }
     }
 
-    @objc func handleTap(recognizer: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-        let location = recognizer.location(in: view)
-
-        let attachmentView = view.subviews.first {
-            $0 is AttachmentView
-        }
-        
-        if attachmentView?.frame.contains(location) ?? false {
-            attachmentView?.removeFromSuperview()
-        }
-    }
+   
 
     @objc func recordTapped() {
         if audioRecorder == nil {
@@ -398,8 +401,19 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             guard let photo = currentAttachment as? Photo else {
                 return
             }
-            let photoWrapper = PhotoWrapper(photo: photo)
-            let galleryPreview = INSPhotosViewController(photos: [photoWrapper], initialPhoto: photoWrapper, referenceView: cell)
+            
+            let initialPhoto = PhotoWrapper(photo: photo)
+            
+            let photos = incident?.attachments.filter {
+                $0 is Photo
+            }
+            
+            var wrappers: [PhotoWrapper] = []
+            for photo in photos ?? [] {
+                wrappers.append(PhotoWrapper(photo: photo as! Photo))
+            }
+ 
+            let galleryPreview = INSPhotosViewController(photos: wrappers, initialPhoto: initialPhoto, referenceView: cell)
             
             galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
                 if let index = self?.attachments.index(where: { $0 === photo }) {
