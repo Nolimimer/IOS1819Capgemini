@@ -252,6 +252,7 @@
                                                 <state key="normal" title="All"/>
                                                 <connections>
                                                     <action selector="showAllAttachments:" destination="jav-cE-mj7" eventType="touchUpInside" id="ibe-L6-hY1"/>
+                                                    <segue destination="T6S-Pu-SFY" kind="show" identifier="attachmentSegue" id="afV-Pw-9yG"/>
                                                 </connections>
                                             </button>
                                         </subviews>

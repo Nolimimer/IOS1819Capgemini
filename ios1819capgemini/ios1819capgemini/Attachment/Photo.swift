@@ -18,6 +18,19 @@ class Photo: Attachment {
     required init(from decoder: Decoder) throws {
         try super.init(from: decoder)
     }
+    
+    override func computeThumbnail() -> UIImage {
+        if name == "plusButton" {
+            guard let result = UIImage(named: "plusbutton") else {
+                return UIImage()
+            }
+            return result
+        }
+        guard let result = UIImage(contentsOfFile: filePath) else {
+            return UIImage()
+        }
+        return result
+    }
 }
 
 class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
@@ -33,6 +46,8 @@ class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
         super.init(attachment: photo)
     }
     
+   
+    
     @objc open func loadImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
         if let image = image {
             completion(image, nil)
@@ -41,7 +56,7 @@ class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
         loadImageWithURL(URL(fileURLWithPath: photo.filePath), completion: completion)
     }
     @objc open func loadThumbnailImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
-        let thumbnailImage = AttachmentWrapper.computeThumbnailImage(for: photo)
+        let thumbnailImage = photo.computeThumbnail()
         completion(image, nil)
     }
     
