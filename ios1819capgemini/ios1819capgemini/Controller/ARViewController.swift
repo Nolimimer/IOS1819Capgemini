@@ -527,8 +527,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             print("no object anchor found or its reference object has no name")
             return
         }
-        let width = 400
-        let height = 300
+        let width = 0.1
+        let height = 0.07
         let plane = SCNPlane(width: CGFloat(width),
                              height: CGFloat(height))
         plane.cornerRadius = plane.width / 45
