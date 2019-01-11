@@ -16,27 +16,28 @@ extension ARViewController {
         do {
             let incidents = try JSONDecoder().decode([Incident].self, from: data)
             DataHandler.incidents = incidents
-            if incidents.isEmpty {
-                nodes = []
-                self.scene.rootNode.childNodes.forEach { node in
-                    guard let name = node.name else {
-                        return
-                    }
-                    self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
-                }
-                self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
-                automaticallyDetectedIncidents = []
-                let configuration = ARWorldTrackingConfiguration()
-                if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
-                    configuration.detectionObjects = detectionObjects
-                    sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-                    let notification = UINotificationFeedbackGenerator()
-                    
-                    DispatchQueue.main.async {
-                        notification.notificationOccurred(.success)
-                    }
-                }
-            }
+//            if incidents.isEmpty {
+//                print("incidents is empty")
+//                nodes = []
+//                self.scene.rootNode.childNodes.forEach { node in
+//                    guard let name = node.name else {
+//                        return
+//                    }
+//                    self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+//                }
+//                self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
+//                automaticallyDetectedIncidents = []
+//                let configuration = ARWorldTrackingConfiguration()
+//                if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
+//                    configuration.detectionObjects = detectionObjects
+//                    sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+//                    let notification = UINotificationFeedbackGenerator()
+//                    DispatchQueue.main.async {
+//                        notification.notificationOccurred(.success)
+//                    }
+//                }
+//            }
+            
         } catch {
             
         }
@@ -100,6 +101,16 @@ extension ARViewController {
         }
         return nil
     }
+    
+    func checkIncidentDeleted(identifier: String) -> Bool {
+        for incident in DataHandler.incidents {
+            if "\(incident.identifier)" == identifier {
+                return false
+            }
+        }
+        return true
+    }
+    
     
     func updatePinColour() {
         for incident in DataHandler.incidents {

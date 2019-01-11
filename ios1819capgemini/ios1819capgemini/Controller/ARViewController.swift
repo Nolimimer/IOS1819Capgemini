@@ -258,6 +258,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         incidentEditted()
+        refreshNodes()
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
                 let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
@@ -518,8 +519,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             guard let name = node.name else {
                 return
             }
+            if DataHandler.incidents.isEmpty {
+                do {
+                    let data = try JSONEncoder().encode(DataHandler.incidents)
+                    self.multipeerSession.sendToAllPeers(data)
+                } catch {
+                    print("sending incidents array failed (refreshNodes DataHandler.incidents.isEmpty)")
+                }
+            }
             if DataHandler.incident(withId: name) == nil {
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+                do {
+                    let data = try JSONEncoder().encode(DataHandler.incidents)
+                    self.multipeerSession.sendToAllPeers(data)
+                } catch {
+                    print("sending incidents array failed (refreshNodes DataHandler.incident(withId: name) == nil")
+                }
             }
         }
     }
