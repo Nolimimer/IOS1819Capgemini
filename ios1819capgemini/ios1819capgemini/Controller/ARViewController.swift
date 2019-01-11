@@ -262,7 +262,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //        setNavigationArrows(for: frame.camera.trackingState)
         updatePinColour()
         setDescriptionLabel()
-        refreshNodes()
         setNavigationArrows(for: frame.camera.trackingState)
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
