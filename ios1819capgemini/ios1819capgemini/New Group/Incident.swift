@@ -22,6 +22,7 @@ public class Incident: Codable {
     private(set) var description: String
     private(set) var status: Status
     private(set) var attachments = [AnyAttachment]()
+
     let coordinate: Coordinate
     // MARK: Initializers
     init(type: IncidentType, description: String, coordinate: Coordinate) {
@@ -45,6 +46,10 @@ public class Incident: Codable {
         case .resolved: self.changePinColor(to: UIColor(red: 22.0/255.0, green: 167.0/255.0, blue: 0.0, alpha: 0.9))
         }
         
+    }
+    
+    func editIncidentType(type: IncidentType) {
+        self.type = type
     }
     
     // MARK: Private Instance Methods
@@ -85,9 +90,9 @@ public class Incident: Codable {
 
  // MARK: Constants
 enum IncidentType: String, Codable {
+    case unknown = "Unknown Incident"
     case scratch = "Scratch"
     case dent = "Dent"
-    case unknown = "Unknown Incident"
 }
 
 enum Status: String, Codable {
@@ -107,4 +112,8 @@ extension Coordinate: Equatable {
     public static func == (lhs: Coordinate, rhs: Coordinate) -> Bool {
         return lhs.description == rhs.description
     }
+}
+
+extension IncidentType: CaseIterable {
+    
 }

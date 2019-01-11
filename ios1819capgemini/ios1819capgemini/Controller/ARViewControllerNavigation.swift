@@ -161,25 +161,25 @@ extension ARViewController {
         if !ARViewController.objectDetected {
             return 
         }
-        upNavigation.isHidden = true
-        downNavigation.isHidden = true
-        rightNavigation.isHidden = true
-        leftNavigation.isHidden = true
+        arrowUp.isHidden = true
+        arrowDown.isHidden = true
+        arrowRight.isHidden = true
+        arrowLeft.isHidden = true
         
         let suggestion = navigationSuggestion()
         switch suggestion {
         case "up":
             statusViewController.showTrackingQualityInfo(for: trackingState, autoHide: true)
-            upNavigation.isHidden = false
+            arrowUp.isHidden = false
         case "down":
             statusViewController.showTrackingQualityInfo(for: trackingState, autoHide: true)
-            downNavigation.isHidden = false
+            arrowDown.isHidden = false
         case "right":
             statusViewController.showTrackingQualityInfo(for: trackingState, autoHide: true)
-            rightNavigation.isHidden = false
+            arrowRight.isHidden = false
         case "left":
             statusViewController.showTrackingQualityInfo(for: trackingState, autoHide: true)
-            leftNavigation.isHidden = false
+            arrowLeft.isHidden = false
         default:
             statusViewController.showMessage(suggestion, autoHide: true)
         }

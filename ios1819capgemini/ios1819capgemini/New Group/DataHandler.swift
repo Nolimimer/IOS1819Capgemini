@@ -64,7 +64,6 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
-//
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
