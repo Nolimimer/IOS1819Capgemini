@@ -85,9 +85,9 @@ public class Incident: Codable {
 
  // MARK: Constants
 enum IncidentType: String, Codable {
+    case unknown = "Unknown Incident"
     case scratch = "Scratch"
     case dent = "Dent"
-    case unknown = "Unknown Incident"
 }
 
 enum Status: String, Codable {

@@ -51,6 +51,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     @IBAction private func incidentTypeButtonPressed(_ sender: Any) {
         whiteViewFromPopUp.layer.cornerRadius = 10
         popUpIncidentTypeView.isHidden = false
+        incidentTypePicker.selectRow(types.firstIndex(of: type)!, inComponent: 0, animated: false)
     }
     
     @IBAction private func selectIncidentType(_ sender: Any) {
@@ -203,7 +204,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         IncidentType.allCases.forEach {
             types.append($0)
         }
-        types = types.filter { $0 != IncidentType.unknown }
         popUpIncidentTypeView.isHidden = true
         incidentTypePicker.dataSource = self
         incidentTypePicker.delegate = self
