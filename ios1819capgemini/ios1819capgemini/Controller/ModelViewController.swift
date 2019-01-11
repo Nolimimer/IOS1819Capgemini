@@ -11,6 +11,17 @@ import UIKit
 
 class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    // MARK: Overriddent instance methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // add blurred subview
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        blurView.frame = UIScreen.main.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.navigationController?.view.addSubview(blurView)
+        self.navigationController?.view.sendSubviewToBack(blurView)
+    }
+    
     let reuseIdentifier = "modelCell" 
     var items = ["1", "2", "3", "4", "5", "6"]
     
@@ -24,8 +35,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         //swiftlint:disable all
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! ARModelsCollectionViewCell
         
-        // Use the outlet in our custom class to get a reference to the UILabel in the cell
-        cell.numberOfIncidents.text = self.items[indexPath.item]
+        
+        //cell.text = //self.items[indexPath.item]
         
         return cell
     }

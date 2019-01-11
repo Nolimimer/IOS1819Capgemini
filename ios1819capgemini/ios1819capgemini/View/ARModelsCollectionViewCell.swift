@@ -12,8 +12,20 @@ class ARModelsCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var modelImage: UIImageView!
     
-    @IBOutlet weak var numberOfIncidents: UILabel!
+    @IBOutlet weak var incidentLabel: UILabel!
     
-    @IBOutlet weak var numberOfPins: UILabel!
+    @IBOutlet weak var openLabel: UILabel!
+
+    
+    @IBOutlet weak var resolvedLabel: UILabel!
+    
+    @IBOutlet weak var openNumber: UILabel!
+    
+    @IBOutlet weak var progessNumber: UILabel!
+    
+    
+    @IBOutlet weak var resolvedNumber: UILabel!
+    
+    
     
 }
