@@ -154,18 +154,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     @IBAction func restartButtonTapped(_ sender: Any) {
         print("restart button tapped")
         if let scan = scan, scan.boundingBoxExists {
+            print("scan bounding box exists")
             let title = "Start over?"
             let message = "Discard the current scan and start over?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else if testRun != nil {
+            print("test run != nil")
             let title = "Finished?"
             let message = "Start reporting damages or create another scan?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else {
+            print("perform segue")
             self.performSegue(withIdentifier: "Start screen", sender: nil)
         }
     }

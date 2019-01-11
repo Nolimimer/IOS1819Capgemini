@@ -14,6 +14,7 @@ import Vision
 import UICircularProgressRing
 
 // Stores all the nodes added to the scene
+var anchorWrapper : ARObjectAnchor?
 var nodes = [SCNNode]()
 //swiftlint:disable type_body_length
 var nodesIdentifier = [String: SCNNode]()
@@ -244,6 +245,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             self.node = node
             self.objectAnchor = objectAnchor
+            anchorWrapper = objectAnchor
             /*
             node nimmt erst einen wert an nachdem die methode ausgeführt wurde, deswegen ist
             detected object node hier eine nicht mit werten initialisierte node und ein transformieren der koordinaten in der methode selbst ist nicht möglich

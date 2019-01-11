@@ -29,6 +29,8 @@ public class Incident: Codable {
     private(set) var description: String
     private(set) var status: Status
     private(set) var attachments = [Attachment]()
+    
+    
     let coordinate: Coordinate
     // MARK: Initializers
     init(type: IncidentType, description: String, coordinate: Coordinate) {

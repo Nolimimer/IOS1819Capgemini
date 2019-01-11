@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dcg-B5-UM8">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -686,43 +686,6 @@
             <point key="canvasLocation" x="2941.5999999999999" y="919.95073891625623"/>
         </scene>
         <!--View Controller-->
-        <scene sceneID="5cJ-O0-ZIQ">
-            <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Q6w-mo-XXu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="dcg-B5-UM8" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8x9-6W-L7d">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DJL-Vc-tnw">
-                                <rect key="frame" x="132" y="318" width="112" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Create incidents">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.19607843459999999" blue="0.19607843459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="5Xx-Fu-l5i"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FLE-Ep-3gU">
-                                <rect key="frame" x="154" y="234" width="67" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="New scan">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.19607843459999999" blue="0.19607843459999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="dsx-8Z-4fu" kind="show" id="5eE-bU-zRE"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="dYA-dF-z7m"/>
-                    </view>
-                </viewController>
-            </objects>
-            <point key="canvasLocation" x="1492" y="115"/>
-        </scene>
-        <!--View Controller-->
         <scene sceneID="kR8-Kc-VqH">
             <objects>
                 <viewController id="dsx-8Z-4fu" customClass="ViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
@@ -977,7 +940,7 @@
                         <outlet property="sessionInfoLabel" destination="mgd-ai-SNP" id="bHU-hj-9cC"/>
                         <outlet property="sessionInfoView" destination="sg1-3l-5lD" id="9MY-dl-BTF"/>
                         <outlet property="toggleInstructionsButton" destination="Wlu-xb-zjn" id="nv8-UZ-oqH"/>
-                        <segue destination="dcg-B5-UM8" kind="show" identifier="Start screen" id="Ifl-TP-VUm"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="Start screen" id="SsH-gl-QWO"/>
                     </connections>
                 </viewController>
                 <pinchGestureRecognizer id="DAc-qJ-2NR" customClass="ThresholdPinchGestureRecognizer" customModule="ios1819capgemini" customModuleProvider="target">
@@ -1018,7 +981,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1492" y="1212"/>
+            <point key="canvasLocation" x="5516" y="-688"/>
         </scene>
         <!--Status View Controller-->
         <scene sceneID="ysd-JI-lVN">
@@ -1260,6 +1223,9 @@
                                         <state key="normal" title="Scan New">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="dsx-8Z-4fu" kind="presentation" id="cCx-JB-ddT"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3725,7 +3691,7 @@ AAAAAAAAAAAAAAIzxQ
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="bt6-h5-83B"/>
+        <segue reference="uUl-YU-Nua"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
