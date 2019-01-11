@@ -160,48 +160,42 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         let location = touches.first!.location(in: sceneView)
-//        let hitOptions = self.sceneView.hitTest(location, options: nil)
-//        if let tappedNode = hitOptions.first?.node, let _ = tappedNode.name {
-//            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-//        }
-            let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
-            if let touch = touches.first {
-                print("touch found")
-                if let hitResult = hitResultsFeaturePoints.first {
-                    print("hit result = feature point")
-                    if let node = getNodeInRadius(hitResult: hitResult, radius: 0.015) {
-                        self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
-                    }
-                    print("no node at position ")
-                    let position = touch.location(in: view)
-                    progressRing.frame.origin.x = position.x - 110
-                    progressRing.frame.origin.y = position.y - 60
-                    progressRing.isHidden = false
-                    progressRing.maxValue = 100
-                    progressRing.startProgress(to: 100, duration: 1.0) {
-                    self.progressRing.isHidden = true
-                    self.progressRing.resetProgress()
-                        if self.detectedObjectNode != nil {
-                            let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
-                                SCNVector3(hitResult.worldTransform.columns.3.x,
-                                           hitResult.worldTransform.columns.3.y,
-                                           hitResult.worldTransform.columns.3.z),
-                                to: self.detectedObjectNode)
-                            let incident = Incident (type: .unknown,
-                                                     description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            self.filterAllPins()
-                            let imageWithoutPin = self.sceneView.snapshot()
-                            self.saveImage(image: imageWithoutPin, incident: incident)
-                            self.add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                                       hitResult.worldTransform.columns.3.y,
-                                                                       hitResult.worldTransform.columns.3.z),
-                                          identifier: "\(incident.identifier)" )
-                            self.filter3DPins(identifier: "\(incident.identifier)")
-                            let imageWithPin = self.sceneView.snapshot()
-                            self.saveImage(image: imageWithPin, incident: incident)
-                            DataHandler.incidents.append(incident)
-                            self.sendIncident(incident: incident)
+        let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
+        if let touch = touches.first {
+            if let hitResult = hitResultsFeaturePoints.first {
+                if let node = getNodeInRadius(hitResult: hitResult, radius: 0.1) {
+                    self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
+                    return
+                }
+                let position = touch.location(in: view)
+                progressRing.frame.origin.x = position.x - 110
+                progressRing.frame.origin.y = position.y - 60
+                progressRing.isHidden = false
+                progressRing.maxValue = 100
+                progressRing.startProgress(to: 100, duration: 1.0) {
+                self.progressRing.isHidden = true
+                self.progressRing.resetProgress()
+                    if self.detectedObjectNode != nil {
+                        let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
+                            SCNVector3(hitResult.worldTransform.columns.3.x,
+                                        hitResult.worldTransform.columns.3.y,
+                                        hitResult.worldTransform.columns.3.z),
+                            to: self.detectedObjectNode)
+                        let incident = Incident (type: .unknown,
+                                                 description: "New Incident",
+                                                 coordinate: Coordinate(vector: coordinateRelativeToObject))
+                        self.filterAllPins()
+                        let imageWithoutPin = self.sceneView.snapshot()
+                        self.saveImage(image: imageWithoutPin, incident: incident)
+                        self.add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                                    hitResult.worldTransform.columns.3.y,
+                                                                    hitResult.worldTransform.columns.3.z),
+                                      identifier: "\(incident.identifier)" )
+                        self.filter3DPins(identifier: "\(incident.identifier)")
+                        let imageWithPin = self.sceneView.snapshot()
+                        self.saveImage(image: imageWithPin, incident: incident)
+                        DataHandler.incidents.append(incident)
+                        self.sendIncident(incident: incident)
                     }
                 }
             }
@@ -209,18 +203,24 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func getNodeInRadius(hitResult: ARHitTestResult, radius: Float) -> SCNNode? {
-        print("get node in radius")
         let coordinateVector = SCNVector3(hitResult.worldTransform.columns.3.x,
                                           hitResult.worldTransform.columns.3.y,
                                           hitResult.worldTransform.columns.3.z)
         for node in nodes {
-            if ((node.position.x - radius)...(node.position.x + radius) ~= coordinateVector.x) && ((node.position.y - radius)...(node.position.y + radius) ~= coordinateVector.y) && ((node.position.z - radius)...(node.position.z + radius) ~= coordinateVector.x) {
-                print("node in radius found")
+            if checkRange(origin: node.position.x, pos: coordinateVector.x, radius: 0.015) && checkRange(origin: node.position.y, pos: coordinateVector.y, radius: 0.015) && checkRange(origin: node.position.z, pos: coordinateVector.z, radius: 0.015) {
                 return node
             }
         }
         return nil
     }
+    
+    func checkRange(origin: Float, pos: Float, radius: Float) -> Bool {
+        if (origin - radius) ... (origin + radius) ~= pos {
+            return true
+        }
+        return false
+    }
+    
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
@@ -262,7 +262,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         if !multipeerSession.connectedPeers.isEmpty {
-            print("connected to peer in session ")
             ARViewController.connectedToPeer = true
         }
         
@@ -302,6 +301,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
+        if detectedObjectNode != nil {
+            return node
+        }
         if let objectAnchor = anchor as? ARObjectAnchor {
             
             let notification = UINotificationFeedbackGenerator()
