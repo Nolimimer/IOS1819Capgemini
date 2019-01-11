@@ -89,6 +89,8 @@
 		BA09652321CEEA0800174922 /* ARViewControllerStatusbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */; };
 		BA6972E621D854E200F919EF /* ARViewControllerScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */; };
 		BA6972E821D8557D00F919EF /* ARViewControllerNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */; };
+		BE18F72921E8A7B200057A0C /* ARModelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE18F72821E8A7B200057A0C /* ARModelsCollectionViewCell.swift */; };
+		BE18F72B21E8A84F00057A0C /* ModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE18F72A21E8A84F00057A0C /* ModelViewController.swift */; };
 		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
@@ -180,6 +182,8 @@
 		BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusbar.swift; sourceTree = "<group>"; };
 		BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerScreenshot.swift; sourceTree = "<group>"; };
 		BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNavigation.swift; sourceTree = "<group>"; };
+		BE18F72821E8A7B200057A0C /* ARModelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARModelsCollectionViewCell.swift; sourceTree = "<group>"; };
+		BE18F72A21E8A84F00057A0C /* ModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelViewController.swift; sourceTree = "<group>"; };
 		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -212,6 +216,7 @@
 				908466EF21B6C85B00A3C80C /* PhotoViewController.swift */,
 				908466F121B6D11800A3C80C /* AttachmentViewCell.swift */,
 				BA09652021CEE59F00174922 /* StatusViewController.swift */,
+				BE18F72A21E8A84F00057A0C /* ModelViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -228,6 +233,7 @@
 				0DF3077321B7DBE0007D57D6 /* LineView.swift */,
 				0DF3077B21B7E067007D57D6 /* AttachmentView.xib */,
 				0DF3077D21B7E070007D57D6 /* AttachmentView.swift */,
+				BE18F72821E8A7B200057A0C /* ARModelsCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -585,6 +591,7 @@
 			files = (
 				B30A479721CFBC5A007049F8 /* ARCameraTrackingState.swift in Sources */,
 				90C7377E21B56C15008AD568 /* VideoCollectionViewCell.swift in Sources */,
+				BE18F72921E8A7B200057A0C /* ARModelsCollectionViewCell.swift in Sources */,
 				90CB846E21ADAB2800CA1C09 /* Anchors6.swift in Sources */,
 				B30A478A21CFBC5A007049F8 /* DetectedBoundingBox.swift in Sources */,
 				B30A478B21CFBC5A007049F8 /* Tile.swift in Sources */,
@@ -650,6 +657,7 @@
 				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,
 				9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */,
 				9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */,
+				BE18F72B21E8A84F00057A0C /* ModelViewController.swift in Sources */,
 				B30A478E21CFBC5A007049F8 /* ViewController.swift in Sources */,
 				90D3451321B3FF29009EF79E /* AttachmentViewController.swift in Sources */,
 				B30A478821CFBC5A007049F8 /* ObjectOriginAxis.swift in Sources */,
