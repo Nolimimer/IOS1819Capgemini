@@ -207,11 +207,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                           hitResult.worldTransform.columns.3.y,
                                           hitResult.worldTransform.columns.3.z)
         for node in nodes {
-            if checkRange(origin: node.position.x, pos: coordinateVector.x, radius: 0.015) && checkRange(origin: node.position.y, pos: coordinateVector.y, radius: 0.015) && checkRange(origin: node.position.z, pos: coordinateVector.z, radius: 0.015) {
+            if checkRange(origin: node.position, pos: coordinateVector, radius: 0.015) {
                 return node
             }
         }
         return nil
+    }
+    
+    func checkRange(origin: SCNVector3, pos: SCNVector3, radius: Float) -> Bool {
+        return checkRange(origin: origin.x, pos: pos.x, radius: radius) && checkRange(origin: origin.y, pos: origin.y, radius: radius) && checkRange(origin: origin.z, pos: pos.z, radius: radius)
     }
     
     func checkRange(origin: Float, pos: Float, radius: Float) -> Bool {
