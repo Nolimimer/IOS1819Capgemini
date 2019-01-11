@@ -6,6 +6,7 @@
 //  Copyright © 2018 TUM LS1. All rights reserved.
 //
 
+//swiftlint:disable all
 // MARK: Imports
 import UIKit
 import AVKit
@@ -28,9 +29,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     // Variables / Mock Variable
-    var incident = Incident(type: IncidentType.unknown,
-                            description: "This scratch is a critical one, my suggestion is to completly remove the right door.",
-                            coordinate: Coordinate (vector: SCNVector3(0, 0, 0)))
+    var incident: Incident? = nil
     var attachments: [Attachment] = []
     var imagePicker: UIImagePickerController!
 
@@ -45,10 +44,12 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet private weak var editButton: UIBarButtonItem!
     @IBOutlet private weak var incidentTypeButton: UIButton!
     @IBOutlet private weak var popUpIncidentTypeView: UIView!
+    @IBOutlet private weak var whiteViewFromPopUp: UIView!
     @IBOutlet private weak var incidentTypePicker: UIPickerView!
     
     // MARK: IBActions
     @IBAction private func incidentTypeButtonPressed(_ sender: Any) {
+        whiteViewFromPopUp.layer.cornerRadius = 10
         popUpIncidentTypeView.isHidden = false
     }
     
@@ -88,14 +89,14 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             default:
                 status = .resolved
             }
-            incident.edit(status: status, description: textField.text, modifiedDate: Date())
-            incident.editIncidentType(type: type)
+            incident!.edit(status: status, description: textField.text, modifiedDate: Date())
+            incident!.editIncidentType(type: type)
             editButton.title = "Edit"
             textField.isEditable = false
             segmentControll.isEnabled = false
             incidentTypeButton.isEnabled = false
             textField.layer.borderWidth = 0.0
-            lastModifiedDateLabel.text = dateFormatter.string(from: incident.modifiedDate)
+            lastModifiedDateLabel.text = dateFormatter.string(from: incident!.modifiedDate)
             modus = .view
         }
     }
@@ -166,7 +167,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
 //        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int
-        switch incident.status {
+        switch incident!.status {
         case .open:
             controllIndex = 0
         case .progress:
@@ -176,12 +177,12 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
         segmentControll.selectedSegmentIndex = controllIndex
         
-        let dateString = dateFormatter.string(from: incident.createDate)
-        let lastModifiedDateString = dateFormatter.string(from: incident.modifiedDate)
+        let dateString = dateFormatter.string(from: incident!.createDate)
+        let lastModifiedDateString = dateFormatter.string(from: incident!.modifiedDate)
         generatedDateLabel.text = dateString
         lastModifiedDateLabel.text = lastModifiedDateString
-        textField.text = incident.description
-        type = incident.type
+        textField.text = incident!.description
+        type = incident!.type
         incidentTypeButton.setTitle(type.rawValue, for: .normal)
         attachments = computeAttachments()
         collectionView.reloadData()

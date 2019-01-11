@@ -300,13 +300,16 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8BC-Gv-pcb">
-                                        <rect key="frame" x="0.0" y="148" width="375" height="294"/>
+                                        <rect key="frame" x="41" y="188" width="293" height="240"/>
                                         <subviews>
                                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pUg-jT-OYM">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="216"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="293" height="200"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="200" id="mV8-AJ-pDZ"/>
+                                                </constraints>
                                             </pickerView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yVU-Nj-jjW">
-                                                <rect key="frame" x="172" y="250" width="31" height="39"/>
+                                                <rect key="frame" x="131" y="193" width="31" height="39"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                 <state key="normal" title="OK">
                                                     <color key="titleColor" name="appBlue"/>
@@ -318,21 +321,21 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="yVU-Nj-jjW" secondAttribute="bottom" constant="5" id="0Ts-Pu-CVK"/>
-                                            <constraint firstItem="yVU-Nj-jjW" firstAttribute="leading" secondItem="8BC-Gv-pcb" secondAttribute="leading" constant="172" id="L3I-2C-VVF"/>
-                                            <constraint firstAttribute="trailing" secondItem="yVU-Nj-jjW" secondAttribute="trailing" constant="172" id="XAz-9S-Q4f"/>
-                                            <constraint firstItem="pUg-jT-OYM" firstAttribute="top" secondItem="8BC-Gv-pcb" secondAttribute="top" id="n1I-zu-eh9"/>
-                                            <constraint firstItem="pUg-jT-OYM" firstAttribute="leading" secondItem="8BC-Gv-pcb" secondAttribute="leading" id="vDg-AG-cV9"/>
-                                            <constraint firstAttribute="trailing" secondItem="pUg-jT-OYM" secondAttribute="trailing" id="zZz-8b-pkW"/>
+                                            <constraint firstAttribute="bottom" secondItem="yVU-Nj-jjW" secondAttribute="bottom" constant="8" id="ERW-dS-70i"/>
+                                            <constraint firstItem="pUg-jT-OYM" firstAttribute="leading" secondItem="8BC-Gv-pcb" secondAttribute="leading" id="W5Z-i3-M14"/>
+                                            <constraint firstAttribute="height" constant="240" id="XTO-9b-tMJ"/>
+                                            <constraint firstAttribute="trailing" secondItem="pUg-jT-OYM" secondAttribute="trailing" id="dHC-zA-zCc"/>
+                                            <constraint firstItem="pUg-jT-OYM" firstAttribute="top" secondItem="8BC-Gv-pcb" secondAttribute="top" id="juz-Ey-1cy"/>
+                                            <constraint firstItem="yVU-Nj-jjW" firstAttribute="leading" secondItem="8BC-Gv-pcb" secondAttribute="leading" constant="131" id="mXy-rZ-QJW"/>
+                                            <constraint firstAttribute="trailing" secondItem="yVU-Nj-jjW" secondAttribute="trailing" constant="131" id="yc0-cj-Q50"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.5" green="0.5" blue="0.5" alpha="0.80329623287671237" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="8BC-Gv-pcb" secondAttribute="trailing" id="8ta-nf-WoZ"/>
-                                    <constraint firstItem="8BC-Gv-pcb" firstAttribute="leading" secondItem="jn7-9G-Qd7" secondAttribute="leading" id="R4L-he-7V6"/>
-                                    <constraint firstAttribute="bottom" secondItem="8BC-Gv-pcb" secondAttribute="bottom" constant="225" id="dKk-iu-Khl"/>
-                                    <constraint firstItem="8BC-Gv-pcb" firstAttribute="top" secondItem="jn7-9G-Qd7" secondAttribute="top" constant="148" id="ou4-Ww-feW"/>
+                                    <constraint firstAttribute="trailing" secondItem="8BC-Gv-pcb" secondAttribute="trailing" constant="41" id="kIP-s6-8P3"/>
+                                    <constraint firstItem="8BC-Gv-pcb" firstAttribute="top" secondItem="jn7-9G-Qd7" secondAttribute="top" constant="188" id="wIz-t2-3cJ"/>
+                                    <constraint firstItem="8BC-Gv-pcb" firstAttribute="leading" secondItem="jn7-9G-Qd7" secondAttribute="leading" constant="41" id="x3L-wr-Vum"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -388,6 +391,7 @@
                         <outlet property="popUpIncidentTypeView" destination="jn7-9G-Qd7" id="M4N-We-z1D"/>
                         <outlet property="segmentControll" destination="uPK-r0-I5L" id="CMP-6n-Ru8"/>
                         <outlet property="textField" destination="COY-aq-UVO" id="Zmq-o3-u17"/>
+                        <outlet property="whiteViewFromPopUp" destination="8BC-Gv-pcb" id="uMP-Dm-yES"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9kA-GM-aNH" userLabel="First Responder" sceneMemberID="firstResponder"/>
