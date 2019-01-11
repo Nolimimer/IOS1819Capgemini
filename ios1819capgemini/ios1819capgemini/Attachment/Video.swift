@@ -3,6 +3,7 @@ import Photos
 
 /// Wrap a PHAsset for video
 class Video: Attachment {
+    
     static let type = AttachmentType.video
     
     var data: Data?
@@ -20,17 +21,13 @@ class Video: Attachment {
     
     init(name: String, videoPath: String, duration: TimeInterval) {
         self.duration = duration
-        do {
-            try data = Data(contentsOf: URL(fileURLWithPath: videoPath))
-        } catch {
-            data = nil
-        }
         date = Date()
         self.name = name
         self.filePath = videoPath
         let defaults = UserDefaults.standard
         identifier = defaults.integer(forKey: "AttachmentIdentifer")
         defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
+        reevaluatePath()
     }
     
     func computeThumbnail() -> UIImage {
@@ -43,6 +40,21 @@ class Video: Attachment {
         return createdThumbnail
     }
     
+    func reevaluatePath() {
+        do {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory = URL(fileURLWithPath: paths[0])
+            let path = documentsDirectory.appendingPathComponent(name)
+            guard let data = data else {
+                return
+            }
+            try data.write(to: path, options: [])
+            filePath = path.absoluteString
+        } catch {
+            data = nil
+        }
+    }
     
     private func createThumbnailOfVideoFromRemoteUrl(url: String) -> UIImage? {
         

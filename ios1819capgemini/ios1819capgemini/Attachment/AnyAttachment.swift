@@ -15,8 +15,11 @@ class AnyAttachment: Codable {
         self.attachment = attachment
     }
     
-    required init(from decoder: Decoder) throws {
-        super.init(from: decoder)
+     required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let type = try container.decode(AttachmentType.self, forKey: .type)
+        self.attachment = try type.metatype.init(from: container.superDecoder(forKey: .attachment))
     }
     
     private enum CodingKeys : CodingKey {
@@ -29,6 +32,8 @@ class AnyAttachment: Codable {
         try container.encode(type(of: attachment).type, forKey: .type)
         try attachment.encode(to: encoder)
     }
+    
+    
 }
 
 public enum AttachmentType : String, Codable {

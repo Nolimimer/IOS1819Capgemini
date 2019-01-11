@@ -64,6 +64,11 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
+            for incident in incidents {
+                for attachment in incident.attachments {
+                    attachment.attachment.reevaluatePath()
+                }
+            }
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }

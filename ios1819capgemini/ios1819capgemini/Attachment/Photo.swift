@@ -18,17 +18,25 @@ class Photo: Attachment {
     
 
     init(name: String, photoPath: String) {
-        do {
-            try data = Data(contentsOf: URL(fileURLWithPath: photoPath))
-        } catch {
-            data = nil
-        }
         date = Date()
         self.name = name
         self.filePath = photoPath
         let defaults = UserDefaults.standard
         identifier = defaults.integer(forKey: "AttachmentIdentifer")
         defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
+        do {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory = URL(fileURLWithPath: paths[0])
+            let path = documentsDirectory.appendingPathComponent(name)
+            guard let data = data else {
+                return
+            }
+            try data.write(to: path, options: [])
+            filePath = path.absoluteString
+        } catch {
+            data = nil
+        }
     }
     
     func computeThumbnail() -> UIImage {
@@ -42,6 +50,22 @@ class Photo: Attachment {
             return UIImage()
         }
         return result
+    }
+    
+    func reevaluatePath() {
+        do {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory = URL(fileURLWithPath: paths[0])
+            let path = documentsDirectory.appendingPathComponent(name)
+            guard let data = data else {
+                return
+            }
+            try data.write(to: path, options: [])
+            filePath = path.absoluteString
+        } catch {
+            data = nil
+        }
     }
 }
 

@@ -12,7 +12,7 @@ import UIKit
 import AVKit
 
 // MARK: - Attachment
-protocol Attachment: Encodable {
+protocol Attachment: Codable {
     static var type: AttachmentType { get }
     var data: Data? { get }
     var identifier: Int { get }
@@ -32,6 +32,8 @@ protocol Attachment: Encodable {
 //    defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
 //
     func computeThumbnail() -> UIImage
+    
+    func reevaluatePath()
 }
 
 public class AttachmentWrapper {
