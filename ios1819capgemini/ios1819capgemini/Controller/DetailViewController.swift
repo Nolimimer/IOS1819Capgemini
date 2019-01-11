@@ -78,8 +78,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             segmentControll.isEnabled = false
             textField.layer.borderWidth = 0.0
             lastModifiedDateLabel.text = dateFormatter.string(from: incident.modifiedDate)
-            
+            ARViewController.incidentEdited = true
             modus = .view
+            
         }
     }
    

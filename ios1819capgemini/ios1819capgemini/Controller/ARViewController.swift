@@ -12,17 +12,18 @@ import ARKit
 import SceneKit
 import Vision
 import UICircularProgressRing
+import MultipeerConnectivity
 
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
 //swiftlint:disable type_body_length
-var nodesIdentifier = [String: SCNNode]()
 var creatingNodePossible = true
 // MARK: - ARViewController
 // swiftlint:disable all
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
+    static var incidentEdited = false
     static var objectDetected = false
     var detectedObjectNode: SCNNode?
     private var detectionObjects = Set <ARReferenceObject>()
@@ -33,6 +34,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     let numBoxes = 100
     var boundingBoxes: [BoundingBox] = []
     var model: VNCoreMLModel?
+    var mapProvider: MCPeerID?
+    var multipeerSession: MultipeerSession!
+
     private var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode = SKLabelNode(text: "")
     private var anchorLabels = [UUID: String]()
@@ -80,6 +84,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configureLighting()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
+        multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
     }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
@@ -88,6 +93,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if UIDevice.current.orientation.isLandscape {
         } else {
         }
+    }
+    @IBAction func resetButtonPressed(_ sender: Any) {
+        
+    }
+    @IBAction func shareIncidentsButtonPressed(_ sender: Any) {
+        sendIncidents(incidents: DataHandler.incidents)
     }
     
     /*
@@ -134,6 +145,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             self.saveImage(image: imageWithPin, incident: incident)
                             DataHandler.incidents.append(incident)
                             self.descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
+                            self.sendIncident(incident: incident)
                         }
                     }
                 }
@@ -182,9 +194,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        updateIncidents()
         refreshNodes()
-        setNavigationArrows(for: frame.camera.trackingState)
+        updateIncidents()
+//        setNavigationArrows(for: frame.camera.trackingState)
+        updateInfoPlane()
+        updatePinColour()
+        updateAutomaticallyDetectedIncidents()
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()
@@ -203,11 +218,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             self.node = node
             self.objectAnchor = objectAnchor
-            /*
-            node nimmt erst einen wert an nachdem die methode ausgeführt wurde, deswegen ist
-            detected object node hier eine nicht mit werten initialisierte node und ein transformieren der koordinaten in der methode selbst ist nicht möglich
-            (bzw. produziert falsche werte)
-            */
             self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             ARViewController.objectDetected = true
@@ -219,12 +229,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if !ARViewController.objectDetected {
             return
         }
+        incidentEditted()
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
-                /*
-                let coordianteRelativeObject = self.sceneView.rootNode.convertPosition(incident.getCoordinateToVector(), to: detectedObjectNode)
-                let coordinateRelativeWorld = self.sceneView.rootNode.convertPosition(coordinateRelativeObject, to: nil)
-                */
                 let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
                 add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
             }
@@ -373,11 +380,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         let incident = Incident (type: .scratch,
                                                  description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
                                                  coordinate: Coordinate(vector: coordinates))
+                        incident.automaticallyDetected = true
                         DataHandler.incidents.append(incident)
                         sphereNode.runAction(imageHighlightAction)
                         sphereNode.name = "\(incident.identifier)"
                         self.scene.rootNode.addChildNode(sphereNode)
                         nodes.append(sphereNode)
+                        sendIncident(incident: incident)
                     }
 //                }
                 //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
@@ -407,6 +416,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
     }
+    
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         let sphere = SCNSphere(radius: 0.015)
@@ -464,6 +474,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     @objc func tapped(recognizer: UIGestureRecognizer) {
         
+    }
+    private func updateInfoPlane() {
+        descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
+        let openIncidentsCount = DataHandler.incidents.filter { $0.status == .open }
+        if openIncidentsCount.isEmpty {
+            descriptionNode.fontColor = UIColor.green
+        } else {
+            descriptionNode.fontColor = UIColor.red
+        }
     }
     
     func refreshNodes() {
