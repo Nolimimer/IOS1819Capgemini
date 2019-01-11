@@ -13,6 +13,7 @@ import INSPhotoGallery
 import MobileCoreServices
 import SceneKit
 
+
 //swiftlint:disable all
 // MARK: - DetailViewController
 class DetailViewController: UIViewController, UINavigationControllerDelegate, UIDocumentInteractionControllerDelegate {
@@ -112,89 +113,21 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             segmentControll.isEnabled = false
             incidentTypeButton.isEnabled = false
             textField.layer.borderWidth = 0.0
+            ARViewController.incidentEdited = true
             lastModifiedDateLabel.text = dateFormatter.string(from: tmpIncident.modifiedDate)
             modus = .view
+            
         }
     }
    
     // MARK: Overridden/Lifecycle Methods
-    /*
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        if let firstTouch = touches.first {
-            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
-            
-            let attachmentView = view.subviews.first {
-                $0 is AttachmentView
-            }
-            if hitView != attachmentView {
-                attachmentView?.removeFromSuperview()
-            }
-        }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        if let firstTouch = touches.first {
-            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
-            
-            let attachmentView = view.subviews.first {
-                $0 is AttachmentView
-            }
-            if hitView != attachmentView {
-                attachmentView?.removeFromSuperview()
-            }
-        }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        if let firstTouch = touches.first {
-            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
-            
-            let attachmentView = view.subviews.first {
-                $0 is AttachmentView
-            }
-            if hitView != attachmentView {
-                attachmentView?.removeFromSuperview()
-            }
-        }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        if let firstTouch = touches.first {
-            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
-            
-            let attachmentView = view.subviews.first {
-                $0 is AttachmentView
-            }
-            if hitView != attachmentView {
-                attachmentView?.removeFromSuperview()
-            }
-        }
-    }
-     
-     @objc func handleTap(recognizer: UITapGestureRecognizer) {
-     self.view.endEditing(true)
-     let location = recognizer.location(in: view)
-     
-     let attachmentView = view.subviews.first {
-     $0 is AttachmentView
-     }
-     
-     if attachmentView?.frame.contains(location) ?? false {
-     attachmentView?.removeFromSuperview()
-     }
-     }
-    */
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         creatingNodePossible = false
         modalPresentationStyle = .overCurrentContext
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 
-//        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
+        //navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int
         guard let tmpIncident = incident else {
@@ -393,19 +326,18 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             guard let photo = currentAttachment as? Photo else {
                 return
             }
-            
-            let initialPhoto = PhotoWrapper(photo: photo)
-            
-            let photos = incident?.attachments.filter {
-                $0 is Photo
+
+            let photos: [PhotoWrapper] = incident!.attachments.reduce([]) {
+                var list = $0
+                if $1 is Photo {
+                    list.append(PhotoWrapper(photo: $1 as! Photo))
+                }
+                return list
             }
             
-            var wrappers: [PhotoWrapper] = []
-            for photo in photos ?? [] {
-                wrappers.append(PhotoWrapper(photo: photo as! Photo))
-            }
+            let initialPhoto = photos.first(where: { $0.photo.name == photo.name })
  
-            let galleryPreview = INSPhotosViewController(photos: wrappers, initialPhoto: initialPhoto, referenceView: cell)
+            let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: initialPhoto, referenceView: cell)
             
             galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
                 if let index = self?.attachments.index(where: { $0 === photo }) {

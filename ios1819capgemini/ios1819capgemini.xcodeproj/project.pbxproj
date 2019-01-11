@@ -94,6 +94,9 @@
 		BA09652321CEEA0800174922 /* ARViewControllerStatusbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */; };
 		BA6972E621D854E200F919EF /* ARViewControllerScreenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */; };
 		BA6972E821D8557D00F919EF /* ARViewControllerNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */; };
+		BAD6B88421E79CF200701698 /* ARViewControllerMultiUserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */; };
+		BAD6B88621E79E7900701698 /* MultipeerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88521E79E7900701698 /* MultipeerSession.swift */; };
+		BAD6B88821E7A2A100701698 /* ARViewControllerStatusBarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */; };
 		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
@@ -192,6 +195,9 @@
 		BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusbar.swift; sourceTree = "<group>"; };
 		BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerScreenshot.swift; sourceTree = "<group>"; };
 		BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNavigation.swift; sourceTree = "<group>"; };
+		BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerMultiUserExtension.swift; sourceTree = "<group>"; };
+		BAD6B88521E79E7900701698 /* MultipeerSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerSession.swift; sourceTree = "<group>"; };
+		BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusBarExtension.swift; sourceTree = "<group>"; };
 		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -213,6 +219,8 @@
 			isa = PBXGroup;
 			children = (
 				A66447E92192121300B2D32B /* ARViewController.swift */,
+				BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */,
+				BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */,
 				BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */,
 				BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */,
 				BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */,
@@ -226,6 +234,8 @@
 				908466EF21B6C85B00A3C80C /* PhotoViewController.swift */,
 				908466F121B6D11800A3C80C /* AttachmentViewCell.swift */,
 				BA09652021CEE59F00174922 /* StatusViewController.swift */,
+				904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */,
+				904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -349,6 +359,7 @@
 				90CB845621AD9D4100CA1C09 /* Scratch Detection */,
 				9082AF6321A5618100CA8E80 /* Model */,
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
+				BAD6B88521E79E7900701698 /* MultipeerSession.swift */,
 				0D1F63FA21E7A01000AFC29A /* Settings.bundle */,
 				0D5F4A7621A3121F00D443CC /* CUU.plist */,
 				A66447F32192121300B2D32B /* Info.plist */,
@@ -624,6 +635,7 @@
 				B30A477C21CFBC59007049F8 /* ThresholdPanGestureRecognizer.swift in Sources */,
 				B30A479321CFBC5A007049F8 /* ViewController+Gestures.swift in Sources */,
 				B30A477F21CFBC5A007049F8 /* RoundedButton.swift in Sources */,
+				BAD6B88621E79E7900701698 /* MultipeerSession.swift in Sources */,
 				B30A479621CFBC5A007049F8 /* ScannerAppUtilities.swift in Sources */,
 				5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */,
 				B30A477E21CFBC5A007049F8 /* FlashlightButton.swift in Sources */,
@@ -664,6 +676,7 @@
 				90C7377A21B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift in Sources */,
 				90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */,
 				B30A478121CFBC5A007049F8 /* ScannedObject.swift in Sources */,
+				BAD6B88421E79CF200701698 /* ARViewControllerMultiUserExtension.swift in Sources */,
 				90CB846421ADAAF700CA1C09 /* Anchors1.swift in Sources */,
 				B30A478921CFBC5A007049F8 /* PointCloud+CreateVisualization.swift in Sources */,
 				B30A479021CFBC5A007049F8 /* ViewController+SessionInfo.swift in Sources */,
@@ -688,6 +701,7 @@
 				90CB847021ADAB3100CA1C09 /* Anchors7.swift in Sources */,
 				BA09652121CEE59F00174922 /* StatusViewController.swift in Sources */,
 				0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */,
+				BAD6B88821E7A2A100701698 /* ARViewControllerStatusBarExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
