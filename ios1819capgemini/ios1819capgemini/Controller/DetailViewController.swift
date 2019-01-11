@@ -6,7 +6,6 @@
 //  Copyright © 2018 TUM LS1. All rights reserved.
 //
 
-//swiftlint:disable all
 // MARK: Imports
 import UIKit
 import AVKit
@@ -20,7 +19,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     private var modus = Modus.view
     
     private var types: [IncidentType] = []
-    private var type: IncidentType = IncidentType.unknown
+    private var type = IncidentType.unknown
     
     private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -29,9 +28,11 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     // Variables / Mock Variable
-    var incident: Incident? = nil
+    var incident: Incident?
     var attachments: [Attachment] = []
+    //swiftlint:disable implicitly_unwrapped_optional
     var imagePicker: UIImagePickerController!
+    //swiftlint:enable implicitly_unwrapped_optional
 
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
@@ -51,7 +52,11 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     @IBAction private func incidentTypeButtonPressed(_ sender: Any) {
         whiteViewFromPopUp.layer.cornerRadius = 10
         popUpIncidentTypeView.isHidden = false
-        incidentTypePicker.selectRow(types.firstIndex(of: type)!, inComponent: 0, animated: false)
+        guard let tmpIndexOfType = types.firstIndex(of: type) else {
+            print("Error")
+            return
+        }
+        incidentTypePicker.selectRow(tmpIndexOfType, inComponent: 0, animated: false)
     }
     
     @IBAction private func selectIncidentType(_ sender: Any) {
@@ -64,7 +69,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
          self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func showAllAttachments(_ sender: Any) {
+    @IBAction private func showAllAttachments(_ sender: Any) {
         performSegue(withIdentifier: "attachmentSegue", sender: self)
     }
     
@@ -90,14 +95,18 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             default:
                 status = .resolved
             }
-            incident!.edit(status: status, description: textField.text, modifiedDate: Date())
-            incident!.editIncidentType(type: type)
+            guard let tmpIncident = incident else {
+                print("Error")
+                return
+            }
+            tmpIncident.edit(status: status, description: textField.text, modifiedDate: Date())
+            tmpIncident.editIncidentType(type: type)
             editButton.title = "Edit"
             textField.isEditable = false
             segmentControll.isEnabled = false
             incidentTypeButton.isEnabled = false
             textField.layer.borderWidth = 0.0
-            lastModifiedDateLabel.text = dateFormatter.string(from: incident!.modifiedDate)
+            lastModifiedDateLabel.text = dateFormatter.string(from: tmpIncident.modifiedDate)
             modus = .view
         }
     }
@@ -168,7 +177,11 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
 //        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int
-        switch incident!.status {
+        guard let tmpIncident = incident else {
+            print("Error")
+            return
+        }
+        switch tmpIncident.status {
         case .open:
             controllIndex = 0
         case .progress:
@@ -178,18 +191,16 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
         segmentControll.selectedSegmentIndex = controllIndex
         
-        let dateString = dateFormatter.string(from: incident!.createDate)
-        let lastModifiedDateString = dateFormatter.string(from: incident!.modifiedDate)
+        let dateString = dateFormatter.string(from: tmpIncident.createDate)
+        let lastModifiedDateString = dateFormatter.string(from: tmpIncident.modifiedDate)
         generatedDateLabel.text = dateString
         lastModifiedDateLabel.text = lastModifiedDateString
-        textField.text = incident!.description
-        type = incident!.type
+        textField.text = tmpIncident.description
+        type = tmpIncident.type
         incidentTypeButton.setTitle(type.rawValue, for: .normal)
         attachments = computeAttachments()
         collectionView.reloadData()
     }
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -289,10 +300,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             present(alertController, animated: true)
         } else {
             print("Saved picture")
-            for child in view.subviews {
-                if child is AttachmentView {
-                    child.removeFromSuperview()
-                }
+            for child in view.subviews where child is AttachmentView {
+                child.removeFromSuperview()
             }
         }
     }
@@ -306,7 +315,11 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).row == 0 {
-            let attachmentView = AttachmentView(frame: CGRect(x: collectionView.cellForItem(at: indexPath)!.center.x - 30,
+            guard let tmpX = collectionView.cellForItem(at: indexPath) else {
+                print("Error")
+                return
+            }
+            let attachmentView = AttachmentView(frame: CGRect(x: tmpX.center.x - 30,
                                                               y: collectionView.center.y - 200,
                                                               width: 150,
                                                               height: 200))
@@ -355,6 +368,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
 }
 
 extension DetailViewController: UIImagePickerControllerDelegate {
+    //swiftlint:disable colon
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey:Any]) {
         imagePicker.dismiss(animated: true, completion: nil)
         if let selectedImage = info[.originalImage] as? UIImage {
@@ -385,7 +399,9 @@ extension DetailViewController: UIImagePickerControllerDelegate {
         }
     }
     
+    //swiftlint:disable implicitly_unwrapped_optional
     @objc func videoSaved(_ video: String, didFinishSavingWithError error: NSError!, context: UnsafeMutableRawPointer) {
+        //swiftlint:enable implicitly_unwrapped_optional
         if let theError = error {
             print("error saving the video = \(theError)")
         } else {
