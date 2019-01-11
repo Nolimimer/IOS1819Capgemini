@@ -23,6 +23,7 @@ var creatingNodePossible = true
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
+    static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
     var detectedObjectNode: SCNNode?
@@ -240,6 +241,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // The camera stream has only a finite amount of buffers available; holding too many buffers for analysis would starve the camera.
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
+        }
+        if !multipeerSession.connectedPeers.isEmpty {
+            print("connected to peer in session ")
+            ARViewController.connectedToPeer = true
         }
         
         // Check settings
