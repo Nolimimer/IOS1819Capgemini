@@ -88,9 +88,9 @@ enum IncidentType: String, Codable {
 }
 
 enum Status: String, Codable {
-    case open
-    case progress
-    case resolved
+    case open = "Open"
+    case progress = "In Progress"
+    case resolved = "Resolved"
 }
 
 // MARK: - Extension: Equatable

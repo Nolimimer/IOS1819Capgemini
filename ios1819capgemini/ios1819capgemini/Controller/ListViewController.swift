@@ -9,7 +9,15 @@
 // MARK: Imports
 import UIKit
 //swiftlint:disable all
-// MARK: LastViewController
+
+// MARK: CustomCell IBOutlets
+class CustomCell: UITableViewCell {
+    @IBOutlet weak var incidentTitleLabel: UILabel!
+    @IBOutlet weak var incidentDescriptionLabel: UILabel!
+    @IBOutlet weak var incidentStatusLabel: UILabel!
+}
+
+// MARK: ListViewController
 class ListViewController: UIViewController {
     
     // MARK: IBOutlets
@@ -120,7 +128,7 @@ enum Filter: Int { // Remark: Need to match Segment in Story Board.
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
+        let cell: CustomCell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath) as! CustomCell
         let incident: Incident
         switch filterSegmentedControl.selectedSegmentIndex {
         case Filter.showAll.rawValue: // Filter by All Incidents.
@@ -134,9 +142,12 @@ extension ListViewController: UITableViewDataSource {
         default: // Default by All Incidents.
             incident = DataHandler.incidents[indexPath.row]
         }
-        cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
+        cell.incidentTitleLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
+        cell.incidentDescriptionLabel?.text = incident.description
+        cell.incidentStatusLabel?.text = incident.status.rawValue
+        //cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
         cell.tag = incident.identifier
-        cell.detailTextLabel?.text = incident.description
+        //cell.detailTextLabel?.text = incident.description
         return cell
     }
     
