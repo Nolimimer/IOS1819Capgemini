@@ -13,6 +13,7 @@ import INSPhotoGallery
 import MobileCoreServices
 import SceneKit
 
+
 //swiftlint:disable all
 // MARK: - DetailViewController
 class DetailViewController: UIViewController, UINavigationControllerDelegate, UIDocumentInteractionControllerDelegate {
