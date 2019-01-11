@@ -30,7 +30,7 @@ enum DataHandler {
     static var openIncidents = [Incident]()
     static var inProgressIncidents = [Incident]()
     static var resolvedIncidents = [Incident]()
-    
+  
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
         largestID += 1

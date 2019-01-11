@@ -11,6 +11,11 @@ import UIKit
 
 class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    
+    @IBAction func exploreButton(_ sender: Any) {
+        self.dismiss(animated: false, completion: nil)
+    }
+    
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,11 +28,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     let reuseIdentifier = "modelCell" 
-    var items = ["1", "2", "3", "4", "5", "6"]
     
     // MARK: - UICollectionViewDataSource protocol
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.items.count
+        return Incident.scanID
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -35,11 +39,21 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         //swiftlint:disable all
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! ARModelsCollectionViewCell
         
-        
-        //cell.text = //self.items[indexPath.item]
+        let nsDocumentDirectory = FileManager.SearchPathDirectory.documentDirectory
+        let nsUserDomainMask    = FileManager.SearchPathDomainMask.userDomainMask
+        let paths               = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+        if let dirPath          = paths.first
+        {
+            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("Scan\(indexPath.item+1).jpg")
+            let image    = UIImage(contentsOfFile: imageURL.path)
+            cell.modelImage.image = image
+            }
         
         return cell
     }
+    
+
+    
     
     // MARK: - UICollectionViewDelegate protocol
     

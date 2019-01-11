@@ -688,6 +688,7 @@
         <!--View Controller-->
         <scene sceneID="5cJ-O0-ZIQ">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q6w-mo-XXu" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="dcg-B5-UM8" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8x9-6W-L7d">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -718,7 +719,6 @@
                         <viewLayoutGuide key="safeArea" id="dYA-dF-z7m"/>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Q6w-mo-XXu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1492" y="115"/>
         </scene>
@@ -1236,6 +1236,7 @@
                                                     <outlet property="openLabel" destination="t8a-FK-7YE" id="yhI-Gd-Xrx"/>
                                                     <outlet property="openNumber" destination="ciG-aX-R57" id="Ilg-Fl-wXd"/>
                                                     <outlet property="progessNumber" destination="8f2-PW-hT7" id="9OQ-qX-7b7"/>
+                                                    <outlet property="progressLabel" destination="WlM-sU-Kvf" id="6u6-AA-NkH"/>
                                                     <outlet property="resolvedLabel" destination="gkR-ga-dqy" id="nFI-HH-EG1"/>
                                                     <outlet property="resolvedNumber" destination="znS-pq-8Nx" id="HM5-dE-DmF"/>
                                                 </connections>

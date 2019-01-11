@@ -25,7 +25,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: Stored Instance Properties
     static var objectDetected = false
     var detectedObjectNode: SCNNode?
-    private var detectionObjects = Set <ARReferenceObject>()
+    var detectionObjects = Set <ARReferenceObject>()
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?

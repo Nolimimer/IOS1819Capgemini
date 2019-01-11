@@ -16,6 +16,7 @@ class ARModelsCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var openLabel: UILabel!
 
+    @IBOutlet weak var progressLabel: UILabel!
     
     @IBOutlet weak var resolvedLabel: UILabel!
     
@@ -23,9 +24,6 @@ class ARModelsCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var progessNumber: UILabel!
     
-    
     @IBOutlet weak var resolvedNumber: UILabel!
-    
-    
     
 }

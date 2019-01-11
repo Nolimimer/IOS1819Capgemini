@@ -152,6 +152,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     // MARK: - UI Event Handling
     //swiftlint:disable private_action
     @IBAction func restartButtonTapped(_ sender: Any) {
+        print("restart button tapped")
         if let scan = scan, scan.boundingBoxExists {
             let title = "Start over?"
             let message = "Discard the current scan and start over?"
@@ -364,6 +365,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
         print("documentURL \(documentURL)")
         
+        saveImage(image: testRun.previewImage)
         
         DispatchQueue.global().async {
             do {
@@ -374,6 +376,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             
         }
     }
+    
+    
+    func saveImage(image: UIImage) {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileName = "Scan\(Incident.nextScanID).jpg"
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        if let data = image.jpegData(compressionQuality: 0.5) {
+            do {
+                try data.write(to: fileURL)
+                print("file saved")
+            } catch {
+                print("error saving file:", error)
+            }
+    }
+    }
+    
     
     func createAndShareReferenceObject() {
         guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {
