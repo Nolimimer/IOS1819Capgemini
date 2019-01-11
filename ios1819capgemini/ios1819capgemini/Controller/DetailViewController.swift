@@ -20,7 +20,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     private var modus = Modus.view
     private var overlay: UIView! = nil
-    private var attachmentView: AttachmentView! = nil
     var recordButton: UIButton!
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
@@ -187,21 +186,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         popUpIncidentTypeView.isHidden = true
         incidentTypePicker.dataSource = self
         incidentTypePicker.delegate = self
-        
-        attachmentView = AttachmentView(frame: CGRect(x: 0, y: 0, width: 150, height: 200))
-        attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
-        attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
-        attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
-        attachmentView.documentButton.addTarget(self, action: #selector(pickDocument), for: .touchUpInside)
-        recordButton = attachmentView.audioButton
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch: UITouch? = touches.first
         
-        if touch?.view == overlay || touch?.view == attachmentView {
+        if touch?.view == overlay{
             overlay.removeFromSuperview()
-            attachmentView.removeFromSuperview()
         }
     }
     
@@ -262,12 +253,15 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         if audioRecorder == nil {
             startRecording()
         } else {
+            overlay.removeFromSuperview()
             finishRecording(success: true)
         }
     }
     
 
     @objc private func takePhoto() {
+        overlay.removeFromSuperview()
+        
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
@@ -276,6 +270,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     @objc private func takeVideo() {
+        overlay.removeFromSuperview()
+        
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
@@ -309,6 +305,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         self.present(importMenu, animated: true, completion: nil)
     }
     
+    // Spotlights the attachment popup
     private func showOverlay() {
         overlay = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
         overlay.backgroundColor = UIColor(white: 0, alpha: 0.5)
@@ -329,14 +326,19 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 return
             }
             
-            attachmentView.frame = CGRect(x: tmpX.center.x - 30,
-                                          y: collectionView.center.y - 200,
-                                          width: 150,
-                                          height: 200)
-            showOverlay()
+            let attachmentView = AttachmentView(frame: CGRect(x: tmpX.center.x - 30,
+                                                              y: collectionView.center.y - 200,
+                                                              width: 150,
+                                                              height: 200))
+            attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
+            attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
+            attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+            attachmentView.documentButton.addTarget(self, action: #selector(pickDocument), for: .touchUpInside)
+            recordButton = attachmentView.audioButton
             
-
-            view.addSubview(attachmentView)
+            showOverlay()
+            overlay.addSubview(attachmentView)
+            
             return
         }
         let currentAttachment = attachments[(indexPath as NSIndexPath).row]
