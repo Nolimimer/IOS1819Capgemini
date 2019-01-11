@@ -33,7 +33,7 @@ enum DataHandler {
     
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
-        largestID += 1
+        largestID = Int(arc4random())
         return largestID
     }
     
@@ -105,7 +105,6 @@ enum DataHandler {
             return nil
         }
     }
-
     
     static func loadFromJSON(url: URL) {
         do {
@@ -119,7 +118,7 @@ enum DataHandler {
         }
     }
     
-    static func removeIncident(incidentToDelete : Incident) {
+    static func removeIncident(incidentToDelete: Incident) {
         for (index, incident) in incidents.enumerated() {
             if incident.identifier == incidentToDelete.identifier {
                 incidents.remove(at: index)

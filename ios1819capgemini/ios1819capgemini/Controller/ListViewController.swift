@@ -156,10 +156,25 @@ extension ListViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let incident = DataHandler.incidents[indexPath.row]
-            DataHandler.removeIncident(incidentToDelete: incident)
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            return
+            print("connected to peer : \(ARViewController.connectedToPeer)")
+            if ARViewController.connectedToPeer {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can't be deleted if Peer is connected",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            } else {
+                let incident = DataHandler.incidents[indexPath.row]
+                DataHandler.removeIncident(incidentToDelete: incident)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                return
+            }
+
         }
     }
     

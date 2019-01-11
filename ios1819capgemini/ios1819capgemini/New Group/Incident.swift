@@ -23,6 +23,7 @@ public class Incident: Codable {
     private(set) var status: Status
     var attachments = [Attachment]()
     let coordinate: Coordinate
+    var automaticallyDetected = false
     // MARK: Initializers
     init(type: IncidentType, description: String, coordinate: Coordinate) {
         identifier = DataHandler.nextIncidentID
