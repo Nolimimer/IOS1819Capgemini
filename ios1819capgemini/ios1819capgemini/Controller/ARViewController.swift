@@ -37,7 +37,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var mapProvider: MCPeerID?
     var multipeerSession: MultipeerSession!
 
-    private var automaticallyDetectedIncidents = [CGPoint]()
+    var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode = SKLabelNode(text: "")
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
@@ -95,7 +95,37 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     @IBAction func resetButtonPressed(_ sender: Any) {
-        
+        DataHandler.incidents = []
+        DataHandler.saveToJSON()
+        self.scene.rootNode.childNodes.forEach { node in
+            guard let name = node.name else {
+                return
+            }
+            self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+        }
+        nodes = []
+        automaticallyDetectedIncidents = []
+        self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
+        let configuration = ARWorldTrackingConfiguration()
+        if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
+            configuration.detectionObjects = detectionObjects
+            sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.success)
+            }
+        }
+        do {
+            let data = try JSONEncoder().encode(DataHandler.incidents)
+            self.multipeerSession.sendToAllPeers(data)
+        } catch _ {
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.error)
+            }
+        }
     }
     @IBAction func shareIncidentsButtonPressed(_ sender: Any) {
         sendIncidents(incidents: DataHandler.incidents)
@@ -194,12 +224,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        refreshNodes()
         updateIncidents()
 //        setNavigationArrows(for: frame.camera.trackingState)
         updateInfoPlane()
         updatePinColour()
-        updateAutomaticallyDetectedIncidents()
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()

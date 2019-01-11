@@ -16,6 +16,27 @@ extension ARViewController {
         do {
             let incidents = try JSONDecoder().decode([Incident].self, from: data)
             DataHandler.incidents = incidents
+            if incidents.isEmpty {
+                nodes = []
+                self.scene.rootNode.childNodes.forEach { node in
+                    guard let name = node.name else {
+                        return
+                    }
+                    self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+                }
+                self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
+                automaticallyDetectedIncidents = []
+                let configuration = ARWorldTrackingConfiguration()
+                if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
+                    configuration.detectionObjects = detectionObjects
+                    sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+                    let notification = UINotificationFeedbackGenerator()
+                    
+                    DispatchQueue.main.async {
+                        notification.notificationOccurred(.success)
+                    }
+                }
+            }
         } catch {
             
         }
@@ -80,22 +101,19 @@ extension ARViewController {
         return nil
     }
     
-    func updateAutomaticallyDetectedIncidents() {
-        for node in nodes {
-            if (getIncident(identifier: node.name!)?.automaticallyDetected)! {
-                node.geometry?.materials.first?.diffuse.contents = UIColor.blue
-            }
-        }
-    }
-    
     func updatePinColour() {
         for incident in DataHandler.incidents {
-            for node in nodes {
-                if node.name! == String(incident.identifier) {
-                    switch incident.status {
-                    case .open: node.geometry?.materials.first?.diffuse.contents = UIColor.red
-                    case .progress: node.geometry?.materials.first?.diffuse.contents = UIColor.yellow
-                    case .resolved: node.geometry?.materials.first?.diffuse.contents = UIColor.green
+            if incident.automaticallyDetected {
+                nodes.first(where: {$0.name == "\(incident.identifier)"})?.geometry?.materials.first?.diffuse.contents = UIColor.blue
+            }
+            else {
+                for node in nodes {
+                    if node.name! == String(incident.identifier) {
+                        switch incident.status {
+                        case .open: node.geometry?.materials.first?.diffuse.contents = UIColor.red
+                        case .progress: node.geometry?.materials.first?.diffuse.contents = UIColor.yellow
+                        case .resolved: node.geometry?.materials.first?.diffuse.contents = UIColor.green
+                        }
                     }
                 }
             }
