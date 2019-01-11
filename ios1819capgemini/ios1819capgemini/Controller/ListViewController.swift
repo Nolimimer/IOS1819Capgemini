@@ -8,12 +8,13 @@
 
 // MARK: Imports
 import UIKit
-
+//swiftlint:disable all
 // MARK: LastViewController
 class ListViewController: UIViewController {
-
+    
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var filterSegmentedControl: UISegmentedControl!
     
     // MARK: Overridden/Lifecycle Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,7 +33,6 @@ class ListViewController: UIViewController {
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -42,7 +42,12 @@ class ListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        DataHandler.refreshOpenIncidents()
+        DataHandler.refreshInProgressIncidents()
+        DataHandler.refreshResolvedIncidents()
+        filterSegmentedControl.selectedSegmentIndex = DataHandler.currentSegmentFilter
         tableView.reloadData()
+        creatingNodePossible = false
         super.viewWillAppear(animated)
         self.modalPresentationStyle = .overCurrentContext
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -51,6 +56,7 @@ class ListViewController: UIViewController {
 
     // MARK: IBActions
     @IBAction private func didPressAddButton(_ sender: Any) {
+         creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
     
@@ -58,9 +64,33 @@ class ListViewController: UIViewController {
         share()
     }
     
-    // Share with airDrop just works on iPhone and not in the xCode simulator
+    
+    @IBAction private func selectedFilterSegment(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case Filter.showAll.rawValue: // All tab
+            DataHandler.currentSegmentFilter = Filter.showAll.rawValue
+            tableView.reloadData()
+        case Filter.showOpen.rawValue: // Open tab
+            DataHandler.currentSegmentFilter = Filter.showOpen.rawValue
+            DataHandler.refreshOpenIncidents()
+            tableView.reloadData()
+        case Filter.showInProgress.rawValue: // In Progress tab
+            DataHandler.currentSegmentFilter = Filter.showInProgress.rawValue
+            DataHandler.refreshInProgressIncidents()
+            tableView.reloadData()
+        case Filter.showResolved.rawValue: // Resolved tab
+            DataHandler.currentSegmentFilter = Filter.showResolved.rawValue
+            DataHandler.refreshResolvedIncidents()
+            tableView.reloadData()
+        default:
+            break
+        }
+}
+  
+    
     private func share() {
-    let activityController = UIActivityViewController(activityItems: DataHandler.incidents, applicationActivities: nil)
+    DataHandler.saveToJSON()
+    let activityController = UIActivityViewController(activityItems: [DataHandler.getJSON()!], applicationActivities: nil)
         
         let excludedActivities =
             [UIActivity.ActivityType.mail,
@@ -76,30 +106,62 @@ class ListViewController: UIViewController {
              UIActivity.ActivityType.postToVimeo]
         
         activityController.excludedActivityTypes = excludedActivities
-        
-        present(activityController, animated: true, completion: nil)
-    
+        self.present(activityController, animated: true, completion: nil)
     }
-    
-    private func receive() {
-        
-    }
-    
-    
+}
+
+enum Filter: Int { // Remark: Need to match Segment in Story Board.
+    case showAll = 0
+    case showOpen
+    case showInProgress
+    case showResolved
 }
 
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
-        let incident = DataHandler.incidents[indexPath.row]
-        cell.textLabel?.text = incident.description
+        let incident: Incident
+        switch filterSegmentedControl.selectedSegmentIndex {
+        case Filter.showAll.rawValue: // Filter by All Incidents.
+            incident = DataHandler.incidents[indexPath.row]
+        case Filter.showOpen.rawValue: // Filter by Open Incidents
+            incident = DataHandler.openIncidents[indexPath.row]
+        case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
+            incident = DataHandler.inProgressIncidents[indexPath.row]
+        case Filter.showResolved.rawValue: // Filter by Resolved Incidents
+            incident = DataHandler.resolvedIncidents[indexPath.row]
+        default: // Default by All Incidents.
+            incident = DataHandler.incidents[indexPath.row]
+        }
+        cell.textLabel?.text = "\(incident.identifier) \(incident.type.rawValue)"
         cell.tag = incident.identifier
-//        print("Tag: \(cell.tag)")
+        cell.detailTextLabel?.text = incident.description
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DataHandler.incidents.count
+        switch filterSegmentedControl.selectedSegmentIndex {
+        case Filter.showAll.rawValue: // Filter by All Incidents.
+            return DataHandler.incidents.count
+        case Filter.showOpen.rawValue: // Filter by Open Incidents
+            return DataHandler.openIncidents.count
+        case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
+            return DataHandler.inProgressIncidents.count
+        case Filter.showResolved.rawValue: // Filter by Resolved Incidents
+            return DataHandler.resolvedIncidents.count
+        default: // Default by All Incidents.
+            return DataHandler.incidents.count
+        }
     }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let incident = DataHandler.incidents[indexPath.row]
+            DataHandler.removeIncident(incidentToDelete: incident)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            return
+        }
+    }
+    
+
 }

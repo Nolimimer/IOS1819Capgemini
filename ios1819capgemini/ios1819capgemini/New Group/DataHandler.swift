@@ -22,10 +22,14 @@ enum DataHandler {
             return documentsDirectory.appendingPathComponent(Constants.fileName)
         }
     }
-    
+
     // MARK: Stored Type Properties
     static var incidents: [Incident] = []
     static var largestID = 0
+    static var currentSegmentFilter = Filter.showAll.rawValue // Show All by default
+    static var openIncidents = [Incident]()
+    static var inProgressIncidents = [Incident]()
+    static var resolvedIncidents = [Incident]()
     
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
@@ -36,8 +40,23 @@ enum DataHandler {
     static func incident(withId id: Int) -> Incident? {
         return incidents.first(where: { $0.identifier == id })
     }
+    static func incident(withId id: String) -> Incident? {
+        return incidents.first(where: { "\($0.identifier)" == id })
+    }
+
+    static func refreshOpenIncidents() {
+        openIncidents = incidents.filter({ $0.status == Status.open })
+    }
     
-     // MARK: Type Methods
+    static func refreshInProgressIncidents() {
+        inProgressIncidents = incidents.filter({ $0.status == Status.progress })
+    }
+    
+    static func refreshResolvedIncidents() {
+        resolvedIncidents = incidents.filter({ $0.status == Status.resolved })
+    }
+    
+    // MARK: Type Methods
     static func loadFromJSON() {
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)
@@ -45,7 +64,6 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
-            print("Decoded \(incidents.count) incidents.")
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
@@ -55,11 +73,46 @@ enum DataHandler {
         do {
             let data = try JSONEncoder().encode(incidents)
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
-            try jsonFileWrapper.write(to: Constants.localStorageURL, options: FileWrapper.WritingOptions.atomic, originalContentsURL: nil)
-            print("Saved incidents!")
+            try jsonFileWrapper.write(to: Constants.localStorageURL,
+                                      options: FileWrapper.WritingOptions.atomic,
+                                      originalContentsURL: nil)
+//            print("Saved incidents!")
         } catch _ {
             print("Could not save incidents")
         }
     }
+    
+    static func getJSON() -> Data? {
+        do {
+            let data = try JSONEncoder().encode(incidents)
+            return data
+        } catch _ {
+            return nil
+        }
+    }
+
+    
+    static func loadFromJSON(url: URL) {
+        do {
+            let fileWrapper = try FileWrapper(url: url, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            incidents = try JSONDecoder().decode([Incident].self, from: data)
+        } catch _ {
+            print("Could not load incidents, DataHandler uses no incident")
+        }
+    }
+    
+    static func removeIncident(incidentToDelete : Incident) {
+        for (index, incident) in incidents.enumerated() {
+            if incident.identifier == incidentToDelete.identifier {
+                incidents.remove(at: index)
+                saveToJSON()
+                return
+            }
+        }
+    }
+
     
 }

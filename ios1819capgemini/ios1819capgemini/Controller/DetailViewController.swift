@@ -18,6 +18,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     private var modus = Modus.view
     
+    private var types: [IncidentType] = []
+    private var type = IncidentType.unknown
+    
     private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
@@ -25,13 +28,12 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     // Variables / Mock Variable
-    var incident = Incident(type: IncidentType.dent,
-                            description: "This scratch is a critical one, my suggestion is to completly remove the right door.",
-                            coordinate: Coordinate (vector: SCNVector3(0, 0, 0)))
+    var incident: Incident?
     var attachments: [Attachment] = []
+    //swiftlint:disable implicitly_unwrapped_optional
     var imagePicker: UIImagePickerController!
+    //swiftlint:enable implicitly_unwrapped_optional
 
-    
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
     @IBOutlet private weak var generatedDateLabel: UILabel!
@@ -41,13 +43,33 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet private weak var backButton: UIBarButtonItem!
     @IBOutlet private weak var textField: UITextView!
     @IBOutlet private weak var editButton: UIBarButtonItem!
+    @IBOutlet private weak var incidentTypeButton: UIButton!
+    @IBOutlet private weak var popUpIncidentTypeView: UIView!
+    @IBOutlet private weak var whiteViewFromPopUp: UIView!
+    @IBOutlet private weak var incidentTypePicker: UIPickerView!
     
     // MARK: IBActions
+    @IBAction private func incidentTypeButtonPressed(_ sender: Any) {
+        whiteViewFromPopUp.layer.cornerRadius = 10
+        popUpIncidentTypeView.isHidden = false
+        guard let tmpIndexOfType = types.firstIndex(of: type) else {
+            print("Error")
+            return
+        }
+        incidentTypePicker.selectRow(tmpIndexOfType, inComponent: 0, animated: false)
+    }
+    
+    @IBAction private func selectIncidentType(_ sender: Any) {
+        incidentTypeButton.setTitle(type.rawValue, for: .normal)
+        popUpIncidentTypeView.isHidden = true
+    }
+    
     @IBAction private func backButtonPressed(_ sender: Any) {
+         creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func showAllAttachments(_ sender: Any) {
+    @IBAction private func showAllAttachments(_ sender: Any) {
         performSegue(withIdentifier: "attachmentSegue", sender: self)
     }
     
@@ -55,6 +77,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         switch modus {
         case .view:
             editButton.title = "Save"
+            incidentTypeButton.isEnabled = true
             textField.isEditable = true
             segmentControll.isEnabled = true
             textField.layer.borderWidth = 1.0
@@ -72,14 +95,18 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             default:
                 status = .resolved
             }
-            incident.edit(status: status, description: textField.text, modifiedDate: Date())
-            
+            guard let tmpIncident = incident else {
+                print("Error")
+                return
+            }
+            tmpIncident.edit(status: status, description: textField.text, modifiedDate: Date())
+            tmpIncident.editIncidentType(type: type)
             editButton.title = "Edit"
             textField.isEditable = false
             segmentControll.isEnabled = false
+            incidentTypeButton.isEnabled = false
             textField.layer.borderWidth = 0.0
-            lastModifiedDateLabel.text = dateFormatter.string(from: incident.modifiedDate)
-            
+            lastModifiedDateLabel.text = dateFormatter.string(from: tmpIncident.modifiedDate)
             modus = .view
         }
     }
@@ -95,7 +122,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             }
             if hitView != attachmentView {
                 attachmentView?.removeFromSuperview()
-            } 
+            }
         }
     }
     
@@ -141,16 +168,20 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        creatingNodePossible = false
         modalPresentationStyle = .overCurrentContext
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        
-        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
+
+//        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int
-        switch incident.status {
+        guard let tmpIncident = incident else {
+            print("Error")
+            return
+        }
+        switch tmpIncident.status {
         case .open:
             controllIndex = 0
         case .progress:
@@ -160,30 +191,33 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         }
         segmentControll.selectedSegmentIndex = controllIndex
         
-        let dateString = dateFormatter.string(from: incident.createDate)
-        let lastModifiedDateString = dateFormatter.string(from: incident.modifiedDate)
+        let dateString = dateFormatter.string(from: tmpIncident.createDate)
+        let lastModifiedDateString = dateFormatter.string(from: tmpIncident.modifiedDate)
         generatedDateLabel.text = dateString
         lastModifiedDateLabel.text = lastModifiedDateString
-        textField.text = incident.description
+        textField.text = tmpIncident.description
+        type = tmpIncident.type
+        incidentTypeButton.setTitle(type.rawValue, for: .normal)
         attachments = computeAttachments()
         collectionView.reloadData()
     }
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         attachments = computeAttachments()
-        
-//        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.handleTap(recognizer:)))
-//        self.view.addGestureRecognizer(gesture)
-        // add blurred subview
+
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+        IncidentType.allCases.forEach {
+            types.append($0)
+        }
+        popUpIncidentTypeView.isHidden = true
+        incidentTypePicker.dataSource = self
+        incidentTypePicker.delegate = self
     }
     
     func computeAttachments() -> [Attachment] {
@@ -224,7 +258,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         return []
     }
     
-    @objc func handleTap(recognizer: UITapGestureRecognizer){
+    @objc func handleTap(recognizer: UITapGestureRecognizer) {
         self.view.endEditing(true)
         let location = recognizer.location(in: view)
 
@@ -239,7 +273,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
 
     
     @objc private func takePhoto() {
-        imagePicker =  UIImagePickerController()
+        imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
         present(imagePicker, animated: true, completion: nil)
@@ -247,7 +281,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @objc private func takeVideo() {
-        imagePicker =  UIImagePickerController()
+        imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
         imagePicker.mediaTypes = [kUTTypeMovie as String]
@@ -266,15 +300,11 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             present(alertController, animated: true)
         } else {
             print("Saved picture")
-            let index = 0
-            for child in view.subviews {
-                if child is AttachmentView {
-                    child.removeFromSuperview()
-                }
+            for child in view.subviews where child is AttachmentView {
+                child.removeFromSuperview()
             }
         }
     }
-    
 }
 
 // MARK: Extension
@@ -285,7 +315,11 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).row == 0 {
-            let attachmentView = AttachmentView(frame: CGRect(x: collectionView.cellForItem(at: indexPath)!.center.x - 30,
+            guard let tmpX = collectionView.cellForItem(at: indexPath) else {
+                print("Error")
+                return
+            }
+            let attachmentView = AttachmentView(frame: CGRect(x: tmpX.center.x - 30,
                                                               y: collectionView.center.y - 200,
                                                               width: 150,
                                                               height: 200))
@@ -334,6 +368,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
 }
 
 extension DetailViewController: UIImagePickerControllerDelegate {
+    //swiftlint:disable colon
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey:Any]) {
         imagePicker.dismiss(animated: true, completion: nil)
         if let selectedImage = info[.originalImage] as? UIImage {
@@ -364,15 +399,15 @@ extension DetailViewController: UIImagePickerControllerDelegate {
         }
     }
     
+    //swiftlint:disable implicitly_unwrapped_optional
     @objc func videoSaved(_ video: String, didFinishSavingWithError error: NSError!, context: UnsafeMutableRawPointer) {
+        //swiftlint:enable implicitly_unwrapped_optional
         if let theError = error {
             print("error saving the video = \(theError)")
         } else {
             DispatchQueue.main.async(execute: { () -> Void in })
         }
     }
-        
-        
     
     func saveImage(image: UIImage) -> Bool {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
@@ -397,6 +432,25 @@ extension DetailViewController: UIImagePickerControllerDelegate {
     
 }
 
+extension DetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return types.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        type = types[row]
+        //        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return types[row].rawValue
+    }
+    
+}
 
 // MARK: Constants
 enum Modus {
