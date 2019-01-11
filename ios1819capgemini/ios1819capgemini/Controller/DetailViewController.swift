@@ -19,6 +19,8 @@ import SceneKit
 class DetailViewController: UIViewController, UINavigationControllerDelegate, UIDocumentInteractionControllerDelegate {
     
     private var modus = Modus.view
+    private var overlay: UIView! = nil
+    private var attachmentView: AttachmentView! = nil
     var recordButton: UIButton!
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
@@ -185,6 +187,22 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         popUpIncidentTypeView.isHidden = true
         incidentTypePicker.dataSource = self
         incidentTypePicker.delegate = self
+        
+        attachmentView = AttachmentView(frame: CGRect(x: 0, y: 0, width: 150, height: 200))
+        attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
+        attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
+        attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+        attachmentView.documentButton.addTarget(self, action: #selector(pickDocument), for: .touchUpInside)
+        recordButton = attachmentView.audioButton
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch: UITouch? = touches.first
+        
+        if touch?.view == overlay || touch?.view == attachmentView {
+            overlay.removeFromSuperview()
+            attachmentView.removeFromSuperview()
+        }
     }
     
     func hidePopup() {
@@ -194,7 +212,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             }
         }
     }
-    
     
     func reloadCollectionView() {
         attachments = []
@@ -292,6 +309,11 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         self.present(importMenu, animated: true, completion: nil)
     }
     
+    private func showOverlay() {
+        overlay = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
+        overlay.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        view.addSubview(overlay)
+    }
 }
 
 // MARK: Extension
@@ -306,15 +328,14 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 print("Error")
                 return
             }
-            let attachmentView = AttachmentView(frame: CGRect(x: tmpX.center.x - 30,
-                                                              y: collectionView.center.y - 200,
-                                                              width: 150,
-                                                              height: 200))
-            attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
-             attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
-             attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
-            attachmentView.documentButton.addTarget(self, action: #selector(pickDocument), for: .touchUpInside)
-            recordButton = attachmentView.audioButton
+            
+            attachmentView.frame = CGRect(x: tmpX.center.x - 30,
+                                          y: collectionView.center.y - 200,
+                                          width: 150,
+                                          height: 200)
+            showOverlay()
+            
+
             view.addSubview(attachmentView)
             return
         }
