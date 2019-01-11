@@ -17,12 +17,11 @@ class AnyAttachment: Codable {
     
      required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
         let type = try container.decode(AttachmentType.self, forKey: .type)
         self.attachment = try type.metatype.init(from: container.superDecoder(forKey: .attachment))
     }
     
-    private enum CodingKeys : CodingKey {
+    private enum CodingKeys: CodingKey {
         case type, attachment
     }
     
@@ -30,13 +29,13 @@ class AnyAttachment: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encode(type(of: attachment).type, forKey: .type)
-        try attachment.encode(to: encoder)
+        try attachment.encode(to: container.superEncoder(forKey: .attachment))
     }
     
     
 }
 
-public enum AttachmentType : String, Codable {
+public enum AttachmentType: String, Codable {
     
     // be careful not to rename these – the encoding/decoding relies on the string
     // values of the cases. If you want the decoding to be reliant on case

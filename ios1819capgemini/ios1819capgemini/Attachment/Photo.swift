@@ -22,18 +22,21 @@ class Photo: Attachment {
         self.name = name
         self.filePath = photoPath
         let defaults = UserDefaults.standard
+        data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
         identifier = defaults.integer(forKey: "AttachmentIdentifer")
         defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
         do {
             let paths = NSSearchPathForDirectoriesInDomains(
                 FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
             let documentsDirectory = URL(fileURLWithPath: paths[0])
+ 
             let path = documentsDirectory.appendingPathComponent(name)
             guard let data = data else {
                 return
             }
             try data.write(to: path, options: [])
-            filePath = path.absoluteString
+            filePath = "\(paths[0])/\(name)"
+            print(filePath)
         } catch {
             data = nil
         }
@@ -62,8 +65,9 @@ class Photo: Attachment {
                 return
             }
             try data.write(to: path, options: [])
-            filePath = path.absoluteString
-        } catch {
+            filePath = "\(paths[0])/\(name)"
+        } catch let error {
+            print("Could not save data")
             data = nil
         }
     }

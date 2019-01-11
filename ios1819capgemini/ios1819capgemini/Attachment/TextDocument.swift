@@ -24,10 +24,25 @@ class TextDocument: Attachment {
         date = Date()
         self.name = name
         self.filePath = filePath
+        data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
         let defaults = UserDefaults.standard
         identifier = defaults.integer(forKey: "AttachmentIdentifer")
         defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
-        reevaluatePath()
+        do {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory = URL(fileURLWithPath: paths[0])
+            
+            let path = documentsDirectory.appendingPathComponent(name)
+            guard let data = data else {
+                return
+            }
+            try data.write(to: path, options: [])
+            self.filePath = "\(paths[0])/\(name)"
+            print(filePath)
+        } catch {
+            data = nil
+        }
     }
     
    func computeThumbnail() -> UIImage {
@@ -47,7 +62,7 @@ class TextDocument: Attachment {
                 return
             }
             try data.write(to: path, options: [])
-            filePath = path.absoluteString
+            filePath = "\(paths[0])/\(name)"
         } catch {
             data = nil
         }

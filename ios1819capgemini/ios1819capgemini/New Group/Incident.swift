@@ -25,7 +25,6 @@ public class Incident: Codable {
     let coordinate: Coordinate
     // MARK: Initializers
     init(type: IncidentType, description: String, coordinate: Coordinate) {
-        
         identifier = DataHandler.nextIncidentID
         createDate = Date()
         modifiedDate = createDate
