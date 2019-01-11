@@ -356,23 +356,44 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     func saveToCARgemini() {
-        guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {
+        
+        guard let testRun = self.testRun, let object = testRun.referenceObject, var name = object.name else {
             print("Error: Missing scanned object for saving to the app.")
             return
         }
         
-        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
-        print("documentURL \(documentURL)")
+        //1. Create the alert controller.
+        let alert = UIAlertController(title: "Save scan", message: "Enter a name for your scan", preferredStyle: .alert)
         
-        
-        DispatchQueue.global().async {
-            do {
-                try object.export(to: documentURL, previewImage: testRun.previewImage)
-            } catch {
-                fatalError("Failed to save the file to \(documentURL)")
-            }
-            
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextField { textField in
+            textField.text = "\(name)"
         }
+        // 3. Grab the value from the text field, and print it when the user clicks OK.
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] _ in
+            guard let alert = alert,
+                let textFields = alert.textFields else {
+                    return
+            }
+            name = textFields[0].text ?? name
+            print("new name: \(name)")
+            
+            let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
+            print("documentURL \(documentURL)")
+            
+            DispatchQueue.global().async {
+                do {
+                    try object.export(to: documentURL, previewImage: testRun.previewImage)
+                } catch {
+                    fatalError("Failed to save the file to \(documentURL)")
+                }
+                
+            }
+        }))
+        
+        // 4. Present the alert.
+        self.present(alert, animated: true, completion: nil)
+    
     }
     
     func createAndShareReferenceObject() {

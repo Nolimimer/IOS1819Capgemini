@@ -283,6 +283,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
+        if detectedObjectNode == nil {
         if let objectAnchor = anchor as? ARObjectAnchor {
             
             let notification = UINotificationFeedbackGenerator()
@@ -295,6 +296,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             ARViewController.objectDetected = true
+        }
         }
         return node
     }
