@@ -163,7 +163,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
         if let touch = touches.first {
             if let hitResult = hitResultsFeaturePoints.first {
-                if let node = getNodeInRadius(hitResult: hitResult, radius: 0.1) {
+                if let node = getNodeInRadius(hitResult: hitResult, radius: 0.015) {
                     self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
                     return
                 }
@@ -207,7 +207,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                           hitResult.worldTransform.columns.3.y,
                                           hitResult.worldTransform.columns.3.z)
         for node in nodes {
-            if checkRange(origin: node.position, pos: coordinateVector, radius: 0.015) {
+            if checkRange(origin: node.position, pos: coordinateVector, radius: radius) {
                 return node
             }
         }
