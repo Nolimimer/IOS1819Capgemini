@@ -16,6 +16,7 @@
 		0DF3077C21B7E067007D57D6 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DF3077B21B7E067007D57D6 /* AttachmentView.xib */; };
 		0DF3077E21B7E070007D57D6 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF3077D21B7E070007D57D6 /* AttachmentView.swift */; };
 		5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC4072921A8331100A64106 /* DataHandler.swift */; };
+		9021D49021E78EF2000E7EAD /* AnyAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9021D48F21E78EF2000E7EAD /* AnyAttachment.swift */; };
 		904AA43521E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */; };
 		904AA43C21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */; };
 		904AA43E21E493B40027D29E /* TextDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904AA43D21E493B40027D29E /* TextDocument.swift */; };
@@ -112,6 +113,7 @@
 		0DF3077D21B7E070007D57D6 /* AttachmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		5EC4072921A8331100A64106 /* DataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
 		67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios1819capgemini.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9021D48F21E78EF2000E7EAD /* AnyAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyAttachment.swift; sourceTree = "<group>"; };
 		904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DetailViewController+AVAudioRecorderDelegate.swift"; sourceTree = "<group>"; };
 		904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DetailViewController+UIDocumentMenuDelegate.swift"; sourceTree = "<group>"; };
 		904AA43D21E493B40027D29E /* TextDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDocument.swift; sourceTree = "<group>"; };
@@ -224,6 +226,8 @@
 				BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */,
 				0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */,
 				0D9DBF3121A33D39004D445B /* DetailViewController.swift */,
+				904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */,
+				904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */,
 				90D3451221B3FF29009EF79E /* AttachmentViewController.swift */,
 				90C7377921B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift */,
 				90C7377F21B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift */,
@@ -323,6 +327,7 @@
 				908466ED21B6C6E500A3C80C /* Photo.swift */,
 				905C159021C9D08400182B14 /* Audio.swift */,
 				904AA43D21E493B40027D29E /* TextDocument.swift */,
+				9021D48F21E78EF2000E7EAD /* AnyAttachment.swift */,
 			);
 			path = Attachment;
 			sourceTree = "<group>";
@@ -634,6 +639,7 @@
 				B30A479621CFBC5A007049F8 /* ScannerAppUtilities.swift in Sources */,
 				5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */,
 				B30A477E21CFBC5A007049F8 /* FlashlightButton.swift in Sources */,
+				9021D49021E78EF2000E7EAD /* AnyAttachment.swift in Sources */,
 				B30A479421CFBC5A007049F8 /* Scan.swift in Sources */,
 				B30A479521CFBC5A007049F8 /* ViewController+ApplicationState.swift in Sources */,
 				90CB846821ADAB1100CA1C09 /* Anchors3.swift in Sources */,

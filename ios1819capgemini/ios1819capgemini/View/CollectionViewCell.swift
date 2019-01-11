@@ -69,7 +69,6 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func cropToBounds(image: UIImage, width: Double, height: Double) -> UIImage {
-        
         let cgimage = image.cgImage!
         let contextImage: UIImage = UIImage(cgImage: cgimage)
         let contextSize: CGSize = contextImage.size

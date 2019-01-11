@@ -35,7 +35,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     // Variables / Mock Variable
     var incident: Incident?
-    var attachments: [Attachment] = []
+    var attachments: [AnyAttachment] = []
     //swiftlint:disable implicitly_unwrapped_optional
     var imagePicker: UIImagePickerController!
     var documentInteractionController: UIDocumentInteractionController!
@@ -148,15 +148,11 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         let lastModifiedDateString = dateFormatter.string(from: tmpIncident.modifiedDate)
         generatedDateLabel.text = dateString
         lastModifiedDateLabel.text = lastModifiedDateString
-
         textField.text = incident?.description
-        attachments = []
-        attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
-        attachments.append(contentsOf: (incident!.attachments))
-        collectionView.reloadData()
+        reloadCollectionView()
     }
-    
-    override func viewDidLoad() {
+
+        override func viewDidLoad() {
         super.viewDidLoad()
         
         recordingSession = AVAudioSession.sharedInstance()
@@ -167,13 +163,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         } catch {
             print("Failed to record audio!")
         }
-        attachments = []
-        attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
-        attachments.append(contentsOf: (incident!.attachments))
-        
-//        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.handleTap(recognizer:)))
-//        self.view.addGestureRecognizer(gesture)
-        // add blurred subview
+
+        reloadCollectionView()
+
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -198,8 +190,10 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     func reloadCollectionView() {
         attachments = []
-        attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
+
+        attachments.append(AnyAttachment(Photo(name: "plusButton", photoPath: "errorPath")))
         attachments.append(contentsOf: (incident!.attachments))
+
         collectionView.reloadData()
     }
     
@@ -230,10 +224,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             incident!.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
             recordButton.setTitle("Audio", for: .normal)
             hidePopup()
-            attachments = []
-            attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
-            attachments.append(contentsOf: (incident!.attachments))
-            collectionView.reloadData()
+            reloadCollectionView()
+
         } else {
             recordButton.setTitle("Tap to Record", for: .normal)
         }
@@ -311,17 +303,17 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                                                               width: 150,
                                                               height: 200))
             attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
-             attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
-             attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+            attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
+            attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
             attachmentView.documentButton.addTarget(self, action: #selector(pickDocument), for: .touchUpInside)
             recordButton = attachmentView.audioButton
             view.addSubview(attachmentView)
             return
         }
-        let currentAttachment = attachments[(indexPath as NSIndexPath).row]
+        let currentAttachment = attachments[(indexPath as NSIndexPath).row].attachment
         if currentAttachment is Video {
             let item = attachments[(indexPath as NSIndexPath).item]
-            let player = AVPlayer(url: URL(fileURLWithPath: item.filePath))
+            let player = AVPlayer(url: URL(fileURLWithPath: item.attachment.filePath))
             let playerController = AVPlayerViewController()
             playerController.player = player
             present(playerController, animated: true) {
@@ -377,7 +369,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
-        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row])
+        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment)
         return cell ?? UICollectionViewCell()
     }
 }

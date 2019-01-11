@@ -21,7 +21,8 @@ public class Incident: Codable {
     private(set) var type: IncidentType
     private(set) var description: String
     private(set) var status: Status
-    var attachments = [Attachment]()
+    private(set) var attachments = [AnyAttachment]()
+
     let coordinate: Coordinate
     var automaticallyDetected = false
     // MARK: Initializers
@@ -59,9 +60,9 @@ public class Incident: Codable {
     }
     
     func addAttachment(attachment: Attachment) {
-        attachments.append(attachment)
+        attachments.append(AnyAttachment(attachment))
         attachments.sort {
-            $0.date > $1.date
+            $0.attachment.date > $1.attachment.date
         }
         print("\(attachment) added")
     }

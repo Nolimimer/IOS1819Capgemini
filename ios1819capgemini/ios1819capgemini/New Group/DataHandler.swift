@@ -64,21 +64,6 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
-            
-            for incident in incidents {
-            var attachments = [Attachment]()
-                for attachment in incident.attachments {
-                    if  attachment.name.hasSuffix("jpg") {
-                        guard let downCasted = attachment as? Photo else {
-                            continue
-                        }
-                        attachments.append(downCasted)
-                    }
-                    attachments.append(attachment)
-                }
-                incident.attachments = attachments
-            }
-            
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
@@ -113,6 +98,11 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
+            for incident in incidents {
+                for attachment in incident.attachments {
+                    attachment.attachment.reevaluatePath()
+                }
+            }
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
