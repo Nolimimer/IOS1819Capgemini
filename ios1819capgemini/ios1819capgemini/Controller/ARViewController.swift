@@ -160,21 +160,27 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         let location = touches.first!.location(in: sceneView)
-        let hitOptions = self.sceneView.hitTest(location, options: nil)
-        if let tappedNode = hitOptions.first?.node, let _ = tappedNode.name {
-            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-        } else {
+//        let hitOptions = self.sceneView.hitTest(location, options: nil)
+//        if let tappedNode = hitOptions.first?.node, let _ = tappedNode.name {
+//            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
+//        }
             let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
             if let touch = touches.first {
-                let position = touch.location(in: view)
-                progressRing.frame.origin.x = position.x - 110
-                progressRing.frame.origin.y = position.y - 60
-                progressRing.isHidden = false
-                progressRing.maxValue = 100
-                progressRing.startProgress(to: 100, duration: 1.0) {
+                print("touch found")
+                if let hitResult = hitResultsFeaturePoints.first {
+                    print("hit result = feature point")
+                    if let node = getNodeInRadius(hitResult: hitResult, radius: 0.015) {
+                        self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
+                    }
+                    print("no node at position ")
+                    let position = touch.location(in: view)
+                    progressRing.frame.origin.x = position.x - 110
+                    progressRing.frame.origin.y = position.y - 60
+                    progressRing.isHidden = false
+                    progressRing.maxValue = 100
+                    progressRing.startProgress(to: 100, duration: 1.0) {
                     self.progressRing.isHidden = true
                     self.progressRing.resetProgress()
-                    if let hitResult = hitResultsFeaturePoints.first {
                         if self.detectedObjectNode != nil {
                             let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
                                 SCNVector3(hitResult.worldTransform.columns.3.x,
@@ -196,11 +202,24 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             self.saveImage(image: imageWithPin, incident: incident)
                             DataHandler.incidents.append(incident)
                             self.sendIncident(incident: incident)
-                        }
                     }
                 }
             }
         }
+    }
+    
+    func getNodeInRadius(hitResult: ARHitTestResult, radius: Float) -> SCNNode? {
+        print("get node in radius")
+        let coordinateVector = SCNVector3(hitResult.worldTransform.columns.3.x,
+                                          hitResult.worldTransform.columns.3.y,
+                                          hitResult.worldTransform.columns.3.z)
+        for node in nodes {
+            if ((node.position.x - radius)...(node.position.x + radius) ~= coordinateVector.x) && ((node.position.y - radius)...(node.position.y + radius) ~= coordinateVector.y) && ((node.position.z - radius)...(node.position.z + radius) ~= coordinateVector.x) {
+                print("node in radius found")
+                return node
+            }
+        }
+        return nil
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -550,12 +569,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         labelNode.preferredMaxLayoutWidth = CGFloat(450)
         labelNode.lineBreakMode = .byWordWrapping
         
-        setDescriptionLabel()
         descriptionNode.fontSize = 30
         descriptionNode.fontName = "HelveticaNeue-Light"
         descriptionNode.position = CGPoint(x: 200, y: 100)
         descriptionNode.numberOfLines = 4
         descriptionNode.lineBreakMode = NSLineBreakMode.byWordWrapping
+        setDescriptionLabel()
+
         spriteKitScene.addChild(descriptionNode)
         spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
