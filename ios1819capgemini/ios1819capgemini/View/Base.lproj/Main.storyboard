@@ -300,16 +300,16 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8BC-Gv-pcb">
-                                        <rect key="frame" x="41" y="188" width="293" height="240"/>
+                                        <rect key="frame" x="41" y="188" width="293" height="190"/>
                                         <subviews>
                                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pUg-jT-OYM">
-                                                <rect key="frame" x="0.0" y="0.0" width="293" height="200"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="293" height="150"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="200" id="mV8-AJ-pDZ"/>
+                                                    <constraint firstAttribute="height" constant="150" id="mV8-AJ-pDZ"/>
                                                 </constraints>
                                             </pickerView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yVU-Nj-jjW">
-                                                <rect key="frame" x="131" y="193" width="31" height="39"/>
+                                                <rect key="frame" x="131" y="143" width="31" height="39"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                 <state key="normal" title="OK">
                                                     <color key="titleColor" name="appBlue"/>
@@ -321,13 +321,13 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="yVU-Nj-jjW" secondAttribute="bottom" constant="8" id="ERW-dS-70i"/>
+                                            <constraint firstAttribute="trailing" secondItem="yVU-Nj-jjW" secondAttribute="trailing" constant="131" id="Cpb-x9-suA"/>
+                                            <constraint firstAttribute="bottom" secondItem="yVU-Nj-jjW" secondAttribute="bottom" constant="8" id="OQD-ev-hyN"/>
+                                            <constraint firstItem="yVU-Nj-jjW" firstAttribute="leading" secondItem="8BC-Gv-pcb" secondAttribute="leading" constant="131" id="Sqg-YX-U3v"/>
                                             <constraint firstItem="pUg-jT-OYM" firstAttribute="leading" secondItem="8BC-Gv-pcb" secondAttribute="leading" id="W5Z-i3-M14"/>
-                                            <constraint firstAttribute="height" constant="240" id="XTO-9b-tMJ"/>
+                                            <constraint firstAttribute="height" constant="190" id="XTO-9b-tMJ"/>
                                             <constraint firstAttribute="trailing" secondItem="pUg-jT-OYM" secondAttribute="trailing" id="dHC-zA-zCc"/>
                                             <constraint firstItem="pUg-jT-OYM" firstAttribute="top" secondItem="8BC-Gv-pcb" secondAttribute="top" id="juz-Ey-1cy"/>
-                                            <constraint firstItem="yVU-Nj-jjW" firstAttribute="leading" secondItem="8BC-Gv-pcb" secondAttribute="leading" constant="131" id="mXy-rZ-QJW"/>
-                                            <constraint firstAttribute="trailing" secondItem="yVU-Nj-jjW" secondAttribute="trailing" constant="131" id="yc0-cj-Q50"/>
                                         </constraints>
                                     </view>
                                 </subviews>
