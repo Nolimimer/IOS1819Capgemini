@@ -25,7 +25,6 @@ public class Incident: Codable {
     let coordinate: Coordinate
     // MARK: Initializers
     init(type: IncidentType, description: String, coordinate: Coordinate) {
-        
         identifier = DataHandler.nextIncidentID
         createDate = Date()
         modifiedDate = createDate
@@ -46,6 +45,10 @@ public class Incident: Codable {
         case .resolved: self.changePinColor(to: UIColor(red: 22.0/255.0, green: 167.0/255.0, blue: 0.0, alpha: 0.9))
         }
         
+    }
+    
+    func editIncidentType(type: IncidentType) {
+        self.type = type
     }
     
     // MARK: Private Instance Methods
@@ -104,4 +107,8 @@ extension Coordinate: Equatable {
     public static func == (lhs: Coordinate, rhs: Coordinate) -> Bool {
         return lhs.description == rhs.description
     }
+}
+
+extension IncidentType: CaseIterable {
+    
 }

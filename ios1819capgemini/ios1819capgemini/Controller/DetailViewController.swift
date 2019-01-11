@@ -18,6 +18,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     private var modus = Modus.view
     
+    private var types: [IncidentType] = []
+    private var type: IncidentType = IncidentType.unknown
+    
     private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
@@ -25,7 +28,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     // Variables / Mock Variable
-    var incident = Incident(type: IncidentType.dent,
+    var incident = Incident(type: IncidentType.unknown,
                             description: "This scratch is a critical one, my suggestion is to completly remove the right door.",
                             coordinate: Coordinate (vector: SCNVector3(0, 0, 0)))
     var attachments: [Attachment] = []
@@ -40,12 +43,25 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet private weak var backButton: UIBarButtonItem!
     @IBOutlet private weak var textField: UITextView!
     @IBOutlet private weak var editButton: UIBarButtonItem!
+    @IBOutlet private weak var incidentTypeButton: UIButton!
+    @IBOutlet private weak var popUpIncidentTypeView: UIView!
+    @IBOutlet private weak var incidentTypePicker: UIPickerView!
     
     // MARK: IBActions
+    @IBAction private func incidentTypeButtonPressed(_ sender: Any) {
+        popUpIncidentTypeView.isHidden = false
+    }
+    
+    @IBAction private func selectIncidentType(_ sender: Any) {
+        incidentTypeButton.setTitle(type.rawValue, for: .normal)
+        popUpIncidentTypeView.isHidden = true
+    }
+    
     @IBAction private func backButtonPressed(_ sender: Any) {
          creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
+    
     @IBAction func showAllAttachments(_ sender: Any) {
         performSegue(withIdentifier: "attachmentSegue", sender: self)
     }
@@ -54,6 +70,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         switch modus {
         case .view:
             editButton.title = "Save"
+            incidentTypeButton.isEnabled = true
             textField.isEditable = true
             segmentControll.isEnabled = true
             textField.layer.borderWidth = 1.0
@@ -72,13 +89,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
                 status = .resolved
             }
             incident.edit(status: status, description: textField.text, modifiedDate: Date())
-            
+            incident.editIncidentType(type: type)
             editButton.title = "Edit"
             textField.isEditable = false
             segmentControll.isEnabled = false
+            incidentTypeButton.isEnabled = false
             textField.layer.borderWidth = 0.0
             lastModifiedDateLabel.text = dateFormatter.string(from: incident.modifiedDate)
-            
             modus = .view
         }
     }
@@ -146,7 +163,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         modalPresentationStyle = .overCurrentContext
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 
-        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
+//        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int
         switch incident.status {
@@ -164,6 +181,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         generatedDateLabel.text = dateString
         lastModifiedDateLabel.text = lastModifiedDateString
         textField.text = incident.description
+        type = incident.type
+        incidentTypeButton.setTitle(type.rawValue, for: .normal)
         attachments = computeAttachments()
         collectionView.reloadData()
     }
@@ -180,6 +199,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+        IncidentType.allCases.forEach {
+            types.append($0)
+        }
+        types = types.filter { $0 != IncidentType.unknown }
+        popUpIncidentTypeView.isHidden = true
+        incidentTypePicker.dataSource = self
+        incidentTypePicker.delegate = self
     }
     
     func computeAttachments() -> [Attachment] {
@@ -385,6 +411,26 @@ extension DetailViewController: UIImagePickerControllerDelegate {
             print(error.localizedDescription)
             return false
         }
+    }
+    
+}
+
+extension DetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return types.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        type = types[row]
+        //        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return types[row].rawValue
     }
     
 }
