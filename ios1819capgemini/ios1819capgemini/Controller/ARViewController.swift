@@ -284,19 +284,19 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let node = SCNNode()
         
         if detectedObjectNode == nil {
-        if let objectAnchor = anchor as? ARObjectAnchor {
-            
-            let notification = UINotificationFeedbackGenerator()
-            
-            DispatchQueue.main.async {
-                notification.notificationOccurred(.success)
+            if let objectAnchor = anchor as? ARObjectAnchor {
+                
+                let notification = UINotificationFeedbackGenerator()
+                
+                DispatchQueue.main.async {
+                    notification.notificationOccurred(.success)
+                }
+                self.node = node
+                self.objectAnchor = objectAnchor
+                self.detectedObjectNode = node
+                addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
+                ARViewController.objectDetected = true
             }
-            self.node = node
-            self.objectAnchor = objectAnchor
-            self.detectedObjectNode = node
-            addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
-            ARViewController.objectDetected = true
-        }
         }
         return node
     }
@@ -527,8 +527,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             print("no object anchor found or its reference object has no name")
             return
         }
-        let width = objectAnchor.referenceObject.extent.x * 0.8
-        let height = objectAnchor.referenceObject.extent.y * 0.5
+        let width = 400
+        let height = 300
         let plane = SCNPlane(width: CGFloat(width),
                              height: CGFloat(height))
         plane.cornerRadius = plane.width / 45
