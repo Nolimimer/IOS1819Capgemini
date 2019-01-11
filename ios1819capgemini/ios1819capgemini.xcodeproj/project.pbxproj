@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D1F63FB21E7A01000AFC29A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0D1F63FA21E7A01000AFC29A /* Settings.bundle */; };
 		0D5F4A7721A3121F00D443CC /* CUU.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0D5F4A7621A3121F00D443CC /* CUU.plist */; };
 		0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9DBF3121A33D39004D445B /* DetailViewController.swift */; };
 		0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */; };
@@ -98,6 +99,7 @@
 
 /* Begin PBXFileReference section */
 		0CDB5AF4C15D59DC7C04B3EA /* Pods-ios1819capgemini.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.release.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.release.xcconfig"; sourceTree = "<group>"; };
+		0D1F63FA21E7A01000AFC29A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0D5F4A7621A3121F00D443CC /* CUU.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = CUU.plist; sourceTree = "<group>"; };
 		0D9DBF3121A33D39004D445B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 				90CB845621AD9D4100CA1C09 /* Scratch Detection */,
 				9082AF6321A5618100CA8E80 /* Model */,
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
+				0D1F63FA21E7A01000AFC29A /* Settings.bundle */,
 				0D5F4A7621A3121F00D443CC /* CUU.plist */,
 				A66447F32192121300B2D32B /* Info.plist */,
 				B30A475221CFBC32007049F8 /* ScannerApp */,
@@ -518,6 +521,7 @@
 				0DF3077221B7DBC4007D57D6 /* LineView.xib in Resources */,
 				A66447ED2192121300B2D32B /* Main.storyboard in Resources */,
 				B30A477921CFBC59007049F8 /* Assets.xcassets in Resources */,
+				0D1F63FB21E7A01000AFC29A /* Settings.bundle in Resources */,
 				0DF3077C21B7E067007D57D6 /* AttachmentView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

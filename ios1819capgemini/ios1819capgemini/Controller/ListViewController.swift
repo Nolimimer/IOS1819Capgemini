@@ -134,7 +134,7 @@ extension ListViewController: UITableViewDataSource {
         default: // Default by All Incidents.
             incident = DataHandler.incidents[indexPath.row]
         }
-        cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
+        cell.textLabel?.text = "\(incident.identifier) \(incident.type.rawValue)"
         cell.tag = incident.identifier
         cell.detailTextLabel?.text = incident.description
         return cell

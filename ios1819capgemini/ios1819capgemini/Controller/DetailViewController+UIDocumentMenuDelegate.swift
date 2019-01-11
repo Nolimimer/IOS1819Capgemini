@@ -29,7 +29,7 @@ extension DetailViewController: UIDocumentMenuDelegate,UIDocumentPickerDelegate 
             do {
                 try data?.write(to: path)
                 let textDocument = TextDocument(name: name, filePath: "\(paths[0])/\(name)")
-                incident.addAttachment(attachment: textDocument)
+                incident!.addAttachment(attachment: textDocument)
                 reloadCollectionView()
             } catch {
                 print ("Could not save Text Document to \(path)")

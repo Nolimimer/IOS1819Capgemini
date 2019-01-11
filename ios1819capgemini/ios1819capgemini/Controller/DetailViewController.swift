@@ -13,7 +13,7 @@ import INSPhotoGallery
 import MobileCoreServices
 import SceneKit
 
-
+//swiftlint:disable all
 // MARK: - DetailViewController
 class DetailViewController: UIViewController, UINavigationControllerDelegate, UIDocumentInteractionControllerDelegate {
     
@@ -23,6 +23,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     var audioRecorder: AVAudioRecorder!
     var audioPlayer: AVAudioPlayer?
     
+    private var types: [IncidentType] = []
+    private var type = IncidentType.unknown
+    
     private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
@@ -30,12 +33,12 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     // Variables / Mock Variable
-    var incident = Incident(type: IncidentType.dent,
-                            description: "This scratch is a critical one, my suggestion is to completly remove the right door.",
-                            coordinate: Coordinate (vector: SCNVector3(0, 0, 0)))
+    var incident: Incident?
     var attachments: [Attachment] = []
+    //swiftlint:disable implicitly_unwrapped_optional
     var imagePicker: UIImagePickerController!
     var documentInteractionController: UIDocumentInteractionController!
+    //swiftlint:enable implicitly_unwrapped_optional
 
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
@@ -46,12 +49,32 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     @IBOutlet private weak var backButton: UIBarButtonItem!
     @IBOutlet private weak var textField: UITextView!
     @IBOutlet private weak var editButton: UIBarButtonItem!
+    @IBOutlet private weak var incidentTypeButton: UIButton!
+    @IBOutlet private weak var popUpIncidentTypeView: UIView!
+    @IBOutlet private weak var whiteViewFromPopUp: UIView!
+    @IBOutlet private weak var incidentTypePicker: UIPickerView!
     
     // MARK: IBActions
+    @IBAction private func incidentTypeButtonPressed(_ sender: Any) {
+        whiteViewFromPopUp.layer.cornerRadius = 10
+        popUpIncidentTypeView.isHidden = false
+        guard let tmpIndexOfType = types.firstIndex(of: type) else {
+            print("Error")
+            return
+        }
+        incidentTypePicker.selectRow(tmpIndexOfType, inComponent: 0, animated: false)
+    }
+    
+    @IBAction private func selectIncidentType(_ sender: Any) {
+        incidentTypeButton.setTitle(type.rawValue, for: .normal)
+        popUpIncidentTypeView.isHidden = true
+    }
+    
     @IBAction private func backButtonPressed(_ sender: Any) {
          creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
+
     @IBAction func showAllAttachments(_ sender: Any) {
         //performSegue(withIdentifier: "attachmentSegue", sender: self)
     }
@@ -60,6 +83,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         switch modus {
         case .view:
             editButton.title = "Save"
+            incidentTypeButton.isEnabled = true
             textField.isEditable = true
             segmentControll.isEnabled = true
             textField.layer.borderWidth = 1.0
@@ -77,14 +101,18 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             default:
                 status = .resolved
             }
-            incident.edit(status: status, description: textField.text, modifiedDate: Date())
-            
+            guard let tmpIncident = incident else {
+                print("Error")
+                return
+            }
+            tmpIncident.edit(status: status, description: textField.text, modifiedDate: Date())
+            tmpIncident.editIncidentType(type: type)
             editButton.title = "Edit"
             textField.isEditable = false
             segmentControll.isEnabled = false
+            incidentTypeButton.isEnabled = false
             textField.layer.borderWidth = 0.0
-            lastModifiedDateLabel.text = dateFormatter.string(from: incident.modifiedDate)
-            
+            lastModifiedDateLabel.text = dateFormatter.string(from: tmpIncident.modifiedDate)
             modus = .view
         }
     }
@@ -152,10 +180,14 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         modalPresentationStyle = .overCurrentContext
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 
-        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
+//        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int
-        switch incident.status {
+        guard let tmpIncident = incident else {
+            print("Error")
+            return
+        }
+        switch tmpIncident.status {
         case .open:
             controllIndex = 0
         case .progress:
@@ -165,18 +197,17 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         }
         segmentControll.selectedSegmentIndex = controllIndex
         
-        let dateString = dateFormatter.string(from: incident.createDate)
-        let lastModifiedDateString = dateFormatter.string(from: incident.modifiedDate)
+        let dateString = dateFormatter.string(from: tmpIncident.createDate)
+        let lastModifiedDateString = dateFormatter.string(from: tmpIncident.modifiedDate)
         generatedDateLabel.text = dateString
         lastModifiedDateLabel.text = lastModifiedDateString
-        textField.text = incident.description
+
+        textField.text = incident?.description
         attachments = []
         attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
-        attachments.append(contentsOf: (incident.attachments))
+        attachments.append(contentsOf: (incident!.attachments))
         collectionView.reloadData()
     }
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -191,7 +222,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         }
         attachments = []
         attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
-        attachments.append(contentsOf: (incident.attachments))
+        attachments.append(contentsOf: (incident!.attachments))
         
 //        let gesture = UITapGestureRecognizer(target: self, action:  #selector (self.handleTap(recognizer:)))
 //        self.view.addGestureRecognizer(gesture)
@@ -201,6 +232,12 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+        IncidentType.allCases.forEach {
+            types.append($0)
+        }
+        popUpIncidentTypeView.isHidden = true
+        incidentTypePicker.dataSource = self
+        incidentTypePicker.delegate = self
     }
     
     func hidePopup() {
@@ -215,7 +252,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     func reloadCollectionView() {
         attachments = []
         attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
-        attachments.append(contentsOf: (incident.attachments))
+        attachments.append(contentsOf: (incident!.attachments))
         collectionView.reloadData()
     }
     
@@ -243,12 +280,12 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             let defaults = UserDefaults.standard
             let name = "cARgeminiAudioAsset\(defaults.integer(forKey: "AttachedAudioName") - 1).m4a"
             let audioFilename = getDocumentsDirectory().appendingPathComponent(name)
-            incident.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
+            incident!.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
             recordButton.setTitle("Audio", for: .normal)
             hidePopup()
             attachments = []
             attachments.append(Photo(name: "plusButton", photoPath: "errorPath"))
-            attachments.append(contentsOf: (incident.attachments))
+            attachments.append(contentsOf: (incident!.attachments))
             collectionView.reloadData()
         } else {
             recordButton.setTitle("Tap to Record", for: .normal)
@@ -305,9 +342,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             present(alertController, animated: true)
         } else {
             print("Saved picture")
+
             let index = 0
             hidePopup()
-            
         }
     }
     
@@ -329,7 +366,11 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).row == 0 {
-            let attachmentView = AttachmentView(frame: CGRect(x: collectionView.cellForItem(at: indexPath)!.center.x - 30,
+            guard let tmpX = collectionView.cellForItem(at: indexPath) else {
+                print("Error")
+                return
+            }
+            let attachmentView = AttachmentView(frame: CGRect(x: tmpX.center.x - 30,
                                                               y: collectionView.center.y - 200,
                                                               width: 150,
                                                               height: 200))
@@ -396,6 +437,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
 }
 
 extension DetailViewController: UIImagePickerControllerDelegate {
+    //swiftlint:disable colon
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey:Any]) {
         imagePicker.dismiss(animated: true, completion: nil)
         if let selectedImage = info[.originalImage] as? UIImage {
@@ -423,14 +465,16 @@ extension DetailViewController: UIImagePickerControllerDelegate {
             defaults.set(defaults.integer(forKey: "AttachedVideoName") + 1, forKey: "AttachedVideoName")
             do {
                 try videoData?.write(to: dataPath, options: [])
-                incident.addAttachment(attachment: Video(name: name, videoPath: "\(paths[0])/\(name)", duration: 3.0))
+                incident?.addAttachment(attachment: Video(name: name, videoPath: "\(paths[0])/\(name)", duration: 3.0))
             } catch {
                 print(Error.self)
             }
         }
     }
     
+    //swiftlint:disable implicitly_unwrapped_optional
     @objc func videoSaved(_ video: String, didFinishSavingWithError error: NSError!, context: UnsafeMutableRawPointer) {
+        //swiftlint:enable implicitly_unwrapped_optional
         if let theError = error {
             print("error saving the video = \(theError)")
         } else {
@@ -455,12 +499,32 @@ extension DetailViewController: UIImagePickerControllerDelegate {
             let path = documentsDirectory.appendingPathComponent(name)
             try data.write(to: path, options: [])
             defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedPhotoName")
-            incident.addAttachment(attachment: Photo(name: name, photoPath: "\(paths[0])/\(name)"))
+            incident?.addAttachment(attachment: Photo(name: name, photoPath: "\(paths[0])/\(name)"))
             return true
         } catch {
             print(error.localizedDescription)
             return false
         }
+    }
+    
+}
+
+extension DetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return types.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        type = types[row]
+        //        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return types[row].rawValue
     }
     
 }
