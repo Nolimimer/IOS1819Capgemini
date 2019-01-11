@@ -172,6 +172,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 progressRing.isHidden = false
                 progressRing.maxValue = 100
                 progressRing.startProgress(to: 100, duration: 1.0) {
+                    self.progressRing.isHidden = true
+                    self.progressRing.resetProgress()
                     if let hitResult = hitResultsFeaturePoints.first {
                         if self.detectedObjectNode != nil {
                             let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
@@ -202,8 +204,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        progressRing.resetProgress()
-        progressRing.isHidden = true
     }
     func loadCustomScans() {
         let fileManager = FileManager.default
@@ -564,7 +564,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     @objc func tapped(recognizer: UIGestureRecognizer) {
-        
+        if recognizer.state != .began  {
+            progressRing.resetProgress()
+            progressRing.isHidden = true
+        }
     }
     private func updateInfoPlane() {
         descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
