@@ -1,29 +1,29 @@
-import UIKit
-import Photos
+//
+//  TextDocument.swift
+//  ios1819capgemini
+//
+//  Created by MembrainDev on 08.01.19.
+//  Copyright © 2019 TUM LS1. All rights reserved.
+//
 
-/// Wrap a PHAsset for video
-class Video: Attachment {
+import Foundation
+import UIKit
+
+class TextDocument: Attachment {
     
-    static let type = AttachmentType.video
     
+    static var type = AttachmentType.textDocument
     var data: Data?
-    
     var identifier: Int
-    
     var date: Date
-    
     var filePath: String
-    
     var name: String
     
-    
-    let duration: TimeInterval
-    
-    init(name: String, videoPath: String, duration: TimeInterval) {
-        self.duration = duration
+ 
+    init(name: String, filePath: String) {
         date = Date()
         self.name = name
-        self.filePath = videoPath
+        self.filePath = filePath
         data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
         let defaults = UserDefaults.standard
         identifier = defaults.integer(forKey: "AttachmentIdentifer")
@@ -38,21 +38,18 @@ class Video: Attachment {
                 return
             }
             try data.write(to: path, options: [])
-            filePath = "\(paths[0])/\(name)"
+            self.filePath = "\(paths[0])/\(name)"
             print(filePath)
         } catch {
             data = nil
         }
     }
     
-    func computeThumbnail() -> UIImage {
-        guard let createdThumbnail = createThumbnailOfVideoFromRemoteUrl(url: filePath) else {
-            guard let result = UIImage(named: "videoPreview") else {
-                return UIImage()
-            }
-            return result
-        }
-        return createdThumbnail
+   func computeThumbnail() -> UIImage {
+        let frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 120, height: 120))
+        let cgImage = CIContext().createCGImage(CIImage(color: .red), from: frame)!
+        let uiImage = UIImage(cgImage: cgImage)
+        return uiImage
     }
     
     func reevaluatePath() {
@@ -70,24 +67,4 @@ class Video: Attachment {
             data = nil
         }
     }
-    
-    private func createThumbnailOfVideoFromRemoteUrl(url: String) -> UIImage? {
-        
-        let asset = AVURLAsset(url: URL(fileURLWithPath: url), options: nil)
-        let imgGenerator = AVAssetImageGenerator(asset: asset)
-        
-        
-        //Can set this to improve performance if target size is known before hand
-        //assetImgGenerate.maximumSize = CGSize(width,height)
-        do {
-            imgGenerator.appliesPreferredTrackTransform = true
-            let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(value: 0, timescale: 1), actualTime: nil)
-            let thumbnail = UIImage(cgImage: cgImage)
-            return thumbnail
-        } catch {
-            print(error)
-            return nil
-        }
-    }
-    
 }

@@ -12,18 +12,20 @@ import ARKit
 import SceneKit
 import Vision
 import UICircularProgressRing
+import MultipeerConnectivity
 
 // Stores all the nodes added to the scene
 var anchorWrapper : ARObjectAnchor?
 var nodes = [SCNNode]()
 //swiftlint:disable type_body_length
-var nodesIdentifier = [String: SCNNode]()
 var creatingNodePossible = true
 // MARK: - ARViewController
 // swiftlint:disable all
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
+    static var connectedToPeer = false
+    static var incidentEdited = false
     static var objectDetected = false
     var detectedObjectNode: SCNNode?
     var detectionObjects = Set <ARReferenceObject>()
@@ -34,7 +36,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     let numBoxes = 100
     var boundingBoxes: [BoundingBox] = []
     var model: VNCoreMLModel?
-    private var automaticallyDetectedIncidents = [CGPoint]()
+    var mapProvider: MCPeerID?
+    var multipeerSession: MultipeerSession!
+
+    var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode = SKLabelNode(text: "")
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
@@ -85,6 +90,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configureLighting()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
+        multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
     }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
@@ -93,6 +99,42 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if UIDevice.current.orientation.isLandscape {
         } else {
         }
+    }
+    @IBAction func resetButtonPressed(_ sender: Any) {
+        DataHandler.incidents = []
+        DataHandler.saveToJSON()
+        self.scene.rootNode.childNodes.forEach { node in
+            guard let name = node.name else {
+                return
+            }
+            self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+        }
+        nodes = []
+        automaticallyDetectedIncidents = []
+        self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
+        let configuration = ARWorldTrackingConfiguration()
+        if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
+            configuration.detectionObjects = detectionObjects
+            sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.success)
+            }
+        }
+        do {
+            let data = try JSONEncoder().encode(DataHandler.incidents)
+            self.multipeerSession.sendToAllPeers(data)
+        } catch _ {
+            let notification = UINotificationFeedbackGenerator()
+            
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.error)
+            }
+        }
+    }
+    @IBAction func shareIncidentsButtonPressed(_ sender: Any) {
+        sendIncidents(incidents: DataHandler.incidents)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -119,50 +161,73 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         let location = touches.first!.location(in: sceneView)
-        let hitOptions = self.sceneView.hitTest(location, options: nil)
-        if let tappedNode = hitOptions.first?.node, let _ = tappedNode.name {
-            self.performSegue(withIdentifier: "ShowDetailSegue", sender: tappedNode)
-        } else {
-            let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
-            if let touch = touches.first {
+        let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
+        if let touch = touches.first {
+            if let hitResult = hitResultsFeaturePoints.first {
+                if let node = getNodeInRadius(hitResult: hitResult, radius: 0.015) {
+                    self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
+                    return
+                }
                 let position = touch.location(in: view)
                 progressRing.frame.origin.x = position.x - 110
                 progressRing.frame.origin.y = position.y - 60
                 progressRing.isHidden = false
                 progressRing.maxValue = 100
                 progressRing.startProgress(to: 100, duration: 1.0) {
-                    if let hitResult = hitResultsFeaturePoints.first {
-                        if self.detectedObjectNode != nil {
-                            let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
-                                SCNVector3(hitResult.worldTransform.columns.3.x,
-                                           hitResult.worldTransform.columns.3.y,
-                                           hitResult.worldTransform.columns.3.z),
-                                to: self.detectedObjectNode)
-                            let incident = Incident (type: .unknown,
-                                                     description: "New Incident",
-                                                     coordinate: Coordinate(vector: coordinateRelativeToObject))
-                            self.filterAllPins()
-                            let imageWithoutPin = self.sceneView.snapshot()
-                            self.saveImage(image: imageWithoutPin, incident: incident)
-                            self.add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                                       hitResult.worldTransform.columns.3.y,
-                                                                       hitResult.worldTransform.columns.3.z),
-                                          identifier: "\(incident.identifier)" )
-                            self.filter3DPins(identifier: "\(incident.identifier)")
-                            let imageWithPin = self.sceneView.snapshot()
-                            self.saveImage(image: imageWithPin, incident: incident)
-                            DataHandler.incidents.append(incident)
-                            self.descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-                        }
+                self.progressRing.isHidden = true
+                self.progressRing.resetProgress()
+                    if self.detectedObjectNode != nil {
+                        let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
+                            SCNVector3(hitResult.worldTransform.columns.3.x,
+                                        hitResult.worldTransform.columns.3.y,
+                                        hitResult.worldTransform.columns.3.z),
+                            to: self.detectedObjectNode)
+                        let incident = Incident (type: .unknown,
+                                                 description: "New Incident",
+                                                 coordinate: Coordinate(vector: coordinateRelativeToObject))
+                        self.filterAllPins()
+                        let imageWithoutPin = self.sceneView.snapshot()
+                        self.saveImage(image: imageWithoutPin, incident: incident)
+                        self.add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
+                                                                    hitResult.worldTransform.columns.3.y,
+                                                                    hitResult.worldTransform.columns.3.z),
+                                      identifier: "\(incident.identifier)" )
+                        self.filter3DPins(identifier: "\(incident.identifier)")
+                        let imageWithPin = self.sceneView.snapshot()
+                        self.saveImage(image: imageWithPin, incident: incident)
+                        DataHandler.incidents.append(incident)
+                        self.sendIncident(incident: incident)
                     }
                 }
             }
         }
     }
     
+    func getNodeInRadius(hitResult: ARHitTestResult, radius: Float) -> SCNNode? {
+        let coordinateVector = SCNVector3(hitResult.worldTransform.columns.3.x,
+                                          hitResult.worldTransform.columns.3.y,
+                                          hitResult.worldTransform.columns.3.z)
+        for node in nodes {
+            if checkRange(origin: node.position, pos: coordinateVector, radius: radius) {
+                return node
+            }
+        }
+        return nil
+    }
+    
+    func checkRange(origin: SCNVector3, pos: SCNVector3, radius: Float) -> Bool {
+        return checkRange(origin: origin.x, pos: pos.x, radius: radius) && checkRange(origin: origin.y, pos: origin.y, radius: radius) && checkRange(origin: origin.z, pos: pos.z, radius: radius)
+    }
+    
+    func checkRange(origin: Float, pos: Float, radius: Float) -> Bool {
+        if (origin - radius) ... (origin + radius) ~= pos {
+            return true
+        }
+        return false
+    }
+    
+    
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        progressRing.resetProgress()
-        progressRing.isHidden = true
     }
     func loadCustomScans() {
         let fileManager = FileManager.default
@@ -201,6 +266,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
+        if !multipeerSession.connectedPeers.isEmpty {
+            ARViewController.connectedToPeer = true
+        }
         
         // Check settings
         if UserDefaults.standard.bool(forKey: "enable_boundingboxes") {
@@ -219,7 +287,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         updateIncidents()
-        refreshNodes()
+//        setNavigationArrows(for: frame.camera.trackingState)
+        updatePinColour()
+        setDescriptionLabel()
         setNavigationArrows(for: frame.camera.trackingState)
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
@@ -236,6 +306,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
+        if detectedObjectNode != nil {
+            return node
+        }
         if let objectAnchor = anchor as? ARObjectAnchor {
             
             let notification = UINotificationFeedbackGenerator()
@@ -245,12 +318,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             self.node = node
             self.objectAnchor = objectAnchor
-            anchorWrapper = objectAnchor
-            /*
-            node nimmt erst einen wert an nachdem die methode ausgeführt wurde, deswegen ist
-            detected object node hier eine nicht mit werten initialisierte node und ein transformieren der koordinaten in der methode selbst ist nicht möglich
-            (bzw. produziert falsche werte)
-            */
             self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             ARViewController.objectDetected = true
@@ -262,12 +329,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if !ARViewController.objectDetected {
             return
         }
+        incidentEditted()
+        refreshNodes()
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
-                /*
-                let coordianteRelativeObject = self.sceneView.rootNode.convertPosition(incident.getCoordinateToVector(), to: detectedObjectNode)
-                let coordinateRelativeWorld = self.sceneView.rootNode.convertPosition(coordinateRelativeObject, to: nil)
-                */
                 let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
                 add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
             }
@@ -416,11 +481,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         let incident = Incident (type: .scratch,
                                                  description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
                                                  coordinate: Coordinate(vector: coordinates))
+                        incident.automaticallyDetected = true
                         DataHandler.incidents.append(incident)
                         sphereNode.runAction(imageHighlightAction)
                         sphereNode.name = "\(incident.identifier)"
                         self.scene.rootNode.addChildNode(sphereNode)
                         nodes.append(sphereNode)
+                        sendIncident(incident: incident)
                     }
                 }
                 //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
@@ -450,6 +517,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
     }
+    
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         let sphere = SCNSphere(radius: 0.015)
@@ -463,41 +531,58 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         nodes.append(sphereNode)
     }
     
+    private func setDescriptionLabel() {
+        let openIncidents = (DataHandler.incidents.filter { $0.status == .open}).count
+        let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress}).count
+        let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved}).count
+        descriptionNode.text = """
+        Number of incidents: \(DataHandler.incidents.count)\r\n
+        Open: \(openIncidents)\r\n
+        In progress: \(incidentsInProgress)\r\n
+        Resolved: \(resolvedIncidents)
+        """
+    }
+    
     //adds the info plane which displays the detected object and the number of incidents
     private func addInfoPlane (carPart: String) {
         
-        guard let objectAnchor = self.objectAnchor else {
+        guard let objectAnchor = self.objectAnchor,
+        let name = objectAnchor.referenceObject.name else {
+            print("no object anchor found or its reference object has no name")
             return
         }
-        let plane = SCNPlane(width: CGFloat(objectAnchor.referenceObject.extent.x * 0.8),
-                             height: CGFloat(objectAnchor.referenceObject.extent.y * 0.3))
-        plane.cornerRadius = plane.width / 8
-        let spriteKitScene = SKScene(size: CGSize(width: 300, height: 300))
-        spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
+        let width = objectAnchor.referenceObject.extent.x * 0.8
+        let height = objectAnchor.referenceObject.extent.y * 0.5
+        let plane = SCNPlane(width: CGFloat(width),
+                             height: CGFloat(height))
+        plane.cornerRadius = plane.width / 45
+        let spriteKitScene = SKScene(size: CGSize(width: 500, height: 500))
+        spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.9)
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
         let planeNode = SCNNode(geometry: plane)
         let absoluteObjectPosition = objectAnchor.transform.columns.3
         let planePosition = SCNVector3(absoluteObjectPosition.x,
-                                       absoluteObjectPosition.y + objectAnchor.referenceObject.extent.y,
+                                       absoluteObjectPosition.y + 1.5 * objectAnchor.referenceObject.extent.y,
                                        absoluteObjectPosition.z)
         planeNode.position = planePosition
-        let labelNode = SKLabelNode(text: carPart)
+        planeNode.name = "info-plane"
+        let labelNode = SKLabelNode(text: name)
         labelNode.fontSize = 40
-        labelNode.color = UIColor.black
-        labelNode.fontName = "Helvetica-Bold"
-        labelNode.position = CGPoint(x: 120, y: 200)
+        labelNode.fontName = "HelveticaNeue-Medium"
+        labelNode.position = CGPoint(x: 250, y: 400)
+        labelNode.numberOfLines = 2
+        labelNode.preferredMaxLayoutWidth = CGFloat(450)
+        labelNode.lineBreakMode = .byWordWrapping
         
-        descriptionNode = SKLabelNode(text: "Incidents: \(DataHandler.incidents.count)")
         descriptionNode.fontSize = 30
-        if DataHandler.incidents.count == 0 {
-            descriptionNode.fontColor = UIColor.green
-        } else {
-            descriptionNode.fontColor = UIColor.red
-        }
-        descriptionNode.fontName = "Helvetica-Bold"
-        descriptionNode.position = CGPoint(x: 120, y: 50)
+        descriptionNode.fontName = "HelveticaNeue-Light"
+        descriptionNode.position = CGPoint(x: 200, y: 100)
+        descriptionNode.numberOfLines = 4
+        descriptionNode.lineBreakMode = NSLineBreakMode.byWordWrapping
+        setDescriptionLabel()
+
         spriteKitScene.addChild(descriptionNode)
         spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
@@ -506,7 +591,19 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     @objc func tapped(recognizer: UIGestureRecognizer) {
-        
+        if recognizer.state != .began  {
+            progressRing.resetProgress()
+            progressRing.isHidden = true
+        }
+    }
+    private func updateInfoPlane() {
+        descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
+        let openIncidentsCount = DataHandler.incidents.filter { $0.status == .open }
+        if openIncidentsCount.isEmpty {
+            descriptionNode.fontColor = UIColor.green
+        } else {
+            descriptionNode.fontColor = UIColor.red
+        }
     }
     
     func refreshNodes() {
@@ -514,8 +611,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             guard let name = node.name else {
                 return
             }
+            if DataHandler.incidents.isEmpty {
+                do {
+                    let data = try JSONEncoder().encode(DataHandler.incidents)
+                    self.multipeerSession.sendToAllPeers(data)
+                } catch {
+                    print("sending incidents array failed (refreshNodes DataHandler.incidents.isEmpty)")
+                }
+            }
             if DataHandler.incident(withId: name) == nil {
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+                do {
+                    let data = try JSONEncoder().encode(DataHandler.incidents)
+                    self.multipeerSession.sendToAllPeers(data)
+                } catch {
+                    print("sending incidents array failed (refreshNodes DataHandler.incident(withId: name) == nil")
+                }
             }
         }
     }

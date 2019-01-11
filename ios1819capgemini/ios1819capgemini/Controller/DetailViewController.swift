@@ -13,10 +13,17 @@ import INSPhotoGallery
 import MobileCoreServices
 import SceneKit
 
+
+//swiftlint:disable all
 // MARK: - DetailViewController
-class DetailViewController: UIViewController, UINavigationControllerDelegate {
+class DetailViewController: UIViewController, UINavigationControllerDelegate, UIDocumentInteractionControllerDelegate {
     
     private var modus = Modus.view
+    private var overlay: UIView! = nil
+    var recordButton: UIButton!
+    var recordingSession: AVAudioSession!
+    var audioRecorder: AVAudioRecorder!
+    var audioPlayer: AVAudioPlayer?
     
     private var types: [IncidentType] = []
     private var type = IncidentType.unknown
@@ -29,9 +36,10 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     
     // Variables / Mock Variable
     var incident: Incident?
-    var attachments: [Attachment] = []
+    var attachments: [AnyAttachment] = []
     //swiftlint:disable implicitly_unwrapped_optional
     var imagePicker: UIImagePickerController!
+    var documentInteractionController: UIDocumentInteractionController!
     //swiftlint:enable implicitly_unwrapped_optional
 
     // MARK: IBOutlets
@@ -68,9 +76,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
          creatingNodePossible = true
          self.dismiss(animated: true, completion: nil)
     }
-    
-    @IBAction private func showAllAttachments(_ sender: Any) {
-        performSegue(withIdentifier: "attachmentSegue", sender: self)
+
+    @IBAction func showAllAttachments(_ sender: Any) {
+        //performSegue(withIdentifier: "attachmentSegue", sender: self)
     }
     
     @IBAction private func editButtonPressed(_ sender: Any) {
@@ -106,75 +114,21 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             segmentControll.isEnabled = false
             incidentTypeButton.isEnabled = false
             textField.layer.borderWidth = 0.0
+            ARViewController.incidentEdited = true
             lastModifiedDateLabel.text = dateFormatter.string(from: tmpIncident.modifiedDate)
             modus = .view
+            
         }
     }
    
     // MARK: Overridden/Lifecycle Methods
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        if let firstTouch = touches.first {
-            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
-            
-            let attachmentView = view.subviews.first {
-                $0 is AttachmentView
-            }
-            if hitView != attachmentView {
-                attachmentView?.removeFromSuperview()
-            }
-        }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        if let firstTouch = touches.first {
-            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
-            
-            let attachmentView = view.subviews.first {
-                $0 is AttachmentView
-            }
-            if hitView != attachmentView {
-                attachmentView?.removeFromSuperview()
-            }
-        }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        if let firstTouch = touches.first {
-            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
-            
-            let attachmentView = view.subviews.first {
-                $0 is AttachmentView
-            }
-            if hitView != attachmentView {
-                attachmentView?.removeFromSuperview()
-            }
-        }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        if let firstTouch = touches.first {
-            let hitView = self.view.hitTest(firstTouch.location(in: self.view), with: event)
-            
-            let attachmentView = view.subviews.first {
-                $0 is AttachmentView
-            }
-            if hitView != attachmentView {
-                attachmentView?.removeFromSuperview()
-            }
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         creatingNodePossible = false
         modalPresentationStyle = .overCurrentContext
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
 
-//        navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
+        //navigationItemIncidentTitle.title = "\(incident.type.rawValue) \(incident.identifier)"
         
         let controllIndex: Int
         guard let tmpIncident = incident else {
@@ -195,17 +149,23 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         let lastModifiedDateString = dateFormatter.string(from: tmpIncident.modifiedDate)
         generatedDateLabel.text = dateString
         lastModifiedDateLabel.text = lastModifiedDateString
-        textField.text = tmpIncident.description
-        type = tmpIncident.type
-        incidentTypeButton.setTitle(type.rawValue, for: .normal)
-        attachments = computeAttachments()
-        collectionView.reloadData()
+        textField.text = incident?.description
+        reloadCollectionView()
     }
-    
-    override func viewDidLoad() {
+
+        override func viewDidLoad() {
         super.viewDidLoad()
         
-        attachments = computeAttachments()
+        recordingSession = AVAudioSession.sharedInstance()
+        
+        do {
+            try recordingSession.setCategory(.playAndRecord, mode: .default)
+            try recordingSession.setActive(true)
+        } catch {
+            print("Failed to record audio!")
+        }
+
+        reloadCollectionView()
 
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -220,59 +180,80 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
         incidentTypePicker.delegate = self
     }
     
-    func computeAttachments() -> [Attachment] {
-        if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
-            
-            let fileManager = FileManager.default
-            let arrImages: NSMutableArray = []
-            do {
-                let filePaths = try fileManager.contentsOfDirectory(atPath: dir.path)
-                for filePath in filePaths {
-                    let urlString = URL(fileURLWithPath: dir.absoluteString).appendingPathComponent(filePath).path
-                        arrImages.add(urlString)
-                }
-            } catch {
-                print("Could not get folder: \(error)")
-            }
-            var result: [Attachment] = []
-            result.append(Photo(name: "plusButton", photoPath: "errorPath"))
-            for val in arrImages {
-                guard let val = val as? String else {
-                    continue
-                }
-                let strings = val.split(separator: "/")
-                let name = strings[strings.count - 1]
-                if val.hasSuffix("mov") {
-                    result.append(Video(name: String(name), videoPath: val))
-                    continue
-                }
-                if val.hasSuffix("jpg") {
-                    result.append(Photo(name: String(name), photoPath: val))
-                }
-            }
-            result.sort {
-                $0.date == $1.date
-            }
-            return result
-        }
-        return []
-    }
-    
-    @objc func handleTap(recognizer: UITapGestureRecognizer) {
-        self.view.endEditing(true)
-        let location = recognizer.location(in: view)
-
-        let attachmentView = view.subviews.first {
-            $0 is AttachmentView
-        }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch: UITouch? = touches.first
         
-        if attachmentView?.frame.contains(location) ?? false {
-            attachmentView?.removeFromSuperview()
+        if touch?.view == overlay{
+            overlay.removeFromSuperview()
         }
+    }
+    
+    func hidePopup() {
+        for child in view.subviews {
+            if child is AttachmentView {
+                child.removeFromSuperview()
+            }
+        }
+    }
+    
+    func reloadCollectionView() {
+        attachments = []
+
+        attachments.append(AnyAttachment(Photo(name: "plusButton", photoPath: "errorPath")))
+        attachments.append(contentsOf: (incident!.attachments))
+
+        collectionView.reloadData()
+    }
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
+    }
+    
+    func documentInteractionControllerViewForPreview(_ controller: UIDocumentInteractionController) -> UIView? {
+        return self.view
+    }
+    
+    func documentInteractionControllerRectForPreview(_ controller: UIDocumentInteractionController) -> CGRect {
+        return self.view.frame
     }
 
     
+    func finishRecording(success: Bool) {
+        
+        audioRecorder?.stop()
+        let duration = audioRecorder.currentTime
+        audioRecorder = nil
+        if success {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let defaults = UserDefaults.standard
+            let name = "cARgeminiAudioAsset\(defaults.integer(forKey: "AttachedAudioName") - 1).m4a"
+            let audioFilename = getDocumentsDirectory().appendingPathComponent(name)
+            incident!.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
+            recordButton.setTitle("Audio", for: .normal)
+            hidePopup()
+            reloadCollectionView()
+
+        } else {
+            recordButton.setTitle("Tap to Record", for: .normal)
+        }
+    }
+
+   
+
+    @objc func recordTapped() {
+        if audioRecorder == nil {
+            startRecording()
+        } else {
+            overlay.removeFromSuperview()
+            finishRecording(success: true)
+        }
+    }
+    
+
     @objc private func takePhoto() {
+        overlay.removeFromSuperview()
+        
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
@@ -281,6 +262,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     @objc private func takeVideo() {
+        overlay.removeFromSuperview()
+        
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
@@ -300,10 +283,25 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate {
             present(alertController, animated: true)
         } else {
             print("Saved picture")
-            for child in view.subviews where child is AttachmentView {
-                child.removeFromSuperview()
-            }
+
+            let index = 0
+            hidePopup()
         }
+    }
+    
+    
+    @objc private func pickDocument() {
+        let importMenu = UIDocumentMenuViewController(documentTypes: [String(kUTTypePDF)], in: .import)
+        importMenu.delegate = self
+        importMenu.modalPresentationStyle = .formSheet
+        self.present(importMenu, animated: true, completion: nil)
+    }
+    
+    // Spotlights the attachment popup
+    private func showOverlay() {
+        overlay = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
+        overlay.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        view.addSubview(overlay)
     }
 }
 
@@ -319,20 +317,26 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 print("Error")
                 return
             }
+            
             let attachmentView = AttachmentView(frame: CGRect(x: tmpX.center.x - 30,
                                                               y: collectionView.center.y - 200,
                                                               width: 150,
                                                               height: 200))
             attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
-             attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
-             attachmentView.audioButton.addTarget(self, action: #selector(recordAudio), for: .touchUpInside)
-            view.addSubview(attachmentView)
+            attachmentView.videoButton.addTarget(self, action: #selector(takeVideo), for: .touchUpInside)
+            attachmentView.audioButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+            attachmentView.documentButton.addTarget(self, action: #selector(pickDocument), for: .touchUpInside)
+            recordButton = attachmentView.audioButton
+            
+            showOverlay()
+            overlay.addSubview(attachmentView)
+            
             return
         }
-        let currentAttachment = attachments[(indexPath as NSIndexPath).row]
+        let currentAttachment = attachments[(indexPath as NSIndexPath).row].attachment
         if currentAttachment is Video {
             let item = attachments[(indexPath as NSIndexPath).item]
-            let player = AVPlayer(url: URL(fileURLWithPath: item.filePath))
+            let player = AVPlayer(url: URL(fileURLWithPath: item.attachment.filePath))
             let playerController = AVPlayerViewController()
             playerController.player = player
             present(playerController, animated: true) {
@@ -345,8 +349,18 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             guard let photo = currentAttachment as? Photo else {
                 return
             }
-            let photoWrapper = PhotoWrapper(photo: photo)
-            let galleryPreview = INSPhotosViewController(photos: [photoWrapper], initialPhoto: photoWrapper, referenceView: cell)
+
+            let photos: [PhotoWrapper] = incident!.attachments.reduce([]) {
+                var list = $0
+                if $1 is Photo {
+                    list.append(PhotoWrapper(photo: $1 as! Photo))
+                }
+                return list
+            }
+            
+            let initialPhoto = photos.first(where: { $0.photo.name == photo.name })
+ 
+            let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: initialPhoto, referenceView: cell)
             
             galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
                 if let index = self?.attachments.index(where: { $0 === photo }) {
@@ -357,12 +371,28 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             }
             present(galleryPreview, animated: true, completion: nil)
         }
+        if currentAttachment is Audio {
+            let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell
+            guard let audio = currentAttachment as? Audio else {
+                return
+            }
+            playSound(audio: audio)
+        }
+        if currentAttachment is TextDocument {
+            let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell
+            guard let textDocument = currentAttachment as? TextDocument else {
+                return
+            }
+            self.documentInteractionController = UIDocumentInteractionController.init(url: URL(fileURLWithPath: textDocument.filePath))
+            self.documentInteractionController.delegate = self
+            self.documentInteractionController.presentPreview(animated: true)
+        }
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
-        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row])
+        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment)
         return cell ?? UICollectionViewCell()
     }
 }
@@ -376,23 +406,27 @@ extension DetailViewController: UIImagePickerControllerDelegate {
                 print("Saved image")
             }
         }
-        
         if let selectedVideo: URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
             // Save video to the main photo album
             let selectorToCall = #selector(AttachmentViewController.videoSaved(_:didFinishSavingWithError:context:))
             
             // 2
             UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
+
             // Save the video to the app directory
             let videoData = try? Data(contentsOf: selectedVideo)
+            //let a = Data
             let paths = NSSearchPathForDirectoriesInDomains(
                 FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
             let documentsDirectory = URL(fileURLWithPath: paths[0])
             let defaults = UserDefaults.standard
-            let dataPath = documentsDirectory.appendingPathComponent("cARgeminiVideoAsset\(defaults.integer(forKey: "AttachedVideoName")).mov")
+            let name = "cARgeminiVideoAsset\(defaults.integer(forKey: "AttachedVideoName")).mov"
+            
+            let dataPath = documentsDirectory.appendingPathComponent(name)
             defaults.set(defaults.integer(forKey: "AttachedVideoName") + 1, forKey: "AttachedVideoName")
             do {
                 try videoData?.write(to: dataPath, options: [])
+                incident?.addAttachment(attachment: Video(name: name, videoPath: "\(paths[0])/\(name)", duration: 3.0))
             } catch {
                 print(Error.self)
             }
@@ -407,6 +441,7 @@ extension DetailViewController: UIImagePickerControllerDelegate {
         } else {
             DispatchQueue.main.async(execute: { () -> Void in })
         }
+        hidePopup()
     }
     
     func saveImage(image: UIImage) -> Bool {
@@ -421,8 +456,11 @@ extension DetailViewController: UIImagePickerControllerDelegate {
         }
         do {
             let defaults = UserDefaults.standard
-            try data.write(to: documentsDirectory.appendingPathComponent("cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"), options: [])
+            let name = "cARgeminiasset\(defaults.integer(forKey: "AttachedPhotoName")).jpg"
+            let path = documentsDirectory.appendingPathComponent(name)
+            try data.write(to: path, options: [])
             defaults.set(defaults.integer(forKey: "AttachedPhotoName") + 1, forKey: "AttachedPhotoName")
+            incident?.addAttachment(attachment: Photo(name: name, photoPath: "\(paths[0])/\(name)"))
             return true
         } catch {
             print(error.localizedDescription)

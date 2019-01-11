@@ -4,19 +4,72 @@
 //
 //  Created by MembrainDev on 04.12.18.
 //  Copyright © 2018 TUM LS1. All rights reserved.
-//
 
 import Foundation
 import INSPhotoGallery
 
 class Photo: Attachment {
+    static var type = AttachmentType.photo
+    var data: Data?
+    var identifier: Int
+    var date: Date
+    var filePath: String
+    var name: String
+    
 
     init(name: String, photoPath: String) {
-        super.init(name: name, filePath: photoPath)
+        date = Date()
+        self.name = name
+        self.filePath = photoPath
+        let defaults = UserDefaults.standard
+        data = try? Data(contentsOf: URL(fileURLWithPath: filePath))
+        identifier = defaults.integer(forKey: "AttachmentIdentifer")
+        defaults.set(defaults.integer(forKey: "AttachmentIdentifer") + 1, forKey: "AttachmentIdentifer")
+        do {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory = URL(fileURLWithPath: paths[0])
+ 
+            let path = documentsDirectory.appendingPathComponent(name)
+            guard let data = data else {
+                return
+            }
+            try data.write(to: path, options: [])
+            filePath = "\(paths[0])/\(name)"
+            print(filePath)
+        } catch {
+            data = nil
+        }
     }
-
-    required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
+    
+    func computeThumbnail() -> UIImage {
+        if name == "plusButton" {
+            guard let result = UIImage(named: "plusbutton") else {
+                return UIImage()
+            }
+            return result
+        }
+        guard let result = UIImage(contentsOfFile: filePath) else {
+            return UIImage()
+        }
+        return result
+    }
+    
+    func reevaluatePath() {
+        do {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory = URL(fileURLWithPath: paths[0])
+            let path = documentsDirectory.appendingPathComponent(name)
+            guard let data = data else {
+                return
+            }
+            try data.write(to: path, options: [])
+            filePath = "\(paths[0])/\(name)"
+        } catch let error {
+            print("Could not save data")
+            data = nil
+        }
     }
 }
 
@@ -40,8 +93,9 @@ class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
         }
         loadImageWithURL(URL(fileURLWithPath: photo.filePath), completion: completion)
     }
+    
     @objc open func loadThumbnailImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
-        let thumbnailImage = AttachmentWrapper.computeThumbnailImage(for: photo)
+        let thumbnailImage = photo.computeThumbnail()
         completion(image, nil)
     }
     

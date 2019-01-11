@@ -16,6 +16,11 @@
 		0DF3077C21B7E067007D57D6 /* AttachmentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DF3077B21B7E067007D57D6 /* AttachmentView.xib */; };
 		0DF3077E21B7E070007D57D6 /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF3077D21B7E070007D57D6 /* AttachmentView.swift */; };
 		5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC4072921A8331100A64106 /* DataHandler.swift */; };
+		9021D49021E78EF2000E7EAD /* AnyAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9021D48F21E78EF2000E7EAD /* AnyAttachment.swift */; };
+		904AA43521E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */; };
+		904AA43C21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */; };
+		904AA43E21E493B40027D29E /* TextDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904AA43D21E493B40027D29E /* TextDocument.swift */; };
+		905C159121C9D08400182B14 /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 905C159021C9D08400182B14 /* Audio.swift */; };
 		9082AF6A21A561D200CA8E80 /* CarPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6421A561D200CA8E80 /* CarPart.swift */; };
 		9082AF6B21A561D200CA8E80 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6521A561D200CA8E80 /* Car.swift */; };
 		9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9082AF6621A561D200CA8E80 /* Incident.swift */; };
@@ -91,6 +96,9 @@
 		BA6972E821D8557D00F919EF /* ARViewControllerNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */; };
 		BE18F72921E8A7B200057A0C /* ARModelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE18F72821E8A7B200057A0C /* ARModelsCollectionViewCell.swift */; };
 		BE18F72B21E8A84F00057A0C /* ModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE18F72A21E8A84F00057A0C /* ModelViewController.swift */; };
+		BAD6B88421E79CF200701698 /* ARViewControllerMultiUserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */; };
+		BAD6B88621E79E7900701698 /* MultipeerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88521E79E7900701698 /* MultipeerSession.swift */; };
+		BAD6B88821E7A2A100701698 /* ARViewControllerStatusBarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */; };
 		BE5BAF8221A16B1B00CEBB3C /* CUU.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE5BAF8121A16B1B00CEBB3C /* CUU.framework */; };
 		D2116AFA6D957C3B4D9F2CE7 /* Pods_ios1819capgemini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */; };
 /* End PBXBuildFile section */
@@ -107,6 +115,13 @@
 		0DF3077D21B7E070007D57D6 /* AttachmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		5EC4072921A8331100A64106 /* DataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
 		67865FE4559F021B51E7D3CF /* Pods_ios1819capgemini.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios1819capgemini.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9021D48F21E78EF2000E7EAD /* AnyAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyAttachment.swift; sourceTree = "<group>"; };
+		904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DetailViewController+AVAudioRecorderDelegate.swift"; sourceTree = "<group>"; };
+		904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DetailViewController+UIDocumentMenuDelegate.swift"; sourceTree = "<group>"; };
+		904AA43D21E493B40027D29E /* TextDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDocument.swift; sourceTree = "<group>"; };
+		904AA43F21E4994F0027D29E /* ios1819capgemini.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ios1819capgemini.entitlements; sourceTree = "<group>"; };
+		905C158E21C9CD9800182B14 /* DetailViewController+AVAudioRecorderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DetailViewController+AVAudioRecorderDelegate.swift"; sourceTree = "<group>"; };
+		905C159021C9D08400182B14 /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		9082AF6421A561D200CA8E80 /* CarPart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarPart.swift; sourceTree = "<group>"; };
 		9082AF6521A561D200CA8E80 /* Car.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		9082AF6621A561D200CA8E80 /* Incident.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Incident.swift; sourceTree = "<group>"; };
@@ -184,6 +199,9 @@
 		BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNavigation.swift; sourceTree = "<group>"; };
 		BE18F72821E8A7B200057A0C /* ARModelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARModelsCollectionViewCell.swift; sourceTree = "<group>"; };
 		BE18F72A21E8A84F00057A0C /* ModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelViewController.swift; sourceTree = "<group>"; };
+		BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerMultiUserExtension.swift; sourceTree = "<group>"; };
+		BAD6B88521E79E7900701698 /* MultipeerSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerSession.swift; sourceTree = "<group>"; };
+		BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusBarExtension.swift; sourceTree = "<group>"; };
 		BE5BAF8121A16B1B00CEBB3C /* CUU.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CUU.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E590CB3B090CC7CD8999AD88 /* Pods-ios1819capgemini.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios1819capgemini.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios1819capgemini/Pods-ios1819capgemini.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -205,11 +223,15 @@
 			isa = PBXGroup;
 			children = (
 				A66447E92192121300B2D32B /* ARViewController.swift */,
+				BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */,
+				BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */,
 				BA6972E521D854E200F919EF /* ARViewControllerScreenshot.swift */,
 				BA6972E721D8557D00F919EF /* ARViewControllerNavigation.swift */,
 				BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */,
 				0DD194BB21A31BE7001F8EA5 /* ListViewController.swift */,
 				0D9DBF3121A33D39004D445B /* DetailViewController.swift */,
+				904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */,
+				904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */,
 				90D3451221B3FF29009EF79E /* AttachmentViewController.swift */,
 				90C7377921B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift */,
 				90C7377F21B56D0B008AD568 /* AttachmentViewController+UICollectionViewDataSource.swift */,
@@ -217,6 +239,8 @@
 				908466F121B6D11800A3C80C /* AttachmentViewCell.swift */,
 				BA09652021CEE59F00174922 /* StatusViewController.swift */,
 				BE18F72A21E8A84F00057A0C /* ModelViewController.swift */,
+				904AA43421E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift */,
+				904AA43B21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -247,6 +271,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		904AA43121E4871F0027D29E /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				905C158E21C9CD9800182B14 /* DetailViewController+AVAudioRecorderDelegate.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		9082AF6321A5618100CA8E80 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -259,13 +291,6 @@
 			);
 			name = Model;
 			path = "New Group";
-			sourceTree = "<group>";
-		};
-		90903D1721B688B200DA4C7E /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		90CB845621AD9D4100CA1C09 /* Scratch Detection */ = {
@@ -306,6 +331,9 @@
 				9082AF6921A561D200CA8E80 /* Attachment.swift */,
 				90D3453021B44C34009EF79E /* Video.swift */,
 				908466ED21B6C6E500A3C80C /* Photo.swift */,
+				905C159021C9D08400182B14 /* Audio.swift */,
+				904AA43D21E493B40027D29E /* TextDocument.swift */,
+				9021D48F21E78EF2000E7EAD /* AnyAttachment.swift */,
 			);
 			path = Attachment;
 			sourceTree = "<group>";
@@ -317,7 +345,7 @@
 				A66447E52192121300B2D32B /* Products */,
 				D8D30B6BEE4E7F64DA26A3F4 /* Pods */,
 				253FA3086DD92FE99E3DF7A7 /* Frameworks */,
-				90903D1721B688B200DA4C7E /* Recovered References */,
+				904AA43121E4871F0027D29E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -332,10 +360,12 @@
 		A66447E62192121300B2D32B /* ios1819capgemini */ = {
 			isa = PBXGroup;
 			children = (
+				904AA43F21E4994F0027D29E /* ios1819capgemini.entitlements */,
 				90D3452E21B44C03009EF79E /* Attachment */,
 				90CB845621AD9D4100CA1C09 /* Scratch Detection */,
 				9082AF6321A5618100CA8E80 /* Model */,
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
+				BAD6B88521E79E7900701698 /* MultipeerSession.swift */,
 				0D1F63FA21E7A01000AFC29A /* Settings.bundle */,
 				0D5F4A7621A3121F00D443CC /* CUU.plist */,
 				A66447F32192121300B2D32B /* Info.plist */,
@@ -470,6 +500,14 @@
 					A66447E32192121300B2D32B = {
 						CreatedOnToolsVersion = 10.0;
 						LastSwiftMigration = 1010;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -592,6 +630,7 @@
 				B30A479721CFBC5A007049F8 /* ARCameraTrackingState.swift in Sources */,
 				90C7377E21B56C15008AD568 /* VideoCollectionViewCell.swift in Sources */,
 				BE18F72921E8A7B200057A0C /* ARModelsCollectionViewCell.swift in Sources */,
+				904AA43E21E493B40027D29E /* TextDocument.swift in Sources */,
 				90CB846E21ADAB2800CA1C09 /* Anchors6.swift in Sources */,
 				B30A478A21CFBC5A007049F8 /* DetectedBoundingBox.swift in Sources */,
 				B30A478B21CFBC5A007049F8 /* Tile.swift in Sources */,
@@ -599,15 +638,19 @@
 				90CB847621ADAB8B00CA1C09 /* Anchors10.swift in Sources */,
 				B30A478721CFBC5A007049F8 /* DetectedPointCloud.swift in Sources */,
 				9082AF6D21A561D200CA8E80 /* CarPartItem.swift in Sources */,
+				904AA43C21E492ED0027D29E /* DetailViewController+UIDocumentMenuDelegate.swift in Sources */,
 				B30A477C21CFBC59007049F8 /* ThresholdPanGestureRecognizer.swift in Sources */,
 				B30A479321CFBC5A007049F8 /* ViewController+Gestures.swift in Sources */,
 				B30A477F21CFBC5A007049F8 /* RoundedButton.swift in Sources */,
+				BAD6B88621E79E7900701698 /* MultipeerSession.swift in Sources */,
 				B30A479621CFBC5A007049F8 /* ScannerAppUtilities.swift in Sources */,
 				5EC4072A21A8331100A64106 /* DataHandler.swift in Sources */,
 				B30A477E21CFBC5A007049F8 /* FlashlightButton.swift in Sources */,
+				9021D49021E78EF2000E7EAD /* AnyAttachment.swift in Sources */,
 				B30A479421CFBC5A007049F8 /* Scan.swift in Sources */,
 				B30A479521CFBC5A007049F8 /* ViewController+ApplicationState.swift in Sources */,
 				90CB846821ADAB1100CA1C09 /* Anchors3.swift in Sources */,
+				905C159121C9D08400182B14 /* Audio.swift in Sources */,
 				90CB847421ADAB3F00CA1C09 /* Anchors9.swift in Sources */,
 				B30A477A21CFBC59007049F8 /* ThresholdRotationGestureRecognizer.swift in Sources */,
 				B30A477B21CFBC59007049F8 /* ThresholdPinchGestureRecognizer.swift in Sources */,
@@ -640,6 +683,7 @@
 				90C7377A21B56B96008AD568 /* AttachmentViewController+UIImagePickerControllerDelegate.swift in Sources */,
 				90CB845C21AD9E1B00CA1C09 /* NonMaxSuppression.swift in Sources */,
 				B30A478121CFBC5A007049F8 /* ScannedObject.swift in Sources */,
+				BAD6B88421E79CF200701698 /* ARViewControllerMultiUserExtension.swift in Sources */,
 				90CB846421ADAAF700CA1C09 /* Anchors1.swift in Sources */,
 				B30A478921CFBC5A007049F8 /* PointCloud+CreateVisualization.swift in Sources */,
 				B30A479021CFBC5A007049F8 /* ViewController+SessionInfo.swift in Sources */,
@@ -656,6 +700,7 @@
 				A66447E82192121300B2D32B /* AppDelegate.swift in Sources */,
 				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,
 				9082AF6C21A561D200CA8E80 /* Incident.swift in Sources */,
+				904AA43521E488CC0027D29E /* DetailViewController+AVAudioRecorderDelegate.swift in Sources */,
 				9082AF6E21A561D200CA8E80 /* CarPartComponent.swift in Sources */,
 				BE18F72B21E8A84F00057A0C /* ModelViewController.swift in Sources */,
 				B30A478E21CFBC5A007049F8 /* ViewController.swift in Sources */,
@@ -664,6 +709,7 @@
 				90CB847021ADAB3100CA1C09 /* Anchors7.swift in Sources */,
 				BA09652121CEE59F00174922 /* StatusViewController.swift in Sources */,
 				0D9DBF3221A33D39004D445B /* DetailViewController.swift in Sources */,
+				BAD6B88821E7A2A100701698 /* ARViewControllerStatusBarExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -811,6 +857,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ios1819capgemini/ios1819capgemini.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WCM2L8RG39;
 				INFOPLIST_FILE = ios1819capgemini/Info.plist;
@@ -833,6 +880,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ios1819capgemini/ios1819capgemini.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = WCM2L8RG39;
 				INFOPLIST_FILE = ios1819capgemini/Info.plist;
