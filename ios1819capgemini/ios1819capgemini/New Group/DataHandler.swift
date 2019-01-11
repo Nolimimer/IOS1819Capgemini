@@ -33,7 +33,7 @@ enum DataHandler {
     
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
-        largestID += 1
+        largestID = Int(arc4random())
         return largestID
     }
     
@@ -90,7 +90,6 @@ enum DataHandler {
             return nil
         }
     }
-
     
     static func loadFromJSON(url: URL) {
         do {
