@@ -145,9 +145,7 @@ extension ListViewController: UITableViewDataSource {
         cell.incidentTitleLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
         cell.incidentDescriptionLabel?.text = incident.description
         cell.incidentStatusLabel?.text = incident.status.rawValue
-        //cell.textLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
         cell.tag = incident.identifier
-        //cell.detailTextLabel?.text = incident.description
         return cell
     }
     
