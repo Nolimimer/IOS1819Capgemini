@@ -282,8 +282,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             hideBoxes()
             isDetecting = false
         }
-        
+        print("nodes : \(nodes)")
         updateIncidents()
+        refreshNodes()
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: frame.camera.trackingState)
@@ -328,7 +329,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         incidentEditted()
-        refreshNodes()
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
                 let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
@@ -621,12 +621,22 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             if DataHandler.incident(withId: name) == nil {
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+                deleteNode(identifier: name)
                 do {
                     let data = try JSONEncoder().encode(DataHandler.incidents)
                     self.multipeerSession.sendToAllPeers(data)
                 } catch {
                     print("sending incidents array failed (refreshNodes DataHandler.incident(withId: name) == nil")
                 }
+            }
+        }
+    }
+    
+    func deleteNode(identifier: String) {
+        for (index, node) in nodes.enumerated() {
+            if node.name == identifier {
+                nodes.remove(at: index)
+                return
             }
         }
     }

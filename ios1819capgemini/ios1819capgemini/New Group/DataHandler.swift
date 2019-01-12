@@ -109,12 +109,17 @@ enum DataHandler {
     }
     
     static func removeIncident(incidentToDelete: Incident) {
-        for (index, incident) in incidents.enumerated() {
-            if incident.identifier == incidentToDelete.identifier {
-                incidents.remove(at: index)
-                saveToJSON()
-                return
-            }
+        for (index, incident) in incidents.enumerated() where incident.identifier == incidentToDelete.identifier {
+//             removeIncidentNode(incident: incident)
+             incidents.remove(at: index)
+             saveToJSON()
+             return
+        }
+    }
+    static func removeIncidentNode(incident: Incident) {
+        for (index, node) in nodes.enumerated() where node.name == "\(incident.identifier)" {
+            nodes.remove(at: index)
+            return
         }
     }
 

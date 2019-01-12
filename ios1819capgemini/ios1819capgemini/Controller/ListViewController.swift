@@ -10,7 +10,7 @@
 import UIKit
 //swiftlint:disable all
 // MARK: LastViewController
-class ListViewController: UIViewController {
+class ListViewController: UIViewController, UITableViewDelegate {
     
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
@@ -39,6 +39,7 @@ class ListViewController: UIViewController {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+        tableView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -119,6 +120,7 @@ enum Filter: Int { // Remark: Need to match Segment in Story Board.
 
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
         let incident: Incident
@@ -175,27 +177,44 @@ extension ListViewController: UITableViewDataSource {
             }
         }
     }
-//    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-//        let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
-//            print("more button tapped")
-//        }
-//        more.backgroundColor = UIColor.lightGray
+    
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 //
-//        let favorite = UITableViewRowAction(style: .normal, title: "Favorite") { action, index in
-//            print("favorite button tapped")
-//        }
-//        favorite.backgroundColor = UIColor.orange
-//
-//        let share = UITableViewRowAction(style: .normal, title: "Share") { action, index in
-//            print("share button tapped")
-//        }
-//        share.backgroundColor = UIColor.blue
-//
-//        return [share, favorite, more]
 //    }
-//
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // the cells you would like the actions to appear needs to be editable
         return true
+    }
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let navigate = UITableViewRowAction(style: .destructive, title: "Navigate") { action, index in
+            //self.isEditing = false
+            print("navigate button tapped")
+        }
+        navigate.backgroundColor = UIColor.orange
+        
+        let delete = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
+            //self.isEditing = false
+            print("delete button tapped")
+            if ARViewController.connectedToPeer {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can't be deleted if Peer is connected",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            } else {
+                let incident = DataHandler.incidents[indexPath.row]
+                DataHandler.removeIncident(incidentToDelete: incident)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                return
+            }
+        }
+        delete.backgroundColor = UIColor.red
+        
+        return [delete, navigate]
     }
 }

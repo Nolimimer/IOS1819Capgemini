@@ -91,6 +91,8 @@ extension ARViewController {
         return true
     }
     
+
+    
     func updatePinColour() {
         for incident in DataHandler.incidents {
             if incident.automaticallyDetected {
