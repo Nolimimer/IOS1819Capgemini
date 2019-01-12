@@ -16,6 +16,11 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         self.dismiss(animated: false, completion: nil)
     }
     
+    @IBAction func reportButton(_ sender: Any) {
+        self.dismiss(animated: false, completion: nil)
+    }
+    
+    
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()

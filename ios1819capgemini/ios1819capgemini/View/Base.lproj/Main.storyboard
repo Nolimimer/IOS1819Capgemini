@@ -104,7 +104,7 @@
                                     <action selector="shareIncidentsButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eiW-Vd-WXz"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kyw-wm-j2V">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kyw-wm-j2V">
                                 <rect key="frame" x="281" y="511" width="46" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1127,6 +1127,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Pd-fz-IC4">
                                         <rect key="frame" x="134.5" y="453" width="106" height="30"/>
                                         <state key="normal" title="Report Incident"/>
+                                        <connections>
+                                            <action selector="reportButton:" destination="V9q-uH-WWX" eventType="touchUpInside" id="qY4-Zd-yF6"/>
+                                        </connections>
                                     </button>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KfP-XT-7uu">
                                         <rect key="frame" x="35" y="33" width="305" height="319"/>
@@ -1234,6 +1237,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tce-eT-Rgl">
                                         <rect key="frame" x="161.5" y="511" width="52" height="30"/>
                                         <state key="normal" title="Explore"/>
+                                        <connections>
+                                            <action selector="exploreButton:" destination="V9q-uH-WWX" eventType="touchUpInside" id="tXM-tz-mhy"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2cQ-1j-oN5">
                                         <rect key="frame" x="153" y="378" width="69" height="67"/>
