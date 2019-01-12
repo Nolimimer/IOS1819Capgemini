@@ -63,6 +63,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             .fadeOpacity(to: 1, duration: 0.25),
             ])
     }
+    var nodeBlinking: SCNAction {
+        return .sequence([
+            .fadeOpacity(to:1, duration:0.1),
+            .fadeOpacity(to:0.4, duration:0.25)
+            ])
+    }
     // MARK: IBOutlets
     //sceneview bitte nicht private
     @IBOutlet var sceneView: ARSCNView!

@@ -191,12 +191,7 @@ extension ListViewController: UITableViewDataSource {
             self.dismiss(animated: true, completion: {
                 creatingNodePossible = true
                 let incident = DataHandler.incidents[indexPath.row]
-                print("incident id: \(incident.identifier)")
-                if ARViewController.navigatingIncident != nil {
-                    ARViewController.navigatingIncident = nil
-                }
                 ARViewController.navigatingIncident = incident
-                print("ar navigating incident : \(ARViewController.navigatingIncident?.identifier)")
             })
         }
         navigate.backgroundColor = UIColor.appGreen

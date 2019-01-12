@@ -195,11 +195,40 @@ extension ARViewController {
         
         if let pov  = sceneView.pointOfView {
             let isVisible = sceneView.isNode(node, insideFrustumOf: pov)
-            return isVisible
+            let notification = UINotificationFeedbackGenerator()
+            if isVisible {
+                DispatchQueue.main.async {
+                    notification.notificationOccurred(.success)
+                }
+                return isVisible
+            } else {
+                return isVisible
+            }
         }
         return false
     }
     
+    func toggleIncidentsOpacityExceptNavigating() {
+        guard let incident = ARViewController.navigatingIncident else {
+            return
+        }
+        for node in nodes where node.name != String(incident.identifier) && node.name != "info-plane"{
+            node.opacity = 0.45
+        }
+    }
+    
+    func restoreIncidentOpacity() {
+        for node in nodes where node.name != "info-plane" {
+            node.opacity = 1
+        }
+    }
+    
+    func animateNavigatingIncident(incident: Incident?) {
+        guard let incident = incident, let node = getNodeOfIncident(incident: incident) else {
+            return
+        }
+        node.runAction(nodeBlinking)
+    }
     /*
      sets navigation buttons based on the navigation which is given
      */
@@ -211,6 +240,7 @@ extension ARViewController {
         guard let incident = incident else {
             return
         }
+        animateNavigatingIncident(incident: incident)
         arrowUp.isHidden = true
         arrowDown.isHidden = true
         arrowRight.isHidden = true
