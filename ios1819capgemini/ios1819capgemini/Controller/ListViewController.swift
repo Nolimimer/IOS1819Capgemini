@@ -10,7 +10,7 @@
 import UIKit
 //swiftlint:disable all
 // MARK: LastViewController
-class ListViewController: UIViewController {
+class ListViewController: UIViewController, UITableViewDelegate {
     
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
@@ -39,6 +39,7 @@ class ListViewController: UIViewController {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+        tableView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,18 +68,18 @@ class ListViewController: UIViewController {
     
     @IBAction private func selectedFilterSegment(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-        case Filter.showAll.rawValue: // All tab
+        case Filter.showAll.rawValue:
             DataHandler.currentSegmentFilter = Filter.showAll.rawValue
             tableView.reloadData()
-        case Filter.showOpen.rawValue: // Open tab
+        case Filter.showOpen.rawValue:
             DataHandler.currentSegmentFilter = Filter.showOpen.rawValue
             DataHandler.refreshOpenIncidents()
             tableView.reloadData()
-        case Filter.showInProgress.rawValue: // In Progress tab
+        case Filter.showInProgress.rawValue:
             DataHandler.currentSegmentFilter = Filter.showInProgress.rawValue
             DataHandler.refreshInProgressIncidents()
             tableView.reloadData()
-        case Filter.showResolved.rawValue: // Resolved tab
+        case Filter.showResolved.rawValue:
             DataHandler.currentSegmentFilter = Filter.showResolved.rawValue
             DataHandler.refreshResolvedIncidents()
             tableView.reloadData()
@@ -119,22 +120,23 @@ enum Filter: Int { // Remark: Need to match Segment in Story Board.
 
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
         let incident: Incident
         switch filterSegmentedControl.selectedSegmentIndex {
-        case Filter.showAll.rawValue: // Filter by All Incidents.
+        case Filter.showAll.rawValue:
             incident = DataHandler.incidents[indexPath.row]
-        case Filter.showOpen.rawValue: // Filter by Open Incidents
+        case Filter.showOpen.rawValue:
             incident = DataHandler.openIncidents[indexPath.row]
-        case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
+        case Filter.showInProgress.rawValue:
             incident = DataHandler.inProgressIncidents[indexPath.row]
-        case Filter.showResolved.rawValue: // Filter by Resolved Incidents
+        case Filter.showResolved.rawValue:
             incident = DataHandler.resolvedIncidents[indexPath.row]
-        default: // Default by All Incidents.
+        default:
             incident = DataHandler.incidents[indexPath.row]
         }
-        cell.textLabel?.text = "\(incident.identifier) \(incident.type.rawValue)"
+        cell.textLabel?.text = "\(incident.type.rawValue)"
         cell.tag = incident.identifier
         cell.detailTextLabel?.text = incident.description
         return cell
@@ -142,15 +144,20 @@ extension ListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch filterSegmentedControl.selectedSegmentIndex {
-        case Filter.showAll.rawValue: // Filter by All Incidents.
+        case Filter.showAll.rawValue:
+            ARViewController.filterAllIncidents()
             return DataHandler.incidents.count
-        case Filter.showOpen.rawValue: // Filter by Open Incidents
+        case Filter.showOpen.rawValue:
+            ARViewController.filterOpenIncidents()
             return DataHandler.openIncidents.count
-        case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
+        case Filter.showInProgress.rawValue:
+            ARViewController.filterInProgressIncidents()
             return DataHandler.inProgressIncidents.count
-        case Filter.showResolved.rawValue: // Filter by Resolved Incidents
+        case Filter.showResolved.rawValue:
+            ARViewController.filterResolvedIncidents()
             return DataHandler.resolvedIncidents.count
-        default: // Default by All Incidents.
+        default:
+            ARViewController.filterAllIncidents()
             return DataHandler.incidents.count
         }
     }
@@ -168,14 +175,55 @@ extension ListViewController: UITableViewDataSource {
                 }
                 return
             } else {
+                creatingNodePossible = false
                 let incident = DataHandler.incidents[indexPath.row]
                 DataHandler.removeIncident(incidentToDelete: incident)
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 return
             }
-
         }
     }
     
-
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//
+//    }
+    private func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let navigate = UITableViewRowAction(style: .normal, title: "Navigate") { action, index in
+            self.dismiss(animated: true, completion: {
+                creatingNodePossible = true
+                let incident = DataHandler.incidents[indexPath.row]
+                ARViewController.navigatingIncident = incident
+            })
+        }
+        navigate.backgroundColor = UIColor.appGreen
+        
+        
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { action, index in
+            if ARViewController.connectedToPeer {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can't be deleted if Peer is connected",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            } else {
+                creatingNodePossible = true
+                let incident = DataHandler.incidents[indexPath.row]
+                DataHandler.removeIncident(incidentToDelete: incident)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                return
+            }
+        }
+        delete.backgroundColor = UIColor.red
+        
+        return [delete, navigate]
+    }
 }

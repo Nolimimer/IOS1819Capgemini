@@ -17,14 +17,15 @@ import MultipeerConnectivity
 // Stores all the nodes added to the scene
 var anchorWrapper : ARObjectAnchor?
 var nodes = [SCNNode]()
-//swiftlint:disable type_body_length
 var creatingNodePossible = true
+
 // MARK: - ARViewController
 // swiftlint:disable all
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
     static var resetButtonPressed = false
+    static var navigatingIncident : Incident?
     static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
@@ -61,6 +62,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             .fadeOpacity(to: 0.9, duration: 0.25),
             .fadeOpacity(to: 0.15, duration: 0.25),
             .fadeOpacity(to: 1, duration: 0.25),
+            ])
+    }
+    var nodeBlinking: SCNAction {
+        return .sequence([
+            .fadeOpacity(to:1, duration:0.1),
+            .fadeOpacity(to:0.4, duration:0.25)
             ])
     }
     // MARK: IBOutlets
@@ -238,9 +245,6 @@ func reset() {
         return false
     }
     
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
     func loadCustomScans() {
         let fileManager = FileManager.default
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -256,6 +260,7 @@ func reset() {
             print("Error loading custom scans")
         }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let config = ARWorldTrackingConfiguration()
@@ -290,7 +295,7 @@ func reset() {
         } else {
             sceneView.debugOptions = []
         }
-        if UserDefaults.standard.bool(forKey: "enable_detection") {
+        if UserDefaults.standard.bool(forKey: "enable_detection") && detectedObjectNode != nil {
             isDetecting = true
             setupBoxes()
         } else {
@@ -299,10 +304,10 @@ func reset() {
         }
         checkReset()
         updateIncidents()
-//        setNavigationArrows(for: frame.camera.trackingState)
+        refreshNodes()
         updatePinColour()
         setDescriptionLabel()
-        setNavigationArrows(for: frame.camera.trackingState)
+        setNavigationArrows(for: frame.camera.trackingState, incident: ARViewController.navigatingIncident)
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()
@@ -316,6 +321,7 @@ func reset() {
     
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        
         let node = SCNNode()
         
         if detectedObjectNode != nil {
@@ -338,11 +344,11 @@ func reset() {
     }
     
     func updateIncidents() {
+        
         if !ARViewController.objectDetected {
             return
         }
         incidentEditted()
-        refreshNodes()
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
                 let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
@@ -352,6 +358,7 @@ func reset() {
     }
     
     func incidentHasNotBeenPlaced (incident: Incident) -> Bool {
+        
         for node in nodes {
             if String(incident.identifier) == node.name {
                 return false
@@ -371,7 +378,6 @@ func reset() {
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
         
-        //swiftlint:disable force_wrapping
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
             //self?.processClassifications(for: request, error: error)
             guard let predictions = self?.processClassifications(for: request, error: error) else {
@@ -381,7 +387,6 @@ func reset() {
                 self?.drawBoxes(predictions: predictions)
             }
         })
-        //swiftlint:enable force_wrapping
         // Crop input images to square area at center, matching the way the ML model was trained.
         request.imageCropAndScaleOption = .centerCrop
         // Use CPU for Vision processing to ensure that there are adequate GPU resources for rendering.
@@ -513,6 +518,7 @@ func reset() {
      returns true if there is a node in a certain radius from the coordinate
     */
     func calculateNodesInRadius(coordinate: CGPoint , radius: CGFloat) -> Bool {
+        
         for incident in automaticallyDetectedIncidents {
             if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
                 return false
@@ -532,6 +538,7 @@ func reset() {
     
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
+        
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
         materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
@@ -544,6 +551,7 @@ func reset() {
     }
     
     private func setDescriptionLabel() {
+        
         let openIncidents = (DataHandler.incidents.filter { $0.status == .open}).count
         let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress}).count
         let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved}).count
@@ -633,12 +641,22 @@ func reset() {
             }
             if DataHandler.incident(withId: name) == nil {
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+                deleteNode(identifier: name)
                 do {
                     let data = try JSONEncoder().encode(DataHandler.incidents)
                     self.multipeerSession.sendToAllPeers(data)
                 } catch {
                     print("sending incidents array failed (refreshNodes DataHandler.incident(withId: name) == nil")
                 }
+            }
+        }
+    }
+    
+    func deleteNode(identifier: String) {
+        for (index, node) in nodes.enumerated() {
+            if node.name == identifier {
+                nodes.remove(at: index)
+                return
             }
         }
     }
