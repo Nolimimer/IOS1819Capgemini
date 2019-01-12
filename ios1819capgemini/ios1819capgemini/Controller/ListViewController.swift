@@ -174,9 +174,28 @@ extension ListViewController: UITableViewDataSource {
                 return
             }
         }
-        if editingStyle == .insert {
-            print("test")
-        }
     }
-    
+//    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+//        let more = UITableViewRowAction(style: .normal, title: "More") { action, index in
+//            print("more button tapped")
+//        }
+//        more.backgroundColor = UIColor.lightGray
+//
+//        let favorite = UITableViewRowAction(style: .normal, title: "Favorite") { action, index in
+//            print("favorite button tapped")
+//        }
+//        favorite.backgroundColor = UIColor.orange
+//
+//        let share = UITableViewRowAction(style: .normal, title: "Share") { action, index in
+//            print("share button tapped")
+//        }
+//        share.backgroundColor = UIColor.blue
+//
+//        return [share, favorite, more]
+//    }
+//
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // the cells you would like the actions to appear needs to be editable
+        return true
+    }
 }
