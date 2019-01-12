@@ -200,7 +200,10 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         attachments = []
 
         attachments.append(AnyAttachment(Photo(name: "plusButton", photoPath: "errorPath")))
-        attachments.append(contentsOf: (incident!.attachments))
+        guard let incident = incident else {
+            return
+        }
+        attachments.append(contentsOf: (incident.attachments))
 
         collectionView.reloadData()
     }
