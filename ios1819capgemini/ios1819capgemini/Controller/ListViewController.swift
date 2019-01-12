@@ -192,14 +192,26 @@ extension ListViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        let navigate = UITableViewRowAction(style: .normal, title: "Navigate") { action, index in
+        var title = "Navigate"
+        let incident = DataHandler.incidents[indexPath.row]
+        if ARViewController.navigatingIncident == incident {
+            title = "Stop"
+        }
+        let navigate = UITableViewRowAction(style: .normal, title: title) { action, index in
             self.dismiss(animated: true, completion: {
                 creatingNodePossible = true
-                let incident = DataHandler.incidents[indexPath.row]
-                ARViewController.navigatingIncident = incident
+                if ARViewController.navigatingIncident == incident {
+                    ARViewController.navigatingIncident = nil
+                } else {
+                    ARViewController.navigatingIncident = incident
+                }
             })
         }
-        navigate.backgroundColor = UIColor.appGreen
+        if title == "Stop" {
+            navigate.backgroundColor = UIColor.orange
+        } else {
+            navigate.backgroundColor = UIColor.appGreen
+        }
         
         
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") { action, index in
