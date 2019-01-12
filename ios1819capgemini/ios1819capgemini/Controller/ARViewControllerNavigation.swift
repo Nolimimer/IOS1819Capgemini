@@ -137,7 +137,7 @@ extension ARViewController {
             return "Error"
         }
         if visible {
-            return "\(distance)cm"
+            return "Distance: \(distance)cm"
         }
         if abs(distancePOVVector.x) > abs(distancePOVVector.y) {
             if distancePOVVector.x.isLess(than: 0.0) {
