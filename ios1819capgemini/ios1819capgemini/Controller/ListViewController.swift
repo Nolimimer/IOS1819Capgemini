@@ -170,6 +170,7 @@ extension ListViewController: UITableViewDataSource {
                 }
                 return
             } else {
+                creatingNodePossible = false
                 let incident = DataHandler.incidents[indexPath.row]
                 DataHandler.removeIncident(incidentToDelete: incident)
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -181,20 +182,27 @@ extension ListViewController: UITableViewDataSource {
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 //
 //    }
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    private func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        let navigate = UITableViewRowAction(style: .destructive, title: "Navigate") { action, index in
-            //self.isEditing = false
-            print("navigate button tapped")
+        let navigate = UITableViewRowAction(style: .normal, title: "Navigate") { action, index in
+            self.dismiss(animated: true, completion: {
+                creatingNodePossible = true
+                let incident = DataHandler.incidents[indexPath.row]
+                print("incident id: \(incident.identifier)")
+                if ARViewController.navigatingIncident != nil {
+                    ARViewController.navigatingIncident = nil
+                }
+                ARViewController.navigatingIncident = incident
+                print("ar navigating incident : \(ARViewController.navigatingIncident?.identifier)")
+            })
         }
-        navigate.backgroundColor = UIColor.orange
+        navigate.backgroundColor = UIColor.appGreen
         
-        let delete = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
-            //self.isEditing = false
-            print("delete button tapped")
+        
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { action, index in
             if ARViewController.connectedToPeer {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can't be deleted if Peer is connected",
@@ -207,6 +215,7 @@ extension ListViewController: UITableViewDataSource {
                 }
                 return
             } else {
+                creatingNodePossible = true
                 let incident = DataHandler.incidents[indexPath.row]
                 DataHandler.removeIncident(incidentToDelete: incident)
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)

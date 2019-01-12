@@ -23,6 +23,7 @@ var creatingNodePossible = true
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
+    static var navigatingIncident : Incident?
     static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
@@ -275,19 +276,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         } else {
             sceneView.debugOptions = []
         }
-        if UserDefaults.standard.bool(forKey: "enable_detection") {
+        if UserDefaults.standard.bool(forKey: "enable_detection") && detectedObjectNode != nil {
             isDetecting = true
             setupBoxes()
         } else {
             hideBoxes()
             isDetecting = false
         }
-        print("nodes : \(nodes)")
         updateIncidents()
         refreshNodes()
         updatePinColour()
         setDescriptionLabel()
-        setNavigationArrows(for: frame.camera.trackingState)
+        setNavigationArrows(for: frame.camera.trackingState, incident: ARViewController.navigatingIncident)
         // Retain the image buffer for Vision processing.
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()

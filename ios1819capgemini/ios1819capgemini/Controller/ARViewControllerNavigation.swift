@@ -203,20 +203,19 @@ extension ARViewController {
     /*
      sets navigation buttons based on the navigation which is given
      */
-    func setNavigationArrows(for trackingState: ARCamera.TrackingState) {
+    func setNavigationArrows(for trackingState: ARCamera.TrackingState, incident: Incident?) {
         
         if !ARViewController.objectDetected {
             return 
+        }
+        guard let incident = incident else {
+            return
         }
         arrowUp.isHidden = true
         arrowDown.isHidden = true
         arrowRight.isHidden = true
         arrowLeft.isHidden = true
         
-        guard let incident = closestOpenIncident() else {
-            statusViewController.showMessage("No Incident currently Open", autoHide: true)
-            return
-        }
         let navigationSuggestion = navigationToIncident(incident: incident)
         guard let suggestion = navigationSuggestion else {
             statusViewController.showMessage("Error", autoHide: true)
