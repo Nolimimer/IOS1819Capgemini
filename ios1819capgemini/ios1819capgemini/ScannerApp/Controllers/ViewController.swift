@@ -152,19 +152,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     // MARK: - UI Event Handling
     //swiftlint:disable private_action
     @IBAction func restartButtonTapped(_ sender: Any) {
+        print("restart button tapped")
         if let scan = scan, scan.boundingBoxExists {
+            print("scan bounding box exists")
             let title = "Start over?"
             let message = "Discard the current scan and start over?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else if testRun != nil {
+            print("test run != nil")
             let title = "Finished?"
             let message = "Start reporting damages or create another scan?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else {
+            print("perform segue")
             self.performSegue(withIdentifier: "Start screen", sender: nil)
         }
     }
@@ -364,6 +368,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
         print("documentURL \(documentURL)")
         
+        saveImage(image: testRun.previewImage)
         
         DispatchQueue.global().async {
             do {
@@ -374,6 +379,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             
         }
     }
+    
+    
+    func saveImage(image: UIImage) {
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileName = "Scan\(Incident.nextScanID).jpg"
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        if let data = image.jpegData(compressionQuality: 0.5) {
+            do {
+                try data.write(to: fileURL)
+                print("file saved")
+            } catch {
+                print("error saving file:", error)
+            }
+    }
+    }
+    
     
     func createAndShareReferenceObject() {
         guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {

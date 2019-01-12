@@ -15,6 +15,7 @@ import UICircularProgressRing
 import MultipeerConnectivity
 
 // Stores all the nodes added to the scene
+var anchorWrapper : ARObjectAnchor?
 var nodes = [SCNNode]()
 //swiftlint:disable type_body_length
 var creatingNodePossible = true
@@ -27,7 +28,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var incidentEdited = false
     static var objectDetected = false
     var detectedObjectNode: SCNNode?
-    private var detectionObjects = Set <ARReferenceObject>()
+    var detectionObjects = Set <ARReferenceObject>()
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
     var screenHeight: Double?

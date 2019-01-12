@@ -16,6 +16,13 @@ public class Incident: Codable {
     
     let identifier: Int
     let createDate: Date
+    
+    static var scanID = 0
+    
+    static var nextScanID: Int {
+        scanID += 1
+        return scanID
+    }
 
     private(set) var modifiedDate: Date
     private(set) var type: IncidentType
