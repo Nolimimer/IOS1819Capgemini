@@ -40,7 +40,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var model: VNCoreMLModel?
     var mapProvider: MCPeerID?
     var multipeerSession: MultipeerSession!
-
+    
     var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode = SKLabelNode(text: "")
     private var anchorLabels = [UUID: String]()
@@ -329,6 +329,17 @@ func reset() {
         }
         if let objectAnchor = anchor as? ARObjectAnchor {
             
+            guard let name = objectAnchor.referenceObject.name else { fatalError("reference object has no name") }
+            
+            if DataHandler.objectsToIncidents[name] != nil {
+                print("DataHandler.objectsToIncidents != nil")
+                DataHandler.incidents = DataHandler.getIncidentsOfObject(identifier: name)
+            } else {
+                print("DataHandler.objectsToIncidents = nil")
+                DataHandler.incidents = []
+            }
+            ModelViewController.objectName = name
+            print("anchor name : \(ModelViewController.objectName)")
             let notification = UINotificationFeedbackGenerator()
             
             DispatchQueue.main.async {
@@ -342,6 +353,13 @@ func reset() {
         }
         return node
     }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        print("view will disappear ")
+//        guard let anchor = self.objectAnchor else { return }
+//        guard let name = anchor.referenceObject.name else { fatalError ("Each scan has to have a name") }
+//        DataHandler.objectsToIncidents[name] = DataHandler.incidents
+//        print("DataHandler.incidents \(DataHandler.incidents) have been saved to \(name)")
+//    }
     
     func updateIncidents() {
         

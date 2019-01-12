@@ -24,6 +24,7 @@ enum DataHandler {
     }
 
     // MARK: Stored Type Properties
+    static var objectsToIncidents = [String: [Incident]]()
     static var incidents: [Incident] = []
     static var largestID = 0
     static var currentSegmentFilter = Filter.showAll.rawValue // Show All by default
@@ -106,6 +107,9 @@ enum DataHandler {
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
+    }
+    static func getIncidentsOfObject(identifier: String) -> [Incident] {
+        return DataHandler.objectsToIncidents[identifier] ?? []
     }
     
     static func removeIncident(incidentToDelete: Incident) {
