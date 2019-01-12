@@ -129,11 +129,11 @@
             <objects>
                 <viewController id="jav-cE-mj7" customClass="DetailViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9eL-b9-ajH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bk8-mG-5Uu">
-                                <rect key="frame" x="0.0" y="64" width="375" height="539"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UKy-Lv-xeZ">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -292,7 +292,7 @@
                                 </constraints>
                             </scrollView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jn7-9G-Qd7">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8BC-Gv-pcb">
                                         <rect key="frame" x="41" y="188" width="293" height="190"/>
@@ -398,11 +398,11 @@
             <objects>
                 <viewController id="T6S-Pu-SFY" customClass="AttachmentViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ahL-qv-P1P">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6xp-nU-bii">
-                                <rect key="frame" x="0.0" y="559" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <items>
@@ -1088,7 +1088,7 @@
             </objects>
             <point key="canvasLocation" x="3809" y="-579"/>
         </scene>
-        <!--Title-->
+        <!--Available Scans-->
         <scene sceneID="Aha-aj-df0">
             <objects>
                 <viewController id="V9q-uH-WWX" customClass="ModelViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
@@ -1255,7 +1255,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="oLn-Jl-gcP"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="sFe-Bp-E2C"/>
+                    <navigationItem key="navigationItem" title="Available Scans" largeTitleDisplayMode="never" id="sFe-Bp-E2C"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dfb-jn-Uzg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
