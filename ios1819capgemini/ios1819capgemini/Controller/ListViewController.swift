@@ -67,18 +67,18 @@ class ListViewController: UIViewController {
     
     @IBAction private func selectedFilterSegment(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-        case Filter.showAll.rawValue: // All tab
+        case Filter.showAll.rawValue:
             DataHandler.currentSegmentFilter = Filter.showAll.rawValue
             tableView.reloadData()
-        case Filter.showOpen.rawValue: // Open tab
+        case Filter.showOpen.rawValue:
             DataHandler.currentSegmentFilter = Filter.showOpen.rawValue
             DataHandler.refreshOpenIncidents()
             tableView.reloadData()
-        case Filter.showInProgress.rawValue: // In Progress tab
+        case Filter.showInProgress.rawValue:
             DataHandler.currentSegmentFilter = Filter.showInProgress.rawValue
             DataHandler.refreshInProgressIncidents()
             tableView.reloadData()
-        case Filter.showResolved.rawValue: // Resolved tab
+        case Filter.showResolved.rawValue:
             DataHandler.currentSegmentFilter = Filter.showResolved.rawValue
             DataHandler.refreshResolvedIncidents()
             tableView.reloadData()
@@ -123,18 +123,18 @@ extension ListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
         let incident: Incident
         switch filterSegmentedControl.selectedSegmentIndex {
-        case Filter.showAll.rawValue: // Filter by All Incidents.
+        case Filter.showAll.rawValue:
             incident = DataHandler.incidents[indexPath.row]
-        case Filter.showOpen.rawValue: // Filter by Open Incidents
+        case Filter.showOpen.rawValue:
             incident = DataHandler.openIncidents[indexPath.row]
-        case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
+        case Filter.showInProgress.rawValue:
             incident = DataHandler.inProgressIncidents[indexPath.row]
-        case Filter.showResolved.rawValue: // Filter by Resolved Incidents
+        case Filter.showResolved.rawValue:
             incident = DataHandler.resolvedIncidents[indexPath.row]
-        default: // Default by All Incidents.
+        default:
             incident = DataHandler.incidents[indexPath.row]
         }
-        cell.textLabel?.text = "\(incident.identifier) \(incident.type.rawValue)"
+        cell.textLabel?.text = "\(incident.type.rawValue)"
         cell.tag = incident.identifier
         cell.detailTextLabel?.text = incident.description
         return cell
@@ -142,15 +142,15 @@ extension ListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch filterSegmentedControl.selectedSegmentIndex {
-        case Filter.showAll.rawValue: // Filter by All Incidents.
+        case Filter.showAll.rawValue:
             return DataHandler.incidents.count
-        case Filter.showOpen.rawValue: // Filter by Open Incidents
+        case Filter.showOpen.rawValue:
             return DataHandler.openIncidents.count
-        case Filter.showInProgress.rawValue: // Filter by In Progress Incidents
+        case Filter.showInProgress.rawValue:
             return DataHandler.inProgressIncidents.count
-        case Filter.showResolved.rawValue: // Filter by Resolved Incidents
+        case Filter.showResolved.rawValue:
             return DataHandler.resolvedIncidents.count
-        default: // Default by All Incidents.
+        default:
             return DataHandler.incidents.count
         }
     }
@@ -173,9 +173,10 @@ extension ListViewController: UITableViewDataSource {
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 return
             }
-
+        }
+        if editingStyle == .insert {
+            print("test")
         }
     }
     
-
 }

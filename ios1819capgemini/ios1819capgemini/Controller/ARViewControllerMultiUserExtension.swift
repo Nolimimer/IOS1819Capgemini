@@ -54,6 +54,7 @@ extension ARViewController {
         }
         return false
     }
+    
     func sendIncident(incident: Incident) {
         do {
             let data = try JSONEncoder().encode(incident)
@@ -71,6 +72,7 @@ extension ARViewController {
             
         }
     }
+    
     func getIncident(identifier: String) -> Incident? {
         for incident in DataHandler.incidents {
             if "\(incident.identifier)" == identifier {
@@ -88,7 +90,6 @@ extension ARViewController {
         }
         return true
     }
-    
     
     func updatePinColour() {
         for incident in DataHandler.incidents {

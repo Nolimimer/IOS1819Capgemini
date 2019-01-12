@@ -16,8 +16,8 @@ import MultipeerConnectivity
 
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
-//swiftlint:disable type_body_length
 var creatingNodePossible = true
+
 // MARK: - ARViewController
 // swiftlint:disable all
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
@@ -225,9 +225,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return false
     }
     
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
     func loadCustomScans() {
         let fileManager = FileManager.default
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -243,6 +240,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             print("Error loading custom scans")
         }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let config = ARWorldTrackingConfiguration()
@@ -286,7 +284,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         updateIncidents()
-//        setNavigationArrows(for: frame.camera.trackingState)
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: frame.camera.trackingState)
@@ -303,6 +300,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        
         let node = SCNNode()
         
         if detectedObjectNode != nil {
@@ -325,6 +323,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func updateIncidents() {
+        
         if !ARViewController.objectDetected {
             return
         }
@@ -339,6 +338,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func incidentHasNotBeenPlaced (incident: Incident) -> Bool {
+        
         for node in nodes {
             if String(incident.identifier) == node.name {
                 return false
@@ -358,7 +358,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
         
-        //swiftlint:disable force_wrapping
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
             //self?.processClassifications(for: request, error: error)
             guard let predictions = self?.processClassifications(for: request, error: error) else {
@@ -368,7 +367,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self?.drawBoxes(predictions: predictions)
             }
         })
-        //swiftlint:enable force_wrapping
         // Crop input images to square area at center, matching the way the ML model was trained.
         request.imageCropAndScaleOption = .centerCrop
         // Use CPU for Vision processing to ensure that there are adequate GPU resources for rendering.
@@ -500,6 +498,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
      returns true if there is a node in a certain radius from the coordinate
     */
     func calculateNodesInRadius(coordinate: CGPoint , radius: CGFloat) -> Bool {
+        
         for incident in automaticallyDetectedIncidents {
             if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
                 return false
@@ -519,6 +518,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
+        
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
         materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
@@ -531,6 +531,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     private func setDescriptionLabel() {
+        
         let openIncidents = (DataHandler.incidents.filter { $0.status == .open}).count
         let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress}).count
         let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved}).count
