@@ -1016,13 +1016,12 @@
                                         <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Ab-TC-sVw">
                                             <rect key="frame" x="0.0" y="0.0" width="125" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="qqE-vM-3QW">
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="qqE-vM-3QW">
                                                 <rect key="frame" x="0.0" y="0.0" width="125" height="32"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="250" fixedFrame="YES" text="Tracking status" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8lY-7U-LF5" userLabel="Message Label">
-                                                        <rect key="frame" x="16" y="8" width="93" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="250" misplaced="YES" text="Tracking status" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8lY-7U-LF5" userLabel="Message Label">
+                                                        <rect key="frame" x="0.0" y="0.0" width="125" height="32"/>
                                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                         <nil key="textColor"/>
@@ -1030,6 +1029,16 @@
                                                         <size key="shadowOffset" width="1" height="1"/>
                                                     </label>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="8lY-7U-LF5" firstAttribute="leading" secondItem="qqE-vM-3QW" secondAttribute="leading" id="14v-ZY-tNm"/>
+                                                    <constraint firstItem="8lY-7U-LF5" firstAttribute="leading" secondItem="qqE-vM-3QW" secondAttribute="leading" id="C5q-zw-mST"/>
+                                                    <constraint firstAttribute="bottom" secondItem="8lY-7U-LF5" secondAttribute="bottom" id="Vvu-t9-LSA"/>
+                                                    <constraint firstAttribute="bottom" secondItem="8lY-7U-LF5" secondAttribute="bottom" id="ZCT-rQ-cnG"/>
+                                                    <constraint firstItem="8lY-7U-LF5" firstAttribute="top" secondItem="qqE-vM-3QW" secondAttribute="top" id="dZK-Hm-98T"/>
+                                                    <constraint firstAttribute="trailing" secondItem="8lY-7U-LF5" secondAttribute="trailing" id="f50-BN-5aW"/>
+                                                    <constraint firstAttribute="trailing" secondItem="8lY-7U-LF5" secondAttribute="trailing" id="fdX-Td-g7c"/>
+                                                    <constraint firstItem="8lY-7U-LF5" firstAttribute="top" secondItem="qqE-vM-3QW" secondAttribute="top" id="ytO-5t-qSv"/>
+                                                </constraints>
                                             </view>
                                             <vibrancyEffect>
                                                 <blurEffect style="extraLight"/>
