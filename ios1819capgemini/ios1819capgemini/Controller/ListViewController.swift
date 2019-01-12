@@ -145,14 +145,19 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch filterSegmentedControl.selectedSegmentIndex {
         case Filter.showAll.rawValue:
+            ARViewController.filterAllIncidents()
             return DataHandler.incidents.count
         case Filter.showOpen.rawValue:
+            ARViewController.filterOpenIncidents()
             return DataHandler.openIncidents.count
         case Filter.showInProgress.rawValue:
+            ARViewController.filterInProgressIncidents()
             return DataHandler.inProgressIncidents.count
         case Filter.showResolved.rawValue:
+            ARViewController.filterResolvedIncidents()
             return DataHandler.resolvedIncidents.count
         default:
+            ARViewController.filterAllIncidents()
             return DataHandler.incidents.count
         }
     }

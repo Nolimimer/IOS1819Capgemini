@@ -29,19 +29,17 @@ extension ARViewController {
         return distanceTravelled(xDist: xDist, yDist: yDist, zDist: zDist)
     }
     
-    func getNodeOfIncident(incident: Incident) -> SCNNode? {
-        
-        for node in nodes {
-            if node.name == "\(incident.identifier)" {
-                return node
-            }
-        }
-        return nil
+    static func getNodeOfIncident(incident: Incident) -> SCNNode? {
+        return nodes.first(where: { String(incident.identifier) == $0.name })
+    }
+    
+    static func getIncidentOfNode(node: SCNNode) -> Incident? {
+        return DataHandler.incidents.first(where: { node.name == String($0.identifier) })
     }
     
     func distanceIncidentNodeCamera(incident: Incident) -> Float? {
         
-        guard let node = getNodeOfIncident(incident: incident) else {
+        guard let node = ARViewController.getNodeOfIncident(incident: incident) else {
             return nil
         }
         guard let currentFrame = self.sceneView.session.currentFrame else {
@@ -58,7 +56,7 @@ extension ARViewController {
         guard let incident = incident else {
             return "error"
         }
-        guard let node = getNodeOfIncident(incident: incident) else {
+        guard let node = ARViewController.getNodeOfIncident(incident: incident) else {
             return "error"
         }
         guard let distanceNode = incidentNodePosToPOV(node: node) else {
@@ -96,7 +94,7 @@ extension ARViewController {
         guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident else {
             return nil
         }
-        let node = getNodeOfIncident(incident: incident)
+        let node = ARViewController.getNodeOfIncident(incident: incident)
         
         return distanceTravelled(between: SCNVector3 (x: currentFrame.camera.transform.columns.3.x,
                                                      y: currentFrame.camera.transform.columns.3.y,
@@ -224,7 +222,7 @@ extension ARViewController {
     }
     
     func animateNavigatingIncident(incident: Incident?) {
-        guard let incident = incident, let node = getNodeOfIncident(incident: incident) else {
+        guard let incident = incident, let node = ARViewController.getNodeOfIncident(incident: incident) else {
             return
         }
         node.runAction(nodeBlinking)
@@ -267,5 +265,39 @@ extension ARViewController {
         default:
             statusViewController.showMessage(suggestion, autoHide: true)
         }
+    }
+
+    static func filterOpenIncidents() {
+        for node in nodes {
+            guard let incident = ARViewController.getIncidentOfNode(node: node) else { return }
+            if incident.status != .open {
+                node.opacity = 0.1
+            } else {
+                node.opacity = 1.0
+            }
+        }
+    }
+    static func filterInProgressIncidents() {
+        for node in nodes {
+            guard let incident = ARViewController.getIncidentOfNode(node: node) else { return }
+            if incident.status != .progress {
+                node.opacity = 0.1
+            } else {
+                node.opacity = 1.0
+            }
+        }
+    }
+    static func filterResolvedIncidents() {
+        for node in nodes {
+            guard let incident = ARViewController.getIncidentOfNode(node: node) else { return }
+            if incident.status != .resolved {
+                node.opacity = 0.1
+            } else {
+                node.opacity = 1.0
+            }
+        }
+    }
+    static func filterAllIncidents() {
+        nodes.forEach({ $0.opacity = 1 })
     }
 }
