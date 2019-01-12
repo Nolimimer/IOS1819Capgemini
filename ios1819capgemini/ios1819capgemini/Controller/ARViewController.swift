@@ -66,8 +66,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     var nodeBlinking: SCNAction {
         return .sequence([
-            .fadeOpacity(to:1, duration:0.1),
-            .fadeOpacity(to:0.4, duration:0.25)
+            .fadeOpacity(to:0.5, duration:0.1),
+            .fadeOpacity(to:1.0, duration:0.1)
             ])
     }
     // MARK: IBOutlets
