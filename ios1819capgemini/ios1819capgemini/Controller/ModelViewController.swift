@@ -12,9 +12,16 @@ import UIKit
 class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     
-    @IBAction func exploreButton(_ sender: Any) {
+    @IBAction private func exploreButton(_ sender: Any) {
         self.dismiss(animated: false, completion: nil)
+        creatingNodePossible = true
     }
+    
+    @IBAction private func reportButton(_ sender: Any) {
+        self.dismiss(animated: false, completion: nil)
+        creatingNodePossible = true
+    }
+    
     
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
@@ -25,6 +32,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        creatingNodePossible = false
     }
     
     let reuseIdentifier = "modelCell" 

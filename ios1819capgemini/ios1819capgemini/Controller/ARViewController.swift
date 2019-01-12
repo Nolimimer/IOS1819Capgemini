@@ -24,6 +24,7 @@ var creatingNodePossible = true
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
+    static var resetButtonPressed = false
     static var navigatingIncident : Incident?
     static var connectedToPeer = false
     static var incidentEdited = false
@@ -65,8 +66,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     var nodeBlinking: SCNAction {
         return .sequence([
-            .fadeOpacity(to:1, duration:0.1),
-            .fadeOpacity(to:0.4, duration:0.25)
+            .fadeOpacity(to:0.5, duration:0.1),
+            .fadeOpacity(to:1.0, duration:0.1)
             ])
     }
     // MARK: IBOutlets
@@ -107,7 +108,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         } else {
         }
     }
-    @IBAction func resetButtonPressed(_ sender: Any) {
+  
+func reset() {
         DataHandler.incidents = []
         DataHandler.saveToJSON()
         self.scene.rootNode.childNodes.forEach { node in
@@ -140,6 +142,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
+    
     @IBAction func shareIncidentsButtonPressed(_ sender: Any) {
         sendIncidents(incidents: DataHandler.incidents)
     }
@@ -155,6 +158,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             detailVC.incident = incident
         default :
             return
+        }
+    }
+    
+    func checkReset() {
+        if !ARViewController.resetButtonPressed {
+            return
+        } else {
+            reset()
+            ARViewController.resetButtonPressed = false
         }
     }
     
@@ -290,6 +302,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             hideBoxes()
             isDetecting = false
         }
+        checkReset()
         updateIncidents()
         refreshNodes()
         updatePinColour()

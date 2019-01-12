@@ -72,7 +72,7 @@ extension ARViewController {
             return "Error"
         }
         if nodeVisibleToUser(node: node) {
-            return "Incident is \(distance)cm from your device"
+            return "Distance: \(distance)cm "
         }
         if abs(distanceNode.x) > abs(distanceNode.y) {
             if distanceNode.x.isLess(than: 0.0) {
@@ -212,6 +212,7 @@ extension ARViewController {
         }
         for node in nodes where node.name != String(incident.identifier) && node.name != "info-plane"{
             node.opacity = 0.45
+            
         }
     }
     

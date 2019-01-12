@@ -25,6 +25,11 @@ class StatusViewController: UIViewController {
     
     @IBOutlet private weak var messageLabel: UILabel!
     
+    @IBAction func resetButtonPressed(_ sender: Any) {
+        ARViewController.resetButtonPressed = true
+        
+    }
+    
     
     private let displayDuration: TimeInterval = 3
     private var messageHideTimer: Timer?
