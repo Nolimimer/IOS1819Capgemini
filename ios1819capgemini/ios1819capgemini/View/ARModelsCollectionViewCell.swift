@@ -26,6 +26,5 @@ class ARModelsCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var progessNumber: UILabel!
     
     @IBOutlet weak var resolvedNumber: UILabel!
-    
-    @IBOutlet weak var modelNameLabel: UILabel!
+
 }

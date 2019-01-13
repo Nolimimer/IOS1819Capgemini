@@ -74,7 +74,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
             let image    = UIImage(contentsOfFile: imageURL.path)
             cell.modelImage.image = image
-            cell.modelNameLabel.text = name
+            cell.incidentLabel.text = name
             cell.openNumber.text = String(incidents?.filter{$0.status == .open}.count ?? 0)
             cell.progessNumber.text = String(incidents?.filter{$0.status == .progress}.count ?? 0)
             cell.resolvedNumber.text = String(incidents?.filter{$0.status == .resolved}.count ?? 0)
