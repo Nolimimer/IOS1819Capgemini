@@ -16,19 +16,19 @@ extension ARCamera.TrackingState {
     var presentationString: String {
         switch self {
         case .notAvailable:
-            return "ARKit tracking UNAVAILABLE"
+            return "UNAVAILABLE"
         case .normal:
-            return "ARKit tracking NORMAL"
+            return "NORMAL"
         case .limited(let reason):
             switch reason {
             case .excessiveMotion:
-                return "ARKit tracking LIMITED: Excessive motion"
+                return "EXCESSIVE MOTION"
             case .insufficientFeatures:
-                return "ARKit tracking LIMITED: Low detail"
+                return "LOW DETAIL"
             case .initializing:
-                return "ARKit is initializing"
+                return "INITIALIZING"
             case .relocalizing:
-                return "ARKit is relocalizing"
+                return "RELOCALIZING"
             }
         }
     }
@@ -36,13 +36,13 @@ extension ARCamera.TrackingState {
     var recommendation: String? {
         switch self {
         case .limited(.excessiveMotion):
-            return "Try slowing down your movement, or reset the session."
+            return ""
         case .limited(.insufficientFeatures):
-            return "Try pointing at a flat surface, or reset the session."
+            return ""
         case .limited(.initializing):
-            return "Try moving left or right, or reset the session."
+            return ""
         case .limited(.relocalizing):
-            return "Try returning to the location where you left off."
+            return ""
         default:
             return nil
         }
