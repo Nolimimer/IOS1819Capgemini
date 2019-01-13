@@ -1091,7 +1091,7 @@
             </objects>
             <point key="canvasLocation" x="3809" y="-579"/>
         </scene>
-        <!--Title-->
+        <!--Available Scans-->
         <scene sceneID="Aha-aj-df0">
             <objects>
                 <viewController id="V9q-uH-WWX" customClass="ModelViewController" customModule="ios1819capgemini" customModuleProvider="target" sceneMemberID="viewController">
@@ -1258,7 +1258,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="oLn-Jl-gcP"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="sFe-Bp-E2C"/>
+                    <navigationItem key="navigationItem" title="Available Scans" largeTitleDisplayMode="never" id="sFe-Bp-E2C"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dfb-jn-Uzg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

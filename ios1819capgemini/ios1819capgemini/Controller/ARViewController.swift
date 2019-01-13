@@ -41,7 +41,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var model: VNCoreMLModel?
     var mapProvider: MCPeerID?
     var multipeerSession: MultipeerSession!
-
+    
     var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode = SKLabelNode(text: "")
     private var anchorLabels = [UUID: String]()
@@ -84,6 +84,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
+        creatingNodePossible = true
         super.viewDidLoad()
         sceneView.delegate = self
         sceneView.showsStatistics = false
@@ -110,7 +111,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
   
-    func reset() {
+func reset() {
+        if let name = objectAnchor?.referenceObject.name {
+        DataHandler.objectsToIncidents[name] = DataHandler.incidents
+        }
         DataHandler.incidents = []
         DataHandler.saveToJSON()
         self.scene.rootNode.childNodes.forEach { node in
@@ -120,45 +124,28 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
         }
         nodes = []
+        detectedObjectNode = nil
         automaticallyDetectedIncidents = []
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
-        let configuration = ARWorldTrackingConfiguration()
-        if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
-            configuration.detectionObjects = detectionObjects
-            sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-            let notification = UINotificationFeedbackGenerator()
-            
-            DispatchQueue.main.async {
-                notification.notificationOccurred(.success)
-            }
+        let config = ARWorldTrackingConfiguration()
+        loadCustomScans()
+        guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
+            return
         }
+        for object in testObjects {
+            detectionObjects.insert(object)
+        }
+        config.detectionObjects = detectionObjects
+        sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
         do {
             let data = try JSONEncoder().encode(DataHandler.incidents)
             self.multipeerSession.sendToAllPeers(data)
         } catch _ {
             let notification = UINotificationFeedbackGenerator()
-            
+        
             DispatchQueue.main.async {
                 notification.notificationOccurred(.error)
             }
-        }
-    }
-    
-    @IBAction func shareIncidentsButtonPressed(_ sender: Any) {
-        sendIncidents(incidents: DataHandler.incidents)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "ShowDetailSegue":
-            guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
-                let pin = sender as? SCNNode,
-                let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
-                    return
-            }
-            detailVC.incident = incident
-        default :
-            return
         }
     }
     
@@ -343,7 +330,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return node
         }
         if let objectAnchor = anchor as? ARObjectAnchor {
+            print("object detected")
+            guard let name = objectAnchor.referenceObject.name else { fatalError("reference object has no name") }
             
+            if DataHandler.objectsToIncidents[name] != nil {
+                print("DataHandler.objectsToIncidents != nil")
+                DataHandler.incidents = DataHandler.getIncidentsOfObject(identifier: name)
+            } else {
+                print("DataHandler.objectsToIncidents = nil")
+                DataHandler.incidents = []
+            }
+            ModelViewController.objectName = name
+            print("anchor name : \(ModelViewController.objectName)")
             let notification = UINotificationFeedbackGenerator()
             
             DispatchQueue.main.async {
@@ -354,9 +352,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             ARViewController.objectDetected = true
+            print("dictionary in renderer: \(DataHandler.objectsToIncidents)")
         }
         return node
     }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        print("view will disappear ")
+//        guard let anchor = self.objectAnchor else { return }
+//        guard let name = anchor.referenceObject.name else { fatalError ("Each scan has to have a name") }
+//        DataHandler.objectsToIncidents[name] = DataHandler.incidents
+//        print("DataHandler.incidents \(DataHandler.incidents) have been saved to \(name)")
+//    }
     
     func updateIncidents() {
         
