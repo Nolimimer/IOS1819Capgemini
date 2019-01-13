@@ -30,11 +30,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         if let name = ModelViewController.objectName {
             DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
-        // add blurred subvie w
-        print("view did load")
-        print("dictionary before reset: \(DataHandler.objectsToIncidents)")
+        // add blurred subview
         ARViewController.resetButtonPressed = true
-        print("dictionary after reset: \(DataHandler.objectsToIncidents)")
 //        if let name = ModelViewController.objectName {
 //            print("mvc name: \(name)")
 //            DataHandler.objectsToIncidents[name] = DataHandler.incidents
@@ -67,8 +64,6 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         let name = sortedDictonary[indexPath.item]
         let incidents = DataHandler.objectsToIncidents[name]
-        print("name \(name)")
-        print("incidents : \(incidents)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! ARModelsCollectionViewCell
         
         let nsDocumentDirectory = FileManager.SearchPathDirectory.documentDirectory

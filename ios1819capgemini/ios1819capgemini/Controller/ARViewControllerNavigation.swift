@@ -102,19 +102,6 @@ extension ARViewController {
                                  and: self.sceneView.scene.rootNode.convertPosition(node!.position, to: nil))
     }
     
-//    func distanceCameraNode (incident: Incident?) -> Float? {
-//
-//        guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident else {
-//            return nil
-//        }
-//        return distanceTravelled(between: SCNVector3(x: currentFrame.camera.transform.columns.3.x,
-//                                                     y: currentFrame.camera.transform.columns.3.y,
-//                                                     z: currentFrame.camera.transform.columns.3.z),
-//                                 and: self.sceneView.scene.rootNode.convertPosition(SCNVector3(incident.coordinate.pointX,
-//                                                                                               incident.coordinate.pointY,
-//                                                                                               incident.coordinate.pointZ),
-//                                                                                    to: nil))
-//    }
     /*
      return the closest incident with status open
      */
@@ -136,40 +123,6 @@ extension ARViewController {
     }
     
     /*
-     calculates the distance of an input node to the camera on each of the 3 axis,
-     */
-//    func incidentPosToCamera (incident: Incident?) -> SCNVector3? {
-//        guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident else {
-//            return nil
-//        }
-//        let worldCoordinate = sceneView.scene.rootNode.convertPosition(SCNVector3(incident.coordinate.pointX,
-//                                                                                  incident.coordinate.pointY,
-//                                                                                  incident.coordinate.pointZ),
-//                                                                       to: nil)
-//        return SCNVector3(x: ((worldCoordinate.x - currentFrame.camera.transform.columns.3.x) * 100 ),
-//                          y: ((worldCoordinate.y - currentFrame.camera.transform.columns.3.y) * 100 ),
-//                          z: ((worldCoordinate.z - currentFrame.camera.transform.columns.3.z) * 100))
-//    }
-
-    /*
-     returns the position of the input incident to the point of view, useful for rotational purposes
-     */
-//    func incidentPosToPOV(incident : Incident?) -> SCNVector3? {
-//        guard let incident = incident else {
-//            return nil
-//        }
-//        let position = SCNVector3(x: incident.coordinate.pointX,
-//                                  y: incident.coordinate.pointY,
-//                                  z: incident.coordinate.pointZ)
-//        var incidentPositionToPOV = scene.rootNode.convertPosition(position, to: sceneView.pointOfView)
-//        incidentPositionToPOV.x *= 100
-//        incidentPositionToPOV.y *= 100
-//        incidentPositionToPOV.z *= 100
-//        return incidentPositionToPOV
-//    }
-    
-    
-    /*
      returns the position of the node relative to the point of view
      */
     func incidentNodePosToPOV(node: SCNNode?) -> SCNVector3? {
@@ -184,7 +137,6 @@ extension ARViewController {
         incidentNodePositionToPOV.z *= 100
         return incidentNodePositionToPOV
     }
-    
     
     /*
      returns true if the input node can be seen through the camera, otherwise false
@@ -206,21 +158,7 @@ extension ARViewController {
         return false
     }
     
-    func toggleIncidentsOpacityExceptNavigating() {
-        guard let incident = ARViewController.navigatingIncident else {
-            return
-        }
-        for node in nodes where node.name != String(incident.identifier) && node.name != "info-plane"{
-            node.opacity = 0.45
-            
-        }
-    }
-    
-    func restoreIncidentOpacity() {
-        for node in nodes where node.name != "info-plane" {
-            node.opacity = 1
-        }
-    }
+
     
     func animateNavigatingIncident(incident: Incident?) {
         guard let incident = incident, let node = ARViewController.getNodeOfIncident(incident: incident) else {
@@ -278,6 +216,7 @@ extension ARViewController {
             }
         }
     }
+    
     static func filterInProgressIncidents() {
         for node in nodes {
             guard let incident = ARViewController.getIncidentOfNode(node: node) else { return }
@@ -288,6 +227,7 @@ extension ARViewController {
             }
         }
     }
+    
     static func filterResolvedIncidents() {
         for node in nodes {
             guard let incident = ARViewController.getIncidentOfNode(node: node) else { return }
@@ -298,6 +238,7 @@ extension ARViewController {
             }
         }
     }
+    
     static func filterAllIncidents() {
         nodes.forEach({ $0.opacity = 1 })
     }

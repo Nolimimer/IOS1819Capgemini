@@ -286,8 +286,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             present(alertController, animated: true)
         } else {
             print("Saved picture")
-
-            let index = 0
             hidePopup()
         }
     }

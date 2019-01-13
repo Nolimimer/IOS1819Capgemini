@@ -63,6 +63,10 @@ extension ARViewController {
             
         }
     }
+    
+    func sendIncidents() {
+        sendIncidents(incidents: DataHandler.incidents)
+    }
 
     func sendIncidents(incidents: [Incident]) {
         do {
@@ -74,12 +78,7 @@ extension ARViewController {
     }
     
     func getIncident(identifier: String) -> Incident? {
-        for incident in DataHandler.incidents {
-            if "\(incident.identifier)" == identifier {
-                return incident
-            }
-        }
-        return nil
+        return DataHandler.incidents.first(where: { String($0.identifier) == identifier })
     }
     
     func checkIncidentDeleted(identifier: String) -> Bool {
@@ -90,8 +89,6 @@ extension ARViewController {
         }
         return true
     }
-    
-
     
     func updatePinColour() {
         for incident in DataHandler.incidents {

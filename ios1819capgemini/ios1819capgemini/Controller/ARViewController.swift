@@ -15,7 +15,6 @@ import UICircularProgressRing
 import MultipeerConnectivity
 
 // Stores all the nodes added to the scene
-var anchorWrapper : ARObjectAnchor?
 var nodes = [SCNNode]()
 var creatingNodePossible = true
 
@@ -41,13 +40,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var model: VNCoreMLModel?
     var mapProvider: MCPeerID?
     var multipeerSession: MultipeerSession!
-    
+    var isDetecting = true
+
     var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode = SKLabelNode(text: "")
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?
-    private var isDetecting = true
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
@@ -111,7 +110,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
   
-func reset() {
+    func reset() {
         if let name = objectAnchor?.referenceObject.name {
         DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
@@ -156,10 +155,6 @@ func reset() {
             reset()
             ARViewController.resetButtonPressed = false
         }
-    }
-    
-    func sendIncidents() {
-        sendIncidents(incidents: DataHandler.incidents)
     }
     
     func checkSendIncidents() {
@@ -221,29 +216,6 @@ func reset() {
                 }
             }
         }
-    }
-    
-    func getNodeInRadius(hitResult: ARHitTestResult, radius: Float) -> SCNNode? {
-        let coordinateVector = SCNVector3(hitResult.worldTransform.columns.3.x,
-                                          hitResult.worldTransform.columns.3.y,
-                                          hitResult.worldTransform.columns.3.z)
-        for node in nodes {
-            if checkRange(origin: node.position, pos: coordinateVector, radius: radius) {
-                return node
-            }
-        }
-        return nil
-    }
-    
-    func checkRange(origin: SCNVector3, pos: SCNVector3, radius: Float) -> Bool {
-        return checkRange(origin: origin.x, pos: pos.x, radius: radius) && checkRange(origin: origin.y, pos: origin.y, radius: radius) && checkRange(origin: origin.z, pos: pos.z, radius: radius)
-    }
-    
-    func checkRange(origin: Float, pos: Float, radius: Float) -> Bool {
-        if (origin - radius) ... (origin + radius) ~= pos {
-            return true
-        }
-        return false
     }
     
     func loadCustomScans() {
@@ -315,12 +287,7 @@ func reset() {
         classifyCurrentImage()
     }
     
-    func hideBoxes() {
-        for box in boundingBoxes {
-            box.hide()
-        }
-    }
-    
+
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         
@@ -330,18 +297,14 @@ func reset() {
             return node
         }
         if let objectAnchor = anchor as? ARObjectAnchor {
-            print("object detected")
             guard let name = objectAnchor.referenceObject.name else { fatalError("reference object has no name") }
             
             if DataHandler.objectsToIncidents[name] != nil {
-                print("DataHandler.objectsToIncidents != nil")
                 DataHandler.incidents = DataHandler.getIncidentsOfObject(identifier: name)
             } else {
-                print("DataHandler.objectsToIncidents = nil")
                 DataHandler.incidents = []
             }
             ModelViewController.objectName = name
-            print("anchor name : \(ModelViewController.objectName)")
             let notification = UINotificationFeedbackGenerator()
             
             DispatchQueue.main.async {
@@ -352,17 +315,9 @@ func reset() {
             self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             ARViewController.objectDetected = true
-            print("dictionary in renderer: \(DataHandler.objectsToIncidents)")
         }
         return node
     }
-//    override func viewWillDisappear(_ animated: Bool) {
-//        print("view will disappear ")
-//        guard let anchor = self.objectAnchor else { return }
-//        guard let name = anchor.referenceObject.name else { fatalError ("Each scan has to have a name") }
-//        DataHandler.objectsToIncidents[name] = DataHandler.incidents
-//        print("DataHandler.incidents \(DataHandler.incidents) have been saved to \(name)")
-//    }
     
     func updateIncidents() {
         
@@ -378,24 +333,6 @@ func reset() {
         }
     }
     
-    func incidentHasNotBeenPlaced (incident: Incident) -> Bool {
-        
-        for node in nodes {
-            if String(incident.identifier) == node.name {
-                return false
-            }
-        }
-        return true
-    }
-    
-    // Create shape layers for the bounding boxes.
-    func setupBoxes() {
-        for _ in 0..<numBoxes {
-            let box = BoundingBox()
-            box.addToLayer(sceneView.layer)
-            self.boundingBoxes.append(box)
-        }
-    }
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
         
@@ -435,6 +372,7 @@ func reset() {
             }
         }
     }
+    
     // Handle completion of the Vision request and choose results to display.
     /// - Tag: ProcessClassifications
     private func processClassifications(for request: VNRequest, error: Error?) -> [Prediction]? {
@@ -451,112 +389,7 @@ func reset() {
         let predictions = self.ssdPostProcessor.postprocess(boxPredictions: boxPredictions, classPredictions: classPredictions)
         return predictions
     }
-    
-    // Draw Boxes which indicate if a sticker has been detected
-    func drawBoxes(predictions: [Prediction]) {
-        
-        for (index, prediction) in predictions.enumerated() {
-            if let classNames = self.ssdPostProcessor.classNames {
-                //print("Class: \(classNames[prediction.detectedClass])")
-                
-                let textColor: UIColor
-                let textLabel = String(format: "%.2f - %@", self.sigmoid(prediction.score),
-                                       classNames[prediction.detectedClass])
-                
-                textColor = UIColor.black
-                guard let imgWidth = self.screenWidth,
-                    let imgHeight = self.screenHeight else {
-                        return
-                }
-                
-                let rect = prediction.finalPrediction.toCGRect(imgWidth: imgWidth,
-                                                               imgHeight: imgWidth,
-                                                               xOffset: 0,
-                                                               yOffset: (imgHeight - imgWidth) / 2)
-                //uncomment if boxes should only appear after object has been detected
-                if isDetecting {
-                    self.boundingBoxes[index].show(frame: rect,
-                                                   label: textLabel,
-                                                   color: UIColor.green,
-                                                   textColor: textColor)
-                    let position = CGPoint(x: rect.midX,
-                                           y: rect.midY)
-                    let hitTestResult = sceneView.hitTest(position, types: .featurePoint)
-                    guard let hitTest = hitTestResult.first else {
-                        return
-                    }
-                    if sigmoid(prediction.score) > 0.80 && calculateNodesInRadius(coordinate: position, radius: 40) {
-                        let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
-                                             y: (hitTest.worldTransform.columns.3.y),
-                                             z: (hitTest.worldTransform.columns.3.z))
-                        let length = rect.maxY - rect.minY
-                        let width = rect.maxX - rect.minX
-                        let formatter = NumberFormatter()
-                        formatter.maximumFractionDigits = 2
-                        let lengthCM = (length * 2.54) / 96
-                        let widthCM = (width * 2.54) / 96
-                        guard let formattedLength = formatter.string(from: NSNumber(value: Float(lengthCM))) else {
-                            return
-                        }
-                        guard let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM))) else {
-                            return
-                        }
-                        automaticallyDetectedIncidents.append(position)
-                        let sphere = SCNSphere(radius: 0.015)
-                        let materialSphere = SCNMaterial()
-                        materialSphere.diffuse.contents = UIColor(red: 0.0,
-                                                                  green: 0.0,
-                                                                  blue: 1.0,
-                                                                  alpha: CGFloat(Float(sigmoid(prediction.score))))
-                        sphere.materials = [materialSphere]
-                        let sphereNode = SCNNode(geometry: sphere)
-                        sphereNode.position = tmp
-                        let coordinates = sceneView.scene.rootNode.convertPosition(
-                            SCNVector3(hitTest.worldTransform.columns.3.x,
-                                        hitTest.worldTransform.columns.3.y,
-                                        hitTest.worldTransform.columns.3.z),
-                            to: self.detectedObjectNode)
-                        let incident = Incident (type: .scratch,
-                                                 description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
-                                                 coordinate: Coordinate(vector: coordinates))
-                        incident.automaticallyDetected = true
-                        DataHandler.incidents.append(incident)
-                        sphereNode.runAction(imageHighlightAction)
-                        sphereNode.name = "\(incident.identifier)"
-                        self.scene.rootNode.addChildNode(sphereNode)
-                        nodes.append(sphereNode)
-                        sendIncident(incident: incident)
-                    }
-                }
-                //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
-            }
-        }
-        for index in predictions.count..<self.numBoxes {
-            self.boundingBoxes[index].hide()
-        }
-    }
-    /*
-     returns true if there is a node in a certain radius from the coordinate
-    */
-    func calculateNodesInRadius(coordinate: CGPoint , radius: CGFloat) -> Bool {
-        
-        for incident in automaticallyDetectedIncidents {
-            if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
-                return false
-            }
-        }
-        return true
-    }
-    
-    func sigmoid(_ val: Double) -> Double {
-        return 1.0 / (1.0 + exp(-val))
-    }
-    
-    private func configureLighting() {
-        sceneView.autoenablesDefaultLighting = true
-        sceneView.automaticallyUpdatesLighting = true
-    }
-    
+
     //adds a 3D pin to the AR View
     private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         
@@ -637,6 +470,7 @@ func reset() {
             progressRing.isHidden = true
         }
     }
+    
     private func updateInfoPlane() {
         descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
         let openIncidentsCount = DataHandler.incidents.filter { $0.status == .open }
@@ -673,14 +507,7 @@ func reset() {
         }
     }
     
-    func deleteNode(identifier: String) {
-        for (index, node) in nodes.enumerated() {
-            if node.name == identifier {
-                nodes.remove(at: index)
-                return
-            }
-        }
-    }
+
 }
 
 // MARK: Coordinate
