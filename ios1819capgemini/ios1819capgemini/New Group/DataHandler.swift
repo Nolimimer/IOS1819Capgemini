@@ -15,11 +15,18 @@ enum DataHandler {
     // MARK: Constants
     private enum Constants {
         static let fileName = "Incident.json"
+        static let fileNameModels = "ModelsToIncident.json"
         static var localStorageURL: URL {
             guard let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first else {
                 fatalError("Can't access the document directory in the user's home directory.")
             }
             return documentsDirectory.appendingPathComponent(Constants.fileName)
+        }
+        static var localStorageModelURL: URL {
+            guard let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first else {
+                fatalError("Can't access the document directory in the user's home directory.")
+            }
+            return documentsDirectory.appendingPathComponent(Constants.fileNameModels)
         }
     }
 
@@ -65,8 +72,20 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
+            print("Load incidents: \(incidents.count)")
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
+        }
+        
+        do {
+            let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
+            print("Load objects to incidents: \(objectsToIncidents.count)")
+        } catch _ {
+            print("Could not load ar object: [incident] dictionary")
         }
     }
     
@@ -80,6 +99,14 @@ enum DataHandler {
 //            print("Saved incidents!")
         } catch _ {
             print("Could not save incidents")
+        }
+        do {
+            let data = try JSONEncoder().encode(objectsToIncidents)
+            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
+            try jsonFileWrapper.write(to: Constants.localStorageModelURL,
+                                      options: FileWrapper.WritingOptions.atomic,
+                                      originalContentsURL: nil)        } catch _ {
+            print("Could not save ar object: [incident] dictionary")
         }
     }
     

@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        DataHandler.loadFromJSON()
         PrototyperController.showFeedbackButton = false
         let defaults = UserDefaults.standard
         if defaults.integer(forKey: "AttachmentIdentifier") == 0 {
