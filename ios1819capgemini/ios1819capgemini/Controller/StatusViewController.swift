@@ -29,6 +29,7 @@ class StatusViewController: UIViewController {
         let alert = UIAlertController(title: "Reset", message: "Are you sure you want to reset the app ? This will delete all the scanned objects", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { action in
             DataHandler.objectsToIncidents.removeAll()
+            removeScans()
             ARViewController.resetButtonPressed = true
             DataHandler.saveToJSON()
             self.dismiss(animated: true, completion: nil)
@@ -39,6 +40,20 @@ class StatusViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    func removeScans() {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                if file.lastPathComponent.hasSuffix(".arobject") {
+                    fileManager.removeItem(at: file.absoluteURL)
+                }
+            }
+        } catch {
+            print("Error loading custom scans")
+        }
+    }
     @IBAction private func sendIncidentsButtonPressed(_ sender: Any) {
         ARViewController.sendIncidentButtonPressed = true
     }
