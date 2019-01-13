@@ -122,50 +122,29 @@ func reset() {
             }
             self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
         }
-        detectedObjectNode = nil
         nodes = []
-        objectAnchor = nil
+        detectedObjectNode = nil
         automaticallyDetectedIncidents = []
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
-//        let configuration = ARWorldTrackingConfiguration()
-//        if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
-//            configuration.detectionObjects = detectionObjects
-//            sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-//            print("tracking resetted")
-//            let notification = UINotificationFeedbackGenerator()
-//
-//            DispatchQueue.main.async {
-//                notification.notificationOccurred(.success)
-//            }
-//        }
-//        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        let config = ARWorldTrackingConfiguration()
+        loadCustomScans()
+        guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
+            return
+        }
+        for object in testObjects {
+            detectionObjects.insert(object)
+        }
+        config.detectionObjects = detectionObjects
+        sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
         do {
             let data = try JSONEncoder().encode(DataHandler.incidents)
             self.multipeerSession.sendToAllPeers(data)
         } catch _ {
             let notification = UINotificationFeedbackGenerator()
-            print("encoding failed")
+        
             DispatchQueue.main.async {
                 notification.notificationOccurred(.error)
             }
-        }
-    }
-    
-    @IBAction func shareIncidentsButtonPressed(_ sender: Any) {
-        sendIncidents(incidents: DataHandler.incidents)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "ShowDetailSegue":
-            guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
-                let pin = sender as? SCNNode,
-                let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
-                    return
-            }
-            detailVC.incident = incident
-        default :
-            return
         }
     }
     
@@ -333,7 +312,6 @@ func reset() {
         let node = SCNNode()
         
         if detectedObjectNode != nil {
-            print("detectedObjectNode != nil")
             return node
         }
         if let objectAnchor = anchor as? ARObjectAnchor {
