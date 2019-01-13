@@ -115,7 +115,6 @@ func reset() {
         if let name = objectAnchor?.referenceObject.name {
         DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
-        DataHandler.incidents = []
         DataHandler.saveToJSON()
         self.scene.rootNode.childNodes.forEach { node in
             guard let name = node.name else {
@@ -123,6 +122,7 @@ func reset() {
             }
             self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
         }
+        DataHandler.incidents = []
         nodes = []
         detectedObjectNode = nil
         automaticallyDetectedIncidents = []

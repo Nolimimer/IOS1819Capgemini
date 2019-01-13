@@ -10,6 +10,7 @@ import UIKit
 
 class ARModelsCollectionViewCell: UICollectionViewCell {
     
+    //swiftlint:disable private_outlet
     @IBOutlet weak var modelImage: UIImageView!
     
     @IBOutlet weak var incidentLabel: UILabel!
@@ -26,4 +27,5 @@ class ARModelsCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var resolvedNumber: UILabel!
     
+    @IBOutlet weak var modelNameLabel: UILabel!
 }

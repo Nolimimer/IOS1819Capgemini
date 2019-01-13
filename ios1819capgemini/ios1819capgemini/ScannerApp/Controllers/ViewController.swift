@@ -369,7 +369,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
         print("documentURL \(documentURL)")
         
-        saveImage(image: testRun.previewImage)
+        saveImage(image: testRun.previewImage, name: name)
         
         DispatchQueue.global().async {
             do {
@@ -382,9 +382,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     
-    func saveImage(image: UIImage) {
+    func saveImage(image: UIImage, name: String) {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileName = "Scan\(Incident.nextScanID).jpg"
+        let fileName = "\(name).jpg"
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
         if let data = image.jpegData(compressionQuality: 0.5) {
             do {

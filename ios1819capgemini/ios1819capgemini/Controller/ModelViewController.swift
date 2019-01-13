@@ -15,13 +15,11 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBAction private func exploreButton(_ sender: Any) {
         creatingNodePossible = true
-        ARViewController.resetButtonPressed = true
         self.dismiss(animated: false, completion: nil)
     }
     
     @IBAction private func reportButton(_ sender: Any) {
         creatingNodePossible = true
-        ARViewController.resetButtonPressed = true
         self.dismiss(animated: false, completion: nil)
     }
     
@@ -60,12 +58,17 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     // MARK: - UICollectionViewDataSource protocol
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Incident.scanID
+        return DataHandler.objectsToIncidents.count
     }
     
+    //swiftlint:disable all
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
         
-        //swiftlint:disable all
+        let name = sortedDictonary[indexPath.item]
+        let incidents = DataHandler.objectsToIncidents[name]
+        print("name \(name)")
+        print("incidents : \(incidents)")
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! ARModelsCollectionViewCell
         
         let nsDocumentDirectory = FileManager.SearchPathDirectory.documentDirectory
@@ -73,9 +76,13 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let paths               = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
         if let dirPath          = paths.first
         {
-            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("Scan\(indexPath.item+1).jpg")
+            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
             let image    = UIImage(contentsOfFile: imageURL.path)
             cell.modelImage.image = image
+            cell.modelNameLabel.text = name
+            cell.openNumber.text = String(incidents?.filter{$0.status == .open}.count ?? 0)
+            cell.progessNumber.text = String(incidents?.filter{$0.status == .progress}.count ?? 0)
+            cell.resolvedNumber.text = String(incidents?.filter{$0.status == .resolved}.count ?? 0)
             }
         
         return cell
