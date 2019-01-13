@@ -152,6 +152,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     // MARK: - UI Event Handling
     //swiftlint:disable private_action
     @IBAction func restartButtonTapped(_ sender: Any) {
+        ARViewController.resetButtonPressed = true
         print("restart button tapped")
         if let scan = scan, scan.boundingBoxExists {
             print("scan bounding box exists")

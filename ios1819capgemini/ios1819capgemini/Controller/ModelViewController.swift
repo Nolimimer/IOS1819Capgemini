@@ -8,35 +8,43 @@
 
 import Foundation
 import UIKit
-
+//swiftlint:disable all
 class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     static var objectName: String?
     
     @IBAction private func exploreButton(_ sender: Any) {
-        self.dismiss(animated: false, completion: nil)
         creatingNodePossible = true
+        ARViewController.resetButtonPressed = true
+        self.dismiss(animated: false, completion: nil)
     }
     
     @IBAction private func reportButton(_ sender: Any) {
-        self.dismiss(animated: false, completion: nil)
         creatingNodePossible = true
+        ARViewController.resetButtonPressed = true
+        self.dismiss(animated: false, completion: nil)
     }
     
     
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        // add blurred subview
-        print("view did load")
         if let name = ModelViewController.objectName {
-            print("mvc name: \(name)")
             DataHandler.objectsToIncidents[name] = DataHandler.incidents
-            ModelViewController.objectName = nil
-            DataHandler.incidents = []
-            print("datahandler objets to incidents [name] count \(DataHandler.objectsToIncidents[name]?.count)")
-            print("DataHandler.incidents : \(DataHandler.incidents)") //nil
         }
+        // add blurred subvie w
+        print("view did load")
+        print("dictionary before reset: \(DataHandler.objectsToIncidents)")
+        ARViewController.resetButtonPressed = true
+        print("dictionary after reset: \(DataHandler.objectsToIncidents)")
+//        if let name = ModelViewController.objectName {
+//            print("mvc name: \(name)")
+//            DataHandler.objectsToIncidents[name] = DataHandler.incidents
+//            ModelViewController.objectName = nil
+//            DataHandler.incidents = []
+//            print("datahandler objets to incidents [name] count \(DataHandler.objectsToIncidents[name]?.count)")
+//            print("DataHandler.incidents : \(DataHandler.incidents)") //nil
+//        }
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

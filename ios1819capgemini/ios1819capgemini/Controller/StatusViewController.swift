@@ -27,7 +27,7 @@ class StatusViewController: UIViewController {
     
     @IBAction func resetButtonPressed(_ sender: Any) {
         ARViewController.resetButtonPressed = true
-        
+
     }
     
     

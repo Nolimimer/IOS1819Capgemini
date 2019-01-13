@@ -83,6 +83,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
+        creatingNodePossible = true
         super.viewDidLoad()
         sceneView.delegate = self
         sceneView.showsStatistics = false
@@ -110,6 +111,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
   
 func reset() {
+        if let name = objectAnchor?.referenceObject.name {
+        DataHandler.objectsToIncidents[name] = DataHandler.incidents
+        }
         DataHandler.incidents = []
         DataHandler.saveToJSON()
         self.scene.rootNode.childNodes.forEach { node in
@@ -118,25 +122,29 @@ func reset() {
             }
             self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
         }
+        detectedObjectNode = nil
         nodes = []
+        objectAnchor = nil
         automaticallyDetectedIncidents = []
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
-        let configuration = ARWorldTrackingConfiguration()
-        if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
-            configuration.detectionObjects = detectionObjects
-            sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-            let notification = UINotificationFeedbackGenerator()
-            
-            DispatchQueue.main.async {
-                notification.notificationOccurred(.success)
-            }
-        }
+//        let configuration = ARWorldTrackingConfiguration()
+//        if let detectionObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) {
+//            configuration.detectionObjects = detectionObjects
+//            sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+//            print("tracking resetted")
+//            let notification = UINotificationFeedbackGenerator()
+//
+//            DispatchQueue.main.async {
+//                notification.notificationOccurred(.success)
+//            }
+//        }
+//        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
         do {
             let data = try JSONEncoder().encode(DataHandler.incidents)
             self.multipeerSession.sendToAllPeers(data)
         } catch _ {
             let notification = UINotificationFeedbackGenerator()
-            
+            print("encoding failed")
             DispatchQueue.main.async {
                 notification.notificationOccurred(.error)
             }
@@ -325,10 +333,11 @@ func reset() {
         let node = SCNNode()
         
         if detectedObjectNode != nil {
+            print("detectedObjectNode != nil")
             return node
         }
         if let objectAnchor = anchor as? ARObjectAnchor {
-            
+            print("object detected")
             guard let name = objectAnchor.referenceObject.name else { fatalError("reference object has no name") }
             
             if DataHandler.objectsToIncidents[name] != nil {
@@ -350,6 +359,7 @@ func reset() {
             self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             ARViewController.objectDetected = true
+            print("dictionary in renderer: \(DataHandler.objectsToIncidents)")
         }
         return node
     }
