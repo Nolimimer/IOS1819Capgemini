@@ -25,9 +25,12 @@ class StatusViewController: UIViewController {
     
     @IBOutlet private weak var messageLabel: UILabel!
     
-    @IBAction func resetButtonPressed(_ sender: Any) {
+    @IBAction private func resetButtonPressed(_ sender: Any) {
         ARViewController.resetButtonPressed = true
-
+    }
+    
+    @IBAction private func sendIncidentsButtonPressed(_ sender: Any) {
+        ARViewController.sendIncidentButtonPressed = true
     }
     
     

@@ -24,6 +24,7 @@ var creatingNodePossible = true
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
+    static var sendIncidentButtonPressed = false
     static var resetButtonPressed = false
     static var navigatingIncident : Incident?
     static var connectedToPeer = false
@@ -153,6 +154,19 @@ func reset() {
             return
         } else {
             reset()
+            ARViewController.resetButtonPressed = false
+        }
+    }
+    
+    func sendIncidents() {
+        sendIncidents(incidents: DataHandler.incidents)
+    }
+    
+    func checkSendIncidents() {
+        if !ARViewController.sendIncidentButtonPressed {
+            return
+        } else {
+            sendIncidents()
             ARViewController.resetButtonPressed = false
         }
     }
@@ -290,6 +304,7 @@ func reset() {
             isDetecting = false
         }
         checkReset()
+        checkSendIncidents()
         updateIncidents()
         refreshNodes()
         updatePinColour()

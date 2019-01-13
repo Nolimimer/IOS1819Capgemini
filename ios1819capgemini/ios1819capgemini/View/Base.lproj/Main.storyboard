@@ -1044,6 +1044,9 @@
                                 <rect key="frame" x="73" y="18" width="36" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button" image="multiuserWhite"/>
+                                <connections>
+                                    <action selector="sendIncidentsButtonPressed:" destination="iNR-TU-aP6" eventType="touchUpInside" id="dGf-Mb-d92"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lbG-fv-JNA" userLabel="listViewButton">
                                 <rect key="frame" x="316" y="16" width="43" height="39"/>
