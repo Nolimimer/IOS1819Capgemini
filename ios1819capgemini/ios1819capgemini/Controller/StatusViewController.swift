@@ -26,7 +26,17 @@ class StatusViewController: UIViewController {
     @IBOutlet private weak var messageLabel: UILabel!
     
     @IBAction private func resetButtonPressed(_ sender: Any) {
-        ARViewController.resetButtonPressed = true
+        let alert = UIAlertController(title: "Reset", message: "Are you sure you want to reset the app ? This will delete all the scanned objects", preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { action in
+            DataHandler.objectsToIncidents.removeAll()
+            ARViewController.resetButtonPressed = true
+            DataHandler.saveToJSON()
+            self.dismiss(animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { action in
+            self.dismiss(animated: true, completion: nil)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction private func sendIncidentsButtonPressed(_ sender: Any) {
