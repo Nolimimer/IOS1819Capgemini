@@ -88,7 +88,7 @@ class StatusViewController: UIViewController {
             
             var message = trackingState.presentationString
             if let recommendation = trackingState.recommendation {
-                message.append(": \(recommendation)")
+                message.append("")
             }
             
             self.showMessage(message, autoHide: false)
