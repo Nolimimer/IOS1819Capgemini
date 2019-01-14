@@ -72,7 +72,6 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
-            print("Load incidents: \(incidents.count)")
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
@@ -83,7 +82,6 @@ enum DataHandler {
                 throw NSError()
             }
             objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
-            print("Load objects to incidents: \(objectsToIncidents.count)")
         } catch _ {
             print("Could not load ar object: [incident] dictionary")
         }
