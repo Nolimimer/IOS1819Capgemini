@@ -102,6 +102,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.addGestureRecognizer(gestureRecognizer)
         multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
     }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
         super.viewWillTransition(to: size, with: coordinator)
@@ -112,7 +113,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
   
-    private func reset() {
+    func reset() {
         
         if let name = objectAnchor?.referenceObject.name {
         DataHandler.objectsToIncidents[name] = DataHandler.incidents
@@ -150,25 +151,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
-    
-    private func checkReset() {
-        if !ARViewController.resetButtonPressed {
-            return
-        } else {
-            reset()
-            ARViewController.resetButtonPressed = false
-        }
-    }
-    
-    private func checkSendIncidents() {
-        if !ARViewController.sendIncidentButtonPressed {
-            return
-        } else {
-            sendIncidents()
-            ARViewController.resetButtonPressed = false
-        }
-    }
-    
+
     /*
      recognizes if the screen has been tapped, creates a new pin and a matching incident if the tapped location is not a pin, otherwise
      opens the detail view for the tapped pin.
@@ -222,23 +205,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    func loadCustomScans() {
-        
-        let fileManager = FileManager.default
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
-            for file in fileURLs {
-                if file.lastPathComponent.hasSuffix(".arobject") {
-                    let arRefereceObject = try ARReferenceObject(archiveURL: file)
-                    detectionObjects.insert(arRefereceObject)
-                }
-            }
-        } catch {
-            print("Error loading custom scans")
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
@@ -257,36 +223,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: AR Kit methods
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        // Do not enqueue other buffers for processing while another Vision task is still running.
-        // The camera stream has only a finite amount of buffers available; holding too many buffers for analysis would starve the camera.
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
         
-        // Check settings
-        if UserDefaults.standard.bool(forKey: "enable_boundingboxes") {
-            sceneView.debugOptions = [.showFeaturePoints, .showBoundingBoxes]
-        } else if UserDefaults.standard.bool(forKey: "enable_featurepoints") {
-            sceneView.debugOptions = [.showFeaturePoints]
-        } else {
-            sceneView.debugOptions = []
-        }
-        if UserDefaults.standard.bool(forKey: "enable_detection") && detectedObjectNode != nil {
-            isDetecting = true
-            setupBoxes()
-        } else {
-            hideBoxes()
-            isDetecting = false
-        }
-        checkConnection()
-        checkReset()
-        checkSendIncidents()
-        updateIncidents()
-        refreshNodes()
-        updatePinColour()
-        setDescriptionLabel()
-        setNavigationArrows(for: frame.camera.trackingState, incident: ARViewController.navigatingIncident)
-        // Retain the image buffer for Vision processing.
+        updateSession(for: frame.camera.trackingState, incident: ARViewController.navigatingIncident)
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()
     }
@@ -323,33 +264,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return node
     }
     
-    func updateIncidents() {
-        
-        if !ARViewController.objectDetected {
-            return
-        }
-        incidentEditted()
-        for incident in DataHandler.incidents {
-            if incidentHasNotBeenPlaced(incident: incident) {
-                let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
-                add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
-            }
-        }
-    }
-    
-    func checkConnection () {
-        if !multipeerSession.connectedPeers.isEmpty {
-            ARViewController.connectedToPeer = true
-            let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator : ", ")
-            connectionLabel.text = "Connected with \(peerNames)"
-        }
-    }
-    
+
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
         
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
-            //self?.processClassifications(for: request, error: error)
             guard let predictions = self?.processClassifications(for: request, error: error) else {
                 return
             }
@@ -357,17 +276,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self?.drawBoxes(predictions: predictions)
             }
         })
-        // Crop input images to square area at center, matching the way the ML model was trained.
         request.imageCropAndScaleOption = .centerCrop
-        // Use CPU for Vision processing to ensure that there are adequate GPU resources for rendering.
         request.usesCPUOnly = true
         
         return request
     }()
+    
     // Run the Vision+ML classifier on the current image buffer.
     /// - Tag: ClassifyCurrentImage
     private func classifyCurrentImage() {
-        // Most computer vision tasks are not rotation agnostic so it is important to pass in the orientation of the image with respect to device.
+        
         let orientation = CGImagePropertyOrientation(UIDevice.current.orientation)
         
         guard let cvPixelBuffer = currentBuffer else {
@@ -376,7 +294,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let requestHandler = VNImageRequestHandler(cvPixelBuffer: cvPixelBuffer, orientation: orientation)
         visionQueue.async {
             do {
-                // Release the pixel buffer when done, allowing the next buffer to be processed.
                 defer { self.currentBuffer = nil }
                 try requestHandler.perform([self.classificationRequest])
             } catch {
@@ -403,7 +320,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     //adds a 3D pin to the AR View
-    private func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
+    func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
@@ -416,7 +333,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         nodes.append(sphereNode)
     }
     
-    private func setDescriptionLabel() {
+    func setDescriptionLabel() {
         
         let openIncidents = (DataHandler.incidents.filter { $0.status == .open}).count
         let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress}).count
@@ -430,7 +347,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     //adds the info plane which displays the detected object and the number of incidents
-    private func addInfoPlane (carPart: String) {
+    func addInfoPlane (carPart: String) {
         
         guard let objectAnchor = self.objectAnchor,
         let name = objectAnchor.referenceObject.name else {
@@ -483,34 +400,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    func refreshNodes() {
-        
-        for node in nodes {
-            guard let name = node.name else {
-                return
-            }
-            if DataHandler.incidents.isEmpty {
-                do {
-                    let data = try JSONEncoder().encode(DataHandler.incidents)
-                    self.multipeerSession.sendToAllPeers(data)
-                } catch {
-                    print("sending incidents array failed (refreshNodes DataHandler.incidents.isEmpty)")
-                }
-            }
-            if DataHandler.incident(withId: name) == nil {
-                self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
-                deleteNode(identifier: name)
-                do {
-                    let data = try JSONEncoder().encode(DataHandler.incidents)
-                    self.multipeerSession.sendToAllPeers(data)
-                } catch {
-                    print("sending incidents array failed (refreshNodes DataHandler.incident(withId: name) == nil")
-                }
-            }
-        }
-    }
-    
-
 }
 
 // MARK: Coordinate
