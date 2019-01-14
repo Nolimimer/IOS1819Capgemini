@@ -399,6 +399,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             progressRing.isHidden = true
         }
     }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "ShowDetailSegue":
+            guard let detailVC = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController,
+                let pin = sender as? SCNNode,
+                let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
+                    return
+                }
+            detailVC.incident = incident
+        default :
+            return
+        }
+    }
     
 }
 
