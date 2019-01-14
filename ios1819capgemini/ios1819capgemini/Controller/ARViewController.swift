@@ -278,7 +278,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             hideBoxes()
             isDetecting = false
         }
-        updateConnection()
+        checkConnection()
         checkReset()
         checkSendIncidents()
         updateIncidents()
@@ -337,7 +337,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    func updateConnection () {
+    func checkConnection () {
         if !multipeerSession.connectedPeers.isEmpty {
             ARViewController.connectedToPeer = true
             let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator : ", ")
@@ -480,16 +480,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if recognizer.state != .began  {
             progressRing.resetProgress()
             progressRing.isHidden = true
-        }
-    }
-    
-    private func updateInfoPlane() {
-        descriptionNode.text = "Incidents : \(DataHandler.incidents.count)"
-        let openIncidentsCount = DataHandler.incidents.filter { $0.status == .open }
-        if openIncidentsCount.isEmpty {
-            descriptionNode.fontColor = UIColor.green
-        } else {
-            descriptionNode.fontColor = UIColor.red
         }
     }
     
