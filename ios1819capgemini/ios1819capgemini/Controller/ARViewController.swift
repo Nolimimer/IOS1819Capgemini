@@ -74,15 +74,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     //sceneview bitte nicht private
     @IBOutlet var sceneView: ARSCNView!
  
+    @IBOutlet weak var connectionLabel: UILabel!
     @IBOutlet weak var arrowUp: UIImageView!
     @IBOutlet weak var arrowRight: UIImageView!
     @IBOutlet weak var arrowLeft: UIImageView!
     @IBOutlet weak var arrowDown: UIImageView!
-    
     @IBOutlet private weak var progressRing: UICircularProgressRing!
 
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
+        
         creatingNodePossible = true
         super.viewDidLoad()
         sceneView.delegate = self
@@ -102,6 +103,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
     }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        
         super.viewWillTransition(to: size, with: coordinator)
         screenWidth = Double(size.width)
         screenHeight = Double(size.height)
@@ -110,7 +112,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
   
-    func reset() {
+    private func reset() {
+        
         if let name = objectAnchor?.referenceObject.name {
         DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
@@ -148,7 +151,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    func checkReset() {
+    private func checkReset() {
         if !ARViewController.resetButtonPressed {
             return
         } else {
@@ -157,7 +160,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    func checkSendIncidents() {
+    private func checkSendIncidents() {
         if !ARViewController.sendIncidentButtonPressed {
             return
         } else {
@@ -172,6 +175,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
      If a new pin is created a screenshot of the location is taken before/after placing the pin.
      */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
         if !creatingNodePossible {
             return
         }
@@ -219,6 +223,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func loadCustomScans() {
+        
         let fileManager = FileManager.default
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         do {
@@ -235,6 +240,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         super.viewWillAppear(animated)
         let config = ARWorldTrackingConfiguration()
         
@@ -256,9 +262,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        if !multipeerSession.connectedPeers.isEmpty {
-            ARViewController.connectedToPeer = true
-        }
         
         // Check settings
         if UserDefaults.standard.bool(forKey: "enable_boundingboxes") {
@@ -275,6 +278,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             hideBoxes()
             isDetecting = false
         }
+        updateConnection()
         checkReset()
         checkSendIncidents()
         updateIncidents()
@@ -330,6 +334,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
                 add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
             }
+        }
+    }
+    
+    func updateConnection () {
+        if !multipeerSession.connectedPeers.isEmpty {
+            ARViewController.connectedToPeer = true
+            let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator : ", ")
+            connectionLabel.text = "Connected with \(peerNames)"
         }
     }
     
@@ -482,6 +494,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func refreshNodes() {
+        
         for node in nodes {
             guard let name = node.name else {
                 return
