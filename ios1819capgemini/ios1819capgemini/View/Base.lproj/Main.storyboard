@@ -21,6 +21,14 @@
                             <arscnView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zuy-y1-cIR">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                             </arscnView>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vs-jp-QKL">
+                                <rect key="frame" x="281" y="541" width="74" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Details"/>
+                                <connections>
+                                    <segue destination="arL-mF-BSR" kind="presentation" identifier="ShowDetailSegue" modalPresentationStyle="overCurrentContext" id="uUl-YU-Nua"/>
+                                </connections>
+                            </button>
                             <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsO-Fy-ug4" customClass="UICircularProgressRing" customModule="UICircularProgressRing">
                                 <rect key="frame" x="73" y="270" width="228" height="127"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -3699,5 +3707,8 @@ AAAAAAAAAAAAAAIzxQ
             <color red="0.0" green="0.47843137383460999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="uUl-YU-Nua"/>
+    </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
