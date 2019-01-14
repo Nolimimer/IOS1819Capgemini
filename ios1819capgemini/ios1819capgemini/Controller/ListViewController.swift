@@ -192,13 +192,32 @@ extension ListViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        var title = "Navigate"
-        let incident = DataHandler.incidents[indexPath.row]
+        var title = "Stop"
+        var incident : Incident?
         if ARViewController.navigatingIncident == incident {
-            title = "Stop"
+            title = "Navigate"
         }
         let navigate = UITableViewRowAction(style: .normal, title: title) { action, index in
             self.dismiss(animated: true, completion: {
+
+                switch self.filterSegmentedControl.selectedSegmentIndex {
+                case 0:
+                    incident = DataHandler.incidents[indexPath.row]
+                    break
+                case 1:
+                    incident = DataHandler.openIncidents[indexPath.row]
+                    break
+                case 2:
+                    incident = DataHandler.inProgressIncidents[indexPath.row]
+                    break
+                case 3:
+                    incident = DataHandler.resolvedIncidents[indexPath.row]
+                    break
+                default:
+                    incident = DataHandler.incidents[indexPath.row]
+                    break
+                }
+
                 creatingNodePossible = true
                 if ARViewController.navigatingIncident == incident {
                     ARViewController.navigatingIncident = nil
