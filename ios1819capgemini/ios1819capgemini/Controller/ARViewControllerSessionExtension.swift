@@ -9,6 +9,7 @@
 import Foundation
 import ARKit
 
+//swiftlint:disable all
 extension ARViewController {
     
     func updateIncidents() {
@@ -123,6 +124,7 @@ extension ARViewController {
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: trackingState, incident: incident)
+        
     }
     
 }
