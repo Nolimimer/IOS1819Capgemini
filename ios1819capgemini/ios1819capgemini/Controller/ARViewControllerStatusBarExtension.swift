@@ -11,16 +11,6 @@ import ARKit
 
 extension ARViewController {
     
-    //    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-    //        statusViewController.showTrackingQualityInfo(for: camera.trackingState, autoHide: true)
-    //
-    //        switch camera.trackingState {
-    //        case .notAvailable, .limited:
-    //            statusViewController.escalateFeedback(for: camera.trackingState, inSeconds: 6.0)
-    //        case .normal:
-    //            statusViewController.cancelScheduledMessage(for: .trackingStateEscalation)
-    //        }
-    //    }
     func updateStatus(for frame: ARFrame, trackingState: ARCamera.TrackingState) {
         // Update the UI to provide feedback on the state of the AR experience.
         let message: String
