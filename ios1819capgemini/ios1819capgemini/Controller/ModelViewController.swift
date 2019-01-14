@@ -32,14 +32,6 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
         // add blurred subview
         ARViewController.resetButtonPressed = true
-//        if let name = ModelViewController.objectName {
-//            print("mvc name: \(name)")
-//            DataHandler.objectsToIncidents[name] = DataHandler.incidents
-//            ModelViewController.objectName = nil
-//            DataHandler.incidents = []
-//            print("datahandler objets to incidents [name] count \(DataHandler.objectsToIncidents[name]?.count)")
-//            print("DataHandler.incidents : \(DataHandler.incidents)") //nil
-//        }
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
