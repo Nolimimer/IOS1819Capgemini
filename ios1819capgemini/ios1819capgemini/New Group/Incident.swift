@@ -64,9 +64,7 @@ public class Incident: Codable {
         attachments.sort {
             $0.attachment.date > $1.attachment.date
         }
-        print("\(attachment) added")
     }
-    
 }
 
  // MARK: Constants

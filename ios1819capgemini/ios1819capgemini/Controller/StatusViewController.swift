@@ -29,6 +29,7 @@ class StatusViewController: UIViewController {
         let alert = UIAlertController(title: "Reset", message: "Are you sure you want to reset the app ? This will delete all the scanned objects", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { action in
             DataHandler.objectsToIncidents.removeAll()
+            DataHandler.incidents = []
             self.removeScans()
             ARViewController.resetButtonPressed = true
             DataHandler.saveToJSON()
