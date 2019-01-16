@@ -25,8 +25,7 @@ class LineView: UIView {
             context.setLineWidth(lineWidth)
             if let lineCGColor = self.lineCGColor {
                 context.setStrokeColor(lineCGColor)
-            }
-            else {
+            } else {
                 context.setStrokeColor(UIColor.black.cgColor)
             }
             context.move(to: CGPoint(x: 0.0, y: midpoint))

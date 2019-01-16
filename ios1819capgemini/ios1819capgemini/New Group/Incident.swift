@@ -10,7 +10,6 @@
 import Foundation
 import SceneKit
 
-//swiftlint:disable all
 // MARK: - Incident
 public class Incident: Codable {
     
@@ -21,8 +20,10 @@ public class Incident: Codable {
     private(set) var type: IncidentType
     private(set) var description: String
     private(set) var status: Status
-    private(set) var attachments = [Attachment]()
+    private(set) var attachments = [AnyAttachment]()
+
     let coordinate: Coordinate
+    var automaticallyDetected = false
     // MARK: Initializers
     init(type: IncidentType, description: String, coordinate: Coordinate) {
         identifier = DataHandler.nextIncidentID
@@ -38,13 +39,6 @@ public class Incident: Codable {
         self.status = status
         self.description = description
         self.modifiedDate = modifiedDate
-        
-        switch status {
-        case .open: self.changePinColor(to: UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9))
-        case .progress: self.changePinColor(to: UIColor(red: 239.0/255.0, green: 196.0/255.0, blue: 0.0, alpha: 0.9))
-        case .resolved: self.changePinColor(to: UIColor(red: 22.0/255.0, green: 167.0/255.0, blue: 0.0, alpha: 0.9))
-        }
-        
     }
     
     func editIncidentType(type: IncidentType) {
@@ -55,20 +49,7 @@ public class Incident: Codable {
     private func suggest() -> IncidentType? {
         return nil
     }
-    
-    private func changePinColor(to color: UIColor) {
-        for node in nodes {
-            guard let name = node.name,
-                let nodeId = Int(name) else {
-                    print("no node found")
-                    return
-            }
-            if nodeId == identifier {
-                node.geometry?.materials.first?.diffuse.contents = color
-            }
-        }
-    }
-    
+
     func getCoordinateToVector() -> SCNVector3 {
         var res = SCNVector3.init()
         res.x = coordinate.pointX
@@ -78,9 +59,29 @@ public class Incident: Codable {
     }
     
     func addAttachment(attachment: Attachment) {
-        attachments.append(attachment)
+        attachments.append(AnyAttachment(attachment))
+        attachments.sort {
+            $0.attachment.date > $1.attachment.date
+        }
     }
     
+    func removeAttachment(attachment: Attachment) {
+        let index = attachments.firstIndex {
+            $0.attachment.name == attachment.name
+        }
+        guard let realIndex = index else {
+            print("Could not be removed! Item not found!")
+            return
+        }
+        attachments.remove(at: realIndex)
+        let fileManager = FileManager.default
+        do {
+            try fileManager.removeItem(at: URL(fileURLWithPath: attachment.filePath))
+        } catch {
+            print("Could not be removed! Invalid filePath")
+        }
+        
+    }
 }
 
  // MARK: Constants

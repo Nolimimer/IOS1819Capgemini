@@ -12,10 +12,13 @@ import UIKit
 class AttachmentView: UIView {
 
     @IBOutlet private var contentView: UIView!
-    @IBOutlet weak var photoButton: UIButton!
-    @IBOutlet weak var videoButton: UIButton!
-    @IBOutlet weak var audioButton: UIButton!
-    @IBOutlet weak var documentButton: UIButton!
+    // outlets have to be public
+    // swiftlint:disable private_outlet
+    @IBOutlet public weak var photoButton: UIButton!
+    @IBOutlet public weak var videoButton: UIButton!
+    @IBOutlet public weak var audioButton: UIButton!
+    @IBOutlet public weak var documentButton: UIButton!
+    // swiftlint:enable private_outlet
     
     override init(frame: CGRect) {
         super.init(frame: frame)

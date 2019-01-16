@@ -31,7 +31,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     var videos: [Video] = []
     
     
-    // MARK: -override methods
+    // MARK: override methods
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
     
@@ -39,12 +39,6 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         super.viewDidLoad()
         photos = computePhotos()
         self.videos = computeVideos()
-        for photo in photos {
-            if let photo = photo as? INSPhoto {
-                photo.attributedTitle = NSAttributedString(string: "Example caption text\ncaption text",
-                                                           attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-            }
-        }
         videoCollectionView.delegate = self
         videoCollectionView.dataSource = self
         videoCollectionView.reloadData()
@@ -78,16 +72,16 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         toolbar.setBackgroundImage(UIImage(), forToolbarPosition: .bottom, barMetrics: .default)
     }
     
-    // MARK: -IBActions
+    // MARK: IBActions
     @IBAction private func takeVideo(_ sender: Any) {
-        imagePicker =  UIImagePickerController()
+        imagePicker = UIImagePickerController()
         imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
         imagePicker.mediaTypes = [kUTTypeMovie as String]
         present(imagePicker, animated: true, completion: nil)
     }
     
-    @IBAction func deleteAll(_ sender: Any) {
+    @IBAction private func deleteAll(_ sender: Any) {
         if let dir = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
             
             let fileManager = FileManager.default
@@ -101,7 +95,8 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
                             try fileManager.removeItem(atPath: fullPath)
                         } catch {
                             print ("Error deleting file")
-                        } }  else {
+                        }
+                    } else {
                         print("File does not exist")
                     }
                 }
@@ -116,58 +111,10 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
     }
     
     @IBAction private func takePhoto(_ sender: Any) {
-        imagePicker =  UIImagePickerController()
+        imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
         present(imagePicker, animated: true, completion: nil)
-    }
-    
-    @IBAction private func recordAudio(_ sender: Any) {
-        let recordingSession = AVAudioSession.sharedInstance()
-        
-        do {
-            try recordingSession.setCategory(.playAndRecord, mode: .default)
-            try recordingSession.setActive(true)
-            recordingSession.requestRecordPermission { [unowned self] allowed in
-                DispatchQueue.main.async {
-                    if allowed {
-                        self.loadRecordingUI()
-                    } else {
-                        // failed to record!
-                    }
-                }
-            }
-        } catch {
-            // failed to record!
-        }
-    }
-    
-    
-    // MARK: - Methods
-    func loadRecordingUI() {
-//        recordButton = UIButton(frame: CGRect(x: 64, y: 64, width: 128, height: 64))
-//        recordButton.setTitle("Tap to Record", for: .normal)
-//        recordButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .title1)
-//        recordButton.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
-//        view.addSubview(recordButton)
-    }
-    
-    func finishRecording(success: Bool) {
-        audioRecorder.stop()
-        audioRecorder = nil
-        
-        if success {
-            recordButton.setTitle("Tap to Re-record", for: .normal)
-        } else {
-            recordButton.setTitle("Tap to Record", for: .normal)
-            // recording failed :(
-        }
-    }
-    
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        if !flag {
-            finishRecording(success: false)
-        }
     }
     
     func computePhotos() -> [PhotoWrapper] {
@@ -217,14 +164,12 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
             } catch {
                 print("Could not get folder: \(error)")
             }
-            var result: [Video] = []
+            let result: [Video] = []
             for val in arrImages {
                 guard let val = val as? String else {
                     continue
                 }
-                let strings = val.split(separator: "/")
-                let name = strings[strings.count - 1]
-                result.append(Video(name: String(name), videoPath: val))
+                //result.append(Video(name: String(name), videoPath: val, duration: ))
             }
             return result
         }
@@ -237,17 +182,6 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
         }
         return nil
     }
-    
-   
-    // MARK: -OBJC Functions
-    @objc func recordTapped() {
-        if audioRecorder == nil {
-            //  startRecording()
-        } else {
-            finishRecording(success: true)
-        }
-    }
-    
     
     @objc func videoSaved(_ video: String, didFinishSavingWithError error: NSError!, context: UnsafeMutableRawPointer) {
         if let theError = error {
@@ -319,6 +253,4 @@ extension AttachmentViewController: UICollectionViewDataSource, UICollectionView
         }
         present(galleryPreview, animated: true, completion: nil)
     }
-    
-    
 }

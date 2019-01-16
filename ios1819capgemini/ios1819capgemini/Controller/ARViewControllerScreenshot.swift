@@ -42,7 +42,7 @@ extension ARViewController {
             guard let name = node.name else {
                 return
             }
-            if name != identifier {
+            if name != identifier && name != "info-plane"{
                 let tmpNode = node
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
@@ -58,11 +58,15 @@ extension ARViewController {
             guard let name = node.name else {
                 return
             }
+            
             let tmpNode = node
-            self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                self.scene.rootNode.addChildNode(tmpNode)
-            })
+            if node.name != "info-plane" {
+                self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    self.scene.rootNode.addChildNode(tmpNode)
+                })
+            }
+
         }
     }
 }
