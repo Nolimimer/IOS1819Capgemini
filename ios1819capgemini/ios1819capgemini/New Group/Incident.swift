@@ -64,6 +64,24 @@ public class Incident: Codable {
             $0.attachment.date > $1.attachment.date
         }
     }
+    
+    func removeAttachment(attachment: Attachment) {
+        let index = attachments.firstIndex {
+            $0.attachment.name == attachment.name
+        }
+        guard let realIndex = index else {
+            print("Could not be removed! Item not found!")
+            return
+        }
+        attachments.remove(at: realIndex)
+        let fileManager = FileManager.default
+        do {
+            try fileManager.removeItem(at: URL(fileURLWithPath: attachment.filePath))
+        } catch {
+            print("Could not be removed! Invalid filePath")
+        }
+        
+    }
 }
 
  // MARK: Constants

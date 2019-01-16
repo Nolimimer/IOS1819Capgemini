@@ -54,6 +54,8 @@
 		90CB847621ADAB8B00CA1C09 /* Anchors10.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CB847521ADAB8B00CA1C09 /* Anchors10.swift */; };
 		90D3451321B3FF29009EF79E /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D3451221B3FF29009EF79E /* AttachmentViewController.swift */; };
 		90D3453321B44C34009EF79E /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D3453021B44C34009EF79E /* Video.swift */; };
+		90F8BC3021EF6B6E0006AC39 /* piktogramModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 90F8BC2F21EF6B6E0006AC39 /* piktogramModel.mlmodel */; };
+		90F8BC3221EF92AB0006AC39 /* minus-1270000_960_720.png in Resources */ = {isa = PBXBuildFile; fileRef = 90F8BC3121EF92AB0006AC39 /* minus-1270000_960_720.png */; };
 		A66447E82192121300B2D32B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E72192121300B2D32B /* AppDelegate.swift */; };
 		A66447EA2192121300B2D32B /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A66447E92192121300B2D32B /* ARViewController.swift */; };
 		A66447ED2192121300B2D32B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A66447EB2192121300B2D32B /* Main.storyboard */; };
@@ -158,6 +160,8 @@
 		90CB847521ADAB8B00CA1C09 /* Anchors10.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchors10.swift; sourceTree = "<group>"; };
 		90D3451221B3FF29009EF79E /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		90D3453021B44C34009EF79E /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		90F8BC2F21EF6B6E0006AC39 /* piktogramModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = piktogramModel.mlmodel; sourceTree = "<group>"; };
+		90F8BC3121EF92AB0006AC39 /* minus-1270000_960_720.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minus-1270000_960_720.png"; sourceTree = "<group>"; };
 		A66447E42192121300B2D32B /* ios1819capgemini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ios1819capgemini.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A66447E72192121300B2D32B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A66447E92192121300B2D32B /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
@@ -303,6 +307,7 @@
 		90CB845621AD9D4100CA1C09 /* Scratch Detection */ = {
 			isa = PBXGroup;
 			children = (
+				90F8BC2F21EF6B6E0006AC39 /* piktogramModel.mlmodel */,
 				90C7377721B5368D008AD568 /* stickerTest.mlmodel */,
 				90CB847721ADAB9500CA1C09 /* Anchors */,
 				90CB845F21AD9F4100CA1C09 /* StickerDetector.mlmodel */,
@@ -380,6 +385,7 @@
 				0D5F4A7921A317B500D443CC /* View */,
 				0D5F4A7821A317AB00D443CC /* Controller */,
 				A66447EE2192121300B2D32B /* Assets.xcassets */,
+				90F8BC3121EF92AB0006AC39 /* minus-1270000_960_720.png */,
 			);
 			path = ios1819capgemini;
 			sourceTree = "<group>";
@@ -548,6 +554,7 @@
 				0DF3077221B7DBC4007D57D6 /* LineView.xib in Resources */,
 				A66447ED2192121300B2D32B /* Main.storyboard in Resources */,
 				B30A477921CFBC59007049F8 /* Assets.xcassets in Resources */,
+				90F8BC3221EF92AB0006AC39 /* minus-1270000_960_720.png in Resources */,
 				0D1F63FB21E7A01000AFC29A /* Settings.bundle in Resources */,
 				0DF3077C21B7E067007D57D6 /* AttachmentView.xib in Resources */,
 			);
@@ -706,6 +713,7 @@
 				BA6972E621D854E200F919EF /* ARViewControllerScreenshot.swift in Sources */,
 				9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */,
 				908466F221B6D11800A3C80C /* AttachmentViewCell.swift in Sources */,
+				90F8BC3021EF6B6E0006AC39 /* piktogramModel.mlmodel in Sources */,
 				90CB846C21ADAB2100CA1C09 /* Anchors5.swift in Sources */,
 				A66447E82192121300B2D32B /* AppDelegate.swift in Sources */,
 				0DD194BC21A31BE7001F8EA5 /* ListViewController.swift in Sources */,

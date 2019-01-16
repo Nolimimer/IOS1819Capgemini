@@ -54,7 +54,7 @@ extension ARViewController {
                 if isDetecting {
                     self.boundingBoxes[index].show(frame: rect,
                                                    label: textLabel,
-                                                   color: UIColor.green,
+                                                   color: SSDPostProcessor.getColor(forName: classNames[prediction.detectedClass]),
                                                    textColor: textColor)
                     let position = CGPoint(x: rect.midX,
                                            y: rect.midY)
@@ -104,6 +104,7 @@ extension ARViewController {
                         nodes.append(sphereNode)
                         sendIncident(incident: incident)
                     }
+                    return
                 }
                 //cameraView.layer.addSublayer(self.boundingBoxes[index].shapeLayer)
             }

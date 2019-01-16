@@ -31,7 +31,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var detectedObjectNode: SCNNode?
     var detectionObjects = Set <ARReferenceObject>()
     let scene = SCNScene()
-    let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 2)
+    let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 4)
     var screenHeight: Double?
     var screenWidth: Double?
     let numBoxes = 100
@@ -97,7 +97,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
         sceneView.debugOptions = [.showFeaturePoints]
-        model = try? VNCoreMLModel(for: stickerTest().model)
+        model = try? VNCoreMLModel(for: piktogramModel().model)
         setupBoxes()
         configureLighting()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))

@@ -13,10 +13,36 @@ import UIKit
 class CollectionViewCell: UICollectionViewCell {
     
     @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet private weak var deleteButton: UIButton!
     
-    func populateWithAttachment(_ attachment: Attachment) {
+    var attachment: Attachment? = nil
+    weak var detailViewController: DetailViewController? = nil
+    
+    @IBAction func deleteAttachment(_ sender: Any) {
+        guard let attachment = attachment else {
+            return
+        }
+        detailViewController?.removeAttachment(withName: attachment.name)
+    }
+    
+    
+    func populateWithAttachment(_ attachment: Attachment, detail: DetailViewController ,isEdit: Bool) {
+        self.attachment = attachment
+        self.detailViewController = detail
         let attachmentWrapper = AttachmentWrapper(attachment: attachment)
+
+        if(attachment.name == "plusButton") {
+            deleteButton.isHidden = true
+        }
         
+        if !isEdit {
+            deleteButton.isHidden = true
+        } else {
+            if(attachment.name != "plusButton") {
+                deleteButton.isHidden = false
+                self.bringSubviewToFront(deleteButton)
+            }
+        }
         for view in imageView.subviews {
             view.removeFromSuperview()
         }
@@ -53,6 +79,21 @@ class CollectionViewCell: UICollectionViewCell {
             let image = makeRoundImg(img: self.imageView)
             self.imageView.image = image
             return
+        }
+    }
+    
+    func changeDeleteButtonVisibility(isEdit: Bool) {
+        if(attachment?.name == "plusButton") ?? false {
+            deleteButton.isHidden = true
+        }
+        
+        if !isEdit {
+            deleteButton.isHidden = true
+        } else {
+            if(attachment?.name != "plusButton") ?? false {
+                deleteButton.isHidden = false
+                self.bringSubviewToFront(deleteButton)
+            }
         }
     }
 
