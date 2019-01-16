@@ -31,6 +31,7 @@ extension DetailViewController: UIDocumentMenuDelegate, UIDocumentPickerDelegate
                 }
                 incident.addAttachment(attachment: textDocument)
                 reloadCollectionView()
+                hidePopup()
             } catch {
                 print ("Could not save Text Document to \(path)")
             }
