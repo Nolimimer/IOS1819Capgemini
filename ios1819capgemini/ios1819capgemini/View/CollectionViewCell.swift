@@ -24,7 +24,10 @@ class CollectionViewCell: UICollectionViewCell {
         
         attachmentWrapper.loadThumbnailImage()
         self.imageView.image = nil
-        self.imageView.image = cropToBounds(image: attachmentWrapper.thumbnail!, width: 90, height: 88)
+        guard let thumbnail = attachmentWrapper.thumbnail else {
+            return
+        }
+        self.imageView.image = cropToBounds(image: thumbnail, width: 90, height: 88)
         if attachment is Photo {
             //imageView.transform = imageView.transform.rotated(by: CGFloat(M_PI_2))
             let image = makeRoundImg(img: self.imageView)
@@ -32,7 +35,7 @@ class CollectionViewCell: UICollectionViewCell {
             return
         }
         if attachment is Video {
-            let frontImage = UIImage(named: "play5") // The image in the foreground
+            let frontImage = #imageLiteral(resourceName: "play5") // The image in the foreground
             let frontImageView = UIImageView(image: frontImage) // Create the view holding the image
             let xCoord = self.imageView.center.x - 30
             let yCoord = self.imageView.center.y - 30
@@ -59,23 +62,29 @@ class CollectionViewCell: UICollectionViewCell {
         imgLayer.contents = img.image?.cgImage
         imgLayer.masksToBounds = true
         
-        imgLayer.cornerRadius = imgLayer.frame.size.width/2 //img.frame.size.width/2
+        imgLayer.cornerRadius = imgLayer.frame.size.width / 2 //img.frame.size.width/2
         
+        // swiftlint:disable force_unwrapping
         UIGraphicsBeginImageContext(img.bounds.size)
         imgLayer.render(in: UIGraphicsGetCurrentContext()!)
         let roundedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return roundedImage!
+        // swiftlint:enable force_unwrapping
     }
     
     func cropToBounds(image: UIImage, width: Double, height: Double) -> UIImage {
-        let cgimage = image.cgImage!
-        let contextImage: UIImage = UIImage(cgImage: cgimage)
+        guard let imageCgImage = image.cgImage else {
+            print("Error")
+            return image
+        }
+        let cgimage = imageCgImage
+        let contextImage = UIImage(cgImage: cgimage)
         let contextSize: CGSize = contextImage.size
         var posX: CGFloat = 0.0
         var posY: CGFloat = 0.0
-        var cgwidth: CGFloat = CGFloat(width)
-        var cgheight: CGFloat = CGFloat(height)
+        var cgwidth = CGFloat(width)
+        var cgheight = CGFloat(height)
         
         // See what size is longer and create the center off of that
         if contextSize.width > contextSize.height {
@@ -90,13 +99,17 @@ class CollectionViewCell: UICollectionViewCell {
             cgheight = contextSize.width
         }
         
-        let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
+        let rect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
         
         // Create bitmap image from context using the rect
-        let imageRef: CGImage = cgimage.cropping(to: rect)!
+        guard let cgimageCropping = cgimage.cropping(to: rect) else {
+            print("Error")
+            return image
+        }
+        let imageRef: CGImage = cgimageCropping
         
         // Create a new image based on the imageRef and rotate back to the original orientation
-        let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        let image = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
         
         return image
     }

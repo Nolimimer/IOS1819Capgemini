@@ -13,15 +13,16 @@
 
 import MultipeerConnectivity
 
-//swiftlint:disable all
 /// - Tag: MultipeerSession
 class MultipeerSession: NSObject {
     static let serviceType = "ar-multi-sample"
     
     private let myPeerID = MCPeerID(displayName: UIDevice.current.name)
+    //swiftlint:disable implicitly_unwrapped_optional
     private var session: MCSession!
     private var serviceAdvertiser: MCNearbyServiceAdvertiser!
     private var serviceBrowser: MCNearbyServiceBrowser!
+    //swiftlint:enable implicitly_unwrapped_optional
     
     private let receivedDataHandler: (Data, MCPeerID) -> Void
     
@@ -66,6 +67,7 @@ extension MultipeerSession: MCSessionDelegate {
         receivedDataHandler(data, peerID)
     }
     
+    // swiftlint:disable unavailable_function
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
         fatalError("This service does not send/receive streams.")
     }
@@ -74,9 +76,14 @@ extension MultipeerSession: MCSessionDelegate {
         fatalError("This service does not send/receive resources.")
     }
     
-    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
+    func session(_ session: MCSession,
+                 didFinishReceivingResourceWithName resourceName: String,
+                 fromPeer peerID: MCPeerID,
+                 at localURL: URL?,
+                 withError error: Error?) {
         fatalError("This service does not send/receive resources.")
     }
+    // swiftlint:enable unavailable_function
     
 }
 
@@ -98,7 +105,10 @@ extension MultipeerSession: MCNearbyServiceBrowserDelegate {
 extension MultipeerSession: MCNearbyServiceAdvertiserDelegate {
     
     /// - Tag: AcceptInvite
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser,
+                    didReceiveInvitationFromPeer peerID: MCPeerID,
+                    withContext context: Data?,
+                    invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         // Call handler to accept invitation and join the session.
         invitationHandler(true, self.session)
         print("invitation has been accepted")

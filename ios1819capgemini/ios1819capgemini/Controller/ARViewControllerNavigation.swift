@@ -9,7 +9,6 @@
 import Foundation
 import ARKit
 
-//swiftlint:disable all
 extension ARViewController {
     
     // MARK: Navigation methods
@@ -20,6 +19,7 @@ extension ARViewController {
         return sqrt((xDist * xDist) + (yDist * yDist) + (zDist * zDist))
     }
     
+    // swiftlint:disable identifier_name
     func distanceTravelled(between v1: SCNVector3, and v2: SCNVector3) -> Float {
         
         let xDist = v1.x - v2.x
@@ -95,11 +95,14 @@ extension ARViewController {
             return nil
         }
         let node = ARViewController.getNodeOfIncident(incident: incident)
-        
+        guard let node2 = node else {
+            print("Error")
+            return nil
+        }
         return distanceTravelled(between: SCNVector3 (x: currentFrame.camera.transform.columns.3.x,
-                                                     y: currentFrame.camera.transform.columns.3.y,
-                                                     z: currentFrame.camera.transform.columns.3.z),
-                                 and: self.sceneView.scene.rootNode.convertPosition(node!.position, to: nil))
+                                                      y: currentFrame.camera.transform.columns.3.y,
+                                                      z: currentFrame.camera.transform.columns.3.z),
+                                 and: self.sceneView.scene.rootNode.convertPosition(node2.position, to: nil))
     }
     
     /*
@@ -143,7 +146,7 @@ extension ARViewController {
      */
     func nodeVisibleToUser(node: SCNNode) -> Bool {
         
-        if let pov  = sceneView.pointOfView {
+        if let pov = sceneView.pointOfView {
             let isVisible = sceneView.isNode(node, insideFrustumOf: pov)
             let notification = UINotificationFeedbackGenerator()
             if isVisible {
@@ -158,8 +161,6 @@ extension ARViewController {
         return false
     }
     
-
-    
     func animateNavigatingIncident(incident: Incident?) {
         guard let incident = incident, let node = ARViewController.getNodeOfIncident(incident: incident) else {
             return
@@ -172,7 +173,7 @@ extension ARViewController {
     func setNavigationArrows(for trackingState: ARCamera.TrackingState, incident: Incident?) {
         
         if !ARViewController.objectDetected {
-            return 
+            return
         }
         guard let incident = incident else {
             return
@@ -208,7 +209,9 @@ extension ARViewController {
 
     static func filterOpenIncidents() {
         for node in nodes {
-            guard let incident = ARViewController.getIncidentOfNode(node: node) else { return }
+            guard let incident = ARViewController.getIncidentOfNode(node: node) else {
+                return
+            }
             if incident.status != .open {
                 node.opacity = 0.1
             } else {
@@ -219,7 +222,9 @@ extension ARViewController {
     
     static func filterInProgressIncidents() {
         for node in nodes {
-            guard let incident = ARViewController.getIncidentOfNode(node: node) else { return }
+            guard let incident = ARViewController.getIncidentOfNode(node: node) else {
+                return
+            }
             if incident.status != .progress {
                 node.opacity = 0.1
             } else {
@@ -230,7 +235,9 @@ extension ARViewController {
     
     static func filterResolvedIncidents() {
         for node in nodes {
-            guard let incident = ARViewController.getIncidentOfNode(node: node) else { return }
+            guard let incident = ARViewController.getIncidentOfNode(node: node) else {
+                return
+            }
             if incident.status != .resolved {
                 node.opacity = 0.1
             } else {
