@@ -383,6 +383,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let photos: [PhotoWrapper] = incident.attachments.reduce([]) {
                 var list = $0
                 if $1.attachment is Photo {
+                    // swiftlint:disable force_cast
                     list.append(PhotoWrapper(photo: $1.attachment as! Photo))
                 }
                 // swiftlint:enable force_cast
