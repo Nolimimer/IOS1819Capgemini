@@ -47,7 +47,9 @@ class Video: Attachment {
     
     func computeThumbnail() -> UIImage {
         guard let createdThumbnail = createThumbnailOfVideoFromRemoteUrl(url: filePath) else {
+            // swiftlint:disable object_literal
             guard let result = UIImage(named: "videoPreview") else {
+                // swiftlint:enable object_literal
                 return UIImage()
             }
             return result

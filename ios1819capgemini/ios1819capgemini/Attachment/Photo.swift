@@ -44,9 +44,7 @@ class Photo: Attachment {
     
     func computeThumbnail() -> UIImage {
         if name == "plusButton" {
-            guard let result = UIImage(named: "plusbutton") else {
-                return UIImage()
-            }
+            let result = #imageLiteral(resourceName: "plusbutton")
             return result
         }
         guard let result = UIImage(contentsOfFile: filePath) else {
@@ -66,7 +64,7 @@ class Photo: Attachment {
             }
             try data.write(to: path, options: [])
             filePath = "\(paths[0])/\(name)"
-        } catch let error {
+        } catch _ {
             print("Could not save data")
             data = nil
         }
@@ -86,7 +84,7 @@ class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
         super.init(attachment: photo)
     }
     
-    @objc open func loadImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
+    @objc open func loadImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> Void) {
         if let image = image {
             completion(image, nil)
             return
@@ -94,14 +92,14 @@ class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
         loadImageWithURL(URL(fileURLWithPath: photo.filePath), completion: completion)
     }
     
-    @objc open func loadThumbnailImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
-        let thumbnailImage = photo.computeThumbnail()
+    @objc open func loadThumbnailImageWithCompletionHandler(_ completion: @escaping (_ image: UIImage?, _ error: Error?) -> Void) {
         completion(image, nil)
     }
     
-    open func loadImageWithURL(_ url: URL?, completion: @escaping (_ image: UIImage?, _ error: Error?) -> ()) {
+    open func loadImageWithURL(_ url: URL?, completion: @escaping (_ image: UIImage?, _ error: Error?) -> Void) {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
+        // swiftlint:disable unneeded_parentheses_in_closure_argument multiline_function_chains
         if let imageURL = url {
             session.dataTask(with: imageURL, completionHandler: { (response, data, error) in
                 DispatchQueue.main.async(execute: { () -> Void in
@@ -118,5 +116,6 @@ class PhotoWrapper: AttachmentWrapper, INSPhotoViewable {
         } else {
             completion(nil, NSError(domain: "INSPhotoDomain", code: -2, userInfo: [ NSLocalizedDescriptionKey: "Image URL not found."]))
         }
+        // swiftlint:enable unneeded_parentheses_in_closure_argument multiline_function_chains
     }
 }

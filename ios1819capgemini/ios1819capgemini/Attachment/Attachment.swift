@@ -45,7 +45,7 @@ public class AttachmentWrapper {
     }
     
     
-    func loadThumbnailImage() -> Void {
+    func loadThumbnailImage() {
         self.thumbnail = attachment.computeThumbnail()
     }
 

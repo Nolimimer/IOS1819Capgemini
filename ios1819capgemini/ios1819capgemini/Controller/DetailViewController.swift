@@ -5,6 +5,7 @@
 //  Created by Thomas Böhm on 19.11.18.
 //  Copyright © 2018 TUM LS1. All rights reserved.
 //
+// swiftlint:disable file_length
 
 // MARK: Imports
 import UIKit
@@ -14,15 +15,16 @@ import MobileCoreServices
 import SceneKit
 
 
-//swiftlint:disable all
 // MARK: - DetailViewController
 class DetailViewController: UIViewController, UINavigationControllerDelegate, UIDocumentInteractionControllerDelegate {
     
     private var modus = Modus.view
+    //swiftlint:disable implicitly_unwrapped_optional
     private var overlay: UIView! = nil
     var recordButton: UIButton!
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
+    //swiftlint:enable implicitly_unwrapped_optional
     var audioPlayer: AVAudioPlayer?
     
     private var types: [IncidentType] = []
@@ -37,10 +39,10 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     // Variables / Mock Variable
     var incident: Incident?
     var attachments: [AnyAttachment] = []
-    //swiftlint:disable implicitly_unwrapped_optional
+    // swiftlint:disable implicitly_unwrapped_optional
     var imagePicker: UIImagePickerController!
     var documentInteractionController: UIDocumentInteractionController!
-    //swiftlint:enable implicitly_unwrapped_optional
+    // swiftlint:enable implicitly_unwrapped_optional
 
     // MARK: IBOutlets
     @IBOutlet private weak var navigationItemIncidentTitle: UINavigationItem!
@@ -77,7 +79,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
          self.dismiss(animated: true, completion: nil)
     }
 
-    @IBAction func showAllAttachments(_ sender: Any) {
+    @IBAction private func showAllAttachments(_ sender: Any) {
         //performSegue(withIdentifier: "attachmentSegue", sender: self)
     }
     
@@ -151,6 +153,12 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         lastModifiedDateLabel.text = lastModifiedDateString
         textField.text = incident?.description
         reloadCollectionView()
+        guard let incident = incident else {
+            print("Error")
+            return
+        }
+        type = incident.type
+        incidentTypeButton.setTitle(type.rawValue, for: .normal)
     }
 
         override func viewDidLoad() {
@@ -183,16 +191,14 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch: UITouch? = touches.first
         
-        if touch?.view == overlay{
+        if touch?.view == overlay {
             overlay.removeFromSuperview()
         }
     }
     
     func hidePopup() {
-        for child in view.subviews {
-            if child is AttachmentView {
-                child.removeFromSuperview()
-            }
+        for child in view.subviews where child is AttachmentView {
+            child.removeFromSuperview()
         }
     }
     
@@ -231,8 +237,11 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
             let defaults = UserDefaults.standard
             let name = "cARgeminiAudioAsset\(defaults.integer(forKey: "AttachedAudioName") - 1).m4a"
-            let audioFilename = getDocumentsDirectory().appendingPathComponent(name)
-            incident!.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
+            guard let incident = incident else {
+                print("Error")
+                return
+            }
+            incident.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
             recordButton.setTitle("Audio", for: .normal)
             hidePopup()
             reloadCollectionView()
@@ -241,9 +250,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             recordButton.setTitle("Tap to Record", for: .normal)
         }
     }
-
-   
-
+    
     @objc func recordTapped() {
         if audioRecorder == nil {
             startRecording()
@@ -292,7 +299,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     
     @objc private func pickDocument() {
-        let importMenu = UIDocumentMenuViewController(documentTypes: [String(kUTTypePDF)], in: .import)
+        let importMenu = UIDocumentPickerViewController(documentTypes: [String(kUTTypePDF)], in: .import)
         importMenu.delegate = self
         importMenu.modalPresentationStyle = .formSheet
         self.present(importMenu, animated: true, completion: nil)
@@ -301,7 +308,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     // Spotlights the attachment popup
     private func showOverlay() {
         overlay = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
-        overlay.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        overlay.backgroundColor = #colorLiteral(red: 0.9961728454, green: 0.9902502894, blue: 1, alpha: 0.5)
         view.addSubview(overlay)
     }
 }
@@ -312,6 +319,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return attachments.count
     }
     
+    //swiftlint:disable function_body_length cyclomatic_complexity
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).row == 0 {
             guard let tmpX = collectionView.cellForItem(at: indexPath) else {
@@ -347,15 +355,18 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         }
         if currentAttachment is Photo {
             let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell
-            guard let photo = currentAttachment as? Photo else {
+            guard let photo = currentAttachment as? Photo,
+                let incident = incident else {
                 return
             }
-
-            let photos: [PhotoWrapper] = incident!.attachments.reduce([]) {
+            
+            let photos: [PhotoWrapper] = incident.attachments.reduce([]) {
                 var list = $0
+                // swiftlint:disable force_cast
                 if $1 is Photo {
                     list.append(PhotoWrapper(photo: $1 as! Photo))
                 }
+                // swiftlint:enable force_cast
                 return list
             }
             
@@ -373,14 +384,12 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             present(galleryPreview, animated: true, completion: nil)
         }
         if currentAttachment is Audio {
-            let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell
             guard let audio = currentAttachment as? Audio else {
                 return
             }
             playSound(audio: audio)
         }
         if currentAttachment is TextDocument {
-            let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell
             guard let textDocument = currentAttachment as? TextDocument else {
                 return
             }
@@ -389,6 +398,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             self.documentInteractionController.presentPreview(animated: true)
         }
     }
+    //swiftlint:enable function_body_length cyclomatic_complexity
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
