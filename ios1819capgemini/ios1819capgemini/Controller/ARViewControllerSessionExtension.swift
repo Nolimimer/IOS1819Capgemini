@@ -9,7 +9,6 @@
 import Foundation
 import ARKit
 
-//swiftlint:disable all
 extension ARViewController {
     
     func updateIncidents() {
@@ -20,7 +19,11 @@ extension ARViewController {
         incidentEditted()
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
-                let coordinateRelativeObject = detectedObjectNode!.convertPosition(incident.getCoordinateToVector(), to: nil)
+                guard let detectedObjectNode = detectedObjectNode else {
+                    print("Error")
+                    return
+                }
+                let coordinateRelativeObject = detectedObjectNode.convertPosition(incident.getCoordinateToVector(), to: nil)
                 add3DPin(vectorCoordinate: coordinateRelativeObject, identifier: "\(incident.identifier)")
             }
         }
@@ -29,7 +32,7 @@ extension ARViewController {
     func checkConnection () {
         if !multipeerSession.connectedPeers.isEmpty {
             ARViewController.connectedToPeer = true
-            let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator : ", ")
+            let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
             connectionLabel.text = "Connected with \(peerNames)"
         }
     }

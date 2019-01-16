@@ -9,7 +9,6 @@
 import Foundation
 import ARKit
 
-//swiftlint:disable all
 class StatusViewController: UIViewController {
     
     enum MessageType {
@@ -26,8 +25,10 @@ class StatusViewController: UIViewController {
     @IBOutlet private weak var messageLabel: UILabel!
     
     @IBAction private func resetButtonPressed(_ sender: Any) {
-        let alert = UIAlertController(title: "Reset", message: "Are you sure you want to reset the app ? This will delete all the scanned objects", preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { action in
+        let alert = UIAlertController(title: "Reset",
+                                      message: "Are you sure you want to reset the app ? This will delete all the scanned objects",
+                                      preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { _ in
             DataHandler.objectsToIncidents.removeAll()
             DataHandler.incidents = []
             self.removeScans()
@@ -35,7 +36,7 @@ class StatusViewController: UIViewController {
             DataHandler.saveToJSON()
             self.dismiss(animated: true, completion: nil)
         }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { action in
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { _ in
             self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
@@ -113,7 +114,7 @@ class StatusViewController: UIViewController {
             self.cancelScheduledMessage(for: .trackingStateEscalation)
             
             var message = trackingState.presentationString
-            if let recommendation = trackingState.recommendation {
+            if trackingState.recommendation != nil {
                 message.append("")
             }
             
@@ -133,9 +134,9 @@ class StatusViewController: UIViewController {
         }
         
         UIView.animate(withDuration: 0.2,
-                       delay: 0, options: [.beginFromCurrentState],
-                       animations: {
-            self.messagePanel.alpha = hide ? 0 : 1
-        }, completion: nil)
+                       delay: 0,
+                       options: [.beginFromCurrentState],
+                       animations: { self.messagePanel.alpha = hide ? 0 : 1 },
+                       completion: nil)
     }
 }

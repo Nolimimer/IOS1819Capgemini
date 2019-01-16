@@ -9,7 +9,6 @@
 import Foundation
 import ARKit
 
-//swiftlint:disable all
 
 extension ARViewController {
     
@@ -29,6 +28,7 @@ extension ARViewController {
     }
     
     // Draw Boxes which indicate if a sticker has been detected
+    // swiftlint:disable function_body_length
     func drawBoxes(predictions: [Prediction]) {
         
         for (index, prediction) in predictions.enumerated() {
@@ -36,7 +36,8 @@ extension ARViewController {
                 //print("Class: \(classNames[prediction.detectedClass])")
                 
                 let textColor: UIColor
-                let textLabel = String(format: "%.2f - %@", self.sigmoid(prediction.score),
+                let textLabel = String(format: "%.2f - %@",
+                                       self.sigmoid(prediction.score),
                                        classNames[prediction.detectedClass])
                 
                 textColor = UIColor.black
@@ -94,7 +95,7 @@ extension ARViewController {
                             to: self.detectedObjectNode)
                         let incident = Incident (type: .scratch,
                                                  description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
-                            coordinate: Coordinate(vector: coordinates))
+                                                 coordinate: Coordinate(vector: coordinates))
                         incident.automaticallyDetected = true
                         DataHandler.incidents.append(incident)
                         sphereNode.runAction(imageHighlightAction)

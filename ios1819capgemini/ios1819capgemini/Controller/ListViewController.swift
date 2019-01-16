@@ -8,7 +8,6 @@
 
 // MARK: Imports
 import UIKit
-//swiftlint:disable all
 // MARK: LastViewController
 class ListViewController: UIViewController, UITableViewDelegate {
     
@@ -90,21 +89,25 @@ class ListViewController: UIViewController, UITableViewDelegate {
   
     
     private func share() {
-    DataHandler.saveToJSON()
-    let activityController = UIActivityViewController(activityItems: [DataHandler.getJSON()!], applicationActivities: nil)
+        DataHandler.saveToJSON()
+        guard let dataHandlerGetJason = DataHandler.getJSON() else {
+            print("Error")
+            return
+        }
+        let activityController = UIActivityViewController(activityItems: [dataHandlerGetJason], applicationActivities: nil)
         
-        let excludedActivities =
-            [UIActivity.ActivityType.mail,
-             UIActivity.ActivityType.addToReadingList,
-             UIActivity.ActivityType.assignToContact,
-             UIActivity.ActivityType.copyToPasteboard,
-             UIActivity.ActivityType.mail,
-             UIActivity.ActivityType.postToTencentWeibo,
-             UIActivity.ActivityType.postToFacebook,
-             UIActivity.ActivityType.postToTwitter,
-             UIActivity.ActivityType.postToFlickr,
-             UIActivity.ActivityType.postToWeibo,
-             UIActivity.ActivityType.postToVimeo]
+            let excludedActivities =
+                [UIActivity.ActivityType.mail,
+                 UIActivity.ActivityType.addToReadingList,
+                 UIActivity.ActivityType.assignToContact,
+                 UIActivity.ActivityType.copyToPasteboard,
+                 UIActivity.ActivityType.mail,
+                 UIActivity.ActivityType.postToTencentWeibo,
+                 UIActivity.ActivityType.postToFacebook,
+                 UIActivity.ActivityType.postToTwitter,
+                 UIActivity.ActivityType.postToFlickr,
+                 UIActivity.ActivityType.postToWeibo,
+                 UIActivity.ActivityType.postToVimeo]
         
         activityController.excludedActivityTypes = excludedActivities
         self.present(activityController, animated: true, completion: nil)
@@ -193,29 +196,24 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         var title = "Stop"
-        var incident : Incident?
+        var incident: Incident?
         if ARViewController.navigatingIncident == incident {
             title = "Navigate"
         }
-        let navigate = UITableViewRowAction(style: .normal, title: title) { action, index in
+        let navigate = UITableViewRowAction(style: .normal, title: title) { _, _ in
             self.dismiss(animated: true, completion: {
 
                 switch self.filterSegmentedControl.selectedSegmentIndex {
                 case 0:
                     incident = DataHandler.incidents[indexPath.row]
-                    break
                 case 1:
                     incident = DataHandler.openIncidents[indexPath.row]
-                    break
                 case 2:
                     incident = DataHandler.inProgressIncidents[indexPath.row]
-                    break
                 case 3:
                     incident = DataHandler.resolvedIncidents[indexPath.row]
-                    break
                 default:
                     incident = DataHandler.incidents[indexPath.row]
-                    break
                 }
 
                 creatingNodePossible = true
@@ -233,7 +231,7 @@ extension ListViewController: UITableViewDataSource {
         }
         
         
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { action, index in
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { _, _ in
             if ARViewController.connectedToPeer {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can't be deleted if Peer is connected",

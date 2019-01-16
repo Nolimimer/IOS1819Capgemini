@@ -382,7 +382,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     
     func saveImage(image: UIImage, name: String) {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("Error")
+            return
+        }
         let fileName = "\(name).jpg"
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
         if let data = image.jpegData(compressionQuality: 0.5) {

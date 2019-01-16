@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-//swiftlint:disable all
 class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     static var objectName: String?
@@ -40,43 +39,41 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         creatingNodePossible = false
     }
     
-    let reuseIdentifier = "modelCell" 
+    let reuseIdentifier = "modelCell"
     
     // MARK: - UICollectionViewDataSource protocol
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return DataHandler.objectsToIncidents.count
     }
     
-    //swiftlint:disable all
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
         
         let name = sortedDictonary[indexPath.item]
         let incidents = DataHandler.objectsToIncidents[name]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath as IndexPath) as! ARModelsCollectionViewCell
+        // swiftlint:disable force_cast
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+                                                      for: indexPath as IndexPath) as! ARModelsCollectionViewCell
+        // swiftlint:enable force_cast
         
         let nsDocumentDirectory = FileManager.SearchPathDirectory.documentDirectory
-        let nsUserDomainMask    = FileManager.SearchPathDomainMask.userDomainMask
-        let paths               = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
-        if let dirPath          = paths.first
-        {
+        let nsUserDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+        let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+        if let dirPath = paths.first {
             let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
-            let image    = UIImage(contentsOfFile: imageURL.path)
+            let image = UIImage(contentsOfFile: imageURL.path)
             cell.modelImage.image = image
             cell.incidentLabel.text = name
-            cell.openNumber.text = String(incidents?.filter{$0.status == .open}.count ?? 0)
-            cell.progessNumber.text = String(incidents?.filter{$0.status == .progress}.count ?? 0)
-            cell.resolvedNumber.text = String(incidents?.filter{$0.status == .resolved}.count ?? 0)
-            }
-        
+            cell.openNumber.text = String(incidents?.filter { $0.status == .open }.count ?? 0)
+            cell.progessNumber.text = String(incidents?.filter { $0.status == .progress }.count ?? 0)
+            cell.resolvedNumber.text = String(incidents?.filter { $0.status == .resolved }.count ?? 0)
+        }
         return cell
     }
-    
-
-    
     
     // MARK: - UICollectionViewDelegate protocol
     

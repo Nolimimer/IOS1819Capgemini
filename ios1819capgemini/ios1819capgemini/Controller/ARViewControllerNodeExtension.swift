@@ -9,13 +9,13 @@
 import Foundation
 import ARKit
 import Vision
-//swiftlint:disable all
+
 extension ARViewController {
     
     /*
      returns true if there is a node in a certain radius from the coordinate
      */
-    func calculateNodesInRadius(coordinate: CGPoint , radius: CGFloat) -> Bool {
+    func calculateNodesInRadius(coordinate: CGPoint, radius: CGFloat) -> Bool {
         
         for incident in automaticallyDetectedIncidents {
             if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
@@ -36,11 +36,9 @@ extension ARViewController {
     }
     
     func deleteNode(identifier: String) {
-        for (index, node) in nodes.enumerated() {
-            if node.name == identifier {
-                nodes.remove(at: index)
-                return
-            }
+        for (index, node) in nodes.enumerated() where node.name == identifier {
+            nodes.remove(at: index)
+            return
         }
     }
     
@@ -73,7 +71,9 @@ extension ARViewController {
     }
     
     func checkRange(origin: SCNVector3, pos: SCNVector3, radius: Float) -> Bool {
-        return checkRange(origin: origin.x, pos: pos.x, radius: radius) && checkRange(origin: origin.y, pos: origin.y, radius: radius) && checkRange(origin: origin.z, pos: pos.z, radius: radius)
+        return checkRange(origin: origin.x, pos: pos.x, radius: radius) &&
+            checkRange(origin: origin.y, pos: origin.y, radius: radius) &&
+            checkRange(origin: origin.z, pos: pos.z, radius: radius)
     }
     
     func checkRange(origin: Float, pos: Float, radius: Float) -> Bool {

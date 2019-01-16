@@ -8,7 +8,6 @@
 
 import Foundation
 import ARKit
-//swiftlint:disable all
 extension ARViewController {
         
     func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {

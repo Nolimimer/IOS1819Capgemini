@@ -50,7 +50,9 @@ class Audio: Attachment {
     
     func computeThumbnail() -> UIImage {
         let frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 120, height: 120))
+        // swiftlint:disable force_unwrapping
         let cgImage = CIContext().createCGImage(CIImage(color: .black), from: frame)!
+        // swiftlint:enable force_unwrapping
         let uiImage = UIImage(cgImage: cgImage)
         return uiImage
     }

@@ -18,9 +18,11 @@ class VideoCollectionViewCell: UICollectionViewCell {
 
         attachmentWrapper.loadThumbnailImage()
         
+        //swiftlint:disable object_literal
         let frontImage = UIImage(named: "play")
+        //swiftlint:enable object_literal
         let frontImageView = UIImageView(image: frontImage)
-        frontImageView.frame = self.imageView.frame 
+        frontImageView.frame = self.imageView.frame
         
         self.imageView.image = attachmentWrapper.thumbnail
         self.imageView.addSubview(frontImageView)

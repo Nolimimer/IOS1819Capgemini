@@ -4,7 +4,7 @@
 //
 //  Created by RMMM on 06.11.18.
 //  Copyright © 2018 TUM LS1. All rights reserved.
-//
+// swiftlint:disable type_body_length
 
 // MARK: Imports
 import UIKit
@@ -19,13 +19,12 @@ var nodes = [SCNNode]()
 var creatingNodePossible = true
 
 // MARK: - ARViewController
-// swiftlint:disable all
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // MARK: Stored Instance Properties
     static var sendIncidentButtonPressed = false
     static var resetButtonPressed = false
-    static var navigatingIncident : Incident?
+    static var navigatingIncident: Incident?
     static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
@@ -39,7 +38,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     var model: VNCoreMLModel?
     var mapProvider: MCPeerID?
+    // swiftlint:disable implicitly_unwrapped_optional
     var multipeerSession: MultipeerSession!
+    // swiftlint:enable implicitly_unwrapped_optional
     var isDetecting = true
 
     var automaticallyDetectedIncidents = [CGPoint]()
@@ -47,9 +48,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?
+    // swiftlint:disable force_unwrapping implicit_return
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
+    // swiftlint:enable force_unwrapping implicit_return
     
     // The pixel buffer being held for analysis; used to serialize Vision requests.
     private var currentBuffer: CVPixelBuffer?
@@ -61,24 +64,23 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             .wait(duration: 0.25),
             .fadeOpacity(to: 0.9, duration: 0.25),
             .fadeOpacity(to: 0.15, duration: 0.25),
-            .fadeOpacity(to: 1, duration: 0.25),
-            ])
+            .fadeOpacity(to: 1, duration: 0.25)])
     }
     var nodeBlinking: SCNAction {
         return .sequence([
             .fadeOpacity(to:0.5, duration:0.1),
-            .fadeOpacity(to:1.0, duration:0.1)
-            ])
+            .fadeOpacity(to:1.0, duration:0.1)])
     }
     // MARK: IBOutlets
     //sceneview bitte nicht private
+    // swiftlint:disable private_outlet
     @IBOutlet var sceneView: ARSCNView!
- 
     @IBOutlet weak var connectionLabel: UILabel!
     @IBOutlet weak var arrowUp: UIImageView!
     @IBOutlet weak var arrowRight: UIImageView!
     @IBOutlet weak var arrowLeft: UIImageView!
     @IBOutlet weak var arrowDown: UIImageView!
+    // swiftlint:enable private_outlet
     @IBOutlet private weak var progressRing: UICircularProgressRing!
 
     // MARK: Overridden/Lifecycle Methods
@@ -162,7 +164,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if !creatingNodePossible {
             return
         }
-        let location = touches.first!.location(in: sceneView)
+        guard let touchesFirst = touches.first else {
+            print("Error")
+            return
+        }
+        let location = touchesFirst.location(in: sceneView)
         let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
         if let touch = touches.first {
             if let hitResult = hitResultsFeaturePoints.first {
@@ -181,9 +187,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     if self.detectedObjectNode != nil {
                         let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
                             SCNVector3(hitResult.worldTransform.columns.3.x,
-                                        hitResult.worldTransform.columns.3.y,
-                                        hitResult.worldTransform.columns.3.z),
-                            to: self.detectedObjectNode)
+                                       hitResult.worldTransform.columns.3.y,
+                                       hitResult.worldTransform.columns.3.z),
+                        to: self.detectedObjectNode)
                         let incident = Incident (type: .unknown,
                                                  description: "New Incident",
                                                  coordinate: Coordinate(vector: coordinateRelativeToObject))
@@ -191,8 +197,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         let imageWithoutPin = self.sceneView.snapshot()
                         self.saveImage(image: imageWithoutPin, incident: incident)
                         self.add3DPin(vectorCoordinate: SCNVector3(hitResult.worldTransform.columns.3.x,
-                                                                    hitResult.worldTransform.columns.3.y,
-                                                                    hitResult.worldTransform.columns.3.z),
+                                                                   hitResult.worldTransform.columns.3.y,
+                                                                   hitResult.worldTransform.columns.3.z),
                                       identifier: "\(incident.identifier)" )
                         self.filter3DPins(identifier: "\(incident.identifier)")
                         let imageWithPin = self.sceneView.snapshot()
@@ -267,7 +273,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
-        
+        // swiftlint:disable force_unwrapping
         let request = VNCoreMLRequest(model: model!, completionHandler: { [weak self] request, error in
             guard let predictions = self?.processClassifications(for: request, error: error) else {
                 return
@@ -276,6 +282,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self?.drawBoxes(predictions: predictions)
             }
         })
+        // swiftlint:enable force_unwrapping
         request.imageCropAndScaleOption = .centerCrop
         request.usesCPUOnly = true
         
@@ -324,7 +331,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         let sphere = SCNSphere(radius: 0.015)
         let materialSphere = SCNMaterial()
+        // swiftlint:disable object_literal
         materialSphere.diffuse.contents = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.9)
+        // swiftlint:enable object_literal
         sphere.materials = [materialSphere]
         let sphereNode = SCNNode(geometry: sphere)
         sphereNode.name = identifier
@@ -335,9 +344,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func setDescriptionLabel() {
         
-        let openIncidents = (DataHandler.incidents.filter { $0.status == .open}).count
-        let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress}).count
-        let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved}).count
+        let openIncidents = (DataHandler.incidents.filter { $0.status == .open }).count
+        let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress }).count
+        let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved }).count
         descriptionNode.text = """
         Number of incidents: \(DataHandler.incidents.count)\r\n
         Open: \(openIncidents)\r\n
@@ -360,7 +369,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                              height: CGFloat(height))
         plane.cornerRadius = plane.width / 45
         let spriteKitScene = SKScene(size: CGSize(width: 500, height: 500))
+        // swiftlint:disable object_literal
         spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.9)
+        // swiftlint:enable object_literal
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
         plane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
@@ -394,7 +405,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     @objc func tapped(recognizer: UIGestureRecognizer) {
-        if recognizer.state != .began  {
+        if recognizer.state != .began {
             progressRing.resetProgress()
             progressRing.isHidden = true
         }
