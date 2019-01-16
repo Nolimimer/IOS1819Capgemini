@@ -98,12 +98,29 @@ class SSDPostProcessor {
             } catch {
                 print(error)
             }
-           
         }
         classNames = [String]()
         classNames?.append("???")
-        classNames?.append("sticker")
-        
+        classNames?.append("Pin")
+        classNames?.append("Tachometer")
+        classNames?.append("Spanner")
+        classNames?.append("Hammer")
+    }
+    
+    static func getColor(forName name: String) -> UIColor {
+        if name == "Pin" {
+            return UIColor.purple
+        }
+        if name == "Tachometer" {
+            return UIColor.red
+        }
+        if name == "Spanner" {
+            return UIColor.green
+        }
+        if name == "Hammer" {
+            return UIColor.yellow
+        }
+        return UIColor.black
     }
     
     func postprocess(boxPredictions: MLMultiArray, classPredictions: MLMultiArray) -> [Prediction] {

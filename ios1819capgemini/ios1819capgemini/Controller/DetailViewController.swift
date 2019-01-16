@@ -119,6 +119,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             modus = .view
             
         }
+        setAttachmentsToEditMode()
     }
    
     // MARK: Overridden/Lifecycle Methods
@@ -197,7 +198,9 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     func reloadCollectionView() {
-        attachments = []
+        attachments.removeAll()
+       
+        collectionView.reloadData()
 
         attachments.append(AnyAttachment(Photo(name: "plusButton", photoPath: "errorPath")))
         guard let incident = incident else {
@@ -206,6 +209,23 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         attachments.append(contentsOf: (incident.attachments))
 
         collectionView.reloadData()
+    }
+    
+    func setAttachmentsToEditMode() {
+        for item in collectionView.visibleCells {
+            let cell = item as? CollectionViewCell
+            cell?.changeDeleteButtonVisibility(isEdit: modus == Modus.edit ? true : false)
+        }
+    }
+    
+    func removeAttachment(withName name: String) {
+        for attachment in attachments {
+            if attachment.attachment.name == name {
+                incident?.removeAttachment(attachment: attachment.attachment)
+            }
+        }
+        reloadCollectionView()
+        setAttachmentsToEditMode()
     }
     
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
@@ -353,8 +373,8 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
             let photos: [PhotoWrapper] = incident!.attachments.reduce([]) {
                 var list = $0
-                if $1 is Photo {
-                    list.append(PhotoWrapper(photo: $1 as! Photo))
+                if $1.attachment is Photo {
+                    list.append(PhotoWrapper(photo: $1.attachment as! Photo))
                 }
                 return list
             }
@@ -364,7 +384,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: initialPhoto, referenceView: cell)
             
             galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-                if let index = self?.attachments.index(where: { $0 === photo }) {
+                if let index = self?.attachments.index(where: { $0 === photo}) {
                     let indexPath = IndexPath(item: index, section: 0)
                     return  collectionView.cellForItem(at: indexPath) as? ExampleCollectionViewCell
                 }
@@ -393,7 +413,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
-        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment)
+        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment, detail: self ,isEdit: modus == Modus.edit ? true : false)
         return cell ?? UICollectionViewCell()
     }
 }
