@@ -265,7 +265,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             recordButton.setTitle("Audio", for: .normal)
             hidePopup()
             reloadCollectionView()
-
+            recordingSession = nil
+            recordingSession = AVAudioSession.sharedInstance()
         } else {
             recordButton.setTitle("Tap to Record", for: .normal)
         }
@@ -273,6 +274,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     @objc func recordTapped() {
         if audioRecorder == nil {
+            do {
+                try recordingSession.setCategory(.playAndRecord, mode: .default)
+                try recordingSession.setActive(true)
+            } catch {
+                print("Cannot switch to play an record mode!")
+                return
+            }
             startRecording()
         } else {
             overlay.removeFromSuperview()
@@ -299,10 +307,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         imagePicker.sourceType = .camera
         imagePicker.mediaTypes = [kUTTypeMovie as String]
         present(imagePicker, animated: true, completion: nil)
-    }
-    
-    @objc private func recordAudio() {
-        
     }
     
     @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
