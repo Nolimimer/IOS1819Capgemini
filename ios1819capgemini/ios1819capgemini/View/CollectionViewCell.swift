@@ -18,15 +18,15 @@ class CollectionViewCell: UICollectionViewCell {
     var attachment: Attachment? = nil
     weak var detailViewController: DetailViewController? = nil
     
-    @IBAction func deleteAttachment(_ sender: Any) {
+    @IBAction private func deleteAttachment(_ sender: Any) {
         guard let attachment = attachment else {
             return
         }
         detailViewController?.removeAttachment(withName: attachment.name)
     }
     
-    
-    func populateWithAttachment(_ attachment: Attachment, detail: DetailViewController ,isEdit: Bool) {
+    // swiftlint:disable function_body_length
+    func populateWithAttachment(_ attachment: Attachment, detail: DetailViewController, isEdit: Bool) {
         self.attachment = attachment
         self.detailViewController = detail
         let attachmentWrapper = AttachmentWrapper(attachment: attachment)
