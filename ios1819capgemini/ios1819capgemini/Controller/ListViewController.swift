@@ -50,6 +50,7 @@ class ListViewController: UIViewController, UITableViewDelegate {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+        self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         tableView.delegate = self
         
     }
