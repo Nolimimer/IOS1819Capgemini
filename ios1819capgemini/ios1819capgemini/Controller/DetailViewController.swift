@@ -328,7 +328,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     // Spotlights the attachment popup
     private func showOverlay() {
         overlay = UIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
-        overlay.backgroundColor = #colorLiteral(red: 0.9961728454, green: 0.9902502894, blue: 1, alpha: 0.5)
+        overlay.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.5)
         view.addSubview(overlay)
     }
 }
