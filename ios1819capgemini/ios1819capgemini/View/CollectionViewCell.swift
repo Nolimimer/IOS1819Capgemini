@@ -75,7 +75,26 @@ class CollectionViewCell: UICollectionViewCell {
             self.imageView.image = image
             return
         }
-        if attachment is Audio || attachment is TextDocument {
+        if attachment is Audio {
+            let frontImage = UIImage(named: "audio")
+            let frontImageView = UIImageView(image: frontImage)
+            let xCoord = self.imageView.center.x - 30
+            let yCoord = self.imageView.center.y - 30
+            frontImageView.frame = CGRect(x: xCoord, y: yCoord, width: 20, height: 20)
+            self.imageView.addSubview(frontImageView)
+            //            self.imageView.image = cropToBounds(image: imageView.image ?? UIImage(), width: 90, height: 88)
+            let image = makeRoundImg(img: self.imageView)
+            self.imageView.image = image
+            return
+        }
+        if attachment is TextDocument {
+            let frontImage = UIImage(named: "file")
+            let frontImageView = UIImageView(image: frontImage)
+            let xCoord = self.imageView.center.x - 30
+            let yCoord = self.imageView.center.y - 30
+            frontImageView.frame = CGRect(x: xCoord, y: yCoord, width: 20, height: 20)
+            self.imageView.addSubview(frontImageView)
+            //            self.imageView.image = cropToBounds(image: imageView.image ?? UIImage(), width: 90, height: 88)
             let image = makeRoundImg(img: self.imageView)
             self.imageView.image = image
             return
