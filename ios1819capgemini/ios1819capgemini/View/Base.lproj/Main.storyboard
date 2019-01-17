@@ -588,9 +588,9 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TkF-EC-KpX">
-                                                    <rect key="frame" x="240" y="9" width="71" height="17"/>
+                                                    <rect key="frame" x="240" y="9" width="102" height="17"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="71" id="B2z-ma-3x6"/>
+                                                        <constraint firstAttribute="width" constant="102" id="B2z-ma-3x6"/>
                                                         <constraint firstAttribute="height" constant="17" id="bvf-53-Xeh"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -604,7 +604,7 @@
                                                 <constraint firstItem="TkF-EC-KpX" firstAttribute="top" secondItem="N6v-hV-78g" secondAttribute="topMargin" constant="-2" id="Bbk-2X-x3Z"/>
                                                 <constraint firstItem="BSW-q8-o8Z" firstAttribute="top" secondItem="TkF-EC-KpX" secondAttribute="bottom" constant="4" id="DKa-IQ-dNU"/>
                                                 <constraint firstItem="TkF-EC-KpX" firstAttribute="top" secondItem="N6v-hV-78g" secondAttribute="top" constant="9" id="Ihi-QS-yZM"/>
-                                                <constraint firstItem="TkF-EC-KpX" firstAttribute="trailing" secondItem="N6v-hV-78g" secondAttribute="trailingMargin" constant="-23" id="Ker-IT-Rvz"/>
+                                                <constraint firstItem="TkF-EC-KpX" firstAttribute="trailing" secondItem="N6v-hV-78g" secondAttribute="trailingMargin" constant="8" id="Ker-IT-Rvz"/>
                                                 <constraint firstItem="HxL-xA-sb8" firstAttribute="top" secondItem="tgW-TF-dQE" secondAttribute="bottom" constant="3" id="RKL-14-ioA"/>
                                                 <constraint firstItem="BSW-q8-o8Z" firstAttribute="top" secondItem="TkF-EC-KpX" secondAttribute="bottom" constant="4" id="T2t-Ea-Igy"/>
                                                 <constraint firstItem="TkF-EC-KpX" firstAttribute="centerY" secondItem="tgW-TF-dQE" secondAttribute="centerY" id="elq-0k-D6l"/>

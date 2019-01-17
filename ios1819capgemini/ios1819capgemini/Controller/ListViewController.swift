@@ -51,6 +51,7 @@ class ListViewController: UIViewController, UITableViewDelegate {
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
         tableView.delegate = self
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
