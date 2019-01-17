@@ -14,7 +14,8 @@ import UIKit
 class CustomCell: UITableViewCell {
     @IBOutlet weak var incidentTitleLabel: UILabel!
     @IBOutlet weak var incidentDescriptionLabel: UILabel!
-    @IBOutlet weak var incidentStatusLabel: UILabel!
+    @IBOutlet weak var incidentNumberOfPhotos: UILabel!
+    @IBOutlet weak var incidentNumberOfVideos: UILabel!
 }
 
 // MARK: ListViewController
@@ -144,7 +145,8 @@ extension ListViewController: UITableViewDataSource {
         }
         cell.incidentTitleLabel?.text = "\(incident.type.rawValue) \(incident.identifier)"
         cell.incidentDescriptionLabel?.text = incident.description
-        cell.incidentStatusLabel?.text = incident.status.rawValue
+        cell.incidentNumberOfPhotos?.text = "Photos:\(incident.countPictures())"
+        cell.incidentNumberOfVideos?.text = "Videos:\(incident.countVideos())"
         cell.tag = incident.identifier
         return cell
     }
