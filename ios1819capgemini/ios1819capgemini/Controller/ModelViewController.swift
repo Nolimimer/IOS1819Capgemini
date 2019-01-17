@@ -12,16 +12,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     static var objectName: String?
     
-    @IBAction private func exploreButton(_ sender: Any) {
+    @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
         self.dismiss(animated: false, completion: nil)
     }
-    
-    @IBAction private func reportButton(_ sender: Any) {
-        creatingNodePossible = true
-        self.dismiss(animated: false, completion: nil)
-    }
-    
     
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
