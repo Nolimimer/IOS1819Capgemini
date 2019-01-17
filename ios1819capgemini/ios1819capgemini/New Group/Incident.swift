@@ -81,6 +81,25 @@ public class Incident: Codable {
         attachments.append(attachment)
     }
     
+    func countPictures() -> Int {
+        var count = 0
+        for attachment in attachments {
+            if attachment is Photo {
+                count += 1
+            }
+        }
+        return count
+    }
+    
+    func countVideos() -> Int {
+        var count = 0
+        for attachment in attachments {
+            if attachment is Video {
+                count += 1
+            }
+        }
+        return count
+    }
 }
 
  // MARK: Constants
