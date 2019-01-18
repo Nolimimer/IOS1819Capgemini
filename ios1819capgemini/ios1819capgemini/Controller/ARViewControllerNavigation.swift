@@ -94,15 +94,14 @@ extension ARViewController {
         guard let currentFrame = self.sceneView.session.currentFrame, let incident = incident else {
             return nil
         }
-        let node = ARViewController.getNodeOfIncident(incident: incident)
-        guard let node2 = node else {
+        guard let node = ARViewController.getNodeOfIncident(incident: incident) else {
             print("Error")
             return nil
         }
         return distanceTravelled(between: SCNVector3 (x: currentFrame.camera.transform.columns.3.x,
                                                       y: currentFrame.camera.transform.columns.3.y,
                                                       z: currentFrame.camera.transform.columns.3.z),
-                                 and: self.sceneView.scene.rootNode.convertPosition(node2.position, to: nil))
+                                 and: self.sceneView.scene.rootNode.convertPosition(node.position, to: nil))
     }
     
     /*
