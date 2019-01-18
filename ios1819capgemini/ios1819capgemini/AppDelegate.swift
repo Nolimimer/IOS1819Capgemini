@@ -14,7 +14,7 @@ import CUU
 class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
 
     var window: UIWindow?
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DataHandler.loadFromJSON()
         PrototyperController.showFeedbackButton = false
@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
             defaults.set(1, forKey: "AttachedTextDocumentName")
         }
         // Override point for customization after application launch.
-        
+        DataHandler.setCarParts()
         CUU.start()
         
         return true

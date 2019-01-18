@@ -396,6 +396,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                     fatalError("Enter a name for your scan. Failed to save the file to \(documentURL)")
                 }
             }
+            DataHandler.setCarParts()
             self.showDoneButton()
         })
         guard let alert = alert,
