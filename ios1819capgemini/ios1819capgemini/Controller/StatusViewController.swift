@@ -42,6 +42,9 @@ class StatusViewController: UIViewController {
                                       preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { _ in
             DataHandler.objectsToIncidents.removeAll()
+            for car in DataHandler.carParts {
+                car.incidents.removeAll()
+            }
             DataHandler.incidents = []
             self.removeScans()
             ARViewController.resetButtonPressed = true
