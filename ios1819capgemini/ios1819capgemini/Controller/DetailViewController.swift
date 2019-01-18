@@ -225,10 +225,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     func removeAttachment(withName name: String) {
-        for attachment in attachments {
-            if attachment.attachment.name == name {
-                incident?.removeAttachment(attachment: attachment.attachment)
-            }
+        for attachment in attachments where attachment.attachment.name == name {
+            incident?.removeAttachment(attachment: attachment.attachment)
         }
         reloadCollectionView()
         setAttachmentsToEditMode()
@@ -399,7 +397,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: initialPhoto, referenceView: cell)
             
             galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-                if let index = self?.attachments.index(where: { $0 === photo}) {
+                if let index = self?.attachments.index(where: { $0 === photo }) {
                     let indexPath = IndexPath(item: index, section: 0)
                     return  collectionView.cellForItem(at: indexPath) as? ExampleCollectionViewCell
                 }
@@ -427,7 +425,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
-        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment, detail: self ,isEdit: modus == Modus.edit ? true : false)
+        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment, detail: self, isEdit: modus == Modus.edit ? true : false)
         return cell ?? UICollectionViewCell()
     }
 }

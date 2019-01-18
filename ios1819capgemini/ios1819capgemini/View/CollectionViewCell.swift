@@ -15,8 +15,8 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var deleteButton: UIButton!
     
-    var attachment: Attachment? = nil
-    weak var detailViewController: DetailViewController? = nil
+    var attachment: Attachment?
+    weak var detailViewController: DetailViewController?
     
     @IBAction private func deleteAttachment(_ sender: Any) {
         guard let attachment = attachment else {
@@ -31,14 +31,14 @@ class CollectionViewCell: UICollectionViewCell {
         self.detailViewController = detail
         let attachmentWrapper = AttachmentWrapper(attachment: attachment)
 
-        if(attachment.name == "plusButton") {
+        if attachment.name == "plusButton" {
             deleteButton.isHidden = true
         }
         
         if !isEdit {
             deleteButton.isHidden = true
         } else {
-            if(attachment.name != "plusButton") {
+            if attachment.name != "plusButton" {
                 deleteButton.isHidden = false
                 self.bringSubviewToFront(deleteButton)
             }
@@ -76,7 +76,7 @@ class CollectionViewCell: UICollectionViewCell {
             return
         }
         if attachment is Audio {
-            let frontImage = UIImage(named: "audio")
+            let frontImage = #imageLiteral(resourceName: "audio")
             let frontImageView = UIImageView(image: frontImage)
             let xCoord = self.imageView.center.x - 30
             let yCoord = self.imageView.center.y - 30
@@ -88,7 +88,7 @@ class CollectionViewCell: UICollectionViewCell {
             return
         }
         if attachment is TextDocument {
-            let frontImage = UIImage(named: "file")
+            let frontImage = #imageLiteral(resourceName: "file")
             let frontImageView = UIImageView(image: frontImage)
             let xCoord = self.imageView.center.x - 30
             let yCoord = self.imageView.center.y - 30
@@ -102,14 +102,14 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func changeDeleteButtonVisibility(isEdit: Bool) {
-        if(attachment?.name == "plusButton") ?? false {
+        if attachment?.name == "plusButton" {
             deleteButton.isHidden = true
         }
         
         if !isEdit {
             deleteButton.isHidden = true
         } else {
-            if(attachment?.name != "plusButton") ?? false {
+            if attachment?.name != "plusButton" {
                 deleteButton.isHidden = false
                 self.bringSubviewToFront(deleteButton)
             }
