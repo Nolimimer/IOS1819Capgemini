@@ -67,16 +67,16 @@ enum DataHandler {
     
     // MARK: Type Methods
     static func loadFromJSON() {
-        do {
-            let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)
-            guard let data = fileWrapper.regularFileContents else {
-                throw NSError()
-            }
-            incidents = try JSONDecoder().decode([Incident].self, from: data)
-        } catch _ {
-            print("Could not load incidents, DataHandler uses no incident")
-        }
-        
+//        do {
+//            let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)
+//            guard let data = fileWrapper.regularFileContents else {
+//                throw NSError()
+//            }
+//            incidents = try JSONDecoder().decode([Incident].self, from: data)
+//        } catch _ {
+//            print("Could not load incidents, DataHandler uses no incident")
+//        }
+//
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
@@ -92,22 +92,32 @@ enum DataHandler {
                 throw NSError()
             }
             carParts = try JSONDecoder().decode([CarPart].self, from: data)
+            incidents = []
+            for carPart in carParts {
+                carPart.reevaluateFilePath()
+                for incident in carPart.incidents {
+                    for attachment in incident.attachments {
+                        attachment.attachment.reevaluatePath()
+                    }
+                    incidents.append(incident)
+                }
+            }
         } catch _ {
             print("Could not load ar object: [incident] dictionary")
         }
     }
     
     static func saveToJSON() {
-        do {
-            let data = try JSONEncoder().encode(incidents)
-            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
-            try jsonFileWrapper.write(to: Constants.localStorageURL,
-                                      options: FileWrapper.WritingOptions.atomic,
-                                      originalContentsURL: nil)
-//            print("Saved incidents!")
-        } catch _ {
-            print("Could not save incidents")
-        }
+//        do {
+//            let data = try JSONEncoder().encode(incidents)
+//            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
+//            try jsonFileWrapper.write(to: Constants.localStorageURL,
+//                                      options: FileWrapper.WritingOptions.atomic,
+//                                      originalContentsURL: nil)
+////            print("Saved incidents!")
+//        } catch _ {
+//            print("Could not save incidents")
+//        }
         do {
             let data = try JSONEncoder().encode(objectsToIncidents)
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
@@ -145,20 +155,20 @@ enum DataHandler {
     }
     
     static func loadFromJSON(url: URL) {
-        do {
-            let fileWrapper = try FileWrapper(url: url, options: .immediate)
-            guard let data = fileWrapper.regularFileContents else {
-                throw NSError()
-            }
-            incidents = try JSONDecoder().decode([Incident].self, from: data)
-            for incident in incidents {
-                for attachment in incident.attachments {
-                    attachment.attachment.reevaluatePath()
-                }
-            }
-        } catch _ {
-            print("Could not load incidents, DataHandler uses no incident")
-        }
+//        do {
+//            let fileWrapper = try FileWrapper(url: url, options: .immediate)
+//            guard let data = fileWrapper.regularFileContents else {
+//                throw NSError()
+//            }
+//            incidents = try JSONDecoder().decode([Incident].self, from: data)
+//            for incident in incidents {
+//                for attachment in incident.attachments {
+//                    attachment.attachment.reevaluatePath()
+//                }
+//            }
+//        } catch _ {
+//            print("Could not load incidents, DataHandler uses no incident")
+//        }
         
         do {
             let fileWrapper = try FileWrapper(url: url, options: .immediate)
