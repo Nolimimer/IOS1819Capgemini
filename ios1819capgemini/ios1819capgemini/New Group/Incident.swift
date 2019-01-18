@@ -65,6 +65,46 @@ public class Incident: Codable {
         }
     }
     
+    func countPictures() -> Int {
+        var count = 0
+        for attachment in attachments {
+            if attachment.attachment is Photo {
+                count += 1
+            }
+        }
+        return count
+    }
+    
+    func countAudio() -> Int {
+        var count = 0
+        for attachment in attachments {
+            if attachment.attachment is Audio {
+                count += 1
+            }
+        }
+        return count
+    }
+    
+    func countDocument() -> Int {
+        var count = 0
+        for attachment in attachments {
+            if attachment.attachment is TextDocument {
+                count += 1
+            }
+        }
+        return count
+    }
+    
+    func countVideos() -> Int {
+        var count = 0
+        for attachment in attachments {
+            if attachment.attachment is Video {
+                count += 1
+            }
+        }
+        return count
+    }
+    
     func removeAttachment(attachment: Attachment) {
         let index = attachments.firstIndex {
             $0.attachment.name == attachment.name
@@ -92,9 +132,9 @@ enum IncidentType: String, Codable {
 }
 
 enum Status: String, Codable {
-    case open
-    case progress
-    case resolved
+    case open = "Open"
+    case progress = "In Progress"
+    case resolved = "Resolved"
 }
 
 // MARK: - Extension: Equatable

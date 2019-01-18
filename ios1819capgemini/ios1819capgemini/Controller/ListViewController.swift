@@ -8,6 +8,18 @@
 
 // MARK: Imports
 import UIKit
+
+//swiftlint:disable all
+
+// MARK: CustomCell IBOutlets
+class CustomCell: UITableViewCell {
+    @IBOutlet weak var incidentTitleLabel: UILabel!
+    @IBOutlet weak var incidentDescriptionLabel: UILabel!
+    @IBOutlet weak var incidentStatus: UILabel!
+    @IBOutlet weak var incidentNumberOfAttachments: UILabel!
+}
+
+
 // MARK: LastViewController
 class ListViewController: UIViewController, UITableViewDelegate {
     
@@ -38,7 +50,9 @@ class ListViewController: UIViewController, UITableViewDelegate {
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.navigationController?.view.addSubview(blurView)
         self.navigationController?.view.sendSubviewToBack(blurView)
+        self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         tableView.delegate = self
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -125,7 +139,7 @@ enum Filter: Int { // Remark: Need to match Segment in Story Board.
 extension ListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath)
+        let cell: CustomCell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath) as! CustomCell
         let incident: Incident
         switch filterSegmentedControl.selectedSegmentIndex {
         case Filter.showAll.rawValue:
@@ -139,9 +153,13 @@ extension ListViewController: UITableViewDataSource {
         default:
             incident = DataHandler.incidents[indexPath.row]
         }
-        cell.textLabel?.text = "\(incident.type.rawValue)"
+
+        cell.incidentTitleLabel?.text = "\(incident.type.rawValue)"
+        cell.incidentDescriptionLabel?.text = incident.description
+        cell.incidentStatus?.text = "\(incident.status.rawValue)"
+        cell.incidentNumberOfAttachments?.text = "Attachments: \(incident.attachments.count)"
+        //cell.textLabel?.text = "\(incident.type.rawValue)"
         cell.tag = incident.identifier
-        cell.detailTextLabel?.text = incident.description
         return cell
     }
     
