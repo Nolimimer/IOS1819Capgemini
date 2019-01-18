@@ -21,6 +21,7 @@ extension ARViewController {
             if incidentHasNotBeenPlaced(incident: incident) {
                 guard let detectedObjectNode = detectedObjectNode else {
                     print("detected object node not initialized in updateIncidents() ")
+                    ARViewController.objectDetected = false
                     return
                 }
                 let coordinateRelativeObject = detectedObjectNode.convertPosition(incident.getCoordinateToVector(), to: nil)
@@ -99,6 +100,7 @@ extension ARViewController {
         } catch {
             print("Error loading custom scans")
         }
+        DataHandler.setCarParts()
     }
     
     func checkSettings() {

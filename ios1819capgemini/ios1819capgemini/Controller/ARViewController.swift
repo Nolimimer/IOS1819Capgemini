@@ -31,6 +31,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     var detectedObjectNode: SCNNode?
     var detectionObjects = Set <ARReferenceObject>()
+    var selectedCarPart: CarPart?
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 4)
     var screenHeight: Double?
@@ -121,7 +122,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func reset() {
-        
+
+        print(objectAnchor?.referenceObject.name)
         if let name = objectAnchor?.referenceObject.name {
             DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
@@ -142,9 +144,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
             return
         }
-        for object in testObjects {
-            detectionObjects.insert(object)
-        }
         config.detectionObjects = detectionObjects
         sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
         do {
@@ -157,6 +156,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 notification.notificationOccurred(.error)
             }
         }
+        DataHandler.loadFromJSON()
     }
     
     /*
@@ -198,6 +198,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         let incident = Incident (type: .unknown,
                                                  description: "New Incident",
                                                  coordinate: Coordinate(vector: coordinateRelativeToObject))
+                        
                         self.filterAllPins()
                         let imageWithoutPin = self.sceneView.snapshot()
                         self.saveImage(image: imageWithoutPin, incident: incident)
@@ -208,7 +209,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         self.filter3DPins(identifier: "\(incident.identifier)")
                         let imageWithPin = self.sceneView.snapshot()
                         self.saveImage(image: imageWithPin, incident: incident)
+                        self.selectedCarPart?.incidents.append(incident)
                         DataHandler.incidents.append(incident)
+                        
                         self.sendIncident(incident: incident)
                     }
                 }
@@ -227,6 +230,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         for object in testObjects {
             detectionObjects.insert(object)
+            DispatchQueue.global().async {
+                do {
+                    try object.export(
+                        to: FileManager.default.urls(
+                            for: .documentDirectory,
+                            in: .userDomainMask)[0].appendingPathComponent((object.name ?? "dashboard") + ".arobject"),
+                        previewImage: nil)
+                    DataHandler.setCarParts()
+                } catch {
+                    fatalError("failed to save default scans to .userDomain ")
+                }
+            }
         }
         config.detectionObjects = detectionObjects
         sceneView.session.run(config)
@@ -255,11 +270,19 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if let objectAnchor = anchor as? ARObjectAnchor {
             guard let name = objectAnchor.referenceObject.name else { fatalError("reference object has no name") }
             
-            if DataHandler.objectsToIncidents[name] != nil {
-                DataHandler.incidents = DataHandler.getIncidentsOfObject(identifier: name)
-            } else {
-                DataHandler.incidents = []
+//            if DataHandler.objectsToIncidents[name] != nil {
+//                DataHandler.incidents = DataHandler.getIncidentsOfObject(identifier: name)
+//            } else {
+//                DataHandler.incidents = []
+//            }
+            
+            selectedCarPart = DataHandler.carParts.first(where: { $0.name.hasPrefix(name) })
+            guard let selectedCarPart = selectedCarPart else {
+                print("no carPart with name \(name)")
+                return node
             }
+            DataHandler.incidents = selectedCarPart.incidents
+            
             ModelViewController.objectName = name
             let notification = UINotificationFeedbackGenerator()
             
@@ -275,8 +298,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         return node
     }
-    
-    
     
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {

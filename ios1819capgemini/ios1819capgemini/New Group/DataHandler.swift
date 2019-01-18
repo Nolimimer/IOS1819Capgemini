@@ -31,6 +31,7 @@ enum DataHandler {
     }
 
     // MARK: Stored Type Properties
+    static var carParts = [CarPart]()
     static var objectsToIncidents = [String: [Incident]]()
     static var incidents: [Incident] = []
     static var largestID = 0
@@ -64,16 +65,44 @@ enum DataHandler {
         resolvedIncidents = incidents.filter({ $0.status == Status.resolved })
     }
     
+    static func setCarParts() {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                if file.lastPathComponent.hasSuffix(".arobject") {
+                    let carPart = CarPart(incidents: [], filePath: file)
+                    if !carParts.contains(where: {$0.name == carPart.name}) {
+                        DataHandler.carParts.append(carPart)
+                    }
+                }
+            }
+        } catch {
+            print("Error loading custom scans")
+        }
+    }
+    
     // MARK: Type Methods
     static func loadFromJSON() {
+//        do {
+//            let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)
+//            guard let data = fileWrapper.regularFileContents else {
+//                throw NSError()
+//            }
+//            incidents = try JSONDecoder().decode([Incident].self, from: data)
+//        } catch _ {
+//            print("Could not load incidents, DataHandler uses no incident")
+//        }
+//
         do {
-            let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)
+            let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
             }
-            incidents = try JSONDecoder().decode([Incident].self, from: data)
+            carParts = try JSONDecoder().decode([CarPart].self, from: data)
         } catch _ {
-            print("Could not load incidents, DataHandler uses no incident")
+            print("Could not load ar object: [incident] dictionary")
         }
         
         do {
@@ -85,19 +114,38 @@ enum DataHandler {
         } catch _ {
             print("Could not load ar object: [incident] dictionary")
         }
+        do {
+            let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            carParts = try JSONDecoder().decode([CarPart].self, from: data)
+//            incidents = []
+            for carPart in carParts {
+                carPart.reevaluateFilePath()
+                for incident in carPart.incidents {
+                    for attachment in incident.attachments {
+                        attachment.attachment.reevaluatePath()
+                    }
+//                    incidents.append(incident)
+                }
+            }
+        } catch _ {
+            print("Could not load ar object: [incident] dictionary")
+        }
     }
     
     static func saveToJSON() {
-        do {
-            let data = try JSONEncoder().encode(incidents)
-            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
-            try jsonFileWrapper.write(to: Constants.localStorageURL,
-                                      options: FileWrapper.WritingOptions.atomic,
-                                      originalContentsURL: nil)
-//            print("Saved incidents!")
-        } catch _ {
-            print("Could not save incidents")
-        }
+//        do {
+//            let data = try JSONEncoder().encode(incidents)
+//            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
+//            try jsonFileWrapper.write(to: Constants.localStorageURL,
+//                                      options: FileWrapper.WritingOptions.atomic,
+//                                      originalContentsURL: nil)
+////            print("Saved incidents!")
+//        } catch _ {
+//            print("Could not save incidents")
+//        }
         do {
             let data = try JSONEncoder().encode(objectsToIncidents)
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
@@ -106,32 +154,87 @@ enum DataHandler {
                                       originalContentsURL: nil)        } catch _ {
             print("Could not save ar object: [incident] dictionary")
         }
+        do {
+            let data = try JSONEncoder().encode(carParts)
+            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
+            try jsonFileWrapper.write(to: Constants.localStorageModelURL,
+                                      options: FileWrapper.WritingOptions.atomic,
+                                      originalContentsURL: nil)
+            print(carParts)
+
+        } catch _ {
+                                        print("Could not save ar object: [incident] dictionary")
+                
+        }
+        
     }
     
     static func getJSON() -> Data? {
         do {
-            let data = try JSONEncoder().encode(incidents)
+            let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
             return data
         } catch _ {
+            print("Could not load incidents, DataHandler uses no incident")
             return nil
         }
     }
+        
     
     static func loadFromJSON(url: URL) {
+//        do {
+//            let fileWrapper = try FileWrapper(url: url, options: .immediate)
+//            guard let data = fileWrapper.regularFileContents else {
+//                throw NSError()
+//            }
+//            incidents = try JSONDecoder().decode([Incident].self, from: data)
+//            for incident in incidents {
+//                for attachment in incident.attachments {
+//                    attachment.attachment.reevaluatePath()
+//                }
+//            }
+//        } catch _ {
+//            print("Could not load incidents, DataHandler uses no incident")
+//        }
+        
+        do {
+            let fileWrapper = try FileWrapper(url: url, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }            
+            objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
+            
+            for (_, incidents) in objectsToIncidents {
+                for incident in incidents {
+                    for attachment in incident.attachments {
+                        attachment.attachment.reevaluatePath()
+                    }
+                }
+            }
+        } catch _ {
+            print("Could not load ar object: [incident] dictionary")
+        }
         do {
             let fileWrapper = try FileWrapper(url: url, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
             }
-            incidents = try JSONDecoder().decode([Incident].self, from: data)
-            for incident in incidents {
-                for attachment in incident.attachments {
-                    attachment.attachment.reevaluatePath()
+            carParts = try JSONDecoder().decode([CarPart].self, from: data)
+            for carPart in carParts {
+                carPart.reevaluateFilePath()
+                for incident in carPart.incidents {
+                    for attachment in incident.attachments {
+                        attachment.attachment.reevaluatePath()
+                    }
                 }
             }
         } catch _ {
-            print("Could not load incidents, DataHandler uses no incident")
+            print("Could not load ar object: [incident] dictionary")
         }
+        print(carParts)
+        print("objectsToIncidents \(objectsToIncidents)")
     }
     static func getIncidentsOfObject(identifier: String) -> [Incident] {
         return DataHandler.objectsToIncidents[identifier] ?? []

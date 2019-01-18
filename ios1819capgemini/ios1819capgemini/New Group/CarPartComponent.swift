@@ -8,8 +8,9 @@
 
 // MARK: Imports
 import Foundation
-
+import ARKit
 // MARK: - CarPartComponent
-public class CarPartComponent {
+public class CarPartComponent: Codable {
+    
 
 }

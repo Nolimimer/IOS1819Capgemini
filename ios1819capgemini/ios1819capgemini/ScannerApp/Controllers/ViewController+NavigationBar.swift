@@ -25,7 +25,7 @@ extension ViewController {
                                           target: self,
                                           action: #selector(addScanButtonTapped(_:)))
         
-        let startOverButton = UIBarButtonItem(title: "Restart",
+        let startOverButton = UIBarButtonItem(title: "Cancel",
                                               style: .plain,
                                               target: self,
                                               action: #selector(restartButtonTapped(_:)))
