@@ -30,7 +30,6 @@ extension ARViewController {
     // Draw Boxes which indicate if a sticker has been detected
     // swiftlint:disable function_body_length
     func drawBoxes(predictions: [Prediction]) {
-        
         for (index, prediction) in predictions.enumerated() {
             if let classNames = self.ssdPostProcessor.classNames {
                 //print("Class: \(classNames[prediction.detectedClass])")

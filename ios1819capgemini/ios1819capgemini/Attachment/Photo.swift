@@ -129,14 +129,16 @@ extension UIImage {
         newSize.height = floor(newSize.height)
         
         UIGraphicsBeginImageContextWithOptions(newSize, true, self.scale)
+        //swiftlint:disable force_unwrapping
         let context = UIGraphicsGetCurrentContext()!
+        //swiftlint:enable force_unwrapping
         
         // Move origin to middle
-        context.translateBy(x: newSize.width/2, y: newSize.height/2)
+        context.translateBy(x: newSize.width / 2, y: newSize.height / 2)
         // Rotate around middle
         context.rotate(by: CGFloat(radians))
         // Draw the image at its center
-        self.draw(in: CGRect(x: -self.size.width/2, y: -self.size.height/2, width: self.size.width, height: self.size.height))
+        self.draw(in: CGRect(x: -self.size.width / 2, y: -self.size.height / 2, width: self.size.width, height: self.size.height))
         
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

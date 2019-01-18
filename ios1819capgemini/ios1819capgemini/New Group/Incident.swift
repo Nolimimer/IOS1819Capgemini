@@ -67,6 +67,7 @@ public class Incident: Codable {
     
     func countPictures() -> Int {
         var count = 0
+        //swiftlint:disable for_where
         for attachment in attachments {
             if attachment.attachment is Photo {
                 count += 1
@@ -99,6 +100,7 @@ public class Incident: Codable {
         var count = 0
         for attachment in attachments {
             if attachment.attachment is Video {
+            //swiftlint:enable for_where
                 count += 1
             }
         }

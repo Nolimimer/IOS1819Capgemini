@@ -85,7 +85,7 @@ class SSDPostProcessor {
     var threshold: Double
     var classNames: [String]?
     
-    init(numAnchors: Int, numClasses: Int, threshold: Double = 0.01) {
+    init(numAnchors: Int, numClasses: Int, threshold: Double = 0.7) {
         self.numAnchors = numAnchors
         self.numClasses = numClasses
         self.threshold = threshold
