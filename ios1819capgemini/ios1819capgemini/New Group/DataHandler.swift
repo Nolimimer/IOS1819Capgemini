@@ -110,12 +110,17 @@ enum DataHandler {
     
     static func getJSON() -> Data? {
         do {
-            let data = try JSONEncoder().encode(incidents)
+            let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
             return data
         } catch _ {
+            print("Could not load incidents, DataHandler uses no incident")
             return nil
         }
     }
+        
     
     static func loadFromJSON(url: URL) {
         do {
@@ -123,7 +128,7 @@ enum DataHandler {
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
             }
-            incidents = try JSONDecoder().decode([Incident].self, from: data)
+            objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
             for incident in incidents {
                 for attachment in incident.attachments {
                     attachment.attachment.reevaluatePath()
