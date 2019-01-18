@@ -15,8 +15,7 @@ import UIKit
 class CustomCell: UITableViewCell {
     @IBOutlet weak var incidentTitleLabel: UILabel!
     @IBOutlet weak var incidentDescriptionLabel: UILabel!
-    @IBOutlet weak var incidentStatus: UILabel!
-    @IBOutlet weak var incidentNumberOfAttachments: UILabel!
+    @IBOutlet weak var statusImage: UIImageView!
 }
 
 
@@ -115,7 +114,6 @@ class ListViewController: UIViewController, UITableViewDelegate {
                  UIActivity.ActivityType.addToReadingList,
                  UIActivity.ActivityType.assignToContact,
                  UIActivity.ActivityType.copyToPasteboard,
-                 UIActivity.ActivityType.mail,
                  UIActivity.ActivityType.postToTencentWeibo,
                  UIActivity.ActivityType.postToFacebook,
                  UIActivity.ActivityType.postToTwitter,
@@ -156,9 +154,16 @@ extension ListViewController: UITableViewDataSource {
 
         cell.incidentTitleLabel?.text = "\(incident.type.rawValue)"
         cell.incidentDescriptionLabel?.text = incident.description
-        cell.incidentStatus?.text = "\(incident.status.rawValue)"
-        cell.incidentNumberOfAttachments?.text = "Attachments: \(incident.attachments.count)"
-        //cell.textLabel?.text = "\(incident.type.rawValue)"
+
+        switch incident.status {
+            case .open:
+                cell.statusImage.image = #imageLiteral(resourceName: "red")
+            case .progress:
+                cell.statusImage.image = #imageLiteral(resourceName: "orange")
+            case .resolved:
+                cell.statusImage.image = #imageLiteral(resourceName: "green")
+        }
+
         cell.tag = incident.identifier
         return cell
     }
