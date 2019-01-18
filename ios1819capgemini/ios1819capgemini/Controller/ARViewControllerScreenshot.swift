@@ -14,7 +14,7 @@ extension ARViewController {
     // MARK: screenshot methods
     func saveImage(image: UIImage, incident: Incident) {
         
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        //UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         
         let paths = NSSearchPathForDirectoriesInDomains(
             FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
