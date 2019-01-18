@@ -5,9 +5,9 @@
  
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  
-Abstract:
-Main view controller for the object scanning UI.
-*/
+ Abstract:
+ Main view controller for the object scanning UI.
+ */
 
 import UIKit
 import SceneKit
@@ -28,6 +28,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     @IBOutlet weak var nextButton: RoundedButton!
     var backButton: UIBarButtonItem!
     var mergeScanButton: UIBarButtonItem!
+    var doneButton: UIBarButtonItem!
     @IBOutlet weak var instructionView: UIVisualEffectView!
     @IBOutlet weak var instructionLabel: MessageLabel!
     @IBOutlet weak var loadModelButton: RoundedButton!
@@ -43,7 +44,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     var referenceObjectToMerge: ARReferenceObject?
     var referenceObjectToTest: ARReferenceObject?
-    private var saveCounter = 0
+    private var textField: UITextField?
+    private var action: UIAlertAction?
+    private var alert: UIAlertController?
+    private var saved = false
     
     internal var testRun: TestRun?
     
@@ -92,7 +96,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         blurView.isHidden = true
         sceneView.delegate = self
         sceneView.session.delegate = self
-        saveCounter = 0
+        saved = false
         
         // Prevent the screen from being dimmed after a while.
         UIApplication.shared.isIdleTimerDisabled = true
@@ -183,7 +187,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             }
         }
     }
-
+    
     @IBAction func previousButtonTapped(_ sender: Any) {
         switchToPreviousState()
     }
@@ -197,7 +201,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     @IBAction func addScanButtonTapped(_ sender: Any) {
         guard state == .testing else {
             return }
-
+        
         let title = "Merge another scan?"
         let message = """
             Merging multiple scan results improves detection.
@@ -264,7 +268,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             return }
         flashlightButton.toggledOn = !flashlightButton.toggledOn
     }
-   
+    
     @IBAction func toggleInstructionsButtonTapped(_ sender: Any) {
         guard !toggleInstructionsButton.isHidden && toggleInstructionsButton.isEnabled else {
             return }
@@ -360,27 +364,76 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     func saveToCARgemini() {
-        guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {
+
+        guard let testRun = self.testRun, let object = testRun.referenceObject, var name = object.name else {
             print("Error: Missing scanned object for saving to the app.")
             return
         }
         
-        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
-        print("documentURL \(documentURL)")
+        alert = UIAlertController(title: "Save scan", message: "Enter a name for your scan.", preferredStyle: .alert)
         
-        saveImage(image: testRun.previewImage, name: name)
-        
-        DispatchQueue.global().async {
-            do {
-                try object.export(to: documentURL, previewImage: testRun.previewImage)
-            } catch {
-                fatalError("Failed to save the file to \(documentURL)")
+        action = UIAlertAction(title: "OK", style: .default, handler: { [weak alert] _ in
+            guard let alert = alert,
+                let textFields = alert.textFields else {
+                    return
             }
+            name = textFields[0].text ?? name
             
+            guard let name = name.convertedToSlug() else {
+                return
+            }
+            let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
+            
+            print("documentURL \(documentURL)")
+            self.saveImage(image: testRun.previewImage, name: name)
+            
+            DispatchQueue.global().async {
+                do {
+                    try object.export(to: documentURL, previewImage: testRun.previewImage)
+                    
+                } catch {
+                    fatalError("Enter a name for your scan. Failed to save the file to \(documentURL)")
+                }
+            }
+            self.showDoneButton()
+        })
+        guard let alert = alert,
+            let action = action else {
+                return
+        }
+        alert.addAction(action)
+        alert.addTextField { textField in
+            self.textField = textField
+            textField.text = "\(name)"
+            textField.addTarget(self, action: #selector(self.textFieldEditingDidChange), for: UIControl.Event.editingChanged)
+        }
+    
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+
+    //swiftlint:disable force_unwrapping
+    @IBAction func textFieldEditingDidChange(_ sender: Any) {
+        
+        guard let name = textField?.text!.convertedToSlug() else {
+            alert?.message = "This name contains invalid characters."
+            action?.isEnabled = false
+            return
+        }
+        if FileManager.default.fileExists(atPath: FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask)[0].appendingPathComponent(name + ".arobject").path) {
+            alert?.message = "A file with this name alrady exists."
+            action?.isEnabled = false
+        } else {
+            guard let action = action else {
+                return
+            }
+            alert?.message = "Enter a name for your scan."
+            action.isEnabled = true
         }
     }
-    
-    
+
     func saveImage(image: UIImage, name: String) {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             print("image not saved")
@@ -397,7 +450,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             }
     }
     }
-    
     
     func createAndShareReferenceObject() {
         guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {
@@ -538,14 +590,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         if let objectAnchor = anchor as? ARObjectAnchor {
             if let testRun = self.testRun, objectAnchor.referenceObject == testRun.referenceObject {
                 testRun.successfulDetection(objectAnchor)
-                if saveCounter == 0 {
+                if !saved {
                     saveToCARgemini()
-                    saveCounter += 1
+                    saved = true
                 }
                 
                 let messageText = """
-                    Object successfully detected from this angle. Your scan was successfully saved. To start reporting incidents press Restart.
-
+                    Object successfully detected from this angle. Your scan was succussfully saved.
                     """ + testRun.statistics
                 displayMessage(messageText, expirationTime: testRun.resultDisplayDuration)
                 

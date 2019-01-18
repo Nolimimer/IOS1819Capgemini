@@ -27,6 +27,10 @@ extension ViewController {
                                               style: .plain,
                                               target: self,
                                               action: #selector(restartButtonTapped(_:)))
+        doneButton = UIBarButtonItem(title: "Done",
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(restartButtonTapped(_:)))
         let navigationItem = UINavigationItem(title: "Start")
         navigationItem.leftBarButtonItem = backButton
         navigationItem.rightBarButtonItem = startOverButton
@@ -50,10 +54,11 @@ extension ViewController {
         }
     }
     
-    func showMergeScanButton() {
+    func showDoneButton() {
         guard let navBar = navigationBar, let navItem = navBar.items?.first else {
             return }
-        navItem.leftBarButtonItem = mergeScanButton
+        navItem.rightBarButtonItem = doneButton
+        navItem.leftBarButtonItem = nil
     }
     
     func setNavigationBarTitle(_ title: String) {
