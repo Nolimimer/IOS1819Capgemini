@@ -181,6 +181,7 @@ enum DataHandler {
             return nil
         }
     }
+        
     
     static func loadFromJSON(url: URL) {
 //        do {
@@ -202,8 +203,7 @@ enum DataHandler {
             let fileWrapper = try FileWrapper(url: url, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
-            }
-            
+            }            
             objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
             
             for (_, incidents) in objectsToIncidents {

@@ -169,6 +169,9 @@ extension ListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !ARViewController.objectDetected {
+            return 0
+        }
         switch filterSegmentedControl.selectedSegmentIndex {
         case Filter.showAll.rawValue:
             ARViewController.filterAllIncidents()
@@ -189,6 +192,8 @@ extension ListViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            let incident = DataHandler.incidents[indexPath.row]
+            
             if ARViewController.connectedToPeer {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can't be deleted if Peer is connected",
@@ -200,9 +205,32 @@ extension ListViewController: UITableViewDataSource {
                     self.present(alert, animated: true, completion: nil)
                 }
                 return
+            }
+            if DataHandler.currentSegmentFilter != 0 {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can only be deleted in Show All",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            if ARViewController.navigatingIncident != nil {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can't be deleted if it is navigated to ",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
             } else {
                 creatingNodePossible = false
-                let incident = DataHandler.incidents[indexPath.row]
                 DataHandler.removeIncident(incidentToDelete: incident)
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 return
@@ -218,10 +246,11 @@ extension ListViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        var title = "Stop"
-        var incident: Incident?
-        if ARViewController.navigatingIncident == incident {
+        var incident = ARViewController.navigatingIncident
+        if incident == nil {
             title = "Navigate"
+        } else {
+            title = "Stop"
         }
         let navigate = UITableViewRowAction(style: .normal, title: title) { _, _ in
             self.dismiss(animated: true, completion: {
@@ -266,7 +295,32 @@ extension ListViewController: UITableViewDataSource {
                     self.present(alert, animated: true, completion: nil)
                 }
                 return
-            } else {
+            }
+            if ARViewController.navigatingIncident != nil {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can't be deleted if it is navigated to ",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            if DataHandler.currentSegmentFilter != 0 {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can only be deleted in Show All",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            else {
                 creatingNodePossible = true
                 let incident = DataHandler.incidents[indexPath.row]
                 DataHandler.removeIncident(incidentToDelete: incident)
