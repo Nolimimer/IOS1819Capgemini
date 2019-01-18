@@ -382,6 +382,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             guard let name = name.convertedToSlug() else {
                 return
             }
+            object.name = name
             let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
             
             print("documentURL \(documentURL)")
