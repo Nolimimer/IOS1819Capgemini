@@ -444,7 +444,7 @@ extension DetailViewController: UIImagePickerControllerDelegate {
             let selectorToCall = #selector(AttachmentViewController.videoSaved(_:didFinishSavingWithError:context:))
             
             // 2
-            UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
+            //UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
 
             // Save the video to the app directory
             let videoData = try? Data(contentsOf: selectedVideo)
@@ -478,7 +478,7 @@ extension DetailViewController: UIImagePickerControllerDelegate {
     }
     
     func saveImage(image: UIImage) -> Bool {
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        //UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
         
         let paths = NSSearchPathForDirectoriesInDomains(
             FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
