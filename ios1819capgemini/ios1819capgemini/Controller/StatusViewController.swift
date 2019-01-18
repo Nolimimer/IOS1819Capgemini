@@ -56,6 +56,7 @@ class StatusViewController: UIViewController {
             print("Error loading custom scans")
         }
     }
+    
     @IBAction private func sendIncidentsButtonPressed(_ sender: Any) {
         ARViewController.sendIncidentButtonPressed = true
     }

@@ -135,7 +135,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     func cropToBounds(image: UIImage, width: Double, height: Double) -> UIImage {
         guard let imageCgImage = image.cgImage else {
-            print("Error")
+            print("error crop to bounds")
             return image
         }
         let cgimage = imageCgImage
@@ -163,7 +163,7 @@ class CollectionViewCell: UICollectionViewCell {
         
         // Create bitmap image from context using the rect
         guard let cgimageCropping = cgimage.cropping(to: rect) else {
-            print("Error")
+            print("error image cropping")
             return image
         }
         let imageRef: CGImage = cgimageCropping
