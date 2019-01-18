@@ -5,9 +5,9 @@
  
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  
-Abstract:
-Main view controller for the object scanning UI.
-*/
+ Abstract:
+ Main view controller for the object scanning UI.
+ */
 
 import UIKit
 import SceneKit
@@ -44,7 +44,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     var referenceObjectToMerge: ARReferenceObject?
     var referenceObjectToTest: ARReferenceObject?
-    private var saveCounter = 0
+    private var textField: UITextField?
+    private var action: UIAlertAction?
+    private var alert: UIAlertController?
+    private var saved = false
     
     internal var testRun: TestRun?
     
@@ -93,7 +96,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         blurView.isHidden = true
         sceneView.delegate = self
         sceneView.session.delegate = self
-        saveCounter = 0
+        saved = false
         
         // Prevent the screen from being dimmed after a while.
         UIApplication.shared.isIdleTimerDisabled = true
@@ -180,7 +183,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             }
         }
     }
-
+    
     @IBAction func previousButtonTapped(_ sender: Any) {
         switchToPreviousState()
     }
@@ -194,7 +197,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     @IBAction func addScanButtonTapped(_ sender: Any) {
         guard state == .testing else {
             return }
-
+        
         let title = "Merge another scan?"
         let message = """
             Merging multiple scan results improves detection.
@@ -261,7 +264,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             return }
         flashlightButton.toggledOn = !flashlightButton.toggledOn
     }
-   
+    
     @IBAction func toggleInstructionsButtonTapped(_ sender: Any) {
         guard !toggleInstructionsButton.isHidden && toggleInstructionsButton.isEnabled else {
             return }
@@ -357,46 +360,78 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     }
     
     func saveToCARgemini() {
-        
+
         guard let testRun = self.testRun, let object = testRun.referenceObject, var name = object.name else {
             print("Error: Missing scanned object for saving to the app.")
             return
         }
         
         //1. Create the alert controller.
-        let alert = UIAlertController(title: "Save scan", message: "Enter a name for your scan", preferredStyle: .alert)
+        alert = UIAlertController(title: "Save scan", message: "Enter a name for your scan.", preferredStyle: .alert)
+        // Swift 4 (you can specify the parameters using (_:) since the label is now _ in Swift 4)
         
-        //2. Add the text field. You can configure it however you need.
-        alert.addTextField { textField in
-            textField.text = "\(name)"
-        }
-        // 3. Grab the value from the text field, and print it when the user clicks OK.
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] _ in
+        action = UIAlertAction(title: "OK", style: .default, handler: { [weak alert] _ in
             guard let alert = alert,
                 let textFields = alert.textFields else {
                     return
             }
             name = textFields[0].text ?? name
-            print("new name: \(name)")
             
+            guard let name = name.convertedToSlug() else {
+                return
+            }
             let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
+            
             print("documentURL \(documentURL)")
             
             DispatchQueue.global().async {
                 do {
                     try object.export(to: documentURL, previewImage: testRun.previewImage)
                 } catch {
-                    fatalError("Failed to save the file to \(documentURL)")
+                    fatalError("Enter a name for your scan. Failed to save the file to \(documentURL)")
                 }
-                
             }
-        }))
+            self.showDoneButton()
+        })
+        guard let alert = alert,
+            let action = action else {
+                return
+        }
+        alert.addAction(action)
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextField { textField in
+            self.textField = textField
+            textField.text = "\(name)"
+            textField.addTarget(self, action: #selector(self.textFieldEditingDidChange), for: UIControl.Event.editingChanged)
+        }
         
         // 4. Present the alert.
+
         self.present(alert, animated: true, completion: nil)
-    
+        
     }
-    
+    //swiftlint:disable force_unwrapping
+    @IBAction func textFieldEditingDidChange(_ sender: Any) {
+        
+        guard let name = textField?.text!.convertedToSlug() else {
+            alert?.message = "This name contains invalid characters."
+            action?.isEnabled = false
+            return
+        }
+        if FileManager.default.fileExists(atPath: FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask)[0].appendingPathComponent(name + ".arobject").path) {
+            alert?.message = "A file with this name alrady exists."
+            action?.isEnabled = false
+        } else {
+            guard let action = action else {
+                return
+            }
+            alert?.message = "Enter a name for your scan."
+            action.isEnabled = true
+        }
+    }
+
     func createAndShareReferenceObject() {
         guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {
             print("Error: Missing scanned object for sharing.")
@@ -536,9 +571,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         if let objectAnchor = anchor as? ARObjectAnchor {
             if let testRun = self.testRun, objectAnchor.referenceObject == testRun.referenceObject {
                 testRun.successfulDetection(objectAnchor)
-                if saveCounter == 0 {
+                if !saved {
                     saveToCARgemini()
-                    saveCounter += 1
+                    saved = true
                 }
                 
                 let messageText = """

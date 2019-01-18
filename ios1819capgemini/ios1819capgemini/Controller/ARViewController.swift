@@ -512,9 +512,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress}).count
         let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved}).count
         descriptionNode.text = """
-        Number of incidents: \(DataHandler.incidents.count)\r\n
-        Open: \(openIncidents)\r\n
-        In progress: \(incidentsInProgress)\r\n
+        Number of incidents: \(DataHandler.incidents.count)
+        Open: \(openIncidents)
+        In progress: \(incidentsInProgress)
         Resolved: \(resolvedIncidents)
         """
     }
@@ -532,7 +532,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let plane = SCNPlane(width: CGFloat(width),
                              height: CGFloat(height))
         plane.cornerRadius = plane.width / 45
-        let spriteKitScene = SKScene(size: CGSize(width: 500, height: 500))
+        let spriteKitScene = SKScene(size: CGSize(width: 400, height: 280))
         spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.9)
         plane.firstMaterial?.diffuse.contents = spriteKitScene
         plane.firstMaterial?.isDoubleSided = true
@@ -545,17 +545,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         planeNode.position = planePosition
         planeNode.name = "info-plane"
         let labelNode = SKLabelNode(text: name)
-        labelNode.fontSize = 40
+        labelNode.fontSize = 35
         labelNode.fontName = "HelveticaNeue-Medium"
-        labelNode.position = CGPoint(x: 250, y: 400)
+        labelNode.position = CGPoint(x: 200, y: 200)
         labelNode.numberOfLines = 2
-        labelNode.preferredMaxLayoutWidth = CGFloat(450)
+        labelNode.preferredMaxLayoutWidth = CGFloat(380)
         labelNode.lineBreakMode = .byWordWrapping
         
         setDescriptionLabel()
-        descriptionNode.fontSize = 30
+        descriptionNode.fontSize = 27
         descriptionNode.fontName = "HelveticaNeue-Light"
-        descriptionNode.position = CGPoint(x: 200, y: 100)
+        descriptionNode.position = CGPoint(x: 180, y: 50)
         descriptionNode.numberOfLines = 4
         descriptionNode.lineBreakMode = NSLineBreakMode.byWordWrapping
         spriteKitScene.addChild(descriptionNode)
