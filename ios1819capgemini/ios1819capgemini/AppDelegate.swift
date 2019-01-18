@@ -22,7 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
             for file in fileURLs {
                 if file.lastPathComponent.hasSuffix(".arobject") {
-                    DataHandler.carParts.append(CarPart(incidents: [], filePath: file))
+                    let carPart = CarPart(incidents: [], filePath: file)
+                    if !DataHandler.carParts.contains(where: {$0.name == carPart.name}) {
+                      DataHandler.carParts.append(carPart)
+                    }
                 }
             }
         } catch {
