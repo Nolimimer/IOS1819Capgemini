@@ -120,9 +120,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
-    
-
-    
     func reset() {
         
         if let name = objectAnchor?.referenceObject.name {
