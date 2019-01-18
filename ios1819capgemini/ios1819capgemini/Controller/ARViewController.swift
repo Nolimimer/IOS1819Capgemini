@@ -110,9 +110,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-    }
-    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         
         super.viewWillTransition(to: size, with: coordinator)
