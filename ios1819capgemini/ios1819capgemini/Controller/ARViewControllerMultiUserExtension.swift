@@ -19,9 +19,13 @@ extension ARViewController {
         do {
             let incidents = try JSONDecoder().decode([Incident].self, from: data)
             DataHandler.incidents = incidents
-            
+            for incident in incidents {
+                for attachment in incident.attachments {
+                    attachment.attachment.reevaluatePath()
+                }
+            }
         } catch {
-            
+    
         }
         do {
             let incident = try JSONDecoder().decode(Incident.self, from: data)
