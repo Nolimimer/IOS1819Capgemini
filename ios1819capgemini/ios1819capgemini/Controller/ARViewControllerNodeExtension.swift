@@ -18,7 +18,7 @@ extension ARViewController {
     func calculateNodesInRadius(coordinate: CGPoint, radius: CGFloat) -> Bool {
         
         for incident in automaticallyDetectedIncidents {
-            if incident.x.distance(to: coordinate.x) < radius || incident.y.distance(to: coordinate.y) < radius {
+            if abs(incident.x.distance(to: coordinate.x)) < radius || abs(incident.y.distance(to: coordinate.y)) < radius {
                 return false
             }
         }
