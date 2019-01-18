@@ -660,20 +660,18 @@
                         <viewLayoutGuide key="safeArea" id="aL3-UY-sVh"/>
                     </view>
                     <navigationItem key="navigationItem" title="Incident List" id="02i-px-RU8">
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="add" id="AZm-i1-5TK">
-                                <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <action selector="didPressAddButton:" destination="qwB-cY-kiz" id="YxY-qN-zng"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem style="plain" systemItem="action" id="lLt-by-Vk1">
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <action selector="shareButtonPressed:" destination="qwB-cY-kiz" id="WDR-4p-y0F"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="AZm-i1-5TK">
+                            <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="didPressAddButton:" destination="qwB-cY-kiz" id="YxY-qN-zng"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="action" id="lLt-by-Vk1">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="shareButtonPressed:" destination="qwB-cY-kiz" id="WDR-4p-y0F"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="filterSegmentedControl" destination="Jz5-Se-vdJ" id="3SR-Aq-k41"/>
