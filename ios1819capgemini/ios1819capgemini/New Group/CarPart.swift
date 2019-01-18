@@ -8,8 +8,23 @@
 
 // MARK: Imports
 import Foundation
+import ARKit
 
 // MARK: - CarPart
-public class CarPart: CarPartComponent {
+class CarPart: Codable {
+    var incidents: [Incident]
+    var filePath: URL
+    var data: Data?
+    
+    init(incidents: [Incident], filePath: URL) {
+        self.incidents = incidents
+        self.filePath = filePath
+        do {
+            data = try Data(contentsOf: filePath)
+        } catch {
+            print("could not load arobject")
+        }
+    }
+    
     
 }

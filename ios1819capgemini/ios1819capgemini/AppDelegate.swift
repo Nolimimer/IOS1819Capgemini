@@ -35,7 +35,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
             defaults.set(1, forKey: "AttachedTextDocumentName")
         }
         // Override point for customization after application launch.
-        
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                if file.lastPathComponent.hasSuffix(".arobject") {
+                   DataHandler.carParts.append(CarPart(incidents: [], filePath: file))
+                }
+            }
+        } catch {
+            print("Error loading custom scans")
+        }
         CUU.start()
         
         return true

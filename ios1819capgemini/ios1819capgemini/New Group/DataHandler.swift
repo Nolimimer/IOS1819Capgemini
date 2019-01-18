@@ -31,6 +31,7 @@ enum DataHandler {
     }
 
     // MARK: Stored Type Properties
+    static var carParts = [CarPart]()
     static var objectsToIncidents = [String: [Incident]]()
     static var incidents: [Incident] = []
     static var largestID = 0
