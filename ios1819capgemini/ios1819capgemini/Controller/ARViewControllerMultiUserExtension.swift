@@ -13,6 +13,9 @@ import MultipeerConnectivity
 extension ARViewController {
     
     func receivedData(_ data: Data, from peer: MCPeerID) {
+        if !ARViewController.multiUserEnabled {
+            return
+        }
         do {
             let incidents = try JSONDecoder().decode([Incident].self, from: data)
             DataHandler.incidents = incidents
@@ -59,6 +62,9 @@ extension ARViewController {
     }
     
     func sendIncident(incident: Incident) {
+        if !ARViewController.multiUserEnabled {
+            return
+        }
         do {
             let data = try JSONEncoder().encode(incident)
             self.multipeerSession.sendToAllPeers(data)
@@ -68,10 +74,16 @@ extension ARViewController {
     }
     
     func sendIncidents() {
+        if !ARViewController.multiUserEnabled {
+            return
+        }
         sendIncidents(incidents: DataHandler.incidents)
     }
 
     func sendIncidents(incidents: [Incident]) {
+        if !ARViewController.multiUserEnabled {
+            return
+        }
         do {
             let data = try JSONEncoder().encode(incidents)
             self.multipeerSession.sendToAllPeers(data)
