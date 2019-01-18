@@ -143,24 +143,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
             return
         }
-        //swiftlint:disable multiline_function_chains
-        for object in testObjects {
-            detectionObjects.insert(object)
-            
-            //TODO: insert dashboard image here!
-            DispatchQueue.global().async {
-                do {
-                    try object.export(
-                        to: FileManager.default.urls(
-                            for: .documentDirectory,
-                            in: .userDomainMask)[0].appendingPathComponent(object.name ?? "dashboard" + ".arobject"),
-                        previewImage: nil)
-                    AppDelegate.setCarParts()
-                } catch {
-                    fatalError("failed to save default scans to .userDomain ")
-                }
-            }
-        }
         config.detectionObjects = detectionObjects
         sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
         do {
@@ -246,6 +228,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         for object in testObjects {
             detectionObjects.insert(object)
+            DispatchQueue.global().async {
+                do {
+                    try object.export(
+                        to: FileManager.default.urls(
+                            for: .documentDirectory,
+                            in: .userDomainMask)[0].appendingPathComponent((object.name ?? "dashboard") + ".arobject"),
+                        previewImage: nil)
+                    AppDelegate.setCarParts()
+                } catch {
+                    fatalError("failed to save default scans to .userDomain ")
+                }
+            }
         }
         config.detectionObjects = detectionObjects
         sceneView.session.run(config)
