@@ -385,7 +385,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
             
             print("documentURL \(documentURL)")
-            saveImage(image: testRun.previewImage, name: name)
+            self.saveImage(image: testRun.previewImage, name: name)
             
             DispatchQueue.global().async {
                 do {
