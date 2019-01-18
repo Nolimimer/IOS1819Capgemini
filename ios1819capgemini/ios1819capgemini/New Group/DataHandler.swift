@@ -71,16 +71,7 @@ enum DataHandler {
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
             }
-            incidents = []
-            objectsToIncidents = try JSONDecoder().decode([String : [Incident]].self, from: data)
-            for (_, incidents) in objectsToIncidents {
-                for incident in incidents {
-                    for attachment in incident.attachments {
-                        attachment.attachment.reevaluatePath()
-                    }
-                    self.incidents.append(incident)
-                }
-            }
+            incidents = try JSONDecoder().decode([Incident].self, from: data)
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
@@ -90,16 +81,7 @@ enum DataHandler {
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
             }
-            incidents = []
-            objectsToIncidents = try JSONDecoder().decode([String : [Incident]].self, from: data)
-            for (_, incidents) in objectsToIncidents {
-                for incident in incidents {
-                    for attachment in incident.attachments {
-                        attachment.attachment.reevaluatePath()
-                    }
-                    self.incidents.append(incident)
-                }
-            }
+            objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
         } catch _ {
             print("Could not load ar object: [incident] dictionary")
         }
@@ -107,7 +89,7 @@ enum DataHandler {
     
     static func saveToJSON() {
         do {
-            let data = try JSONEncoder().encode(objectsToIncidents)
+            let data = try JSONEncoder().encode(incidents)
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
             try jsonFileWrapper.write(to: Constants.localStorageURL,
                                       options: FileWrapper.WritingOptions.atomic,
@@ -137,22 +119,17 @@ enum DataHandler {
     
     static func loadFromJSON(url: URL) {
         do {
-            incidents = []
             let fileWrapper = try FileWrapper(url: url, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
             }
-            objectsToIncidents = try JSONDecoder().decode([String : [Incident]].self, from: data)
-            for (_, incidents) in objectsToIncidents {
-                for incident in incidents {
-                    for attachment in incident.attachments {
-                        attachment.attachment.reevaluatePath()
-                    }
-                    self.incidents.append(incident)
+            incidents = try JSONDecoder().decode([Incident].self, from: data)
+            for incident in incidents {
+                for attachment in incident.attachments {
+                    attachment.attachment.reevaluatePath()
                 }
             }
-            print(objectsToIncidents)
-        } catch let error {
+        } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
     }
