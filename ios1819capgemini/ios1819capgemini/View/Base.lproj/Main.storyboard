@@ -85,7 +85,7 @@
                                 </connections>
                             </containerView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y1B-gL-xwm" userLabel="Connection">
-                                <rect key="frame" x="0.0" y="579" width="375" height="24"/>
+                                <rect key="frame" x="0.0" y="589" width="375" height="14"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="14" id="PeP-ca-laG"/>
                                 </constraints>
