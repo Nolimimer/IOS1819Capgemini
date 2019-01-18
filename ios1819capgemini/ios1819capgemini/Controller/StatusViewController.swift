@@ -25,6 +25,18 @@ class StatusViewController: UIViewController {
     @IBOutlet private weak var messageLabel: UILabel!
     
     @IBAction private func resetButtonPressed(_ sender: Any) {
+        if ARViewController.multiUserEnabled {
+            let alert = UIAlertController(title: "Error",
+                                          message: "Reset Button can't be pressed if Multi User AR is enabled!",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK",
+                                          style: .default,
+                                          handler: nil))
+            DispatchQueue.main.async {
+                self.present(alert, animated: true, completion: nil)
+            }
+            return
+        }
         let alert = UIAlertController(title: "Reset",
                                       message: "Are you sure you want to reset the app ? This will delete all the scanned objects",
                                       preferredStyle: UIAlertController.Style.alert)
