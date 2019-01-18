@@ -14,24 +14,6 @@ import CUU
 class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
 
     var window: UIWindow?
-
-    static func setCarParts() {
-        let fileManager = FileManager.default
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
-            for file in fileURLs {
-                if file.lastPathComponent.hasSuffix(".arobject") {
-                    let carPart = CarPart(incidents: [], filePath: file)
-                    if !DataHandler.carParts.contains(where: {$0.name == carPart.name}) {
-                      DataHandler.carParts.append(carPart)
-                    }
-                }
-            }
-        } catch {
-            print("Error loading custom scans")
-        }
-    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DataHandler.loadFromJSON()
@@ -53,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
             defaults.set(1, forKey: "AttachedTextDocumentName")
         }
         // Override point for customization after application launch.
-        AppDelegate.setCarParts()
+        DataHandler.setCarParts()
         CUU.start()
         
         return true

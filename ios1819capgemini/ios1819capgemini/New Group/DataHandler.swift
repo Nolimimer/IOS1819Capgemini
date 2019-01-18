@@ -65,6 +65,24 @@ enum DataHandler {
         resolvedIncidents = incidents.filter({ $0.status == Status.resolved })
     }
     
+    static func setCarParts() {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                if file.lastPathComponent.hasSuffix(".arobject") {
+                    let carPart = CarPart(incidents: [], filePath: file)
+                    if !carParts.contains(where: {$0.name == carPart.name}) {
+                        DataHandler.carParts.append(carPart)
+                    }
+                }
+            }
+        } catch {
+            print("Error loading custom scans")
+        }
+    }
+    
     // MARK: Type Methods
     static func loadFromJSON() {
 //        do {
@@ -77,6 +95,16 @@ enum DataHandler {
 //            print("Could not load incidents, DataHandler uses no incident")
 //        }
 //
+        do {
+            let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            carParts = try JSONDecoder().decode([CarPart].self, from: data)
+        } catch _ {
+            print("Could not load ar object: [incident] dictionary")
+        }
+        
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {

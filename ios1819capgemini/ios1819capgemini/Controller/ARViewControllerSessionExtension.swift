@@ -99,7 +99,7 @@ extension ARViewController {
         } catch {
             print("Error loading custom scans")
         }
-        AppDelegate.setCarParts()
+        DataHandler.setCarParts()
     }
     
     func checkSettings() {
