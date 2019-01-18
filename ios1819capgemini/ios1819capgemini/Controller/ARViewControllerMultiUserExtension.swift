@@ -13,6 +13,9 @@ import MultipeerConnectivity
 extension ARViewController {
     
     func receivedData(_ data: Data, from peer: MCPeerID) {
+        if !ARViewController.multiUserEnabled {
+            return
+        }
         do {
             let incidents = try JSONDecoder().decode([Incident].self, from: data)
             DataHandler.incidents = incidents
@@ -22,6 +25,9 @@ extension ARViewController {
         }
         do {
             let incident = try JSONDecoder().decode(Incident.self, from: data)
+            for attachment in incident.attachments {
+                attachment.attachment.reevaluatePath()
+            }
             DataHandler.incidents.append(incident)
         } catch {
             
@@ -56,6 +62,9 @@ extension ARViewController {
     }
     
     func sendIncident(incident: Incident) {
+        if !ARViewController.multiUserEnabled {
+            return
+        }
         do {
             let data = try JSONEncoder().encode(incident)
             self.multipeerSession.sendToAllPeers(data)
@@ -65,10 +74,16 @@ extension ARViewController {
     }
     
     func sendIncidents() {
+        if !ARViewController.multiUserEnabled {
+            return
+        }
         sendIncidents(incidents: DataHandler.incidents)
     }
 
     func sendIncidents(incidents: [Incident]) {
+        if !ARViewController.multiUserEnabled {
+            return
+        }
         do {
             let data = try JSONEncoder().encode(incidents)
             self.multipeerSession.sendToAllPeers(data)
@@ -90,20 +105,21 @@ extension ARViewController {
     
     func updatePinColour() {
         for incident in DataHandler.incidents {
-            if incident.automaticallyDetected {
-                nodes.first(where: { $0.name == "\(incident.identifier)" })?.geometry?.materials.first?.diffuse.contents = UIColor.blue
-            } else {
-                for node in nodes {
-                    guard let nodeName = node.name else {
-                        print("Error")
-                        return
-                    }
-                    if nodeName == String(incident.identifier) {
-                        switch incident.status {
-                        case .open: node.geometry?.materials.first?.diffuse.contents = UIColor.red
-                        case .progress: node.geometry?.materials.first?.diffuse.contents = UIColor.yellow
-                        case .resolved: node.geometry?.materials.first?.diffuse.contents = UIColor.green
+            for node in nodes {
+                guard let nodeName = node.name else {
+                    print("node.name == nil in updatePinColour()")
+                    return
+                }
+                if nodeName == String(incident.identifier) {
+                    switch incident.status {
+                    case .open:
+                        if incident.automaticallyDetected {
+                            node.geometry?.materials.first?.diffuse.contents = UIColor.blue
+                        } else {
+                            node.geometry?.materials.first?.diffuse.contents = UIColor.red
                         }
+                    case .progress: node.geometry?.materials.first?.diffuse.contents = UIColor.yellow
+                    case .resolved: node.geometry?.materials.first?.diffuse.contents = UIColor.green
                     }
                 }
             }

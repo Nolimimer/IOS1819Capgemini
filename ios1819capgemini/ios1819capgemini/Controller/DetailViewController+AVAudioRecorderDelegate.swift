@@ -45,8 +45,7 @@ extension DetailViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        audioPlayer?.stop()
-        audioPlayer = nil
+       print("Finished playing!")
     }
     
     func getDocumentsDirectory() -> URL {
@@ -67,11 +66,11 @@ extension DetailViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
             /* iOS 10 and earlier require the following line:
              player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
             
-            guard let audioPlayer = audioPlayer else {
+            guard let audioPlayerUnwrapped = audioPlayer else {
                 return
             }
             
-            audioPlayer.play()
+            audioPlayerUnwrapped.play()
         } catch let error {
             print(error)
             print(error.localizedDescription)

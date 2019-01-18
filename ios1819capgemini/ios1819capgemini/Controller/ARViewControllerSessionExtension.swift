@@ -20,7 +20,7 @@ extension ARViewController {
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
                 guard let detectedObjectNode = detectedObjectNode else {
-                    print("Error")
+                    print("detected object node not initialized in updateIncidents() ")
                     return
                 }
                 let coordinateRelativeObject = detectedObjectNode.convertPosition(incident.getCoordinateToVector(), to: nil)
@@ -30,10 +30,13 @@ extension ARViewController {
     }
     
     func checkConnection () {
-        if !multipeerSession.connectedPeers.isEmpty {
+        if !multipeerSession.connectedPeers.isEmpty && ARViewController.multiUserEnabled {
             ARViewController.connectedToPeer = true
             let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
             connectionLabel.text = "Connected with \(peerNames)"
+            connectionLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        } else {
+            connectionLabel.text = ""
         }
     }
     
@@ -99,7 +102,7 @@ extension ARViewController {
     }
     
     func checkSettings() {
-        // Check settings
+        
         if UserDefaults.standard.bool(forKey: "enable_boundingboxes") {
             sceneView.debugOptions = [.showFeaturePoints, .showBoundingBoxes]
         } else if UserDefaults.standard.bool(forKey: "enable_featurepoints") {
@@ -107,6 +110,8 @@ extension ARViewController {
         } else {
             sceneView.debugOptions = []
         }
+        ARViewController.multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
+        
         if UserDefaults.standard.bool(forKey: "enable_detection") && detectedObjectNode != nil {
             isDetecting = true
             setupBoxes()

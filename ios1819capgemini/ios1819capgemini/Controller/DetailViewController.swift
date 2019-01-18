@@ -63,7 +63,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         whiteViewFromPopUp.layer.cornerRadius = 10
         popUpIncidentTypeView.isHidden = false
         guard let tmpIndexOfType = types.firstIndex(of: type) else {
-            print("Error")
+            print("error index type button pressed")
             return
         }
         incidentTypePicker.selectRow(tmpIndexOfType, inComponent: 0, animated: false)
@@ -106,7 +106,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 status = .resolved
             }
             guard let tmpIncident = incident else {
-                print("Error")
+                print("error edit button pressed")
                 return
             }
             tmpIncident.edit(status: status, description: textField.text, modifiedDate: Date())
@@ -135,7 +135,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         
         let controllIndex: Int
         guard let tmpIncident = incident else {
-            print("Error")
+            print("incident not initialized (view will appear DetailViewcontroller)")
             return
         }
         switch tmpIncident.status {
@@ -155,7 +155,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         textField.text = incident?.description
         reloadCollectionView()
         guard let incident = incident else {
-            print("Error")
+            print("incident not initialized in view will appear")
             return
         }
         type = incident.type
@@ -225,10 +225,8 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     func removeAttachment(withName name: String) {
-        for attachment in attachments {
-            if attachment.attachment.name == name {
-                incident?.removeAttachment(attachment: attachment.attachment)
-            }
+        for attachment in attachments where attachment.attachment.name == name {
+            incident?.removeAttachment(attachment: attachment.attachment)
         }
         reloadCollectionView()
         setAttachmentsToEditMode()
@@ -258,14 +256,15 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             let defaults = UserDefaults.standard
             let name = "cARgeminiAudioAsset\(defaults.integer(forKey: "AttachedAudioName") - 1).m4a"
             guard let incident = incident else {
-                print("Error")
+                print("error not recorded ")
                 return
             }
             incident.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
             recordButton.setTitle("Audio", for: .normal)
             hidePopup()
             reloadCollectionView()
-
+            recordingSession = nil
+            recordingSession = AVAudioSession.sharedInstance()
         } else {
             recordButton.setTitle("Tap to Record", for: .normal)
         }
@@ -273,6 +272,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     @objc func recordTapped() {
         if audioRecorder == nil {
+            do {
+                try recordingSession.setCategory(.playAndRecord, mode: .default)
+                try recordingSession.setActive(true)
+            } catch {
+                print("Cannot switch to play an record mode!")
+                return
+            }
             startRecording()
         } else {
             overlay.removeFromSuperview()
@@ -299,10 +305,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         imagePicker.sourceType = .camera
         imagePicker.mediaTypes = [kUTTypeMovie as String]
         present(imagePicker, animated: true, completion: nil)
-    }
-    
-    @objc private func recordAudio() {
-        
     }
     
     @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
@@ -343,7 +345,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).row == 0 {
             guard let tmpX = collectionView.cellForItem(at: indexPath) else {
-                print("Error")
+                print("error in collection view ")
                 return
             }
             
@@ -395,7 +397,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let galleryPreview = INSPhotosViewController(photos: photos, initialPhoto: initialPhoto, referenceView: cell)
             
             galleryPreview.referenceViewForPhotoWhenDismissingHandler = { [weak self] photo in
-                if let index = self?.attachments.index(where: { $0 === photo}) {
+                if let index = self?.attachments.index(where: { $0 === photo }) {
                     let indexPath = IndexPath(item: index, section: 0)
                     return  collectionView.cellForItem(at: indexPath) as? ExampleCollectionViewCell
                 }
@@ -423,7 +425,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
-        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment, detail: self ,isEdit: modus == Modus.edit ? true : false)
+        cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment, detail: self, isEdit: modus == Modus.edit ? true : false)
         return cell ?? UICollectionViewCell()
     }
 }
@@ -442,7 +444,7 @@ extension DetailViewController: UIImagePickerControllerDelegate {
             let selectorToCall = #selector(AttachmentViewController.videoSaved(_:didFinishSavingWithError:context:))
             
             // 2
-            UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
+            //UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)
 
             // Save the video to the app directory
             let videoData = try? Data(contentsOf: selectedVideo)
@@ -476,7 +478,7 @@ extension DetailViewController: UIImagePickerControllerDelegate {
     }
     
     func saveImage(image: UIImage) -> Bool {
-        UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        //UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
         
         let paths = NSSearchPathForDirectoriesInDomains(
             FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)

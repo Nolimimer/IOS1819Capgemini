@@ -92,6 +92,7 @@
 		B30A479521CFBC5A007049F8 /* ViewController+ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30A477421CFBC59007049F8 /* ViewController+ApplicationState.swift */; };
 		B30A479621CFBC5A007049F8 /* ScannerAppUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30A477621CFBC59007049F8 /* ScannerAppUtilities.swift */; };
 		B30A479721CFBC5A007049F8 /* ARCameraTrackingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30A477721CFBC59007049F8 /* ARCameraTrackingState.swift */; };
+		B3936D5421F0CFCD00A1B379 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3936D5321F0CFCD00A1B379 /* StringExtension.swift */; };
 		BA09652121CEE59F00174922 /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652021CEE59F00174922 /* StatusViewController.swift */; };
 		BA09652321CEEA0800174922 /* ARViewControllerStatusbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */; };
 		BA2BAA4621EBE9CD00FE5E83 /* ARViewControllerNodeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2BAA4521EBE9CD00FE5E83 /* ARViewControllerNodeExtension.swift */; };
@@ -200,6 +201,7 @@
 		B30A477421CFBC59007049F8 /* ViewController+ApplicationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+ApplicationState.swift"; sourceTree = "<group>"; };
 		B30A477621CFBC59007049F8 /* ScannerAppUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerAppUtilities.swift; sourceTree = "<group>"; };
 		B30A477721CFBC59007049F8 /* ARCameraTrackingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARCameraTrackingState.swift; sourceTree = "<group>"; };
+		B3936D5321F0CFCD00A1B379 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		BA09652021CEE59F00174922 /* StatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewController.swift; sourceTree = "<group>"; };
 		BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusbar.swift; sourceTree = "<group>"; };
 		BA2BAA4521EBE9CD00FE5E83 /* ARViewControllerNodeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNodeExtension.swift; sourceTree = "<group>"; };
@@ -464,6 +466,7 @@
 			children = (
 				B30A477621CFBC59007049F8 /* ScannerAppUtilities.swift */,
 				B30A477721CFBC59007049F8 /* ARCameraTrackingState.swift */,
+				B3936D5321F0CFCD00A1B379 /* StringExtension.swift */,
 			);
 			path = "Utility Extensions";
 			sourceTree = "<group>";
@@ -676,6 +679,7 @@
 				B30A478321CFBC5A007049F8 /* ScanBoundingBox.swift in Sources */,
 				B30A478221CFBC5A007049F8 /* Wireframe.swift in Sources */,
 				90CB846621ADAB0500CA1C09 /* Anchors2.swift in Sources */,
+				B3936D5421F0CFCD00A1B379 /* StringExtension.swift in Sources */,
 				BA2BAA4821EBEB1F00FE5E83 /* ARViewControllerDamageDetectionExtension.swift in Sources */,
 				BA6972E821D8557D00F919EF /* ARViewControllerNavigation.swift in Sources */,
 				908466F021B6C85B00A3C80C /* PhotoViewController.swift in Sources */,

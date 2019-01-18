@@ -28,6 +28,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
+    static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     var detectedObjectNode: SCNNode?
     var detectionObjects = Set <ARReferenceObject>()
     let scene = SCNScene()
@@ -42,7 +43,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var multipeerSession: MultipeerSession!
     // swiftlint:enable implicitly_unwrapped_optional
     var isDetecting = true
-
+    
     var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode = SKLabelNode(text: "")
     private var anchorLabels = [UUID: String]()
@@ -52,6 +53,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
     // swiftlint:enable force_unwrapping implicit_return
     
     // The pixel buffer being held for analysis; used to serialize Vision requests.
@@ -82,7 +87,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet weak var arrowDown: UIImageView!
     // swiftlint:enable private_outlet
     @IBOutlet private weak var progressRing: UICircularProgressRing!
-
+    
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         
@@ -114,11 +119,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         } else {
         }
     }
-  
+    
     func reset() {
         
         if let name = objectAnchor?.referenceObject.name {
-        DataHandler.objectsToIncidents[name] = DataHandler.incidents
+            DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
         DataHandler.saveToJSON()
         self.scene.rootNode.childNodes.forEach { node in
@@ -147,13 +152,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.multipeerSession.sendToAllPeers(data)
         } catch _ {
             let notification = UINotificationFeedbackGenerator()
-        
+            
             DispatchQueue.main.async {
                 notification.notificationOccurred(.error)
             }
         }
     }
-
+    
     /*
      recognizes if the screen has been tapped, creates a new pin and a matching incident if the tapped location is not a pin, otherwise
      opens the detail view for the tapped pin.
@@ -165,7 +170,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         guard let touchesFirst = touches.first else {
-            print("Error")
+            print("touches first error")
             return
         }
         let location = touchesFirst.location(in: sceneView)
@@ -182,14 +187,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 progressRing.isHidden = false
                 progressRing.maxValue = 100
                 progressRing.startProgress(to: 100, duration: 1.0) {
-                self.progressRing.isHidden = true
-                self.progressRing.resetProgress()
+                    self.progressRing.isHidden = true
+                    self.progressRing.resetProgress()
                     if self.detectedObjectNode != nil {
                         let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
                             SCNVector3(hitResult.worldTransform.columns.3.x,
                                        hitResult.worldTransform.columns.3.y,
                                        hitResult.worldTransform.columns.3.z),
-                        to: self.detectedObjectNode)
+                            to: self.detectedObjectNode)
                         let incident = Incident (type: .unknown,
                                                  description: "New Incident",
                                                  coordinate: Coordinate(vector: coordinateRelativeToObject))
@@ -238,7 +243,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         classifyCurrentImage()
     }
     
-
+    
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         
@@ -260,6 +265,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             DispatchQueue.main.async {
                 notification.notificationOccurred(.success)
+                
             }
             self.node = node
             self.objectAnchor = objectAnchor
@@ -270,7 +276,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return node
     }
     
-
+    
+    
     /// - Tag: ClassificationRequest
     private lazy var classificationRequest: VNCoreMLRequest = {
         // swiftlint:disable force_unwrapping
@@ -325,7 +332,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let predictions = self.ssdPostProcessor.postprocess(boxPredictions: boxPredictions, classPredictions: classPredictions)
         return predictions
     }
-
+    
     //adds a 3D pin to the AR View
     func add3DPin (vectorCoordinate: SCNVector3, identifier: String) {
         
@@ -348,9 +355,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress }).count
         let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved }).count
         descriptionNode.text = """
-        Number of incidents: \(DataHandler.incidents.count)\r\n
-        Open: \(openIncidents)\r\n
-        In progress: \(incidentsInProgress)\r\n
+        Number of incidents: \(DataHandler.incidents.count)
+        Open: \(openIncidents)
+        In progress: \(incidentsInProgress)
         Resolved: \(resolvedIncidents)
         """
     }
@@ -359,16 +366,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func addInfoPlane (carPart: String) {
         
         guard let objectAnchor = self.objectAnchor,
-        let name = objectAnchor.referenceObject.name else {
-            print("no object anchor found or its reference object has no name")
-            return
+            let name = objectAnchor.referenceObject.name else {
+                print("no object anchor found or its reference object has no name")
+                return
         }
-        let width = objectAnchor.referenceObject.extent.x * 0.8
-        let height = objectAnchor.referenceObject.extent.y * 0.5
+        let width = 0.1
+        let height = 0.07
         let plane = SCNPlane(width: CGFloat(width),
                              height: CGFloat(height))
         plane.cornerRadius = plane.width / 45
-        let spriteKitScene = SKScene(size: CGSize(width: 500, height: 500))
+        let spriteKitScene = SKScene(size: CGSize(width: 400, height: 280))
         // swiftlint:disable object_literal
         spriteKitScene.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.9)
         // swiftlint:enable object_literal
@@ -383,34 +390,35 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         planeNode.position = planePosition
         planeNode.name = "info-plane"
         let labelNode = SKLabelNode(text: name)
-        labelNode.fontSize = 40
+        labelNode.fontSize = 35
         labelNode.fontName = "HelveticaNeue-Medium"
-        labelNode.position = CGPoint(x: 250, y: 400)
+        labelNode.position = CGPoint(x: 200, y: 200)
         labelNode.numberOfLines = 2
-        labelNode.preferredMaxLayoutWidth = CGFloat(450)
+        labelNode.preferredMaxLayoutWidth = CGFloat(380)
         labelNode.lineBreakMode = .byWordWrapping
         
-        descriptionNode.fontSize = 30
+        setDescriptionLabel()
+        descriptionNode.fontSize = 27
         descriptionNode.fontName = "HelveticaNeue-Light"
-        descriptionNode.position = CGPoint(x: 200, y: 100)
+        descriptionNode.position = CGPoint(x: 180, y: 50)
         descriptionNode.numberOfLines = 4
         descriptionNode.lineBreakMode = NSLineBreakMode.byWordWrapping
         setDescriptionLabel()
-
+        
         spriteKitScene.addChild(descriptionNode)
         spriteKitScene.addChild(labelNode)
         planeNode.constraints = [SCNBillboardConstraint()]
         
         scene.rootNode.addChildNode(planeNode)
     }
-
+    
     @objc func tapped(recognizer: UIGestureRecognizer) {
         if recognizer.state != .began {
             progressRing.resetProgress()
             progressRing.isHidden = true
         }
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "ShowDetailSegue":
@@ -418,7 +426,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 let pin = sender as? SCNNode,
                 let incident = DataHandler.incident(withId: Int(pin.name ?? "") ?? -1) else {
                     return
-                }
+            }
             detailVC.incident = incident
         default :
             return

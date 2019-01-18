@@ -26,7 +26,7 @@ extension DetailViewController: UIDocumentMenuDelegate, UIDocumentPickerDelegate
                 try data?.write(to: path)
                 let textDocument = TextDocument(name: name, filePath: "\(paths[0])/\(name)")
                 guard let incident = incident else {
-                    print("Error")
+                    print("incident not initialized document picker")
                     return
                 }
                 incident.addAttachment(attachment: textDocument)
