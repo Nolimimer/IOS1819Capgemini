@@ -31,6 +31,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     var detectedObjectNode: SCNNode?
     var detectionObjects = Set <ARReferenceObject>()
+    var selectedCarPart: CarPart?
     let scene = SCNScene()
     let ssdPostProcessor = SSDPostProcessor(numAnchors: 1917, numClasses: 4)
     var screenHeight: Double?
@@ -213,6 +214,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         let incident = Incident (type: .unknown,
                                                  description: "New Incident",
                                                  coordinate: Coordinate(vector: coordinateRelativeToObject))
+                        
                         self.filterAllPins()
                         let imageWithoutPin = self.sceneView.snapshot()
                         self.saveImage(image: imageWithoutPin, incident: incident)
@@ -223,7 +225,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         self.filter3DPins(identifier: "\(incident.identifier)")
                         let imageWithPin = self.sceneView.snapshot()
                         self.saveImage(image: imageWithPin, incident: incident)
+                        self.selectedCarPart?.incidents.append(incident)
                         DataHandler.incidents.append(incident)
+                        
                         self.sendIncident(incident: incident)
                     }
                 }
@@ -275,6 +279,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             } else {
                 DataHandler.incidents = []
             }
+            
+            selectedCarPart = DataHandler.carParts.first(where: { $0.name.hasPrefix(name) })
+            
             ModelViewController.objectName = name
             let notification = UINotificationFeedbackGenerator()
             

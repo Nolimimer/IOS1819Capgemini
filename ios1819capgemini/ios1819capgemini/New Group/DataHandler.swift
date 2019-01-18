@@ -165,6 +165,7 @@ enum DataHandler {
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
             }
+            
             objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
             
             for (_, incidents) in objectsToIncidents {
@@ -183,12 +184,14 @@ enum DataHandler {
                 throw NSError()
             }
             carParts = try JSONDecoder().decode([CarPart].self, from: data)
-            
+            incidents = []
             for carPart in carParts {
+                carPart.reevaluateFilePath()
                 for incident in carPart.incidents {
                     for attachment in incident.attachments {
                         attachment.attachment.reevaluatePath()
                     }
+                    incidents.append(incident)
                 }
             }
         } catch _ {
