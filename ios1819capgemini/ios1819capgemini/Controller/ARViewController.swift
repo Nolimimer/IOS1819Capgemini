@@ -53,6 +53,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     lazy var statusViewController: StatusViewController = {
         return children.lazy.compactMap({ $0 as? StatusViewController }).first!
     }()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
     // swiftlint:enable force_unwrapping implicit_return
     
     // The pixel buffer being held for analysis; used to serialize Vision requests.
@@ -115,6 +119,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         } else {
         }
     }
+    
+    
+
     
     func reset() {
         
@@ -271,6 +278,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         return node
     }
+    
     
     
     /// - Tag: ClassificationRequest
