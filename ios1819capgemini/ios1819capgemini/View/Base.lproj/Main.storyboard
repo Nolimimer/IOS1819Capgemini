@@ -1289,7 +1289,7 @@
                                 <action selector="backButton:" destination="V9q-uH-WWX" id="7oS-AX-QPg"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="bWn-Jo-qKA">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="bWn-Jo-qKA">
                             <connections>
                                 <segue destination="dsx-8Z-4fu" kind="presentation" id="hLZ-Wy-JZ3"/>
                             </connections>

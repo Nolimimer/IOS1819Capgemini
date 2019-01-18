@@ -420,9 +420,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             action?.isEnabled = false
             return
         }
-        if FileManager.default.fileExists(atPath: FileManager.default.urls(
-                for: .documentDirectory,
-                in: .userDomainMask)[0].appendingPathComponent(name + ".arobject").path) {
+        if FileManager.default.fileExists(
+            atPath: FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask)[0]
+                .appendingPathComponent(name + ".arobject")
+                .path) {
             alert?.message = "A file with this name alrady exists."
             action?.isEnabled = false
         } else {
