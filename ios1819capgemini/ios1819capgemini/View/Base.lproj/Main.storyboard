@@ -98,7 +98,6 @@
                         <constraints>
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1hj-TD-boa"/>
                             <constraint firstAttribute="centerX" secondItem="zuy-y1-cIR" secondAttribute="centerX" id="3OA-iy-fds"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y1B-gL-xwm" secondAttribute="trailing" constant="247" id="Bwx-ss-V9O"/>
                             <constraint firstItem="fsC-xg-AgH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="DZD-Ka-GQu"/>
                             <constraint firstItem="NlZ-Ha-13L" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Fcf-YY-gx7"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IBe-6n-2Hy"/>
@@ -3716,7 +3715,7 @@ AAAAAAAAAAAAAAIzxQ
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="bt6-h5-83B"/>
+        <segue reference="uUl-YU-Nua"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
