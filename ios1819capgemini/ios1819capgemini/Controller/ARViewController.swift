@@ -154,7 +154,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                             for: .documentDirectory,
                             in: .userDomainMask)[0].appendingPathComponent(object.name ?? "dashboard" + ".arobject"),
                         previewImage: nil)
-                    
+                    AppDelegate.setCarParts()
                 } catch {
                     fatalError("failed to save default scans to .userDomain ")
                 }

@@ -86,6 +86,15 @@ enum DataHandler {
         } catch _ {
             print("Could not load ar object: [incident] dictionary")
         }
+        do {
+            let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            carParts = try JSONDecoder().decode([CarPart].self, from: data)
+        } catch _ {
+            print("Could not load ar object: [incident] dictionary")
+        }
     }
     
     static func saveToJSON() {
@@ -107,6 +116,19 @@ enum DataHandler {
                                       originalContentsURL: nil)        } catch _ {
             print("Could not save ar object: [incident] dictionary")
         }
+        do {
+            let data = try JSONEncoder().encode(carParts)
+            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
+            try jsonFileWrapper.write(to: Constants.localStorageModelURL,
+                                      options: FileWrapper.WritingOptions.atomic,
+                                      originalContentsURL: nil)
+            print(carParts)
+
+        } catch _ {
+                                        print("Could not save ar object: [incident] dictionary")
+                
+        }
+        
     }
     
     static func getJSON() -> Data? {
@@ -155,6 +177,24 @@ enum DataHandler {
         } catch _ {
             print("Could not load ar object: [incident] dictionary")
         }
+        do {
+            let fileWrapper = try FileWrapper(url: url, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            carParts = try JSONDecoder().decode([CarPart].self, from: data)
+            
+            for carPart in carParts {
+                for incident in carPart.incidents {
+                    for attachment in incident.attachments {
+                        attachment.attachment.reevaluatePath()
+                    }
+                }
+            }
+        } catch _ {
+            print("Could not load ar object: [incident] dictionary")
+        }
+        print(carParts)
         print("objectsToIncidents \(objectsToIncidents)")
     }
     static func getIncidentsOfObject(identifier: String) -> [Incident] {
