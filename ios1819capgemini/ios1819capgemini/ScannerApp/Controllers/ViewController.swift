@@ -167,7 +167,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         } else if testRun != nil {
             print("test run != nil")
             let title = "Finished?"
-            let message = "Start reporting damages or create another scan?"
+            let message = "Are you finished scanning your objects?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
