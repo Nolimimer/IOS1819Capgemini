@@ -169,6 +169,9 @@ extension ListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !ARViewController.objectDetected {
+            return 0
+        }
         switch filterSegmentedControl.selectedSegmentIndex {
         case Filter.showAll.rawValue:
             ARViewController.filterAllIncidents()
