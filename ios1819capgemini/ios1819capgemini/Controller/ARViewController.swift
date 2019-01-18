@@ -28,6 +28,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
+    static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     var detectedObjectNode: SCNNode?
     var detectionObjects = Set <ARReferenceObject>()
     let scene = SCNScene()

@@ -250,7 +250,7 @@ extension ListViewController: UITableViewDataSource {
         
         
         let delete = UITableViewRowAction(style: .destructive, title: "Delete") { _, _ in
-            if ARViewController.connectedToPeer {
+            if ARViewController.connectedToPeer && ARViewController.multiUserEnabled {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can't be deleted if Peer is connected",
                                               preferredStyle: .alert)
