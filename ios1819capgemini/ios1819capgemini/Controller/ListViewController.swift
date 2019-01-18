@@ -74,6 +74,7 @@ class ListViewController: UIViewController, UITableViewDelegate {
     }
     
     @IBAction private func shareButtonPressed(_ sender: Any) {
+        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
         share()
     }
     

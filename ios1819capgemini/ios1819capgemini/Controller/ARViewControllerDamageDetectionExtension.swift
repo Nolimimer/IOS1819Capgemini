@@ -97,7 +97,7 @@ extension ARViewController {
                                                  description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
                                                  coordinate: Coordinate(vector: coordinates))
                         incident.automaticallyDetected = true
-                        self.selectedCarPart?.incidents.append(incident)
+                        ARViewController.selectedCarPart?.incidents.append(incident)
                         DataHandler.incidents.append(incident)
                         sphereNode.runAction(imageHighlightAction)
                         sphereNode.name = "\(incident.identifier)"
