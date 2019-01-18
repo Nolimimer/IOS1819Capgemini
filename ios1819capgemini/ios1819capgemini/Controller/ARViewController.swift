@@ -275,6 +275,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //            }
             
             selectedCarPart = DataHandler.carParts.first(where: { $0.name.hasPrefix(name) })
+            guard let selectedCarPart = selectedCarPart else {
+                print("no carPart with name \(name)")
+                return node
+            }
+            DataHandler.incidents = selectedCarPart.incidents
             
             ModelViewController.objectName = name
             let notification = UINotificationFeedbackGenerator()
