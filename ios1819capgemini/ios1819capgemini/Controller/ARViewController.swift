@@ -124,7 +124,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func reset() {
-        
+
+        print(objectAnchor?.referenceObject.name)
         if let name = objectAnchor?.referenceObject.name {
             DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
@@ -160,6 +161,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 notification.notificationOccurred(.error)
             }
         }
+        DataHandler.loadFromJSON()
     }
     
     /*
