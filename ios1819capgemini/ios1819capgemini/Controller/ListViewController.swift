@@ -203,6 +203,18 @@ extension ListViewController: UITableViewDataSource {
                 }
                 return
             }
+            if DataHandler.currentSegmentFilter != 0 {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can only be deleted in Show All",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
             if ARViewController.navigatingIncident != nil {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can't be deleted if it is navigated to ",
@@ -284,6 +296,18 @@ extension ListViewController: UITableViewDataSource {
             if ARViewController.navigatingIncident != nil {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can't be deleted if it is navigated to ",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK",
+                                              style: .default,
+                                              handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
+                return
+            }
+            if DataHandler.currentSegmentFilter != 0 {
+                let alert = UIAlertController(title: "Error",
+                                              message: "Incident can only be deleted in Show All",
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK",
                                               style: .default,
