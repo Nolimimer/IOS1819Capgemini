@@ -91,7 +91,7 @@ class ListViewController: UIViewController, UITableViewDelegate {
     private func share() {
         DataHandler.saveToJSON()
         guard let dataHandlerGetJason = DataHandler.getJSON() else {
-            print("Error")
+            print("share error")
             return
         }
         let activityController = UIActivityViewController(activityItems: [dataHandlerGetJason], applicationActivities: nil)

@@ -383,7 +383,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     
     func saveImage(image: UIImage, name: String) {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            print("Error")
+            print("image not saved")
             return
         }
         let fileName = "\(name).jpg"

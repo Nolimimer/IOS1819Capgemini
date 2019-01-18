@@ -22,6 +22,9 @@ extension ARViewController {
         }
         do {
             let incident = try JSONDecoder().decode(Incident.self, from: data)
+            for attachment in incident.attachments {
+                attachment.attachment.reevaluatePath()
+            }
             DataHandler.incidents.append(incident)
         } catch {
             
@@ -95,7 +98,7 @@ extension ARViewController {
             } else {
                 for node in nodes {
                     guard let nodeName = node.name else {
-                        print("Error")
+                        print("node.name == nil in updatePinColour()")
                         return
                     }
                     if nodeName == String(incident.identifier) {

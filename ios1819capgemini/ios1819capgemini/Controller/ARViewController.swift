@@ -165,7 +165,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         guard let touchesFirst = touches.first else {
-            print("Error")
+            print("touches first error")
             return
         }
         let location = touchesFirst.location(in: sceneView)

@@ -63,7 +63,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         whiteViewFromPopUp.layer.cornerRadius = 10
         popUpIncidentTypeView.isHidden = false
         guard let tmpIndexOfType = types.firstIndex(of: type) else {
-            print("Error")
+            print("error index type button pressed")
             return
         }
         incidentTypePicker.selectRow(tmpIndexOfType, inComponent: 0, animated: false)
@@ -106,7 +106,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
                 status = .resolved
             }
             guard let tmpIncident = incident else {
-                print("Error")
+                print("error edit button pressed")
                 return
             }
             tmpIncident.edit(status: status, description: textField.text, modifiedDate: Date())
@@ -135,7 +135,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         
         let controllIndex: Int
         guard let tmpIncident = incident else {
-            print("Error")
+            print("incident not initialized (view will appear DetailViewcontroller)")
             return
         }
         switch tmpIncident.status {
@@ -155,7 +155,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         textField.text = incident?.description
         reloadCollectionView()
         guard let incident = incident else {
-            print("Error")
+            print("incident not initialized in view will appear")
             return
         }
         type = incident.type
@@ -258,7 +258,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             let defaults = UserDefaults.standard
             let name = "cARgeminiAudioAsset\(defaults.integer(forKey: "AttachedAudioName") - 1).m4a"
             guard let incident = incident else {
-                print("Error")
+                print("error not recorded ")
                 return
             }
             incident.addAttachment(attachment: Audio(name: name, filePath: "\(paths[0])/\(name)", duration: duration))
@@ -347,7 +347,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (indexPath as NSIndexPath).row == 0 {
             guard let tmpX = collectionView.cellForItem(at: indexPath) else {
-                print("Error")
+                print("error in collection view ")
                 return
             }
             

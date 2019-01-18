@@ -20,7 +20,7 @@ extension ARViewController {
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {
                 guard let detectedObjectNode = detectedObjectNode else {
-                    print("Error")
+                    print("detected object node not initialized in updateIncidents() ")
                     return
                 }
                 let coordinateRelativeObject = detectedObjectNode.convertPosition(incident.getCoordinateToVector(), to: nil)
