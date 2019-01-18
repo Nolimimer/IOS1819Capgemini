@@ -156,19 +156,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
     // MARK: - UI Event Handling
     //swiftlint:disable private_action
     @IBAction func restartButtonTapped(_ sender: Any) {
+        ARViewController.resetButtonPressed = true
         if let scan = scan, scan.boundingBoxExists {
+            print("scan bounding box exists")
             let title = "Start over?"
             let message = "Discard the current scan and start over?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else if testRun != nil {
+            print("test run != nil")
             let title = "Finished?"
             let message = "Start reporting damages or create another scan?"
             self.showAlert(title: title, message: message, buttonTitle: "Yes", showCancel: true) { _ in
                 self.performSegue(withIdentifier: "Start screen", sender: nil)
             }
         } else {
+            print("perform segue")
             self.performSegue(withIdentifier: "Start screen", sender: nil)
         }
     }
@@ -366,9 +370,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             return
         }
         
-        //1. Create the alert controller.
         alert = UIAlertController(title: "Save scan", message: "Enter a name for your scan.", preferredStyle: .alert)
-        // Swift 4 (you can specify the parameters using (_:) since the label is now _ in Swift 4)
         
         action = UIAlertAction(title: "OK", style: .default, handler: { [weak alert] _ in
             guard let alert = alert,
@@ -383,10 +385,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
             let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(name + ".arobject")
             
             print("documentURL \(documentURL)")
+            saveImage(image: testRun.previewImage, name: name)
             
             DispatchQueue.global().async {
                 do {
                     try object.export(to: documentURL, previewImage: testRun.previewImage)
+                    
                 } catch {
                     fatalError("Enter a name for your scan. Failed to save the file to \(documentURL)")
                 }
@@ -398,18 +402,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
                 return
         }
         alert.addAction(action)
-        //2. Add the text field. You can configure it however you need.
         alert.addTextField { textField in
             self.textField = textField
             textField.text = "\(name)"
             textField.addTarget(self, action: #selector(self.textFieldEditingDidChange), for: UIControl.Event.editingChanged)
         }
-        
-        // 4. Present the alert.
-
+    
         self.present(alert, animated: true, completion: nil)
         
     }
+
     //swiftlint:disable force_unwrapping
     @IBAction func textFieldEditingDidChange(_ sender: Any) {
         
@@ -432,6 +434,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate, UI
         }
     }
 
+    func saveImage(image: UIImage, name: String) {
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("Error")
+            return
+        }
+        let fileName = "\(name).jpg"
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        if let data = image.jpegData(compressionQuality: 0.5) {
+            do {
+                try data.write(to: fileURL)
+                print("file saved")
+            } catch {
+                print("error saving file:", error)
+            }
+    }
+    }
+    
     func createAndShareReferenceObject() {
         guard let testRun = self.testRun, let object = testRun.referenceObject, let name = object.name else {
             print("Error: Missing scanned object for sharing.")

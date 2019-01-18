@@ -15,22 +15,30 @@ enum DataHandler {
     // MARK: Constants
     private enum Constants {
         static let fileName = "Incident.json"
+        static let fileNameModels = "ModelsToIncident.json"
         static var localStorageURL: URL {
             guard let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first else {
                 fatalError("Can't access the document directory in the user's home directory.")
             }
             return documentsDirectory.appendingPathComponent(Constants.fileName)
         }
+        static var localStorageModelURL: URL {
+            guard let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first else {
+                fatalError("Can't access the document directory in the user's home directory.")
+            }
+            return documentsDirectory.appendingPathComponent(Constants.fileNameModels)
+        }
     }
 
     // MARK: Stored Type Properties
+    static var objectsToIncidents = [String: [Incident]]()
     static var incidents: [Incident] = []
     static var largestID = 0
     static var currentSegmentFilter = Filter.showAll.rawValue // Show All by default
     static var openIncidents = [Incident]()
     static var inProgressIncidents = [Incident]()
     static var resolvedIncidents = [Incident]()
-    
+  
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
         largestID = Int(arc4random())
@@ -64,23 +72,18 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
-            
-            for incident in incidents {
-            var attachments = [Attachment]()
-                for attachment in incident.attachments {
-                    if  attachment.name.hasSuffix("jpg") {
-                        guard let downCasted = attachment as? Photo else {
-                            continue
-                        }
-                        attachments.append(downCasted)
-                    }
-                    attachments.append(attachment)
-                }
-                incident.attachments = attachments
-            }
-            
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
+        }
+        
+        do {
+            let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
+        } catch _ {
+            print("Could not load ar object: [incident] dictionary")
         }
     }
     
@@ -94,6 +97,14 @@ enum DataHandler {
 //            print("Saved incidents!")
         } catch _ {
             print("Could not save incidents")
+        }
+        do {
+            let data = try JSONEncoder().encode(objectsToIncidents)
+            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
+            try jsonFileWrapper.write(to: Constants.localStorageModelURL,
+                                      options: FileWrapper.WritingOptions.atomic,
+                                      originalContentsURL: nil)        } catch _ {
+            print("Could not save ar object: [incident] dictionary")
         }
     }
     
@@ -113,20 +124,24 @@ enum DataHandler {
                 throw NSError()
             }
             incidents = try JSONDecoder().decode([Incident].self, from: data)
+            for incident in incidents {
+                for attachment in incident.attachments {
+                    attachment.attachment.reevaluatePath()
+                }
+            }
         } catch _ {
             print("Could not load incidents, DataHandler uses no incident")
         }
     }
+    static func getIncidentsOfObject(identifier: String) -> [Incident] {
+        return DataHandler.objectsToIncidents[identifier] ?? []
+    }
     
     static func removeIncident(incidentToDelete: Incident) {
-        for (index, incident) in incidents.enumerated() {
-            if incident.identifier == incidentToDelete.identifier {
-                incidents.remove(at: index)
-                saveToJSON()
-                return
-            }
+        for (index, incident) in incidents.enumerated() where incident.identifier == incidentToDelete.identifier {
+             incidents.remove(at: index)
+             saveToJSON()
+             return
         }
     }
-
-    
 }

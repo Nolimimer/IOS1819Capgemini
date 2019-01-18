@@ -9,7 +9,7 @@
 import Foundation
 import ARKit
 import MultipeerConnectivity
-//swiftlint:disable all
+
 extension ARViewController {
     
     func receivedData(_ data: Data, from peer: MCPeerID) {
@@ -54,6 +54,7 @@ extension ARViewController {
         }
         return false
     }
+    
     func sendIncident(incident: Incident) {
         do {
             let data = try JSONEncoder().encode(incident)
@@ -61,6 +62,10 @@ extension ARViewController {
         } catch {
             
         }
+    }
+    
+    func sendIncidents() {
+        sendIncidents(incidents: DataHandler.incidents)
     }
 
     func sendIncidents(incidents: [Incident]) {
@@ -71,33 +76,29 @@ extension ARViewController {
             
         }
     }
+    
     func getIncident(identifier: String) -> Incident? {
-        for incident in DataHandler.incidents {
-            if "\(incident.identifier)" == identifier {
-                return incident
-            }
-        }
-        return nil
+        return DataHandler.incidents.first(where: { String($0.identifier) == identifier })
     }
     
     func checkIncidentDeleted(identifier: String) -> Bool {
-        for incident in DataHandler.incidents {
-            if "\(incident.identifier)" == identifier {
-                return false
-            }
+        for incident in DataHandler.incidents where "\(incident.identifier)" == identifier {
+            return false
         }
         return true
     }
     
-    
     func updatePinColour() {
         for incident in DataHandler.incidents {
             if incident.automaticallyDetected {
-                nodes.first(where: {$0.name == "\(incident.identifier)"})?.geometry?.materials.first?.diffuse.contents = UIColor.blue
-            }
-            else {
+                nodes.first(where: { $0.name == "\(incident.identifier)" })?.geometry?.materials.first?.diffuse.contents = UIColor.blue
+            } else {
                 for node in nodes {
-                    if node.name! == String(incident.identifier) {
+                    guard let nodeName = node.name else {
+                        print("Error")
+                        return
+                    }
+                    if nodeName == String(incident.identifier) {
                         switch incident.status {
                         case .open: node.geometry?.materials.first?.diffuse.contents = UIColor.red
                         case .progress: node.geometry?.materials.first?.diffuse.contents = UIColor.yellow
