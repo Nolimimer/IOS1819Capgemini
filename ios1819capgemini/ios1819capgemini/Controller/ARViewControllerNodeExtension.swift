@@ -25,6 +25,16 @@ extension ARViewController {
         return true
     }
     
+    func calculateNodesInRadius(coordinate: SCNVector3, radius: Float) -> Bool {
+        
+        for vector in automaticallyDetectedVectors {
+            if checkRange(origin: vector, pos: coordinate, radius: radius) {
+                return false
+            }
+        }
+        return true
+    }
+    
     func incidentHasNotBeenPlaced (incident: Incident) -> Bool {
         
         for node in nodes {
