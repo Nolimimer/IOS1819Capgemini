@@ -61,10 +61,14 @@ extension ARViewController {
                     guard let hitTest = hitTestResult.first else {
                         return
                     }
-                    if sigmoid(prediction.score) > 0.80 && calculateNodesInRadius(coordinate: position, radius: 40) {
-                        let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
-                                             y: (hitTest.worldTransform.columns.3.y),
-                                             z: (hitTest.worldTransform.columns.3.z))
+                    let tmp = SCNVector3(x: (hitTest.worldTransform.columns.3.x),
+                                         y: (hitTest.worldTransform.columns.3.y),
+                                         z: (hitTest.worldTransform.columns.3.z))
+//                    if sigmoid(prediction.score) > 0.80 {
+//                        print("position of bounding box with prediction score \(sigmoid(prediction.score)) :\(position)")
+//                    }
+                    if sigmoid(prediction.score) > 0.80 && calculateNodesInRadius(coordinate: tmp, radius: 0.05) {
+//                        print("pin created for \(classNames[prediction.detectedClass])")
                         let length = rect.maxY - rect.minY
                         let width = rect.maxX - rect.minX
                         let formatter = NumberFormatter()
@@ -77,7 +81,8 @@ extension ARViewController {
                         guard let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM))) else {
                             return
                         }
-                        automaticallyDetectedIncidents.append(position)
+//                        automaticallyDetectedIncidents.append(position)
+                        automaticallyDetectedVectors.append(tmp)
                         let sphere = SCNSphere(radius: 0.015)
                         let materialSphere = SCNMaterial()
                         materialSphere.diffuse.contents = UIColor(red: 0.0,
