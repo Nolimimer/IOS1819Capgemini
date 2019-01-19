@@ -46,7 +46,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var isDetecting = true
     
     var automaticallyDetectedIncidents = [CGPoint]()
-    private var descriptionNode = SKLabelNode(text: "")
+    private var descriptionNode: SKLabelNode?
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?
@@ -123,7 +123,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func reset() {
 
-        print(objectAnchor?.referenceObject.name)
+//        print(objectAnchor?.referenceObject.name)
         if let name = objectAnchor?.referenceObject.name {
             DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
@@ -138,10 +138,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         nodes = []
         detectedObjectNode = nil
         automaticallyDetectedIncidents = []
+        descriptionNode = nil
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
         let config = ARWorldTrackingConfiguration()
         loadCustomScans()
-        guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
+        guard ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) != nil else {
             return
         }
         config.detectionObjects = detectionObjects
@@ -251,6 +252,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         multipeerSession.disconnectSession()
     }
     
@@ -378,7 +380,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func setDescriptionLabel() {
-        
+        guard let descriptionNode = descriptionNode else {
+            print("description node not initialized")
+            return
+        }
         let openIncidents = (DataHandler.incidents.filter { $0.status == .open }).count
         let incidentsInProgress = (DataHandler.incidents.filter { $0.status == .progress }).count
         let resolvedIncidents = (DataHandler.incidents.filter { $0.status == .resolved }).count
@@ -425,7 +430,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         labelNode.preferredMaxLayoutWidth = CGFloat(380)
         labelNode.lineBreakMode = .byWordWrapping
         
-        setDescriptionLabel()
+        self.descriptionNode = SKLabelNode(text: "")
+        guard let descriptionNode = descriptionNode else {
+            print("this should never happen")
+            return
+        }
         descriptionNode.fontSize = 27
         descriptionNode.fontName = "HelveticaNeue-Light"
         descriptionNode.position = CGPoint(x: 180, y: 50)
