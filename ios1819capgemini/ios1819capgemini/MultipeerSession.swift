@@ -15,7 +15,7 @@ import MultipeerConnectivity
 
 /// - Tag: MultipeerSession
 class MultipeerSession: NSObject {
-    static let serviceType = "ar-multi-sample"
+    static let serviceType = "cARgemini"
     
     private let myPeerID = MCPeerID(displayName: UIDevice.current.name)
     //swiftlint:disable implicitly_unwrapped_optional
@@ -55,7 +55,10 @@ class MultipeerSession: NSObject {
     var connectedPeers: [MCPeerID] {
         return session.connectedPeers
     }
-     
+    func disconnectSession() {
+        session.disconnect()
+        print("\(myPeerID) has been disconnected from session")
+    }
 }
 
 extension MultipeerSession: MCSessionDelegate {
@@ -93,6 +96,10 @@ extension MultipeerSession: MCNearbyServiceBrowserDelegate {
     /// - Tag: FoundPeer
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String: String]?) {
         // Invite the new peer to the session.
+        if connectedPeers.contains(myPeerID) {
+            print("\(myPeerID) is already connected to the session")
+            return
+        }
         browser.invitePeer(peerID, to: session, withContext: nil, timeout: 10)
         print("peer \(peerID) has been invited to session")
     }

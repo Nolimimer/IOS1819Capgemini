@@ -114,6 +114,10 @@ extension ARViewController {
         }
         ARViewController.multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
         
+        if !ARViewController.multiUserEnabled {
+            multipeerSession.disconnectSession()
+        }
+        
         if UserDefaults.standard.bool(forKey: "enable_detection") && detectedObjectNode != nil {
             isDetecting = true
             setupBoxes()

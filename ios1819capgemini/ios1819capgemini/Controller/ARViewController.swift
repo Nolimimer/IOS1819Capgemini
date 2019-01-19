@@ -220,7 +220,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        if multipeerSession == nil {
+            multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
+            print("multipeer session created")
+        }
         super.viewWillAppear(animated)
         let config = ARWorldTrackingConfiguration()
         
@@ -245,6 +248,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         config.detectionObjects = detectionObjects
         sceneView.session.run(config)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        multipeerSession.disconnectSession()
     }
     
     // MARK: AR Kit methods
