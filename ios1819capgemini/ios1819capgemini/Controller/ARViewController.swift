@@ -381,7 +381,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func setDescriptionLabel() {
         guard let descriptionNode = descriptionNode else {
-            print("description node not initialized")
+//            print("description node not initialized")
             return
         }
         let openIncidents = (DataHandler.incidents.filter { $0.status == .open }).count

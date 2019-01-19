@@ -77,6 +77,7 @@ extension ARViewController {
                         guard let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM))) else {
                             return
                         }
+                        print("position of bounding box : \(position)")
                         automaticallyDetectedIncidents.append(position)
                         let sphere = SCNSphere(radius: 0.015)
                         let materialSphere = SCNMaterial()

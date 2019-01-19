@@ -57,7 +57,7 @@ class MultipeerSession: NSObject {
     }
     func disconnectSession() {
         session.disconnect()
-        print("\(myPeerID) has been disconnected from session")
+//        print("\(myPeerID) has been disconnected from session")
     }
 }
 
