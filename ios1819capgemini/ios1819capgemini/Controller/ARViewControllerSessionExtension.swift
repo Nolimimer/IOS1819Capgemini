@@ -138,7 +138,6 @@ extension ARViewController {
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: trackingState, incident: incident)
-        
     }
     
 }
