@@ -59,6 +59,9 @@ class MultipeerSession: NSObject {
         session.disconnect()
 //        print("\(myPeerID) has been disconnected from session")
     }
+    var isConnected: Bool {
+        return session.connectedPeers.contains(myPeerID)
+    }
 }
 
 extension MultipeerSession: MCSessionDelegate {

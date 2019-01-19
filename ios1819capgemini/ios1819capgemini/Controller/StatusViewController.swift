@@ -49,10 +49,10 @@ class StatusViewController: UIViewController {
             self.removeScans()
             ARViewController.resetButtonPressed = true
             DataHandler.saveToJSON()
-            self.dismiss(animated: true, completion: nil)
+//            self.dismiss(animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: { _ in
-            self.dismiss(animated: true, completion: nil)
+//            self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
     }
