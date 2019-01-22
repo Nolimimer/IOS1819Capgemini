@@ -137,6 +137,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         DataHandler.incidents = []
         nodes = []
         detectedObjectNode = nil
+        automaticallyDetectedVectors = []
         automaticallyDetectedIncidents = []
         descriptionNode = nil
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
