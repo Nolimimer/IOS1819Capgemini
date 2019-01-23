@@ -73,7 +73,7 @@ enum DataHandler {
             for file in fileURLs {
                 if file.lastPathComponent.hasSuffix(".arobject") {
                     let carPart = CarPart(incidents: [], filePath: file)
-                    if !carParts.contains(where: {$0.name == carPart.name}) {
+                    if !carParts.contains(where: { $0.name == carPart.name }) {
                         DataHandler.carParts.append(carPart)
                     }
                 }
@@ -203,7 +203,7 @@ enum DataHandler {
             let fileWrapper = try FileWrapper(url: url, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
                 throw NSError()
-            }            
+            }
             objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
             
             for (_, incidents) in objectsToIncidents {
