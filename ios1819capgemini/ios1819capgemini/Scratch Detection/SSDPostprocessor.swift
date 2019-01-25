@@ -103,8 +103,8 @@ class SSDPostProcessor {
         classNames?.append("???")
         classNames?.append("Pin")
         classNames?.append("Tachometer")
-        classNames?.append("Spanner")
-        classNames?.append("Hammer")
+        classNames?.append("Scratch")
+        classNames?.append("Dent")
     }
     
     static func getColor(forName name: String) -> UIColor {
@@ -114,10 +114,10 @@ class SSDPostProcessor {
         if name == "Tachometer" {
             return UIColor.red
         }
-        if name == "Spanner" {
+        if name == "Scratch" {
             return UIColor.green
         }
-        if name == "Hammer" {
+        if name == "Dent" {
             return UIColor.yellow
         }
         return UIColor.black

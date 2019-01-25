@@ -98,7 +98,7 @@ extension ARViewController {
                                        hitTest.worldTransform.columns.3.z),
                             to: self.detectedObjectNode)
                         
-                        let incident = Incident (type: IncidentType(rawValue: classNames[prediction.detectedClass]) ?? .unknown,
+                        let incident = Incident (type: IncidentType(rawValue: classNames[prediction.detectedClass]) ?? .other,
                                                  description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
                                                  coordinate: Coordinate(vector: coordinates))
                         incident.automaticallyDetected = true
