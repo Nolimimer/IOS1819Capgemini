@@ -24,7 +24,7 @@
 			<key>Key</key>
 			<string>enable_detection</string>
 			<key>DefaultValue</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>Type</key>

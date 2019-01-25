@@ -101,7 +101,7 @@
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbU-AJ-MqA">
                                             <rect key="frame" x="0.0" y="6" width="275" height="30"/>
-                                            <state key="normal" title="Automatic Detection: On"/>
+                                            <state key="normal" title="Automatic Detection: Off"/>
                                             <connections>
                                                 <action selector="detectionButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dsp-Nb-ddH"/>
                                             </connections>
@@ -164,6 +164,7 @@
                         <outlet property="arrowRight" destination="K2Z-aO-kjw" id="SvD-5F-5GD"/>
                         <outlet property="arrowUp" destination="NlZ-Ha-13L" id="Gkg-GM-KTr"/>
                         <outlet property="connectionLabel" destination="y1B-gL-xwm" id="W0I-JA-19G"/>
+                        <outlet property="detectionButton" destination="EbU-AJ-MqA" id="cNf-PY-lSB"/>
                         <outlet property="progressRing" destination="dsO-Fy-ug4" id="WDm-t6-avZ"/>
                         <outlet property="sceneView" destination="zuy-y1-cIR" id="6CW-Fu-tmc"/>
                     </connections>

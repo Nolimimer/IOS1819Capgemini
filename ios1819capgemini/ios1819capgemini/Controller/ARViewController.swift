@@ -90,6 +90,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // swiftlint:enable private_outlet
     @IBOutlet private weak var progressRing: UICircularProgressRing!
     
+    @IBOutlet weak var detectionButton: UIButton!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
         if sender.currentTitle == "Automatic Detection: On" {
             sender.setTitle("Automatic Detection: Off", for: .normal)
