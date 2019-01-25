@@ -90,6 +90,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // swiftlint:enable private_outlet
     @IBOutlet private weak var progressRing: UICircularProgressRing!
     
+    @IBAction func detectionButtonTapped(_ sender: UIButton) {
+    
+    }
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         
