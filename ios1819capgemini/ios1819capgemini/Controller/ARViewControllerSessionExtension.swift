@@ -134,7 +134,9 @@ extension ARViewController {
         checkReset()
         checkSendIncidents()
         updateIncidents()
-        refreshNodes()
+        if !ARViewController.multiUserEnabled {
+            refreshNodes()
+        }
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: trackingState, incident: incident)

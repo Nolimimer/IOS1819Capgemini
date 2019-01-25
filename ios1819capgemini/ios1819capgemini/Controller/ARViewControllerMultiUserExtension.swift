@@ -29,6 +29,13 @@ extension ARViewController {
         }
         do {
             let incident = try JSONDecoder().decode(Incident.self, from: data)
+            if DataHandler.containsIncidentIdentifier(incident: incident) {
+                DataHandler.replaceIncident(incident: incident)
+                for attachment in incident.attachments {
+                    attachment.attachment.reevaluatePath()
+                }
+                return
+            }
             for attachment in incident.attachments {
                 attachment.attachment.reevaluatePath()
             }
@@ -43,9 +50,14 @@ extension ARViewController {
             return
         }
         do {
-            let data = try JSONEncoder().encode(DataHandler.incidents)
+            guard let incident = ARViewController.editedIncident else {
+                print("Edited Incident is nil")
+                return
+            }
+            let data = try JSONEncoder().encode(incident)
             multipeerSession.sendToAllPeers(data)
             ARViewController.incidentEdited = false
+            ARViewController.editedIncident = nil
         } catch _ {
             let notification = UINotificationFeedbackGenerator()
             

@@ -247,4 +247,16 @@ enum DataHandler {
              return
         }
     }
+    static func containsIncidentIdentifier(incident: Incident) -> Bool {
+        for incidents in DataHandler.incidents {
+            if incident.identifier == incidents.identifier {
+                return true
+            }
+        }
+        return false
+    }
+    
+    static func replaceIncident(incident: Incident) {
+        DataHandler.incidents.first(where: {$0.identifier == incident.identifier}) = incident
+    }
 }

@@ -29,6 +29,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var incidentEdited = false
     static var objectDetected = false
     static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
+    static var editedIncident : Incident?
     var detectedObjectNode: SCNNode?
     var detectionObjects = Set <ARReferenceObject>()
     static var selectedCarPart: CarPart?
