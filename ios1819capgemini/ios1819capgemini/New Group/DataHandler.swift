@@ -248,15 +248,15 @@ enum DataHandler {
         }
     }
     static func containsIncidentIdentifier(incident: Incident) -> Bool {
-        for incidents in DataHandler.incidents {
-            if incident.identifier == incidents.identifier {
+        for incidents in DataHandler.incidents where incident.identifier == incidents.identifier{
                 return true
-            }
         }
         return false
     }
     
+    
     static func replaceIncident(incident: Incident) {
-        DataHandler.incidents.first(where: {$0.identifier == incident.identifier}) = incident
+        guard let index = DataHandler.incidents.firstIndex(where: {$0.identifier == incident.identifier}) else { return }
+        DataHandler.incidents[index] = incident
     }
 }
