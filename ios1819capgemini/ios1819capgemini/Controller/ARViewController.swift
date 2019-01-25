@@ -149,16 +149,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         config.detectionObjects = detectionObjects
         sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
-        do {
-            let data = try JSONEncoder().encode(DataHandler.incidents)
-            self.multipeerSession.sendToAllPeers(data)
-        } catch _ {
-            let notification = UINotificationFeedbackGenerator()
-            
-            DispatchQueue.main.async {
-                notification.notificationOccurred(.error)
-            }
-        }
         DataHandler.loadFromJSON()
     }
     
@@ -201,7 +191,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         let incident = Incident (type: .unknown,
                                                  description: "New Incident",
                                                  coordinate: Coordinate(vector: coordinateRelativeToObject))
-                        
                         self.filterAllPins()
                         let imageWithoutPin = self.sceneView.snapshot()
                         self.saveImage(image: imageWithoutPin, incident: incident)
@@ -214,7 +203,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         self.saveImage(image: imageWithPin, incident: incident)
                         ARViewController.selectedCarPart?.incidents.append(incident)
                         DataHandler.incidents.append(incident)
-                        
                         self.sendIncident(incident: incident)
                     }
                 }
