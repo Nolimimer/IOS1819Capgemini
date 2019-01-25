@@ -28,7 +28,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     var audioPlayer: AVAudioPlayer?
     
     private var types: [IncidentType] = []
-    private var type = IncidentType.unknown
+    private var type = IncidentType.other
     
     private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -163,7 +163,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
         incidentTypeButton.setTitle(type.rawValue, for: .normal)
     }
 
-        override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         recordingSession = AVAudioSession.sharedInstance()

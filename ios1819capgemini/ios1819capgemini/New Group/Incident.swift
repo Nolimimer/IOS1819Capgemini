@@ -128,9 +128,9 @@ public class Incident: Codable {
 
  // MARK: Constants
 enum IncidentType: String, Codable {
-    case unknown = "Unknown Incident"
-    case spanner = "Spanner"
-    case hammer = "Hammer"
+    case other = "Other Incident"
+    case scratch = "Scratch"
+    case dent = "Dent"
     case tachometer = "Tachometer"
     case pin = "Pin"
 }

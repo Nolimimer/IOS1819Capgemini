@@ -198,7 +198,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                        hitResult.worldTransform.columns.3.y,
                                        hitResult.worldTransform.columns.3.z),
                             to: self.detectedObjectNode)
-                        let incident = Incident (type: .unknown,
+                        let incident = Incident (type: .other,
                                                  description: "New Incident",
                                                  coordinate: Coordinate(vector: coordinateRelativeToObject))
                         self.filterAllPins()
