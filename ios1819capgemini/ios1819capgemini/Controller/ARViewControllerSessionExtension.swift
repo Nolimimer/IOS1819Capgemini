@@ -55,7 +55,7 @@ extension ARViewController {
             return
         } else {
             sendIncidents()
-            ARViewController.resetButtonPressed = false
+            ARViewController.sendIncidentButtonPressed = false
         }
     }
     func refreshNodes() {
