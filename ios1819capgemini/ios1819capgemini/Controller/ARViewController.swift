@@ -104,7 +104,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         screenWidth = Double(view.frame.width)
         screenHeight = Double(view.frame.height)
         sceneView.debugOptions = [.showFeaturePoints]
-        model = try? VNCoreMLModel(for: piktogramModel().model)
+        model = try? VNCoreMLModel(for: stickerTest().model)
         setupBoxes()
         configureLighting()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
