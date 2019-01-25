@@ -213,6 +213,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         self.saveImage(image: imageWithPin, incident: incident)
                         ARViewController.selectedCarPart?.incidents.append(incident)
                         DataHandler.incidents.append(incident)
+                        DataHandler.saveToJSON()
                         self.sendIncident(incident: incident)
                     }
                 }
