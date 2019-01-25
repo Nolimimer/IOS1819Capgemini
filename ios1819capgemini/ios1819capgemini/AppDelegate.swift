@@ -88,16 +88,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     func registerSettingsBundle() {
         UserDefaults.standard.register(defaults: ["enable_featurepoints": true,
                                                   "enable_boundingboxes": false,
-                                                  "enable_detection": true,
+                                                  "enable_detection": false,
                                                   "multi_user": true])
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(defaultsChanged),
-                                               name: UserDefaults.didChangeNotification,
-                                               object: nil)
-    }
-    
-    // Called when settings changed
-    @objc func defaultsChanged() {
-        //print("Defaults changed!")
+
+        UserDefaults.standard.set(false, forKey: "enable_detection")
     }
 }

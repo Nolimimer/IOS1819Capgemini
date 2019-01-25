@@ -90,6 +90,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // swiftlint:enable private_outlet
     @IBOutlet private weak var progressRing: UICircularProgressRing!
     
+    @IBOutlet weak var detectionButton: UIButton!
+    @IBAction private func detectionButtonTapped(_ sender: UIButton) {
+        if sender.currentTitle == "Automatic Detection: On" {
+            sender.setTitle("Automatic Detection: Off", for: .normal)
+            UserDefaults.standard.set(false, forKey: "enable_detection")
+        } else {
+            sender.setTitle("Automatic Detection: On", for: .normal)
+            UserDefaults.standard.set(true, forKey: "enable_detection")
+        }
+    }
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
         
@@ -440,7 +450,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         scene.rootNode.addChildNode(planeNode)
     }
-    
     @objc func tapped(recognizer: UIGestureRecognizer) {
         if recognizer.state != .began {
             progressRing.resetProgress()
@@ -461,19 +470,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
     }
-    
 }
-
 // MARK: Coordinate
 struct Coordinate: Codable {
     let pointX: Float
     let pointY: Float
     let pointZ: Float
-    
     var description: String {
         return "x: \(pointX), y: \(pointY), z: \(pointZ) "
     }
-    
     init(vector: SCNVector3) {
         pointX = vector.x
         pointY = vector.y

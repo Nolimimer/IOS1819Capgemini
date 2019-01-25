@@ -69,7 +69,7 @@
                                 </constraints>
                             </imageView>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrowDown" translatesAutoresizingMaskIntoConstraints="NO" id="11s-KU-rP1">
-                                <rect key="frame" x="161.5" y="534" width="52" height="49"/>
+                                <rect key="frame" x="161.5" y="454" width="52" height="49"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="52" id="0qF-EQ-9uA"/>
                                     <constraint firstAttribute="height" constant="49" id="3ju-yK-hUF"/>
@@ -93,10 +93,37 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8vD-94-Y2N">
+                                <rect key="frame" x="50" y="527" width="275" height="42"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="aa4-8X-K2R">
+                                    <rect key="frame" x="0.0" y="0.0" width="275" height="42"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbU-AJ-MqA">
+                                            <rect key="frame" x="0.0" y="6" width="275" height="30"/>
+                                            <state key="normal" title="Automatic Detection: Off"/>
+                                            <connections>
+                                                <action selector="detectionButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dsp-Nb-ddH"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="EbU-AJ-MqA" firstAttribute="centerX" secondItem="aa4-8X-K2R" secondAttribute="centerX" id="G3S-sR-rLK"/>
+                                        <constraint firstItem="EbU-AJ-MqA" firstAttribute="leading" secondItem="aa4-8X-K2R" secondAttribute="leading" id="MvM-aH-T9g"/>
+                                        <constraint firstAttribute="trailing" secondItem="EbU-AJ-MqA" secondAttribute="trailing" id="R8t-zN-VSM"/>
+                                        <constraint firstItem="EbU-AJ-MqA" firstAttribute="centerY" secondItem="aa4-8X-K2R" secondAttribute="centerY" id="VrP-n5-cvl"/>
+                                    </constraints>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="ksN-io-l4V"/>
+                                </constraints>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1hj-TD-boa"/>
+                            <constraint firstItem="8vD-94-Y2N" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="207-OZ-abF"/>
                             <constraint firstAttribute="centerX" secondItem="zuy-y1-cIR" secondAttribute="centerX" id="3OA-iy-fds"/>
                             <constraint firstItem="fsC-xg-AgH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="DZD-Ka-GQu"/>
                             <constraint firstItem="NlZ-Ha-13L" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Fcf-YY-gx7"/>
@@ -105,8 +132,10 @@
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="LGk-y8-o2A"/>
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="O7l-c0-TRW"/>
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="SQk-Mc-yCq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8vD-94-Y2N" secondAttribute="trailing" constant="50" id="Sv3-3e-XjB"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Trb-ec-wlb"/>
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="VNM-PR-tsD"/>
+                            <constraint firstItem="y1B-gL-xwm" firstAttribute="top" secondItem="8vD-94-Y2N" secondAttribute="bottom" constant="20" id="VmF-NE-cQt"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ydv-fJ-Xpy"/>
                             <constraint firstItem="11s-KU-rP1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="d3Y-7m-5Fo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="y1B-gL-xwm" secondAttribute="bottom" id="hUd-VM-exf"/>
@@ -117,7 +146,7 @@
                             <constraint firstItem="fsC-xg-AgH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="ois-ez-fwV"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="r1j-wH-Wgj"/>
                             <constraint firstItem="K2Z-aO-kjw" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="rIc-1L-MST"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="11s-KU-rP1" secondAttribute="bottom" constant="20" id="tLy-6K-EDm"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="11s-KU-rP1" secondAttribute="bottom" constant="100" id="tLy-6K-EDm"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y1B-gL-xwm" secondAttribute="trailing" id="vjQ-cM-Fiu"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="weP-85-TkE"/>
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="yTB-dg-u80"/>
@@ -135,6 +164,7 @@
                         <outlet property="arrowRight" destination="K2Z-aO-kjw" id="SvD-5F-5GD"/>
                         <outlet property="arrowUp" destination="NlZ-Ha-13L" id="Gkg-GM-KTr"/>
                         <outlet property="connectionLabel" destination="y1B-gL-xwm" id="W0I-JA-19G"/>
+                        <outlet property="detectionButton" destination="EbU-AJ-MqA" id="cNf-PY-lSB"/>
                         <outlet property="progressRing" destination="dsO-Fy-ug4" id="WDm-t6-avZ"/>
                         <outlet property="sceneView" destination="zuy-y1-cIR" id="6CW-Fu-tmc"/>
                     </connections>
