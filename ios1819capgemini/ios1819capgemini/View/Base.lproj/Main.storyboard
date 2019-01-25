@@ -100,7 +100,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbU-AJ-MqA">
-                                            <rect key="frame" x="53" y="6" width="169" height="30"/>
+                                            <rect key="frame" x="0.0" y="6" width="275" height="30"/>
                                             <state key="normal" title="Automatic Detection: On"/>
                                             <connections>
                                                 <action selector="detectionButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dsp-Nb-ddH"/>
@@ -109,6 +109,8 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="EbU-AJ-MqA" firstAttribute="centerX" secondItem="aa4-8X-K2R" secondAttribute="centerX" id="G3S-sR-rLK"/>
+                                        <constraint firstItem="EbU-AJ-MqA" firstAttribute="leading" secondItem="aa4-8X-K2R" secondAttribute="leading" id="MvM-aH-T9g"/>
+                                        <constraint firstAttribute="trailing" secondItem="EbU-AJ-MqA" secondAttribute="trailing" id="R8t-zN-VSM"/>
                                         <constraint firstItem="EbU-AJ-MqA" firstAttribute="centerY" secondItem="aa4-8X-K2R" secondAttribute="centerY" id="VrP-n5-cvl"/>
                                     </constraints>
                                 </view>

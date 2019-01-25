@@ -90,14 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
                                                   "enable_boundingboxes": false,
                                                   "enable_detection": true,
                                                   "multi_user": true])
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(defaultsChanged),
-                                               name: UserDefaults.didChangeNotification,
-                                               object: nil)
-    }
-    
-    // Called when settings changed
-    @objc func defaultsChanged() {
-        //print("Defaults changed!")
+
+        UserDefaults.standard.set(true, forKey: "enable_detection")
     }
 }
