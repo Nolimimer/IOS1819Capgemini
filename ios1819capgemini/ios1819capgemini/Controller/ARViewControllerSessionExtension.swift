@@ -34,7 +34,7 @@ extension ARViewController {
         if !multipeerSession.connectedPeers.isEmpty && ARViewController.multiUserEnabled {
             ARViewController.connectedToPeer = true
             let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
-            connectionLabel.text = "Connected with \(peerNames)"
+            connectionLabel.text = "Connected"
             connectionLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         } else {
             connectionLabel.text = ""

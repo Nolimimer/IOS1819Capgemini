@@ -22,7 +22,7 @@ extension ARViewController {
             
         case .normal where !multipeerSession.connectedPeers.isEmpty && mapProvider == nil:
             let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
-            message = "Connected with \(peerNames)."
+            message = "Connected"
             connectionLabel.text = message
         case .notAvailable:
             message = "Tracking unavailable."
