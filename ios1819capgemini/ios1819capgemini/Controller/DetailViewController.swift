@@ -441,7 +441,7 @@ extension DetailViewController: UIImagePickerControllerDelegate {
         }
         if let selectedVideo: URL = (info[UIImagePickerController.InfoKey.mediaURL] as? URL) {
             // Save video to the main photo album
-            let selectorToCall = #selector(AttachmentViewController.videoSaved(_:didFinishSavingWithError:context:))
+            _ = #selector(AttachmentViewController.videoSaved(_:didFinishSavingWithError:context:))
             
             // 2
             //UISaveVideoAtPathToSavedPhotosAlbum(selectedVideo.relativePath, self, selectorToCall, nil)

@@ -233,6 +233,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
             return
         }
+        //swiftlint:disable multiline_function_chains
         for object in testObjects {
             detectionObjects.insert(object)
             DispatchQueue.global().async {
@@ -248,6 +249,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 }
             }
         }
+        //swiftlint:enable multiline_function_chains
         config.detectionObjects = detectionObjects
         sceneView.session.run(config)
     }

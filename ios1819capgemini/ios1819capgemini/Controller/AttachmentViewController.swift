@@ -166,7 +166,7 @@ class AttachmentViewController: UIViewController, UINavigationControllerDelegate
             }
             let result: [Video] = []
             for val in arrImages {
-                guard let val = val as? String else {
+                guard val is String else {
                     continue
                 }
                 //result.append(Video(name: String(name), videoPath: val, duration: ))
