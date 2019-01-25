@@ -44,7 +44,7 @@ class Photo: Attachment {
     
     func computeThumbnail() -> UIImage {
         if name == "plusButton" {
-            let result = #imageLiteral(resourceName: "plusbutton")
+            let result = #imageLiteral(resourceName: "plus")
             return result
         }
         guard let result = UIImage(contentsOfFile: filePath)?.rotate(radians: 0) else {
