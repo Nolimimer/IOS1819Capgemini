@@ -79,7 +79,7 @@ class ListViewController: UIViewController, UITableViewDelegate {
     
     @IBAction private func selectedFilterSegment(_ sender: UISegmentedControl) {
         tableView.reloadData()
-}
+    }
   
     
     private func share() {
