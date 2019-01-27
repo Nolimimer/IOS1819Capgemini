@@ -23,7 +23,6 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         ARViewController.selectedCarPart?.incidents = DataHandler.incidents
         ModelViewController.carPart = ARViewController.selectedCarPart
         DataHandler.incidents = []
-        
         if let carPart = ModelViewController.carPart {
             print("carpart incidents : \(carPart.incidents)")
             if DataHandler.containsCarPart(carPart: carPart) {

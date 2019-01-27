@@ -465,18 +465,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
     }
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        print("view did disappear")
-//        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
-//        print("DataHandler incidents: \(ARViewController.selectedCarPart?.incidents)")
-//        DataHandler.incidents = []
-//        guard let currentCarPart = ARViewController.selectedCarPart else {
-//            return
-//        }
-//        ModelViewController.carPart = currentCarPart
-//    }
-    
 }
 // MARK: Coordinate
 struct Coordinate: Codable {

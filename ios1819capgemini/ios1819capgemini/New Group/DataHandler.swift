@@ -202,6 +202,7 @@ enum DataHandler {
     static func getIndexOfIncident(incident: Incident) -> Int? {
         return DataHandler.incidents.firstIndex(where: { $0.identifier == incident.identifier })
     }
+    
     static func getIndexOfCarPart(carPart: CarPart) -> Int? {
         return DataHandler.carParts.firstIndex(where: { $0.name == carPart.name })
     }
@@ -217,6 +218,7 @@ enum DataHandler {
             DataHandler.carParts[DataHandler.getIndexOfCarPart(carPart: carPart)!] = carPart
         }
     }
+    
     static func containsCarPart(carPart: CarPart) -> Bool {
         return DataHandler.carParts.contains(where: { $0.name == carPart.name })
     }
