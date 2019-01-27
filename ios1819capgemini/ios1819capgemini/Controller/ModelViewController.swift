@@ -24,7 +24,6 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             DataHandler.objectsToIncidents[name] = DataHandler.incidents
         }
         // add blurred subview
-        ARViewController.resetButtonPressed = true
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -35,6 +34,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         creatingNodePossible = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        ARViewController.resetButtonPressed = true
     }
     
     let reuseIdentifier = "modelCell"
