@@ -35,10 +35,6 @@ enum DataHandler {
     static var objectsToIncidents = [String: [Incident]]()
     static var incidents: [Incident] = []
     static var largestID = 0
-    static var currentSegmentFilter = Filter.showAll.rawValue // Show All by default
-    static var openIncidents = [Incident]()
-    static var inProgressIncidents = [Incident]()
-    static var resolvedIncidents = [Incident]()
   
     // MARK: Computed Instance Properties
     static var nextIncidentID: Int {
@@ -53,17 +49,17 @@ enum DataHandler {
         return incidents.first(where: { "\($0.identifier)" == id })
     }
 
-    static func refreshOpenIncidents() {
-        openIncidents = incidents.filter({ $0.status == Status.open })
-    }
-    
-    static func refreshInProgressIncidents() {
-        inProgressIncidents = incidents.filter({ $0.status == Status.progress })
-    }
-    
-    static func refreshResolvedIncidents() {
-        resolvedIncidents = incidents.filter({ $0.status == Status.resolved })
-    }
+//    static func refreshOpenIncidents() {
+//        openIncidents = incidents.filter({ $0.status == Status.open })
+//    }
+//
+//    static func refreshInProgressIncidents() {
+//        inProgressIncidents = incidents.filter({ $0.status == Status.progress })
+//    }
+//
+//    static func refreshResolvedIncidents() {
+//        resolvedIncidents = incidents.filter({ $0.status == Status.resolved })
+//    }
     
     static func setCarParts() {
         let fileManager = FileManager.default
@@ -85,16 +81,6 @@ enum DataHandler {
     
     // MARK: Type Methods
     static func loadFromJSON() {
-//        do {
-//            let fileWrapper = try FileWrapper(url: Constants.localStorageURL, options: .immediate)
-//            guard let data = fileWrapper.regularFileContents else {
-//                throw NSError()
-//            }
-//            incidents = try JSONDecoder().decode([Incident].self, from: data)
-//        } catch _ {
-//            print("Could not load incidents, DataHandler uses no incident")
-//        }
-//
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
@@ -136,16 +122,6 @@ enum DataHandler {
     }
     
     static func saveToJSON() {
-//        do {
-//            let data = try JSONEncoder().encode(incidents)
-//            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
-//            try jsonFileWrapper.write(to: Constants.localStorageURL,
-//                                      options: FileWrapper.WritingOptions.atomic,
-//                                      originalContentsURL: nil)
-////            print("Saved incidents!")
-//        } catch _ {
-//            print("Could not save incidents")
-//        }
         do {
             let data = try JSONEncoder().encode(objectsToIncidents)
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
@@ -184,20 +160,6 @@ enum DataHandler {
         
     
     static func loadFromJSON(url: URL) {
-//        do {
-//            let fileWrapper = try FileWrapper(url: url, options: .immediate)
-//            guard let data = fileWrapper.regularFileContents else {
-//                throw NSError()
-//            }
-//            incidents = try JSONDecoder().decode([Incident].self, from: data)
-//            for incident in incidents {
-//                for attachment in incident.attachments {
-//                    attachment.attachment.reevaluatePath()
-//                }
-//            }
-//        } catch _ {
-//            print("Could not load incidents, DataHandler uses no incident")
-//        }
         
         do {
             let fileWrapper = try FileWrapper(url: url, options: .immediate)

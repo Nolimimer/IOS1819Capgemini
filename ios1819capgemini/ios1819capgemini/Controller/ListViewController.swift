@@ -22,6 +22,7 @@ class CustomCell: UITableViewCell {
 // MARK: LastViewController
 class ListViewController: UIViewController, UITableViewDelegate {
     
+    var currentSegmentFilter = 0
     // MARK: IBOutlets
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var filterSegmentedControl: UISegmentedControl!
@@ -55,10 +56,7 @@ class ListViewController: UIViewController, UITableViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        DataHandler.refreshOpenIncidents()
-//        DataHandler.refreshInProgressIncidents()
-//        DataHandler.refreshResolvedIncidents()
-        filterSegmentedControl.selectedSegmentIndex = DataHandler.currentSegmentFilter
+        filterSegmentedControl.selectedSegmentIndex = currentSegmentFilter
         tableView.reloadData()
         creatingNodePossible = false
         super.viewWillAppear(animated)
@@ -80,25 +78,6 @@ class ListViewController: UIViewController, UITableViewDelegate {
     
     
     @IBAction private func selectedFilterSegment(_ sender: UISegmentedControl) {
-//        switch sender.selectedSegmentIndex {
-//        case Filter.showAll.rawValue:
-//            DataHandler.currentSegmentFilter = Filter.showAll.rawValue
-//            tableView.reloadData()
-//        case Filter.showOpen.rawValue:
-//            DataHandler.currentSegmentFilter = Filter.showOpen.rawValue
-//            DataHandler.refreshOpenIncidents()
-//            tableView.reloadData()
-//        case Filter.showInProgress.rawValue:
-//            DataHandler.currentSegmentFilter = Filter.showInProgress.rawValue
-//            DataHandler.refreshInProgressIncidents()
-//            tableView.reloadData()
-//        case Filter.showResolved.rawValue:
-//            DataHandler.currentSegmentFilter = Filter.showResolved.rawValue
-//            DataHandler.refreshResolvedIncidents()
-//            tableView.reloadData()
-//        default:
-//            break
-//        }
         tableView.reloadData()
 }
   
@@ -142,18 +121,6 @@ extension ListViewController: UITableViewDataSource {
         let cell: CustomCell = tableView.dequeueReusableCell(withIdentifier: "incidentCell", for: indexPath) as! CustomCell
         let incident: Incident
         let incidents: [Incident]
-//        switch filterSegmentedControl.selectedSegmentIndex {
-//        case Filter.showAll.rawValue:
-//            incident = DataHandler.incidents[indexPath.row]
-//        case Filter.showOpen.rawValue:
-//            incident = DataHandler.openIncidents[indexPath.row]
-//        case Filter.showInProgress.rawValue:
-//            incident = DataHandler.inProgressIncidents[indexPath.row]
-//        case Filter.showResolved.rawValue:
-//            incident = DataHandler.resolvedIncidents[indexPath.row]
-//        default:
-//            incident = DataHandler.incidents[indexPath.row]
-//        }
         switch filterSegmentedControl.selectedSegmentIndex {
         case 1:
             incidents = DataHandler.incidents.filter { $0.status == .open }
@@ -188,23 +155,6 @@ extension ListViewController: UITableViewDataSource {
         if !ARViewController.objectDetected {
             return 0
         }
-//        switch filterSegmentedControl.selectedSegmentIndex {
-//        case Filter.showAll.rawValue:
-//            ARViewController.filterAllIncidents()
-//            return DataHandler.incidents.count
-//        case Filter.showOpen.rawValue:
-//            ARViewController.filterOpenIncidents()
-//            return DataHandler.openIncidents.count
-//        case Filter.showInProgress.rawValue:
-//            ARViewController.filterInProgressIncidents()
-//            return DataHandler.inProgressIncidents.count
-//        case Filter.showResolved.rawValue:
-//            ARViewController.filterResolvedIncidents()
-//            return DataHandler.resolvedIncidents.count
-//        default:
-//            ARViewController.filterAllIncidents()
-//            return DataHandler.incidents.count
-//        }
         switch filterSegmentedControl.selectedSegmentIndex {
         case 1:
             return (DataHandler.incidents.filter { $0.status == .open }).count
@@ -232,7 +182,7 @@ extension ListViewController: UITableViewDataSource {
                 }
                 return
             }
-            if DataHandler.currentSegmentFilter != 0 {
+            if  currentSegmentFilter != 0 {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can only be deleted in Show All",
                                               preferredStyle: .alert)
@@ -332,7 +282,7 @@ extension ListViewController: UITableViewDataSource {
                 }
                 return
             }
-            if DataHandler.currentSegmentFilter != 0 {
+            if  self.currentSegmentFilter != 0 {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can only be deleted in Show All",
                                               preferredStyle: .alert)
