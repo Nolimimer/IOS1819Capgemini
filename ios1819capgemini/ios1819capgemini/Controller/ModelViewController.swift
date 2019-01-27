@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    static var objectName: String?
+    static var carPart: CarPart?
     
     @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
@@ -20,8 +20,12 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let name = ModelViewController.objectName {
-            DataHandler.objectsToIncidents[name] = DataHandler.incidents
+        if let carPart = ModelViewController.carPart {
+            if DataHandler.containsCarPart(carPart: carPart) {
+                DataHandler.replaceCarPart(carPart: carPart)
+            } else {
+                DataHandler.setCarParts()
+            }
         }
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))

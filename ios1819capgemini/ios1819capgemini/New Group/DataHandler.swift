@@ -202,11 +202,22 @@ enum DataHandler {
     static func getIndexOfIncident(incident: Incident) -> Int? {
         return DataHandler.incidents.firstIndex(where: { $0.identifier == incident.identifier })
     }
+    static func getIndexOfCarPart(carPart: CarPart) -> Int? {
+        return DataHandler.carParts.firstIndex(where: { $0.name == carPart.name })
+    }
     
     static func replaceIncident(incident: Incident) {
         guard let index = DataHandler.incidents.firstIndex(where: { $0.identifier == incident.identifier }) else {
             return
         }
         DataHandler.incidents[index] = incident
+    }
+    static func replaceCarPart(carPart: CarPart) {
+        if DataHandler.carParts.contains(where: { $0.name == carPart.name }) {
+            DataHandler.carParts[DataHandler.getIndexOfCarPart(carPart: carPart)!] = carPart
+        }
+    }
+    static func containsCarPart(carPart: CarPart) -> Bool {
+        return DataHandler.carParts.contains(where: { $0.name == carPart.name })
     }
 }
