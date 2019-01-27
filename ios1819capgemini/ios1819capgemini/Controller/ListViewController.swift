@@ -247,33 +247,33 @@ extension ListViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        var incident = ARViewController.navigatingIncident
-        if incident == nil {
-            title = "Navigate"
-        } else {
+        
+        var currentIncident: Incident?
+        switch self.filterSegmentedControl.selectedSegmentIndex {
+        case 0:
+            currentIncident = DataHandler.incidents[indexPath.row]
+        case 1:
+            currentIncident = DataHandler.openIncidents[indexPath.row]
+        case 2:
+            currentIncident = DataHandler.inProgressIncidents[indexPath.row]
+        case 3:
+            currentIncident = DataHandler.resolvedIncidents[indexPath.row]
+        default:
+            //should never happen
+            currentIncident = nil
+        }
+        if currentIncident == ARViewController.navigatingIncident {
             title = "Stop"
+        } else {
+            title = "Navigate"
         }
         let navigate = UITableViewRowAction(style: .normal, title: title) { _, _ in
             self.dismiss(animated: true, completion: {
-
-                switch self.filterSegmentedControl.selectedSegmentIndex {
-                case 0:
-                    incident = DataHandler.incidents[indexPath.row]
-                case 1:
-                    incident = DataHandler.openIncidents[indexPath.row]
-                case 2:
-                    incident = DataHandler.inProgressIncidents[indexPath.row]
-                case 3:
-                    incident = DataHandler.resolvedIncidents[indexPath.row]
-                default:
-                    incident = DataHandler.incidents[indexPath.row]
-                }
-
                 creatingNodePossible = true
-                if ARViewController.navigatingIncident == incident {
+                if ARViewController.navigatingIncident == currentIncident {
                     ARViewController.navigatingIncident = nil
                 } else {
-                    ARViewController.navigatingIncident = incident
+                    ARViewController.navigatingIncident = currentIncident
                 }
             })
         }

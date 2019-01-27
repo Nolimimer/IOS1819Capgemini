@@ -248,7 +248,7 @@ enum DataHandler {
         }
     }
     static func containsIncidentIdentifier(incident: Incident) -> Bool {
-        for incidents in DataHandler.incidents where incident.identifier == incidents.identifier{
+        for incidents in DataHandler.incidents where incident.identifier == incidents.identifier {
                 return true
         }
         return false
