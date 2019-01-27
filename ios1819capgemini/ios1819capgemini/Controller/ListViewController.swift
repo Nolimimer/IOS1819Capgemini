@@ -107,13 +107,6 @@ class ListViewController: UIViewController, UITableViewDelegate {
     }
 }
 
-enum Filter: Int { // Remark: Need to match Segment in Story Board.
-    case showAll = 0
-    case showOpen
-    case showInProgress
-    case showResolved
-}
-
 // MARK: Extension - UITableViewDelegate
 extension ListViewController: UITableViewDataSource {
     
@@ -168,23 +161,22 @@ extension ListViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let incident = DataHandler.incidents[indexPath.row]
+            var incidents: [Incident]
+            switch self.filterSegmentedControl.selectedSegmentIndex {
+            case 1:
+                incidents = DataHandler.incidents.filter { $0.status == .open }
+            case 2:
+                incidents = DataHandler.incidents.filter { $0.status == .progress }
+            case 3:
+                incidents = DataHandler.incidents.filter { $0.status == .resolved }
+            default:
+                incidents = DataHandler.incidents
+            }
+            let incident = incidents[indexPath.row]
             
-            if ARViewController.connectedToPeer {
+            if ARViewController.connectedToPeer && ARViewController.multiUserEnabled {
                 let alert = UIAlertController(title: "Error",
                                               message: "Incident can't be deleted if Peer is connected",
-                                              preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK",
-                                              style: .default,
-                                              handler: nil))
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
-            if  currentSegmentFilter != 0 {
-                let alert = UIAlertController(title: "Error",
-                                              message: "Incident can only be deleted in Show All",
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK",
                                               style: .default,
