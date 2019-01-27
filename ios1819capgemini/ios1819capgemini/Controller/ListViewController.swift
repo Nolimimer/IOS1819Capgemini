@@ -282,22 +282,10 @@ extension ListViewController: UITableViewDataSource {
                 }
                 return
             }
-            if  self.currentSegmentFilter != 0 {
-                let alert = UIAlertController(title: "Error",
-                                              message: "Incident can only be deleted in Show All",
-                                              preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK",
-                                              style: .default,
-                                              handler: nil))
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true, completion: nil)
-                }
-                return
-            }
             else {
                 creatingNodePossible = true
-                let incident = DataHandler.incidents[indexPath.row]
-                DataHandler.removeIncident(incidentToDelete: incident)
+                guard let currentIncident = currentIncident else { return }
+                DataHandler.removeIncident(incidentToDelete: currentIncident)
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
                 return
             }
