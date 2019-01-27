@@ -28,6 +28,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
+    static var tappingCreateIncindetButtonPossible = false
     static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     static var editedIncident: Incident?
     var detectedObjectNode: SCNNode?
@@ -89,7 +90,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet weak var arrowDown: UIImageView!
     // swiftlint:enable private_outlet
     @IBOutlet private weak var progressRing: UICircularProgressRing!
-    
+    @IBOutlet weak var createIncidentButton: RoundButton!
+    @IBAction func createIncidentButtonTapped(_ sender: Any) {
+        
+    }
     @IBOutlet weak var detectionButton: UIButton!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
         if sender.currentTitle == "Automatic Detection: On" {

@@ -91,6 +91,9 @@
                                 <state key="normal" title="Create Incident">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="createIncidentButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kWU-yq-yRL"/>
+                                </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vs-jp-QKL">
                                 <rect key="frame" x="285" y="443" width="74" height="42"/>
@@ -147,6 +150,7 @@
                         <outlet property="arrowRight" destination="K2Z-aO-kjw" id="SvD-5F-5GD"/>
                         <outlet property="arrowUp" destination="NlZ-Ha-13L" id="Gkg-GM-KTr"/>
                         <outlet property="connectionLabel" destination="y1B-gL-xwm" id="W0I-JA-19G"/>
+                        <outlet property="createIncidentButton" destination="J7S-2l-kmB" id="BZn-qO-vsm"/>
                         <outlet property="progressRing" destination="dsO-Fy-ug4" id="WDm-t6-avZ"/>
                         <outlet property="sceneView" destination="zuy-y1-cIR" id="6CW-Fu-tmc"/>
                     </connections>
