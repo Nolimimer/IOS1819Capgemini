@@ -48,18 +48,6 @@ enum DataHandler {
     static func incident(withId id: String) -> Incident? {
         return incidents.first(where: { "\($0.identifier)" == id })
     }
-
-//    static func refreshOpenIncidents() {
-//        openIncidents = incidents.filter({ $0.status == Status.open })
-//    }
-//
-//    static func refreshInProgressIncidents() {
-//        inProgressIncidents = incidents.filter({ $0.status == Status.progress })
-//    }
-//
-//    static func refreshResolvedIncidents() {
-//        resolvedIncidents = incidents.filter({ $0.status == Status.resolved })
-//    }
     
     static func setCarParts() {
         let fileManager = FileManager.default
@@ -155,7 +143,6 @@ enum DataHandler {
             return nil
         }
     }
-        
     
     static func loadFromJSON(url: URL) {
         
@@ -216,8 +203,23 @@ enum DataHandler {
         return DataHandler.incidents.firstIndex(where: { $0.identifier == incident.identifier })
     }
     
+    static func getIndexOfCarPart(carPart: CarPart) -> Int? {
+        return DataHandler.carParts.firstIndex(where: { $0.name == carPart.name })
+    }
+    
     static func replaceIncident(incident: Incident) {
-        guard let index = DataHandler.incidents.firstIndex(where: { $0.identifier == incident.identifier }) else { return }
+        guard let index = DataHandler.incidents.firstIndex(where: { $0.identifier == incident.identifier }) else {
+            return
+        }
         DataHandler.incidents[index] = incident
+    }
+    static func replaceCarPart(carPart: CarPart) {
+        if DataHandler.carParts.contains(where: { $0.name == carPart.name }) {
+            DataHandler.carParts[DataHandler.getIndexOfCarPart(carPart: carPart)!] = carPart
+        }
+    }
+    
+    static func containsCarPart(carPart: CarPart) -> Bool {
+        return DataHandler.carParts.contains(where: { $0.name == carPart.name })
     }
 }

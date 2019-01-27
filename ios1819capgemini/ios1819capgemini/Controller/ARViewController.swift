@@ -282,12 +282,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if let objectAnchor = anchor as? ARObjectAnchor {
             guard let name = objectAnchor.referenceObject.name else { fatalError("reference object has no name") }
             
-//            if DataHandler.objectsToIncidents[name] != nil {
-//                DataHandler.incidents = DataHandler.getIncidentsOfObject(identifier: name)
-//            } else {
-//                DataHandler.incidents = []
-//            }
-            
             ARViewController.selectedCarPart = DataHandler.carParts.first(where: { $0.name.hasPrefix(name) })
             guard let selectedCarPart = ARViewController.selectedCarPart else {
                 print("no carPart with name \(name)")
@@ -295,7 +289,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             DataHandler.incidents = selectedCarPart.incidents
             
-            ModelViewController.objectName = name
+            ModelViewController.carPart = selectedCarPart
             let notification = UINotificationFeedbackGenerator()
             
             DispatchQueue.main.async {

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    static var objectName: String?
+    static var carPart: CarPart?
     
     @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
@@ -20,11 +20,18 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let name = ModelViewController.objectName {
-            DataHandler.objectsToIncidents[name] = DataHandler.incidents
+        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
+        ModelViewController.carPart = ARViewController.selectedCarPart
+        DataHandler.incidents = []
+        if let carPart = ModelViewController.carPart {
+            print("carpart incidents : \(carPart.incidents)")
+            if DataHandler.containsCarPart(carPart: carPart) {
+                DataHandler.replaceCarPart(carPart: carPart)
+            } else {
+                DataHandler.setCarParts()
+            }
         }
         // add blurred subview
-        ARViewController.resetButtonPressed = true
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -35,6 +42,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         creatingNodePossible = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        ARViewController.resetButtonPressed = true
     }
     
     let reuseIdentifier = "modelCell"
