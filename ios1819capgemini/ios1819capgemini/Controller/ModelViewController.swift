@@ -20,7 +20,12 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
+        ModelViewController.carPart = ARViewController.selectedCarPart
+        DataHandler.incidents = []
+        
         if let carPart = ModelViewController.carPart {
+            print("carpart incidents : \(carPart.incidents)")
             if DataHandler.containsCarPart(carPart: carPart) {
                 DataHandler.replaceCarPart(carPart: carPart)
             } else {
