@@ -150,12 +150,16 @@ extension ListViewController: UITableViewDataSource {
         }
         switch filterSegmentedControl.selectedSegmentIndex {
         case 1:
+            ARViewController.filterOpenIncidents()
             return (DataHandler.incidents.filter { $0.status == .open }).count
         case 2:
+            ARViewController.filterInProgressIncidents()
             return (DataHandler.incidents.filter { $0.status == .progress }).count
         case 3:
+            ARViewController.filterResolvedIncidents()
             return (DataHandler.incidents.filter { $0.status == .resolved }).count
         default:
+            ARViewController.filterAllIncidents()
             return DataHandler.incidents.count
         }
     }
@@ -188,7 +192,7 @@ extension ListViewController: UITableViewDataSource {
             }
             if ARViewController.navigatingIncident != nil {
                 let alert = UIAlertController(title: "Error",
-                                              message: "Incident can't be deleted if it is navigated to ",
+                                              message: "Incident can't be deleted if navigation is enabled ",
                                               preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK",
                                               style: .default,
