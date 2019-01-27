@@ -47,7 +47,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // swiftlint:disable implicitly_unwrapped_optional
     var multipeerSession: MultipeerSession!
     // swiftlint:enable implicitly_unwrapped_optional
-    var isDetecting = true
+    var isDetecting = false
     var automaticallyDetectedVectors = [SCNVector3]()
     var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode: SKLabelNode?
