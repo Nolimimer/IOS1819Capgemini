@@ -108,7 +108,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
-        
+        createIncidentButton.alpha = 0.2
+        createIncidentButton.backgroundColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        createIncidentButton.isEnabled = false
         creatingNodePossible = true
         super.viewDidLoad()
         sceneView.delegate = self
@@ -273,7 +275,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()
         updateSession(for: frame.camera.trackingState, incident: ARViewController.navigatingIncident)
-        ARViewController.tappingCreateIncindetButtonPossible = false
     }
     
     

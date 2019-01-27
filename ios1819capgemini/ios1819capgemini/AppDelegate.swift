@@ -88,9 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     func registerSettingsBundle() {
         UserDefaults.standard.register(defaults: ["enable_featurepoints": true,
                                                   "enable_boundingboxes": false,
-                                                  "enable_detection": false,
+                                                  "enable_detection": true,
                                                   "multi_user": true])
-
-        UserDefaults.standard.set(false, forKey: "enable_detection")
     }
 }
