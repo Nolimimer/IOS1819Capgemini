@@ -50,9 +50,9 @@ class StatusViewController: UIViewController {
             ARViewController.resetButtonPressed = true
             DataHandler.saveToJSON()
             
-            if let par = self.parent as? ARViewController {
-                par.detectionButton.setTitle("Automatic Detection: Off", for: .normal)
-            }
+//            if let par = self.parent as? ARViewController {
+//                par.detectionButton.setTitle("Automatic Detection: Off", for: .normal)
+//            }
             UserDefaults.standard.set(false, forKey: "enable_detection")
 //            self.dismiss(animated: true, completion: nil)
         }))

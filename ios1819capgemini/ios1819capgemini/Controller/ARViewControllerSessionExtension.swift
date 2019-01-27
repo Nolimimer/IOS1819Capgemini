@@ -118,13 +118,13 @@ extension ARViewController {
             multipeerSession.disconnectSession()
         }
         
-        if UserDefaults.standard.bool(forKey: "enable_detection") && detectedObjectNode != nil {
-            isDetecting = true
-            setupBoxes()
-        } else {
-            hideBoxes()
-            isDetecting = false
-        }
+//        if UserDefaults.standard.bool(forKey: "enable_detection") && detectedObjectNode != nil {
+//            isDetecting = true
+//            setupBoxes()
+//        } else {
+//            hideBoxes()
+//            isDetecting = false
+//        }
     }
     
     func checkTappingCreateButtonPossible() {
