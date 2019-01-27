@@ -106,14 +106,12 @@ enum DataHandler {
                 throw NSError()
             }
             carParts = try JSONDecoder().decode([CarPart].self, from: data)
-//            incidents = []
             for carPart in carParts {
                 carPart.reevaluateFilePath()
                 for incident in carPart.incidents {
                     for attachment in incident.attachments {
                         attachment.attachment.reevaluatePath()
                     }
-//                    incidents.append(incident)
                 }
             }
         } catch _ {
@@ -139,7 +137,7 @@ enum DataHandler {
             print(carParts)
 
         } catch _ {
-                                        print("Could not save ar object: [incident] dictionary")
+            print("Could not save ar object: [incident] dictionary")
                 
         }
         
@@ -195,8 +193,6 @@ enum DataHandler {
         } catch _ {
             print("Could not load ar object: [incident] dictionary")
         }
-        print(carParts)
-        print("objectsToIncidents \(objectsToIncidents)")
     }
     static func getIncidentsOfObject(identifier: String) -> [Incident] {
         return DataHandler.objectsToIncidents[identifier] ?? []
@@ -216,9 +212,12 @@ enum DataHandler {
         return false
     }
     
+    static func getIndexOfIncident(incident: Incident) -> Int? {
+        return DataHandler.incidents.firstIndex(where: { $0.identifier == incident.identifier })
+    }
     
     static func replaceIncident(incident: Incident) {
-        guard let index = DataHandler.incidents.firstIndex(where: {$0.identifier == incident.identifier}) else { return }
+        guard let index = DataHandler.incidents.firstIndex(where: { $0.identifier == incident.identifier }) else { return }
         DataHandler.incidents[index] = incident
     }
 }
