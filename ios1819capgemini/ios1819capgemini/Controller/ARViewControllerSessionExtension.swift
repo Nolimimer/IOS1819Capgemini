@@ -127,8 +127,21 @@ extension ARViewController {
         }
     }
     
+    func checkTappingCreateButtonPossible() {
+        if !ARViewController.tappingCreateIncindetButtonPossible {
+            createIncidentButton.alpha = 0.2
+            createIncidentButton.backgroundColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+            createIncidentButton.isEnabled = false
+        } else {
+            createIncidentButton.alpha = 1.0
+            createIncidentButton.backgroundColor = #colorLiteral(red: 0, green: 0.5762649179, blue: 1, alpha: 1)
+            createIncidentButton.isEnabled = true
+        }
+    }
+    
     func updateSession(for trackingState: ARCamera.TrackingState, incident: Incident?) {
         
+        checkTappingCreateButtonPossible()
         checkSettings()
         checkConnection()
         checkReset()
@@ -140,6 +153,7 @@ extension ARViewController {
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: trackingState, incident: incident)
+        ARViewController.tappingCreateIncindetButtonPossible = false
     }
     
 }

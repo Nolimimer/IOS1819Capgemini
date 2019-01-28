@@ -92,6 +92,7 @@
 		B30A479621CFBC5A007049F8 /* ScannerAppUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30A477621CFBC59007049F8 /* ScannerAppUtilities.swift */; };
 		B30A479721CFBC5A007049F8 /* ARCameraTrackingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30A477721CFBC59007049F8 /* ARCameraTrackingState.swift */; };
 		B3936D5421F0CFCD00A1B379 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3936D5321F0CFCD00A1B379 /* StringExtension.swift */; };
+		BA00D0C621FDDB8E0067B8D1 /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA00D0C521FDDB8E0067B8D1 /* RoundButton.swift */; };
 		BA09652121CEE59F00174922 /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652021CEE59F00174922 /* StatusViewController.swift */; };
 		BA09652321CEEA0800174922 /* ARViewControllerStatusbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */; };
 		BA2BAA4621EBE9CD00FE5E83 /* ARViewControllerNodeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA2BAA4521EBE9CD00FE5E83 /* ARViewControllerNodeExtension.swift */; };
@@ -200,6 +201,7 @@
 		B30A477621CFBC59007049F8 /* ScannerAppUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerAppUtilities.swift; sourceTree = "<group>"; };
 		B30A477721CFBC59007049F8 /* ARCameraTrackingState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARCameraTrackingState.swift; sourceTree = "<group>"; };
 		B3936D5321F0CFCD00A1B379 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		BA00D0C521FDDB8E0067B8D1 /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
 		BA09652021CEE59F00174922 /* StatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewController.swift; sourceTree = "<group>"; };
 		BA09652221CEEA0800174922 /* ARViewControllerStatusbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusbar.swift; sourceTree = "<group>"; };
 		BA2BAA4521EBE9CD00FE5E83 /* ARViewControllerNodeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNodeExtension.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				0DF3077B21B7E067007D57D6 /* AttachmentView.xib */,
 				0DF3077D21B7E070007D57D6 /* AttachmentView.swift */,
 				BE18F72821E8A7B200057A0C /* ARModelsCollectionViewCell.swift */,
+				BA00D0C521FDDB8E0067B8D1 /* RoundButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -710,6 +713,7 @@
 				90D3453321B44C34009EF79E /* Video.swift in Sources */,
 				90C7377821B5368D008AD568 /* stickerTest.mlmodel in Sources */,
 				B30A478C21CFBC5A007049F8 /* ObjectOrigin.swift in Sources */,
+				BA00D0C621FDDB8E0067B8D1 /* RoundButton.swift in Sources */,
 				BA6972E621D854E200F919EF /* ARViewControllerScreenshotExtension.swift in Sources */,
 				9082AF6F21A561D200CA8E80 /* Attachment.swift in Sources */,
 				908466F221B6D11800A3C80C /* AttachmentViewCell.swift in Sources */,

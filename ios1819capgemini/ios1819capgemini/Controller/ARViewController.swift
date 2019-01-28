@@ -14,6 +14,7 @@ import Vision
 import UICircularProgressRing
 import MultipeerConnectivity
 
+
 // Stores all the nodes added to the scene
 var nodes = [SCNNode]()
 var creatingNodePossible = true
@@ -28,6 +29,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
+    static var tappingCreateIncindetButtonPossible = false
+    static var incidentCreated = false
     static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     static var editedIncident: Incident?
     var detectedObjectNode: SCNNode?
@@ -44,7 +47,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // swiftlint:disable implicitly_unwrapped_optional
     var multipeerSession: MultipeerSession!
     // swiftlint:enable implicitly_unwrapped_optional
-    var isDetecting = true
+    var isDetecting = false
     var automaticallyDetectedVectors = [SCNVector3]()
     var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode: SKLabelNode?
@@ -89,7 +92,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet weak var arrowDown: UIImageView!
     // swiftlint:enable private_outlet
     @IBOutlet private weak var progressRing: UICircularProgressRing!
-    
+    @IBOutlet weak var createIncidentButton: RoundButton!
+    @IBAction func createIncidentButtonTapped(_ sender: Any) {
+        ARViewController.incidentCreated = true
+    }
     @IBOutlet weak var detectionButton: UIButton!
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
         if sender.currentTitle == "Automatic Detection: On" {
@@ -102,7 +108,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
-        
+        createIncidentButton.alpha = 0.2
+        createIncidentButton.backgroundColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        createIncidentButton.isEnabled = false
         creatingNodePossible = true
         super.viewDidLoad()
         sceneView.delegate = self
@@ -264,10 +272,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard currentBuffer == nil, case .normal = frame.camera.trackingState else {
             return
         }
-        
-        updateSession(for: frame.camera.trackingState, incident: ARViewController.navigatingIncident)
         self.currentBuffer = frame.capturedImage
         classifyCurrentImage()
+        updateSession(for: frame.camera.trackingState, incident: ARViewController.navigatingIncident)
     }
     
     

@@ -68,47 +68,53 @@ extension ARViewController {
 //                        print("position of bounding box with prediction score \(sigmoid(prediction.score)) :\(position)")
 //                    }
                     if sigmoid(prediction.score) > 0.90 && calculateNodesInRadius(coordinate: tmp, radius: 0.10) {
+                        ARViewController.tappingCreateIncindetButtonPossible = true
 //                        print("pin created for \(classNames[prediction.detectedClass])")
-                        let length = rect.maxY - rect.minY
-                        let width = rect.maxX - rect.minX
-                        let formatter = NumberFormatter()
-                        formatter.maximumFractionDigits = 2
-                        let lengthCM = (length * 2.54) / 96
-                        let widthCM = (width * 2.54) / 96
-                        guard let formattedLength = formatter.string(from: NSNumber(value: Float(lengthCM))) else {
-                            return
+                        if ARViewController.incidentCreated {
+                            let length = rect.maxY - rect.minY
+                            let width = rect.maxX - rect.minX
+                            let formatter = NumberFormatter()
+                            formatter.maximumFractionDigits = 2
+                            let lengthCM = (length * 2.54) / 96
+                            let widthCM = (width * 2.54) / 96
+                            guard let formattedLength = formatter.string(from: NSNumber(value: Float(lengthCM))) else {
+                                return
+                            }
+                            guard let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM))) else {
+                                return
+                            }
+                            //                        automaticallyDetectedIncidents.append(position)
+                            automaticallyDetectedVectors.append(tmp)
+                            let sphere = SCNSphere(radius: 0.015)
+                            let materialSphere = SCNMaterial()
+                            materialSphere.diffuse.contents = UIColor(red: 0.0,
+                                                                      green: 0.0,
+                                                                      blue: 1.0,
+                                                                      alpha: CGFloat(Float(sigmoid(prediction.score))))
+                            sphere.materials = [materialSphere]
+                            let sphereNode = SCNNode(geometry: sphere)
+                            sphereNode.position = tmp
+                            let coordinates = sceneView.scene.rootNode.convertPosition(
+                                SCNVector3(hitTest.worldTransform.columns.3.x,
+                                           hitTest.worldTransform.columns.3.y,
+                                           hitTest.worldTransform.columns.3.z),
+                                to: self.detectedObjectNode)
+                            
+                            let incident = Incident (type: IncidentType(rawValue: classNames[prediction.detectedClass]) ?? .other,
+                                                     description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
+                                coordinate: Coordinate(vector: coordinates))
+                            incident.automaticallyDetected = true
+                            ARViewController.selectedCarPart?.incidents.append(incident)
+                            DataHandler.incidents.append(incident)
+                            sphereNode.runAction(imageHighlightAction)
+                            sphereNode.name = "\(incident.identifier)"
+                            self.scene.rootNode.addChildNode(sphereNode)
+                            nodes.append(sphereNode)
+                            sendIncident(incident: incident)
+                            ARViewController.incidentCreated = false
                         }
-                        guard let formattedWidth = formatter.string(from: NSNumber(value: Float(widthCM))) else {
-                            return
-                        }
-//                        automaticallyDetectedIncidents.append(position)
-                        automaticallyDetectedVectors.append(tmp)
-                        let sphere = SCNSphere(radius: 0.015)
-                        let materialSphere = SCNMaterial()
-                        materialSphere.diffuse.contents = UIColor(red: 0.0,
-                                                                  green: 0.0,
-                                                                  blue: 1.0,
-                                                                  alpha: CGFloat(Float(sigmoid(prediction.score))))
-                        sphere.materials = [materialSphere]
-                        let sphereNode = SCNNode(geometry: sphere)
-                        sphereNode.position = tmp
-                        let coordinates = sceneView.scene.rootNode.convertPosition(
-                            SCNVector3(hitTest.worldTransform.columns.3.x,
-                                       hitTest.worldTransform.columns.3.y,
-                                       hitTest.worldTransform.columns.3.z),
-                            to: self.detectedObjectNode)
-                        
-                        let incident = Incident (type: IncidentType(rawValue: classNames[prediction.detectedClass]) ?? .other,
-                                                 description: "length : \(formattedLength)cm width : \(formattedWidth)cm",
-                                                 coordinate: Coordinate(vector: coordinates))
-                        incident.automaticallyDetected = true
-                        ARViewController.selectedCarPart?.incidents.append(incident)
-                        DataHandler.incidents.append(incident)
-                        sphereNode.runAction(imageHighlightAction)
-                        sphereNode.name = "\(incident.identifier)"
-                        self.scene.rootNode.addChildNode(sphereNode)
-                        nodes.append(sphereNode)
-                        sendIncident(incident: incident)
+                    } else {
+                        ARViewController.tappingCreateIncindetButtonPossible = false
                     }
                     return
                 }
