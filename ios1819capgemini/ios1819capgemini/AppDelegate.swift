@@ -79,6 +79,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
+        ModelViewController.carPart = ARViewController.selectedCarPart
+        DataHandler.incidents = []
+        if let carPart = ModelViewController.carPart {
+            print("carpart incidents : \(carPart.incidents)")
+            if DataHandler.containsCarPart(carPart: carPart) {
+                DataHandler.replaceCarPart(carPart: carPart)
+            } else {
+                DataHandler.setCarParts()
+            }
+        }
         DataHandler.saveToJSON()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         CUU.stop()
