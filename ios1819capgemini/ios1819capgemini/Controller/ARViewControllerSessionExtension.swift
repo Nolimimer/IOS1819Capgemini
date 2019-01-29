@@ -109,13 +109,25 @@ extension ARViewController {
     }
     
     func checkVisibleNodes() {
-        var tmp : [SCNNode] = []
+        var tmp: [SCNNode] = []
         for node in nodes {
             if nodeVisibleToUser(node: node) {
                 tmp.append(node)
             }
         }
         visibleNodes = tmp
+    }
+    
+    func mapVisibleNodesToPosition() {
+        var tmp: [CGPoint] = []
+        for node in visibleNodes {
+            let vector = node.presentation.worldPosition
+            let projectedNode = self.sceneView.projectPoint(vector)
+            let point = CGPoint(x: CGFloat(projectedNode.x), y: CGFloat(projectedNode.y))
+            tmp.append(point)
+        }
+        visibleNodesPosition = tmp
+        print("visible nodes position : \(visibleNodesPosition)")
     }
     
     func loadCustomScans() {
@@ -180,10 +192,11 @@ extension ARViewController {
         checkReset()
         checkSendIncidents()
         updateIncidents()
-        if !ARViewController.multiUserEnabled {
+        if !ARViewController.multiUserEnabled && ARViewController.connectedToPeer {
             refreshNodes()
         }
         checkVisibleNodes()
+        mapVisibleNodesToPosition()
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: trackingState, incident: incident)

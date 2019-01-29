@@ -45,6 +45,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var model: VNCoreMLModel?
     var mapProvider: MCPeerID?
     var visibleNodes: [SCNNode] = []
+    var visibleNodesPosition: [CGPoint] = []
     // swiftlint:disable implicitly_unwrapped_optional
     var multipeerSession: MultipeerSession!
     // swiftlint:enable implicitly_unwrapped_optional
@@ -185,6 +186,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         let location = touchesFirst.location(in: sceneView)
+        print("position : \(location)")
         let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
         if let touch = touches.first {
             if let hitResult = hitResultsFeaturePoints.first {
@@ -230,8 +232,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func makeTapGreatAgain() {
-        for node in nodes where 
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
