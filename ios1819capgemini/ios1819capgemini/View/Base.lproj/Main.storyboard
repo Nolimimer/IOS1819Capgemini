@@ -84,17 +84,35 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J7S-2l-kmB" customClass="RoundButton" customModule="ios1819capgemini">
-                                <rect key="frame" x="117" y="541" width="140" height="34"/>
-                                <color key="backgroundColor" name="appBlue"/>
-                                <color key="tintColor" name="appBlue"/>
-                                <state key="normal" title="Create Incident">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="createIncidentButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kWU-yq-yRL"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="S03-oc-PVI">
+                                <rect key="frame" x="16" y="511" width="343" height="62"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y5F-nr-uXI" customClass="RoundButton" customModule="ios1819capgemini">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="27"/>
+                                        <color key="backgroundColor" name="appBlue"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="tintColor" name="appBlue"/>
+                                        <state key="normal" title="Auto-Create Incident">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="createIncidentButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pyJ-Af-ELn"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ndu-HP-jB6" customClass="RoundButton" customModule="ios1819capgemini">
+                                        <rect key="frame" x="0.0" y="35" width="343" height="27"/>
+                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Automatic Detection: Off">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="detectionButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tij-6d-hsS"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8vs-jp-QKL">
                                 <rect key="frame" x="285" y="443" width="74" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -109,8 +127,7 @@
                         <constraints>
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1hj-TD-boa"/>
                             <constraint firstAttribute="centerX" secondItem="zuy-y1-cIR" secondAttribute="centerX" id="3OA-iy-fds"/>
-                            <constraint firstItem="J7S-2l-kmB" firstAttribute="top" secondItem="11s-KU-rP1" secondAttribute="bottom" constant="38" id="4dg-fg-VMH"/>
-                            <constraint firstItem="y1B-gL-xwm" firstAttribute="top" secondItem="J7S-2l-kmB" secondAttribute="bottom" constant="14" id="6ac-8N-fKC"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="S03-oc-PVI" secondAttribute="trailing" constant="16" id="CIh-qo-s5k"/>
                             <constraint firstItem="fsC-xg-AgH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="DZD-Ka-GQu"/>
                             <constraint firstItem="NlZ-Ha-13L" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Fcf-YY-gx7"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IBe-6n-2Hy"/>
@@ -122,16 +139,16 @@
                             <constraint firstItem="y1B-gL-xwm" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="VNM-PR-tsD"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ydv-fJ-Xpy"/>
                             <constraint firstItem="11s-KU-rP1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="d3Y-7m-5Fo"/>
+                            <constraint firstItem="S03-oc-PVI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="gjH-2A-qzO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="y1B-gL-xwm" secondAttribute="bottom" id="hUd-VM-exf"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="kaw-PZ-WL2"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="lWY-SP-Ifl"/>
-                            <constraint firstItem="J7S-2l-kmB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="117" id="mZc-D7-dz7"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="nW0-tZ-ukQ"/>
+                            <constraint firstAttribute="bottom" secondItem="S03-oc-PVI" secondAttribute="bottom" constant="30" id="npw-Lt-gfP"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="K2Z-aO-kjw" secondAttribute="trailing" constant="16" id="oWd-cp-JZf"/>
                             <constraint firstItem="fsC-xg-AgH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="ois-ez-fwV"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="r1j-wH-Wgj"/>
                             <constraint firstItem="K2Z-aO-kjw" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="rIc-1L-MST"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="J7S-2l-kmB" secondAttribute="trailing" constant="118" id="sRj-QF-rS7"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="11s-KU-rP1" secondAttribute="bottom" constant="100" id="tLy-6K-EDm"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y1B-gL-xwm" secondAttribute="trailing" id="vjQ-cM-Fiu"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="weP-85-TkE"/>
@@ -150,7 +167,8 @@
                         <outlet property="arrowRight" destination="K2Z-aO-kjw" id="SvD-5F-5GD"/>
                         <outlet property="arrowUp" destination="NlZ-Ha-13L" id="Gkg-GM-KTr"/>
                         <outlet property="connectionLabel" destination="y1B-gL-xwm" id="W0I-JA-19G"/>
-                        <outlet property="createIncidentButton" destination="J7S-2l-kmB" id="BZn-qO-vsm"/>
+                        <outlet property="createIncidentButton" destination="Y5F-nr-uXI" id="KTo-eo-YBf"/>
+                        <outlet property="detectionButton" destination="Ndu-HP-jB6" id="qHd-8X-dlU"/>
                         <outlet property="progressRing" destination="dsO-Fy-ug4" id="WDm-t6-avZ"/>
                         <outlet property="sceneView" destination="zuy-y1-cIR" id="6CW-Fu-tmc"/>
                     </connections>
