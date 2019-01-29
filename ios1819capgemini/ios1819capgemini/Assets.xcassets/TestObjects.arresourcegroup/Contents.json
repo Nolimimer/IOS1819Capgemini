@@ -5,6 +5,9 @@
   },
   "resources" : [
     {
+      "filename" : "Dashboard.arobject"
+    },
+    {
       "filename" : "mi_becher.arobject"
     }
   ]
