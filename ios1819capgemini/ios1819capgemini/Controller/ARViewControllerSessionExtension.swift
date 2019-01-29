@@ -85,6 +85,39 @@ extension ARViewController {
         }
     }
     
+    func updatePinColour() {
+        for incident in DataHandler.incidents {
+            for node in nodes {
+                guard let nodeName = node.name else {
+                    print("node.name == nil in updatePinColour()")
+                    return
+                }
+                if nodeName == String(incident.identifier) {
+                    switch incident.status {
+                    case .open:
+                        if incident.automaticallyDetected {
+                            node.geometry?.materials.first?.diffuse.contents = UIColor.blue
+                        } else {
+                            node.geometry?.materials.first?.diffuse.contents = UIColor.red
+                        }
+                    case .progress: node.geometry?.materials.first?.diffuse.contents = UIColor.yellow
+                    case .resolved: node.geometry?.materials.first?.diffuse.contents = UIColor.green
+                    }
+                }
+            }
+        }
+    }
+    
+    func checkVisibleNodes() {
+        var tmp : [SCNNode] = []
+        for node in nodes {
+            if nodeVisibleToUser(node: node) {
+                tmp.append(node)
+            }
+        }
+        visibleNodes = tmp
+    }
+    
     func loadCustomScans() {
         
         let fileManager = FileManager.default
@@ -150,6 +183,7 @@ extension ARViewController {
         if !ARViewController.multiUserEnabled {
             refreshNodes()
         }
+        checkVisibleNodes()
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: trackingState, incident: incident)

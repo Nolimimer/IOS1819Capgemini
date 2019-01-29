@@ -44,6 +44,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     var model: VNCoreMLModel?
     var mapProvider: MCPeerID?
+    var visibleNodes: [SCNNode] = []
     // swiftlint:disable implicitly_unwrapped_optional
     var multipeerSession: MultipeerSession!
     // swiftlint:enable implicitly_unwrapped_optional
@@ -226,6 +227,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 }
             }
         }
+    }
+    
+    func makeTapGreatAgain() {
+        for node in nodes where 
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
