@@ -351,7 +351,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             }
             
             let attachmentView = AttachmentView(frame: CGRect(x: tmpX.center.x - 30,
-                                                              y: collectionView.center.y - 200,
+                                                              y: collectionView.center.y - 180,
                                                               width: 150,
                                                               height: 200))
             attachmentView.photoButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
@@ -361,6 +361,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
             recordButton = attachmentView.audioButton
             
             showOverlay()
+            collectionView.setContentOffset(CGPoint.zero, animated: true)
             overlay.addSubview(attachmentView)
             
             return
