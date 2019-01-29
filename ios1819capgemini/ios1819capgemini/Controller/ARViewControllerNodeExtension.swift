@@ -58,7 +58,6 @@ extension ARViewController {
         }
         for node in nodes where node.name != String(incident.identifier) && node.name != "info-plane"{
             node.opacity = 0.45
-            
         }
     }
     

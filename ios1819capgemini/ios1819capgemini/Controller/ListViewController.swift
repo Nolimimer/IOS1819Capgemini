@@ -52,7 +52,6 @@ class ListViewController: UIViewController, UITableViewDelegate {
         self.navigationController?.view.sendSubviewToBack(blurView)
         self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
         tableView.delegate = self
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

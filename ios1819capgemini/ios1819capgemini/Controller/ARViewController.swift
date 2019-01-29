@@ -90,13 +90,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet weak var arrowRight: UIImageView!
     @IBOutlet weak var arrowLeft: UIImageView!
     @IBOutlet weak var arrowDown: UIImageView!
-    // swiftlint:enable private_outlet
     @IBOutlet private weak var progressRing: UICircularProgressRing!
     @IBOutlet weak var createIncidentButton: RoundButton!
     @IBAction func createIncidentButtonTapped(_ sender: Any) {
         ARViewController.incidentCreated = true
     }
     @IBOutlet weak var detectionButton: UIButton!
+    // swiftlint:enable private_outlet
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
         if sender.currentTitle == "Automatic Detection: On" {
             sender.setTitle("Automatic Detection: Off", for: .normal)
@@ -108,8 +108,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
-        createIncidentButton.alpha = 0.2
-        createIncidentButton.backgroundColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        createIncidentButton.isHidden = true
         createIncidentButton.isEnabled = false
         creatingNodePossible = true
         super.viewDidLoad()
