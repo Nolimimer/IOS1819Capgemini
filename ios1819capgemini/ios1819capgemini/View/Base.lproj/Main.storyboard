@@ -75,15 +75,6 @@
                                     <segue destination="iNR-TU-aP6" kind="embed" id="tJa-dk-vD9"/>
                                 </connections>
                             </containerView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y1B-gL-xwm" userLabel="Connection">
-                                <rect key="frame" x="0.0" y="589" width="375" height="14"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="14" id="PeP-ca-laG"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="S03-oc-PVI">
                                 <rect key="frame" x="16" y="511" width="343" height="62"/>
                                 <subviews>
@@ -122,25 +113,27 @@
                                     <segue destination="arL-mF-BSR" kind="presentation" identifier="ShowDetailSegue" modalPresentationStyle="overCurrentContext" id="uUl-YU-Nua"/>
                                 </connections>
                             </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfm-Ku-NHx" userLabel="Connection">
+                                <rect key="frame" x="16" y="108" width="343" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="y1B-gL-xwm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1hj-TD-boa"/>
                             <constraint firstAttribute="centerX" secondItem="zuy-y1-cIR" secondAttribute="centerX" id="3OA-iy-fds"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="S03-oc-PVI" secondAttribute="trailing" constant="16" id="CIh-qo-s5k"/>
                             <constraint firstItem="fsC-xg-AgH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="DZD-Ka-GQu"/>
                             <constraint firstItem="NlZ-Ha-13L" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Fcf-YY-gx7"/>
+                            <constraint firstItem="lfm-Ku-NHx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Fcj-gu-p6K"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IBe-6n-2Hy"/>
                             <constraint firstItem="NlZ-Ha-13L" firstAttribute="top" secondItem="QGm-iK-VvE" secondAttribute="bottom" constant="8" id="Jf8-0m-aXy"/>
-                            <constraint firstItem="y1B-gL-xwm" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="LGk-y8-o2A"/>
-                            <constraint firstItem="y1B-gL-xwm" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="O7l-c0-TRW"/>
-                            <constraint firstItem="y1B-gL-xwm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="SQk-Mc-yCq"/>
+                            <constraint firstItem="lfm-Ku-NHx" firstAttribute="top" secondItem="QGm-iK-VvE" secondAttribute="bottom" constant="8" id="Kjz-17-Rwl"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Trb-ec-wlb"/>
-                            <constraint firstItem="y1B-gL-xwm" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="VNM-PR-tsD"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ydv-fJ-Xpy"/>
                             <constraint firstItem="11s-KU-rP1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="d3Y-7m-5Fo"/>
                             <constraint firstItem="S03-oc-PVI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="gjH-2A-qzO"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="y1B-gL-xwm" secondAttribute="bottom" id="hUd-VM-exf"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="kaw-PZ-WL2"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="lWY-SP-Ifl"/>
                             <constraint firstItem="zuy-y1-cIR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="nW0-tZ-ukQ"/>
@@ -148,11 +141,10 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="K2Z-aO-kjw" secondAttribute="trailing" constant="16" id="oWd-cp-JZf"/>
                             <constraint firstItem="fsC-xg-AgH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="ois-ez-fwV"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="r1j-wH-Wgj"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lfm-Ku-NHx" secondAttribute="trailing" constant="16" id="rB8-qr-iKZ"/>
                             <constraint firstItem="K2Z-aO-kjw" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="rIc-1L-MST"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="11s-KU-rP1" secondAttribute="bottom" constant="100" id="tLy-6K-EDm"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y1B-gL-xwm" secondAttribute="trailing" id="vjQ-cM-Fiu"/>
                             <constraint firstItem="QGm-iK-VvE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="weP-85-TkE"/>
-                            <constraint firstItem="y1B-gL-xwm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="yTB-dg-u80"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -166,7 +158,7 @@
                         <outlet property="arrowLeft" destination="fsC-xg-AgH" id="nLe-E1-uJg"/>
                         <outlet property="arrowRight" destination="K2Z-aO-kjw" id="SvD-5F-5GD"/>
                         <outlet property="arrowUp" destination="NlZ-Ha-13L" id="Gkg-GM-KTr"/>
-                        <outlet property="connectionLabel" destination="y1B-gL-xwm" id="W0I-JA-19G"/>
+                        <outlet property="connectionLabel" destination="lfm-Ku-NHx" id="wpQ-9W-fae"/>
                         <outlet property="createIncidentButton" destination="Y5F-nr-uXI" id="KTo-eo-YBf"/>
                         <outlet property="detectionButton" destination="Ndu-HP-jB6" id="qHd-8X-dlU"/>
                         <outlet property="progressRing" destination="dsO-Fy-ug4" id="WDm-t6-avZ"/>
