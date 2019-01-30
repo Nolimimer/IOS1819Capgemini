@@ -91,7 +91,7 @@ extension ARViewController {
         }
         return false
     }
-    
+    //swiftlint:disable all
     func convertCMToPixel(f: Float) -> Float {
         return (f * 96)/2.54
     }
