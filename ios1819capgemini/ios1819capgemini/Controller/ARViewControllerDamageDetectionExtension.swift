@@ -68,7 +68,7 @@ extension ARViewController {
 //                        print("position of bounding box with prediction score \(sigmoid(prediction.score)) :\(position)")
 //                    }
                     if sigmoid(prediction.score) > 0.90 && calculateNodesInRadius(coordinate: tmp, radius: 0.10) {
-                        ARViewController.tappingCreateIncindetButtonPossible = true
+                        ARViewController.tappingCreateIncidentButtonPossible = true
 //                        print("pin created for \(classNames[prediction.detectedClass])")
                         if ARViewController.incidentCreated {
                             let length = rect.maxY - rect.minY
@@ -114,7 +114,7 @@ extension ARViewController {
                             ARViewController.incidentCreated = false
                         }
                     } else {
-                        ARViewController.tappingCreateIncindetButtonPossible = false
+                        ARViewController.tappingCreateIncidentButtonPossible = false
                     }
                     return
                 }

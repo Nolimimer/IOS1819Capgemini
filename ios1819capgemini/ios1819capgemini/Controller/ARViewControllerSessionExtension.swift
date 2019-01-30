@@ -33,7 +33,7 @@ extension ARViewController {
     func checkConnection () {
         if !multipeerSession.connectedPeers.isEmpty && ARViewController.multiUserEnabled {
             ARViewController.connectedToPeer = true
-            let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
+//            let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
             connectionLabel.text = "Connected"
             connectionLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         } else {
@@ -119,15 +119,14 @@ extension ARViewController {
     }
     
     func mapVisibleNodesToPosition() {
-        var tmp: [CGPoint] = []
+        var tmp: [SCNNode: CGPoint] = [:]
         for node in visibleNodes {
             let vector = node.presentation.worldPosition
             let projectedNode = self.sceneView.projectPoint(vector)
             let point = CGPoint(x: CGFloat(projectedNode.x), y: CGFloat(projectedNode.y))
-            tmp.append(point)
+            tmp[node] = point
         }
         visibleNodesPosition = tmp
-        print("visible nodes position : \(visibleNodesPosition)")
     }
     
     func loadCustomScans() {
@@ -173,7 +172,7 @@ extension ARViewController {
     }
     
     func checkTappingCreateButtonPossible() {
-        if !ARViewController.tappingCreateIncindetButtonPossible {
+        if !ARViewController.tappingCreateIncidentButtonPossible {
             createIncidentButton.isHidden = true
             createIncidentButton.isEnabled = false
         } else {
@@ -192,7 +191,7 @@ extension ARViewController {
         checkReset()
         checkSendIncidents()
         updateIncidents()
-        if !ARViewController.multiUserEnabled && ARViewController.connectedToPeer {
+        if !ARViewController.multiUserEnabled && !ARViewController.connectedToPeer {
             refreshNodes()
         }
         checkVisibleNodes()
@@ -200,7 +199,7 @@ extension ARViewController {
         updatePinColour()
         setDescriptionLabel()
         setNavigationArrows(for: trackingState, incident: incident)
-        ARViewController.tappingCreateIncindetButtonPossible = false
+        ARViewController.tappingCreateIncidentButtonPossible = false
     }
     
 }

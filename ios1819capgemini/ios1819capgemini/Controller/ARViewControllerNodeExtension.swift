@@ -91,4 +91,51 @@ extension ARViewController {
         }
         return false
     }
+    
+    func convertCMToPixel(f: Float) -> Float {
+        return (f * 96)/2.54
+    }
+    func convertPixelToCM(f: Float) -> Float {
+        return (f * 2.54)/96
+    }
+    
+    func checkRange(tap: CGPoint, position: CGPoint, radius: CGFloat) -> Bool {
+        if (position.x - radius) ... (position.x + radius) ~= tap.x && (position.y - radius) ... (position.y + radius) ~= tap.y {
+            return true
+        }
+        return false
+    }
+    
+    func checkTap(tap: CGPoint, radius: Float) -> SCNNode? {
+        let radiusPixel = convertCMToPixel(f: radius)
+        for node in visibleNodesPosition {
+            if checkRange(tap: tap, position: node.value, radius: CGFloat(radiusPixel)) {
+                return node.key
+            }
+        }
+        return nil
+    }
+    
+    
+    func checkRadiusBasedOnDistance(position: CGPoint, incident: Incident) -> Float? {
+        guard let distance = distanceIncidentNodeCamera(incident: incident) else {
+            return nil
+        }
+        
+        switch distance {
+        case 0..<5.0:
+            return 5.0
+        case 5.0..<10.0:
+            return 4.0
+        case 10.0..<20.0:
+            return 3.0
+        case 20.0..<50.0:
+            return 2.0
+        case 50.0..<100.0:
+            return 1.5
+        default:
+            return 1.0
+        }
+        
+    }
 }
