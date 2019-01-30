@@ -185,6 +185,7 @@ extension ARViewController {
     
     func updateSession(for trackingState: ARCamera.TrackingState, incident: Incident?) {
         
+        setNavigationArrows(for: trackingState, incident: incident)
         checkTappingCreateButtonPossible()
         checkSettings()
         checkConnection()
@@ -198,7 +199,6 @@ extension ARViewController {
         mapVisibleNodesToPosition()
         updatePinColour()
         setDescriptionLabel()
-        setNavigationArrows(for: trackingState, incident: incident)
         ARViewController.tappingCreateIncidentButtonPossible = false
     }
     
