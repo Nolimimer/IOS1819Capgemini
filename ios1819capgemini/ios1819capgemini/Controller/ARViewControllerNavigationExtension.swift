@@ -72,6 +72,10 @@ extension ARViewController {
             return "Error"
         }
         if nodeVisibleToUser(node: node) {
+            let notification = UINotificationFeedbackGenerator()
+            DispatchQueue.main.async {
+                notification.notificationOccurred(.success)
+            }
             return "Distance: \(distance)cm "
         }
         if abs(distanceNode.x) > abs(distanceNode.y) {
@@ -146,16 +150,7 @@ extension ARViewController {
     func nodeVisibleToUser(node: SCNNode) -> Bool {
         
         if let pov = sceneView.pointOfView {
-            let isVisible = sceneView.isNode(node, insideFrustumOf: pov)
-            let notification = UINotificationFeedbackGenerator()
-            if isVisible {
-                DispatchQueue.main.async {
-                    notification.notificationOccurred(.success)
-                }
-                return isVisible
-            } else {
-                return isVisible
-            }
+            return sceneView.isNode(node, insideFrustumOf: pov)
         }
         return false
     }

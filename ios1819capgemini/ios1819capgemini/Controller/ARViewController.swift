@@ -29,7 +29,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var connectedToPeer = false
     static var incidentEdited = false
     static var objectDetected = false
-    static var tappingCreateIncindetButtonPossible = false
+    static var tappingCreateIncidentButtonPossible = false
     static var incidentCreated = false
     static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     static var editedIncident: Incident?
@@ -44,6 +44,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var boundingBoxes: [BoundingBox] = []
     var model: VNCoreMLModel?
     var mapProvider: MCPeerID?
+    var visibleNodes: [SCNNode] = []
+    var visibleNodesPosition: [SCNNode: CGPoint] = [:]
     // swiftlint:disable implicitly_unwrapped_optional
     var multipeerSession: MultipeerSession!
     // swiftlint:enable implicitly_unwrapped_optional
@@ -84,6 +86,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: IBOutlets
     //sceneview bitte nicht private
     // swiftlint:disable private_outlet
+    // swiftlint:disable all
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var connectionLabel: UILabel!
     @IBOutlet weak var arrowUp: UIImageView!
@@ -95,6 +98,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBAction func createIncidentButtonTapped(_ sender: Any) {
         ARViewController.incidentCreated = true
     }
+
     @IBOutlet weak var detectionButton: UIButton!
     // swiftlint:enable private_outlet
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
@@ -187,10 +191,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
         if let touch = touches.first {
             if let hitResult = hitResultsFeaturePoints.first {
-                if let node = getNodeInRadius(hitResult: hitResult, radius: 0.015) {
+//                if let node = getNodeInRadius(hitResult: hitResult, radius: 0.015) {
+//                    self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
+//                    return
+//                }
+                if let node = checkTap(tap: location, radius: 1.5) {
                     self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
                     return
                 }
+                
                 let position = touch.location(in: view)
                 progressRing.frame.origin.x = position.x - 110
                 progressRing.frame.origin.y = position.y - 60
@@ -227,6 +236,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
     }
+
     
     override func viewWillAppear(_ animated: Bool) {
         if multipeerSession == nil {
