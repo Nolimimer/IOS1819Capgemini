@@ -54,22 +54,22 @@ extension ARViewController {
     func navigationToIncident (incident: Incident?) -> String? {
         
         guard let incident = incident else {
-            return "error"
+            return ""
         }
         guard let node = ARViewController.getNodeOfIncident(incident: incident) else {
-            return "error"
+            return ""
         }
         guard let distanceNode = incidentNodePosToPOV(node: node) else {
-            return "error"
+            return ""
         }
         guard var distanceCamera = distanceCameraNode(incident: incident) else {
-            return "error"
+            return ""
         }
         let formatter = NumberFormatter()
         formatter.minimumFractionDigits = 2
         distanceCamera *= 100
         guard let distance = formatter.string(from: NSNumber(value: distanceCamera)) else {
-            return "Error"
+            return ""
         }
         if nodeVisibleToUser(node: node) {
             let notification = UINotificationFeedbackGenerator()
