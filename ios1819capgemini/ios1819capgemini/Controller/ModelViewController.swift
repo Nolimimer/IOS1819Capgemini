@@ -37,19 +37,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
-        ModelViewController.carPart = ARViewController.selectedCarPart
-        DataHandler.incidents = []
-        if let carPart = ModelViewController.carPart {
-            if DataHandler.containsCarPart(carPart: carPart) {
-                DataHandler.replaceCarPart(carPart: carPart)
-            } else {
-                DataHandler.setCarParts()
-            }
-        }
-        for carPart in DataHandler.carParts {
-            print(carPart.name)
-        }
+        DataHandler.saveCarPart()
+//        for carPart in DataHandler.carParts {
+//            print(carPart.name)
+//        }
         
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))

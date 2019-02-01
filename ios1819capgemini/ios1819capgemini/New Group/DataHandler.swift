@@ -214,6 +214,7 @@ enum DataHandler {
         }
         DataHandler.incidents[index] = incident
     }
+    
     static func replaceCarPart(carPart: CarPart) {
         if DataHandler.carParts.contains(where: { $0.name == carPart.name }) {
             DataHandler.carParts[DataHandler.getIndexOfCarPart(carPart: carPart)!] = carPart
@@ -222,5 +223,18 @@ enum DataHandler {
     
     static func containsCarPart(carPart: CarPart) -> Bool {
         return DataHandler.carParts.contains(where: { $0.name == carPart.name })
+    }
+    
+    static func saveCarPart() {
+        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
+        ModelViewController.carPart = ARViewController.selectedCarPart
+        DataHandler.incidents = []
+        if let carPart = ModelViewController.carPart {
+            if DataHandler.containsCarPart(carPart: carPart) {
+                DataHandler.replaceCarPart(carPart: carPart)
+            } else {
+                DataHandler.setCarParts()
+            }
+        }
     }
 }
