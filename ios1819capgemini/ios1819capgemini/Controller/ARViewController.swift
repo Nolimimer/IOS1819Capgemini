@@ -143,6 +143,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        multipeerSession.disconnectSession()
+    }
+    
     func reset() {
 
 //        print(objectAnchor?.referenceObject.name)
