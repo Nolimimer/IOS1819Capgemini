@@ -200,6 +200,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 //                    return
 //                }
                 if let node = checkTap(tap: location, radius: 1.5) {
+                    if let incident = ARViewController.navigatingIncident {
+                        if node.name! == String(incident.identifier) {
+                            ARViewController.navigatingIncident = nil
+                            self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
+                        }
+                    }
                     self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
                     return
                 }
