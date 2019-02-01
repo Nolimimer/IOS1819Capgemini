@@ -13,7 +13,6 @@ import SwipeCellKit
 class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, SwipeCollectionViewCellDelegate {
     
     static var carPart: CarPart?
-    var sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
     
     func removeScan(identifier: String) {
         let fileManager = FileManager.default
@@ -21,13 +20,31 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         do {
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
             for file in fileURLs {
-                if file.lastPathComponent == "\(identifier).arobject" {
+                if file.lastPathComponent == "\(identifier)" {
                     try fileManager.removeItem(at: file.absoluteURL)
                 }
             }
         } catch {
             print("Error loading custom scans")
         }
+    }
+    
+    func getURLOfSavedScan() -> [URL] {
+        let fileManager = FileManager.default
+        let bundleURL = Bundle.main.bundleURL
+        let assetURL = bundleURL.appendingPathComponent("PreviewPictures.bundle")
+        let contents = try! fileManager.contentsOfDirectory(at: assetURL, includingPropertiesForKeys: [URLResourceKey.nameKey, URLResourceKey.isDirectoryKey], options: .skipsHiddenFiles)
+
+        return contents
+    }
+    
+    func getURLOfScan(name: String, urls: [URL]) -> URL? {
+        for item in urls {
+            if item.lastPathComponent == name {
+                return item
+            }
+        }
+        return nil
     }
     
     @IBAction private func backButton(_ sender: Any) {
@@ -38,16 +55,11 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
-        ModelViewController.carPart = ARViewController.selectedCarPart
-        DataHandler.incidents = []
-        if let carPart = ModelViewController.carPart {
-            if DataHandler.containsCarPart(carPart: carPart) {
-                DataHandler.replaceCarPart(carPart: carPart)
-            } else {
-                DataHandler.setCarParts()
-            }
-        }
+        DataHandler.saveCarPart()
+//        for carPart in DataHandler.carParts {
+//            print(carPart.name)
+//        }
+        
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -70,14 +82,14 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     // MARK: - UICollectionViewDataSource protocol
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return DataHandler.objectsToIncidents.count
+        return DataHandler.carParts.count
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let name = sortedDictonary[indexPath.item]
-        let incidents = DataHandler.objectsToIncidents[name]
+        let carPart = DataHandler.carParts[indexPath.row]
+        let incidents = carPart.incidents
         // swiftlint:disable force_cast
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
                                                       for: indexPath as IndexPath) as! ARModelsCollectionViewCell
@@ -87,13 +99,28 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let nsUserDomainMask = FileManager.SearchPathDomainMask.userDomainMask
         let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
         if let dirPath = paths.first {
-            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
+            let name = carPart.name.dropLast(".arobject".count)
+            var imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
+            //lol fuck it
+            if name == "Dashboard" {
+                if getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan()) != nil {
+                    imageURL = getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan())!
+                } else {
+                    print("Dashboard url could not be found")
+                }
+            } else if name == "mi_becher" {
+                if getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan()) != nil {
+                    imageURL = getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan())!
+                } else {
+                    print("mi_becher url could not be found")
+                }
+            }
             let image = UIImage(contentsOfFile: imageURL.path)
             cell.modelImage.image = image
-            cell.incidentLabel.text = name
-            cell.openNumber.text = String(incidents?.filter { $0.status == .open }.count ?? 0)
-            cell.progessNumber.text = String(incidents?.filter { $0.status == .progress }.count ?? 0)
-            cell.resolvedNumber.text = String(incidents?.filter { $0.status == .resolved }.count ?? 0)
+            cell.incidentLabel.text = String(name)
+            cell.openNumber.text = String(incidents.filter { $0.status == .open }.count)
+            cell.progessNumber.text = String(incidents.filter { $0.status == .progress }.count)
+            cell.resolvedNumber.text = String(incidents.filter { $0.status == .resolved }.count)
         }
         cell.delegate = self
         return cell
@@ -103,15 +130,15 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         guard orientation == .right else { print("collection View error"); return nil }
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
             // handle action by updating model with deletion
-            let name = self.sortedDictonary[indexPath.item]
+//            let name = self.sortedDictonary[indexPath.item]
+            let carPart = DataHandler.carParts[indexPath.item]
+            let name = carPart.name
             self.removeScan(identifier: name)
-            DataHandler.objectsToIncidents.removeValue(forKey: name)
-            self.sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
+//            DataHandler.objectsToIncidents.removeValue(forKey: name)
+//            DataHandler.saveToJSON()
+            DataHandler.carParts.removeAll(where: { $0.name == "\(name)" })
             DataHandler.saveToJSON()
-            DataHandler.carParts.removeAll(where: { $0.name == "\(name).arobject" })
-            DataHandler.setCarParts()
         }
-        
         // customize the action appearance
 //        deleteAction.image = #imageLiteral(resourceName: "Trash Icon")
         

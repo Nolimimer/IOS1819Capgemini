@@ -14,9 +14,10 @@ import CUU
 class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
 
     var window: UIWindow?
-    
+    //swiftlint:disable all
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DataHandler.loadFromJSON()
+        DataHandler.setPreviewPictures(files: ["dashboard.jpg","mi_becher.jpg"])
         PrototyperController.showFeedbackButton = false
         let defaults = UserDefaults.standard
         if defaults.integer(forKey: "AttachmentIdentifier") == 0 {
@@ -58,6 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        DataHandler.saveCarPart()
         DataHandler.saveToJSON()
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -79,18 +81,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
-        ModelViewController.carPart = ARViewController.selectedCarPart
-        DataHandler.incidents = []
-        if let carPart = ModelViewController.carPart {
-            print("carpart incidents : \(carPart.incidents)")
-            if DataHandler.containsCarPart(carPart: carPart) {
-                DataHandler.replaceCarPart(carPart: carPart)
-            } else {
-                DataHandler.setCarParts()
-            }
-        }
+        DataHandler.saveCarPart()
         DataHandler.saveToJSON()
+        DataHandler.removePreviewPictures(files: ["dashboard.jpg","mi_becher.jpg"])
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         CUU.stop()
     }

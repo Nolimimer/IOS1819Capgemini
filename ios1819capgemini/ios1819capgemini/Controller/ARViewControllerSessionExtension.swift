@@ -187,7 +187,6 @@ extension ARViewController {
             createIncidentButton.isEnabled = true
         }
     }
-
     
     func updateSession(for trackingState: ARCamera.TrackingState, incident: Incident?) {
         

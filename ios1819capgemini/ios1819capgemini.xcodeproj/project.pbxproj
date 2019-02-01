@@ -100,6 +100,7 @@
 		BA305D8A21ECA74F001D9092 /* ARViewControllerSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA305D8921ECA74F001D9092 /* ARViewControllerSessionExtension.swift */; };
 		BA6972E621D854E200F919EF /* ARViewControllerScreenshotExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E521D854E200F919EF /* ARViewControllerScreenshotExtension.swift */; };
 		BA6972E821D8557D00F919EF /* ARViewControllerNavigationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6972E721D8557D00F919EF /* ARViewControllerNavigationExtension.swift */; };
+		BA997FC62204DAC500688B9B /* PreviewPictures.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BA997FC52204DAC500688B9B /* PreviewPictures.bundle */; };
 		BAD6B88421E79CF200701698 /* ARViewControllerMultiUserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */; };
 		BAD6B88621E79E7900701698 /* MultipeerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88521E79E7900701698 /* MultipeerSession.swift */; };
 		BAD6B88821E7A2A100701698 /* ARViewControllerStatusBarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */; };
@@ -209,6 +210,7 @@
 		BA305D8921ECA74F001D9092 /* ARViewControllerSessionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerSessionExtension.swift; sourceTree = "<group>"; };
 		BA6972E521D854E200F919EF /* ARViewControllerScreenshotExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerScreenshotExtension.swift; sourceTree = "<group>"; };
 		BA6972E721D8557D00F919EF /* ARViewControllerNavigationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerNavigationExtension.swift; sourceTree = "<group>"; };
+		BA997FC52204DAC500688B9B /* PreviewPictures.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PreviewPictures.bundle; sourceTree = "<group>"; };
 		BAD6B88321E79CF200701698 /* ARViewControllerMultiUserExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerMultiUserExtension.swift; sourceTree = "<group>"; };
 		BAD6B88521E79E7900701698 /* MultipeerSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerSession.swift; sourceTree = "<group>"; };
 		BAD6B88721E7A2A100701698 /* ARViewControllerStatusBarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewControllerStatusBarExtension.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				9082AF6321A5618100CA8E80 /* Model */,
 				A66447E72192121300B2D32B /* AppDelegate.swift */,
 				BAD6B88521E79E7900701698 /* MultipeerSession.swift */,
+				BA997FC52204DAC500688B9B /* PreviewPictures.bundle */,
 				0D1F63FA21E7A01000AFC29A /* Settings.bundle */,
 				0D5F4A7621A3121F00D443CC /* CUU.plist */,
 				A66447F32192121300B2D32B /* Info.plist */,
@@ -551,6 +554,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D5F4A7721A3121F00D443CC /* CUU.plist in Resources */,
+				BA997FC62204DAC500688B9B /* PreviewPictures.bundle in Resources */,
 				A66447F22192121300B2D32B /* LaunchScreen.storyboard in Resources */,
 				A66447EF2192121300B2D32B /* Assets.xcassets in Resources */,
 				B30A477821CFBC59007049F8 /* art.scnassets in Resources */,
@@ -914,7 +918,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.www1.ios1819capgemini;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "$SIGH_NAME";
+				PROVISIONING_PROFILE_SPECIFIER = $SIGH_NAME;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

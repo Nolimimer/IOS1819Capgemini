@@ -122,8 +122,6 @@ enum DataHandler {
             try jsonFileWrapper.write(to: Constants.localStorageModelURL,
                                       options: FileWrapper.WritingOptions.atomic,
                                       originalContentsURL: nil)
-            print(carParts)
-
         } catch _ {
             print("Could not save ar object: [incident] dictionary")
                 
@@ -214,6 +212,7 @@ enum DataHandler {
         }
         DataHandler.incidents[index] = incident
     }
+    
     static func replaceCarPart(carPart: CarPart) {
         if DataHandler.carParts.contains(where: { $0.name == carPart.name }) {
             DataHandler.carParts[DataHandler.getIndexOfCarPart(carPart: carPart)!] = carPart
@@ -222,5 +221,56 @@ enum DataHandler {
     
     static func containsCarPart(carPart: CarPart) -> Bool {
         return DataHandler.carParts.contains(where: { $0.name == carPart.name })
+    }
+    
+    static func saveCarPart() {
+        ARViewController.selectedCarPart?.incidents = DataHandler.incidents
+        ModelViewController.carPart = ARViewController.selectedCarPart
+        DataHandler.incidents = []
+        if let carPart = ModelViewController.carPart {
+            if DataHandler.containsCarPart(carPart: carPart) {
+                DataHandler.replaceCarPart(carPart: carPart)
+            } else {
+                DataHandler.setCarParts()
+            }
+        }
+    }
+    //swiftlint:disable all
+    static func removePreviewPictures(files: [String]) {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        for fileToDelete in files {
+            do {
+                let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+                for file in fileURLs {
+                    if file.lastPathComponent == "\(fileToDelete)" {
+                        try fileManager.removeItem(at: file.absoluteURL)
+                    }
+                }
+            } catch {
+                print("Error loading custom scans")
+            }
+        }
+    }
+    
+    static func setPreviewPictures(files: [String]) {
+        if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last {
+            for file in files {
+                let fileURL = documentsDirectory.appendingPathComponent(file)
+                do {
+                    if try fileURL.checkResourceIsReachable() {
+                        print("file exist")
+                    } else {
+                        print("file doesnt exist")
+                        do {
+                            try Data().write(to: fileURL)
+                        } catch {
+                            print("an error happened while creating the file")
+                        }
+                    }
+                } catch {
+                }
+            }
+        }
     }
 }
