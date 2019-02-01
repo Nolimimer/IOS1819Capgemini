@@ -67,7 +67,7 @@ extension ARViewController {
 //                    if sigmoid(prediction.score) > 0.80 {
 //                        print("position of bounding box with prediction score \(sigmoid(prediction.score)) :\(position)")
 //                    }
-                    if sigmoid(prediction.score) > 0.90 && calculateNodesInRadius(coordinate: tmp, radius: 0.10) {
+                    if sigmoid(prediction.score) > 0.90 && calculateNodesInRadius(coordinate: tmp, radius: 0.5) {
                         ARViewController.tappingCreateIncidentButtonPossible = true
 //                        print("pin created for \(classNames[prediction.detectedClass])")
                         if ARViewController.incidentCreated {
