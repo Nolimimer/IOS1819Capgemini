@@ -108,6 +108,10 @@ extension ARViewController {
         }
     }
     
+    func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {
+        return true
+    }
+    
     func checkVisibleNodes() {
         var tmp: [SCNNode] = []
         for node in nodes {
