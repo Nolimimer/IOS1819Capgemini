@@ -188,6 +188,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         let location = touchesFirst.location(in: sceneView)
+        print("location : \(location)")
+        if location.y <= 80 {
+            return 
+        }
         let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
         if let touch = touches.first {
             if let hitResult = hitResultsFeaturePoints.first {
@@ -199,7 +203,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
                     return
                 }
-                
                 let position = touch.location(in: view)
                 progressRing.frame.origin.x = position.x - 110
                 progressRing.frame.origin.y = position.y - 60
