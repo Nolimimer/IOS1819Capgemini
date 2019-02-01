@@ -102,12 +102,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet weak var detectionButton: UIButton!
     // swiftlint:enable private_outlet
     @IBAction private func detectionButtonTapped(_ sender: UIButton) {
-        if sender.currentTitle == "Automatic Detection: On" {
-            sender.setTitle("Automatic Detection: Off", for: .normal)
-            UserDefaults.standard.set(false, forKey: "enable_detection")
-        } else {
+        if sender.currentTitle == "Automatic Detection: Off" {
             sender.setTitle("Automatic Detection: On", for: .normal)
             UserDefaults.standard.set(true, forKey: "enable_detection")
+        } else {
+            sender.setTitle("Automatic Detection: Off", for: .normal)
+            UserDefaults.standard.set(false, forKey: "enable_detection")
         }
     }
     // MARK: Overridden/Lifecycle Methods
