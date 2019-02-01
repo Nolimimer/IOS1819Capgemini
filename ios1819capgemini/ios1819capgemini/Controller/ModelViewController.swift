@@ -22,7 +22,6 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
             for file in fileURLs {
                 if file.lastPathComponent == "\(identifier).arobject" {
-                    print("file absolute string: \(file.absoluteString) has been removed")
                     try fileManager.removeItem(at: file.absoluteURL)
                 }
             }
@@ -109,7 +108,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             DataHandler.objectsToIncidents.removeValue(forKey: name)
             self.sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
             DataHandler.saveToJSON()
-            DataHandler.carParts.removeAll(where: { $0.name == name })
+            DataHandler.carParts.removeAll(where: { $0.name == "\(name).arobject" })
             DataHandler.setCarParts()
         }
         
