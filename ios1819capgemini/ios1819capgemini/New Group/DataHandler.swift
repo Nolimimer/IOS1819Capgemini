@@ -269,8 +269,6 @@ enum DataHandler {
                         }
                     }
                 } catch {
-//                    print("an error happened while checking for the file")
-//                    print("file :\(file)")
                 }
             }
         }

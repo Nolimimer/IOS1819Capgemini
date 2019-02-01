@@ -34,15 +34,12 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let bundleURL = Bundle.main.bundleURL
         let assetURL = bundleURL.appendingPathComponent("PreviewPictures.bundle")
         let contents = try! fileManager.contentsOfDirectory(at: assetURL, includingPropertiesForKeys: [URLResourceKey.nameKey, URLResourceKey.isDirectoryKey], options: .skipsHiddenFiles)
-        for content in contents {
-            print("contents: \(content)")
-        }
+
         return contents
     }
     
     func getURLOfScan(name: String, urls: [URL]) -> URL? {
         for item in urls {
-            print("item : \(item.lastPathComponent)")
             if item.lastPathComponent == name {
                 return item
             }
@@ -110,14 +107,12 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
                     imageURL = getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan())!
                 } else {
                     print("Dashboard url could not be found")
-//                    fatalError()
                 }
             } else if name == "mi_becher" {
                 if getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan()) != nil {
                     imageURL = getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan())!
                 } else {
                     print("mi_becher url could not be found")
-//                    fatalError()
                 }
             }
             let image = UIImage(contentsOfFile: imageURL.path)
