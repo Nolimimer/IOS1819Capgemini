@@ -45,9 +45,9 @@ class StatusViewController: UIViewController {
             for car in DataHandler.carParts {
                 car.incidents.removeAll()
             }
+            ARViewController.resetButtonPressed = true
             DataHandler.incidents = []
             self.removeScans()
-            ARViewController.resetButtonPressed = true
             DataHandler.saveToJSON()
             
 //            if let par = self.parent as? ARViewController {
