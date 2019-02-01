@@ -208,7 +208,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     if let incident = ARViewController.navigatingIncident {
                         if node.name! == String(incident.identifier) {
                             ARViewController.navigatingIncident = nil
-                            self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
                         }
                     }
                     self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
