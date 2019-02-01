@@ -11,6 +11,7 @@ pod 'CUU'
 pod 'SwiftLint'
 pod 'INSPhotoGallery'
 pod 'UICircularProgressRing'
+pod 'SwipeCellKit'
 
 end
 

@@ -7,6 +7,7 @@ PODS:
     - KeychainSwift (= 13.0.0)
     - Prototype (= 0.3.3)
   - SwiftLint (0.27.0)
+  - SwipeCellKit (2.5.1)
   - UICircularProgressRing (4.1.0)
 
 DEPENDENCIES:
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - INSPhotoGallery
   - Prototyper
   - SwiftLint
+  - SwipeCellKit
   - UICircularProgressRing
 
 SPEC REPOS:
@@ -24,6 +26,7 @@ SPEC REPOS:
     - Prototype
     - Prototyper
     - SwiftLint
+    - SwipeCellKit
     - UICircularProgressRing
 
 SPEC CHECKSUMS:
@@ -33,8 +36,9 @@ SPEC CHECKSUMS:
   Prototype: 2009eb25fccdcbe5339d1cbe4f116eb6e68466aa
   Prototyper: 09bf1e15d619a7cd6ae358beaa58dc2e0955fa16
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
+  SwipeCellKit: 30fd6a4f8a8b8ac864ea389c8b4c8bac5ba5471a
   UICircularProgressRing: 5a32c01f54474571b1e66e8fa050c0f83d6d981b
 
-PODFILE CHECKSUM: c28260dc9d25bc3159e0b4bd87fc2aad182a479c
+PODFILE CHECKSUM: 4d4b07c1b3fe6854d10a126573a5ce2a17b8795f
 
 COCOAPODS: 1.5.3
