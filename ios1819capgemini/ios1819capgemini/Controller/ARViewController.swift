@@ -162,6 +162,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         automaticallyDetectedVectors = []
         automaticallyDetectedIncidents = []
         descriptionNode = nil
+        navigatingIncident = nil 
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
         let config = ARWorldTrackingConfiguration()
         loadCustomScans()
@@ -190,7 +191,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let location = touchesFirst.location(in: sceneView)
         print("location : \(location)")
         if location.y <= 80 {
-            return 
+            return
         }
         let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
         if let touch = touches.first {
