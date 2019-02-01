@@ -37,6 +37,7 @@ extension ARViewController {
             connectionLabel.text = "Connected"
             connectionLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         } else {
+            ARViewController.connectedToPeer = false
             connectionLabel.text = ""
         }
     }

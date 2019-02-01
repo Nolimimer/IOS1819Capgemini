@@ -189,7 +189,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         let location = touchesFirst.location(in: sceneView)
-        print("location : \(location)")
         if location.y <= 80 {
             return
         }
