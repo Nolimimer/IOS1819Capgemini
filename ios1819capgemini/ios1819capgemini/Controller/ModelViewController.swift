@@ -5,12 +5,30 @@
 //  Created by Michael Schott on 11.01.19.
 //  Copyright © 2019 TUM LS1. All rights reserved.
 //
-
+//swiftlint:disable all
 import Foundation
 import UIKit
-class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+import SwipeCellKit
+
+class ModelViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, SwipeCollectionViewCellDelegate {
     
     static var carPart: CarPart?
+    var sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
+    
+    func removeScan(identifier: String) {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                if file.lastPathComponent == "\(identifier).arobject" {
+                    try fileManager.removeItem(at: file.absoluteURL)
+                }
+            }
+        } catch {
+            print("Error loading custom scans")
+        }
+    }
     
     @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
@@ -24,7 +42,6 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         ModelViewController.carPart = ARViewController.selectedCarPart
         DataHandler.incidents = []
         if let carPart = ModelViewController.carPart {
-            print("carpart incidents : \(carPart.incidents)")
             if DataHandler.containsCarPart(carPart: carPart) {
                 DataHandler.replaceCarPart(carPart: carPart)
             } else {
@@ -47,6 +64,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewWillDisappear(_ animated: Bool) {
         ARViewController.resetButtonPressed = true
     }
+
     
     let reuseIdentifier = "modelCell"
     
@@ -55,8 +73,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         return DataHandler.objectsToIncidents.count
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
         
         let name = sortedDictonary[indexPath.item]
         let incidents = DataHandler.objectsToIncidents[name]
@@ -77,9 +95,34 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             cell.progessNumber.text = String(incidents?.filter { $0.status == .progress }.count ?? 0)
             cell.resolvedNumber.text = String(incidents?.filter { $0.status == .resolved }.count ?? 0)
         }
+        cell.delegate = self
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { print("collection View error"); return nil }
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            // handle action by updating model with deletion
+            let name = self.sortedDictonary[indexPath.item]
+            self.removeScan(identifier: name)
+            DataHandler.objectsToIncidents.removeValue(forKey: name)
+            self.sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
+            DataHandler.saveToJSON()
+            DataHandler.carParts.removeAll(where: { $0.name == "\(name).arobject" })
+            DataHandler.setCarParts()
+        }
+        
+        // customize the action appearance
+//        deleteAction.image = #imageLiteral(resourceName: "Trash Icon")
+        
+        return [deleteAction]
+    }
+    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .destructiveAfterFill
+        options.transitionStyle = .border
+        return options
+    }
     // MARK: - UICollectionViewDelegate protocol
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -273,6 +273,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         config.detectionObjects = detectionObjects
         sceneView.session.run(config)
     }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
