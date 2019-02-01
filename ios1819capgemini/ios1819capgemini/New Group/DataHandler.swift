@@ -159,7 +159,6 @@ enum DataHandler {
                 }
             }
         } catch _ {
-            print("Could not load ar object: [incident] dictionary")
         }
         do {
             let fileWrapper = try FileWrapper(url: url, options: .immediate)
@@ -176,7 +175,6 @@ enum DataHandler {
                 }
             }
         } catch _ {
-            print("Could not load ar object: [incident] dictionary")
         }
     }
     static func getIncidentsOfObject(identifier: String) -> [Incident] {
@@ -224,6 +222,12 @@ enum DataHandler {
     }
     
     static func saveCarPart() {
+        if ARViewController.selectedCarPart == nil {
+            return
+        }
+        if DataHandler.incidents.isEmpty {
+            return
+        }
         ARViewController.selectedCarPart?.incidents = DataHandler.incidents
         ModelViewController.carPart = ARViewController.selectedCarPart
         DataHandler.incidents = []
