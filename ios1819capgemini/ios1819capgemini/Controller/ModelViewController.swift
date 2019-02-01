@@ -20,7 +20,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         do {
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
             for file in fileURLs {
-                if file.lastPathComponent == "\(identifier).arobject" {
+                if file.lastPathComponent == "\(identifier)" {
                     try fileManager.removeItem(at: file.absoluteURL)
                 }
             }
@@ -47,6 +47,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
                 DataHandler.setCarParts()
             }
         }
+        for carPart in DataHandler.carParts {
+            print(carPart.name)
+        }
+        
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -86,13 +90,14 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let nsUserDomainMask = FileManager.SearchPathDomainMask.userDomainMask
         let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
         if let dirPath = paths.first {
-            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(carPart.name).jpg")
+            let name = carPart.name.dropLast(".arobject".count)
+            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
             let image = UIImage(contentsOfFile: imageURL.path)
             cell.modelImage.image = image
-            cell.incidentLabel.text = carPart.name
-            cell.openNumber.text = String(incidents.filter { $0.status == .open }.count )
-            cell.progessNumber.text = String(incidents.filter { $0.status == .progress }.count )
-            cell.resolvedNumber.text = String(incidents.filter { $0.status == .resolved }.count )
+            cell.incidentLabel.text = String(name)
+            cell.openNumber.text = String(incidents.filter { $0.status == .open }.count)
+            cell.progessNumber.text = String(incidents.filter { $0.status == .progress }.count)
+            cell.resolvedNumber.text = String(incidents.filter { $0.status == .resolved }.count)
         }
         cell.delegate = self
         return cell
@@ -106,12 +111,11 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             let carPart = DataHandler.carParts[indexPath.item]
             let name = carPart.name
             self.removeScan(identifier: name)
-            DataHandler.objectsToIncidents.removeValue(forKey: name)
+//            DataHandler.objectsToIncidents.removeValue(forKey: name)
+//            DataHandler.saveToJSON()
+            DataHandler.carParts.removeAll(where: { $0.name == "\(name)" })
             DataHandler.saveToJSON()
-            DataHandler.carParts.removeAll(where: { $0.name == "\(name).arobject" })
-            DataHandler.setCarParts()
         }
-        
         // customize the action appearance
 //        deleteAction.image = #imageLiteral(resourceName: "Trash Icon")
         

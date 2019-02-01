@@ -122,7 +122,7 @@ enum DataHandler {
             try jsonFileWrapper.write(to: Constants.localStorageModelURL,
                                       options: FileWrapper.WritingOptions.atomic,
                                       originalContentsURL: nil)
-            print(carParts)
+//            print(carParts)
 
         } catch _ {
             print("Could not save ar object: [incident] dictionary")

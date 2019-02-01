@@ -83,7 +83,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         ModelViewController.carPart = ARViewController.selectedCarPart
         DataHandler.incidents = []
         if let carPart = ModelViewController.carPart {
-            print("carpart incidents : \(carPart.incidents)")
             if DataHandler.containsCarPart(carPart: carPart) {
                 DataHandler.replaceCarPart(carPart: carPart)
             } else {
