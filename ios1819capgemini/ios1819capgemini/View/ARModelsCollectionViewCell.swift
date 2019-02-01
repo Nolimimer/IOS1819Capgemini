@@ -7,8 +7,8 @@
 //
 
 import UIKit
-
-class ARModelsCollectionViewCell: UICollectionViewCell {
+import SwipeCellKit
+class ARModelsCollectionViewCell: SwipeCollectionViewCell {
     
     //swiftlint:disable private_outlet
     @IBOutlet weak var modelImage: UIImageView!

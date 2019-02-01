@@ -96,22 +96,18 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             cell.progessNumber.text = String(incidents?.filter { $0.status == .progress }.count ?? 0)
             cell.resolvedNumber.text = String(incidents?.filter { $0.status == .resolved }.count ?? 0)
         }
+        cell.delegate = self
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { print("collection View error"); return nil }
-        
-        print("collection view ")
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
             // handle action by updating model with deletion
-            print("delete action")
             let name = self.sortedDictonary[indexPath.item]
             self.removeScan(identifier: name)
             DataHandler.objectsToIncidents.removeValue(forKey: name)
             self.sortedDictonary = Array(DataHandler.objectsToIncidents.keys).sorted()
-            print("DataHandler objects to incidents : \(DataHandler.objectsToIncidents)")
-            print("sorted dictionary: \(self.sortedDictonary)")
             DataHandler.saveToJSON()
         }
         
@@ -120,10 +116,12 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         return [deleteAction]
     }
-    
-    
-    
-    
+    func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .destructiveAfterFill
+        options.transitionStyle = .border
+        return options
+    }
     // MARK: - UICollectionViewDelegate protocol
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
