@@ -122,8 +122,6 @@ enum DataHandler {
             try jsonFileWrapper.write(to: Constants.localStorageModelURL,
                                       options: FileWrapper.WritingOptions.atomic,
                                       originalContentsURL: nil)
-//            print(carParts)
-
         } catch _ {
             print("Could not save ar object: [incident] dictionary")
                 
@@ -234,6 +232,46 @@ enum DataHandler {
                 DataHandler.replaceCarPart(carPart: carPart)
             } else {
                 DataHandler.setCarParts()
+            }
+        }
+    }
+    //swiftlint:disable all
+    static func removePreviewPictures(files: [String]) {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        for fileToDelete in files {
+            do {
+                let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+                for file in fileURLs {
+                    if file.lastPathComponent == "\(fileToDelete)" {
+                        try fileManager.removeItem(at: file.absoluteURL)
+                    }
+                }
+            } catch {
+                print("Error loading custom scans")
+            }
+        }
+    }
+    
+    static func setPreviewPictures(files: [String]) {
+        if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last {
+            for file in files {
+                let fileURL = documentsDirectory.appendingPathComponent(file)
+                do {
+                    if try fileURL.checkResourceIsReachable() {
+                        print("file exist")
+                    } else {
+                        print("file doesnt exist")
+                        do {
+                            try Data().write(to: fileURL)
+                        } catch {
+                            print("an error happened while creating the file")
+                        }
+                    }
+                } catch {
+//                    print("an error happened while checking for the file")
+//                    print("file :\(file)")
+                }
             }
         }
     }

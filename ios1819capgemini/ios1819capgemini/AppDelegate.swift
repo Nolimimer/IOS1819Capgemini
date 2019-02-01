@@ -14,9 +14,10 @@ import CUU
 class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
 
     var window: UIWindow?
-    
+    //swiftlint:disable all
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DataHandler.loadFromJSON()
+        DataHandler.setPreviewPictures(files: ["dashboard.jpg","mi_becher.jpg"])
         PrototyperController.showFeedbackButton = false
         let defaults = UserDefaults.standard
         if defaults.integer(forKey: "AttachmentIdentifier") == 0 {
@@ -82,6 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         DataHandler.saveCarPart()
         DataHandler.saveToJSON()
+        DataHandler.removePreviewPictures(files: ["dashboard.jpg","mi_becher.jpg"])
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         CUU.stop()
     }

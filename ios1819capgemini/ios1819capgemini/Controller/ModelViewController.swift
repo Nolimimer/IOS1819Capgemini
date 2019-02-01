@@ -29,6 +29,27 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
     
+    func getURLOfSavedScan() -> [URL] {
+        let fileManager = FileManager.default
+        let bundleURL = Bundle.main.bundleURL
+        let assetURL = bundleURL.appendingPathComponent("PreviewPictures.bundle")
+        let contents = try! fileManager.contentsOfDirectory(at: assetURL, includingPropertiesForKeys: [URLResourceKey.nameKey, URLResourceKey.isDirectoryKey], options: .skipsHiddenFiles)
+        for content in contents {
+            print("contents: \(content)")
+        }
+        return contents
+    }
+    
+    func getURLOfScan(name: String, urls: [URL]) -> URL? {
+        for item in urls {
+            print("item : \(item.lastPathComponent)")
+            if item.lastPathComponent == name {
+                return item
+            }
+        }
+        return nil
+    }
+    
     @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
         self.dismiss(animated: false, completion: nil)
@@ -82,7 +103,23 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
         if let dirPath = paths.first {
             let name = carPart.name.dropLast(".arobject".count)
-            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
+            var imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
+            //lol fuck it
+            if name == "Dashboard" {
+                if getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan()) != nil {
+                    imageURL = getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan())!
+                } else {
+                    print("Dashboard url could not be found")
+//                    fatalError()
+                }
+            } else if name == "mi_becher" {
+                if getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan()) != nil {
+                    imageURL = getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan())!
+                } else {
+                    print("mi_becher url could not be found")
+//                    fatalError()
+                }
+            }
             let image = UIImage(contentsOfFile: imageURL.path)
             cell.modelImage.image = image
             cell.incidentLabel.text = String(name)
