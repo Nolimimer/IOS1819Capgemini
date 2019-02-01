@@ -194,7 +194,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         let location = touchesFirst.location(in: sceneView)
-        if location.y <= 80 {
+        if location.y <= 90 {
             return
         }
         let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
