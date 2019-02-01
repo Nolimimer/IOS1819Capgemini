@@ -188,10 +188,6 @@ extension ARViewController {
         }
     }
     
-    func sessionShouldAttemptRelocalization(_ session: ARSession) -> Bool {
-        return true
-    }
-    
     func updateSession(for trackingState: ARCamera.TrackingState, incident: Incident?) {
         
         checkTappingCreateButtonPossible()
