@@ -162,7 +162,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         automaticallyDetectedVectors = []
         automaticallyDetectedIncidents = []
         descriptionNode = nil
-        navigatingIncident = nil 
+        ARViewController.navigatingIncident = nil
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
         let config = ARWorldTrackingConfiguration()
         loadCustomScans()
