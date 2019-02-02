@@ -84,7 +84,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             .fadeOpacity(to:1.0, duration:0.1)])
     }
     // MARK: IBOutlets
-    //sceneview bitte nicht private
     // swiftlint:disable private_outlet
     // swiftlint:disable all
     @IBOutlet var sceneView: ARSCNView!
@@ -195,10 +194,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let hitResultsFeaturePoints: [ARHitTestResult] = sceneView.hitTest(location, types: .featurePoint)
         if let touch = touches.first {
             if let hitResult = hitResultsFeaturePoints.first {
-//                if let node = getNodeInRadius(hitResult: hitResult, radius: 0.015) {
-//                    self.performSegue(withIdentifier: "ShowDetailSegue", sender: node)
-//                    return
-//                }
                 if let node = checkTap(tap: location, radius: 1.5) {
                     if let incident = ARViewController.navigatingIncident {
                         if node.name! == String(incident.identifier) {

@@ -76,7 +76,6 @@ extension ARViewController {
         for incident in DataHandler.incidents {
             for node in nodes {
                 guard let nodeName = node.name else {
-                    print("node.name == nil in updatePinColour()")
                     return
                 }
                 if nodeName == String(incident.identifier) {
