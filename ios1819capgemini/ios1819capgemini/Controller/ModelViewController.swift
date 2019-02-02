@@ -59,7 +59,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let urls = getURLOfSavedScan()
         getURLOfScan(name: "dashboard.jpg",urls: urls)
         getURLOfScan(name: "mi_becher.jpg",urls: urls)
-        printDocumentsDirectory()
+//        printDocumentsDirectory()
     }
     
     func printDocumentsDirectory() {
@@ -154,20 +154,6 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         if let dirPath = paths.first {
             let name = carPart.name.dropLast(".arobject".count).lowercased()
             let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
-            //lol fuck it
-//            if name == "Dashboard" {
-//                if getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan()) != nil {
-//                    imageURL = getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan())!
-//                } else {
-//                    print("Dashboard url could not be found")
-//                }
-//            } else if name == "mi_becher" {
-//                if getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan()) != nil {
-//                    imageURL = getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan())!
-//                } else {
-//                    print("mi_becher url could not be found")
-//                }
-//            }
             let image = UIImage(contentsOfFile: imageURL.path)
             cell.modelImage.image = image
             cell.incidentLabel.text = String(name)
