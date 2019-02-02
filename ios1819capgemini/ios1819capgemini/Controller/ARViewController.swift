@@ -179,7 +179,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
      If a new pin is created a screenshot of the location is taken before/after placing the pin.
      */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        print("object node : \(self.detectedObjectNode?.position)")
+        print("object anchor: \(self.objectAnchor?.transform.columns.3)")
         if !creatingNodePossible {
             return
         }
@@ -212,11 +213,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     self.progressRing.isHidden = true
                     self.progressRing.resetProgress()
                     if self.detectedObjectNode != nil {
+                        let anchorCoordinate = self.objectAnchor!.transform.columns.3
                         let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
                             SCNVector3(hitResult.worldTransform.columns.3.x,
                                        hitResult.worldTransform.columns.3.y,
                                        hitResult.worldTransform.columns.3.z),
                             to: self.detectedObjectNode)
+                        let coordinate = self.sceneView.scene.rootNode
                         let incident = Incident (type: .other,
                                                  description: "New Incident",
                                                  coordinate: Coordinate(vector: coordinateRelativeToObject))
