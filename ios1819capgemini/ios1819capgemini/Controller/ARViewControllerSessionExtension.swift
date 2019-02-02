@@ -196,7 +196,7 @@ extension ARViewController {
         checkReset()
         checkSendIncidents()
         updateIncidents()
-        if !ARViewController.multiUserEnabled || !ARViewController.connectedToPeer {
+        if !ARViewController.multiUserEnabled || !ARViewController.connectedToPeer {
             refreshNodes()
         }
         checkVisibleNodes()
