@@ -38,14 +38,69 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         return contents
     }
     
-    func getURLOfScan(name: String, urls: [URL]) -> URL? {
+    func saveBundleToAsset(name: String, item: URL) {
+        let fileManager = FileManager.default
+//        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            if let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                  .userDomainMask,
+                                                                  true).first {
+                let fullDestPath = URL(fileURLWithPath: destPath)
+                    .appendingPathComponent(name)
+                if !fileManager.fileExists(atPath: fullDestPath.path) {
+                    try fileManager.copyItem(at: item, to: fullDestPath)
+                }
+            }
+        } catch {
+        }
+    }
+    
+    func saveBundleToAsset() {
+        let urls = getURLOfSavedScan()
+        getURLOfScan(name: "dashboard.jpg",urls: urls)
+        getURLOfScan(name: "mi_becher.jpg",urls: urls)
+        printDocumentsDirectory()
+    }
+    
+    func printDocumentsDirectory() {
+        let fileManager = FileManager.default
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                print("file : \(file.lastPathComponent)")
+            }
+        } catch {
+        }
+    }
+    
+    func getURLOfScan(name: String, urls: [URL]) {
         for item in urls {
             if item.lastPathComponent == name {
-                return item
+                saveBundleToAsset(name: name, item: item)
             }
         }
-        return nil
     }
+    
+    func loadBundleToDocuments() {
+        let fileManager = FileManager.default
+        do {
+            try fileManager.copyfileToUserDocumentDirectory(forResource: "dashboard", ofType: "jpg")
+            try fileManager.copyfileToUserDocumentDirectory(forResource: "mi_becher", ofType: "jpg")
+        } catch {
+            print("copying dashboard and/or mi_becher failed")
+        }
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            for file in fileURLs {
+                print("file : \(file.lastPathComponent)")
+            }
+        } catch {
+            print("Error loading custom scans")
+        }
+    }
+    
     
     @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
@@ -55,10 +110,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        saveBundleToAsset()
         DataHandler.saveCarPart()
-//        for carPart in DataHandler.carParts {
-//            print(carPart.name)
-//        }
         
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -99,22 +152,22 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let nsUserDomainMask = FileManager.SearchPathDomainMask.userDomainMask
         let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
         if let dirPath = paths.first {
-            let name = carPart.name.dropLast(".arobject".count)
-            var imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
+            let name = carPart.name.dropLast(".arobject".count).lowercased()
+            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
             //lol fuck it
-            if name == "Dashboard" {
-                if getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan()) != nil {
-                    imageURL = getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan())!
-                } else {
-                    print("Dashboard url could not be found")
-                }
-            } else if name == "mi_becher" {
-                if getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan()) != nil {
-                    imageURL = getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan())!
-                } else {
-                    print("mi_becher url could not be found")
-                }
-            }
+//            if name == "Dashboard" {
+//                if getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan()) != nil {
+//                    imageURL = getURLOfScan(name: "dashboard.jpg", urls: getURLOfSavedScan())!
+//                } else {
+//                    print("Dashboard url could not be found")
+//                }
+//            } else if name == "mi_becher" {
+//                if getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan()) != nil {
+//                    imageURL = getURLOfScan(name: "mi_becher.jpg", urls: getURLOfSavedScan())!
+//                } else {
+//                    print("mi_becher url could not be found")
+//                }
+//            }
             let image = UIImage(contentsOfFile: imageURL.path)
             cell.modelImage.image = image
             cell.incidentLabel.text = String(name)
@@ -154,5 +207,25 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // only viewing
+    }
+}
+
+extension FileManager {
+    func copyfileToUserDocumentDirectory(forResource name: String,
+                                         ofType ext: String) throws {
+        if let bundlePath = Bundle.main.path(forResource: name, ofType: ext),
+            let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                               .userDomainMask,
+                                                               true).first {
+            print("bundle path : \(bundlePath)")
+            let fileName = "\(name).\(ext)"
+            let fullDestPath = URL(fileURLWithPath: destPath)
+                .appendingPathComponent(fileName)
+            let fullDestPathString = fullDestPath.path
+            
+            if !self.fileExists(atPath: fullDestPathString) {
+                try self.copyItem(atPath: bundlePath, toPath: fullDestPathString)
+            }
+        }
     }
 }
