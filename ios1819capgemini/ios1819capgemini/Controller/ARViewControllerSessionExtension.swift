@@ -31,7 +31,7 @@ extension ARViewController {
     }
     
     func checkConnection () {
-        if !multipeerSession.connectedPeers.isEmpty && ARViewController.multiUserEnabled {
+        if !ARViewController.multipeerSession.connectedPeers.isEmpty && ARViewController.multiUserEnabled {
             ARViewController.connectedToPeer = true
 //            let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
             connectionLabel.text = "Connected"
@@ -164,7 +164,7 @@ extension ARViewController {
         ARViewController.multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
         
         if !ARViewController.multiUserEnabled {
-            multipeerSession.disconnectSession()
+            ARViewController.multipeerSession.disconnectSession()
         }
         
         if UserDefaults.standard.bool(forKey: "enable_detection") && detectedObjectNode != nil {

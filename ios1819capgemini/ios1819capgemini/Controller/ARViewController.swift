@@ -47,7 +47,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var visibleNodes: [SCNNode] = []
     var visibleNodesPosition: [SCNNode: CGPoint] = [:]
     // swiftlint:disable implicitly_unwrapped_optional
-    var multipeerSession: MultipeerSession!
+    static var multipeerSession: MultipeerSession!
     // swiftlint:enable implicitly_unwrapped_optional
     var isDetecting = false
     var automaticallyDetectedVectors = [SCNVector3]()
@@ -112,6 +112,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     // MARK: Overridden/Lifecycle Methods
     override func viewDidLoad() {
+        
         createIncidentButton.isHidden = true
         createIncidentButton.isEnabled = false
         creatingNodePossible = true
@@ -130,7 +131,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configureLighting()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
-        multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
+//        if multipeerSession == nil {
+//            print("multi peer session created")
+//            multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
+//        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -142,10 +146,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         } else {
         }
     }
+
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        multipeerSession.disconnectSession()
+//        multipeerSession.disconnectSession()
     }
     
     func reset() {
@@ -252,10 +257,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     
     override func viewWillAppear(_ animated: Bool) {
-        if multipeerSession == nil {
-            multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
-            print("multipeer session created")
-        }
+//        if multipeerSession == nil {
+//            multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
+//            print("multipeer session created")
+//        }
         super.viewWillAppear(animated)
         let config = ARWorldTrackingConfiguration()
         
@@ -287,7 +292,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        multipeerSession.disconnectSession()
     }
     
     // MARK: AR Kit methods

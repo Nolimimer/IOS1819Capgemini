@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     //swiftlint:disable all
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DataHandler.loadFromJSON()
-        DataHandler.setPreviewPictures(files: ["dashboard.jpg","mi_becher.jpg"])
         PrototyperController.showFeedbackButton = false
         let defaults = UserDefaults.standard
         if defaults.integer(forKey: "AttachmentIdentifier") == 0 {
@@ -38,7 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         // Override point for customization after application launch.
         DataHandler.setCarParts()
         CUU.start()
-        
+        ARViewController.multipeerSession = MultipeerSession(receivedDataHandler: ARViewController.receivedData)
+        print("multi peer session created")
+
         return true
     }
     
@@ -83,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         DataHandler.saveCarPart()
         DataHandler.saveToJSON()
-        DataHandler.removePreviewPictures(files: ["dashboard.jpg","mi_becher.jpg"])
+        ARViewController.multipeerSession.disconnectSession()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         CUU.stop()
     }

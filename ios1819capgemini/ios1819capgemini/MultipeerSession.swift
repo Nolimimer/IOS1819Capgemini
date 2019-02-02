@@ -17,7 +17,7 @@ import MultipeerConnectivity
 class MultipeerSession: NSObject {
     static let serviceType = "cARgemini"
     
-    private let myPeerID = MCPeerID(displayName: UIDevice.current.name)
+    let myPeerID = MCPeerID(displayName: UIDevice.current.name)
     //swiftlint:disable implicitly_unwrapped_optional
     private var session: MCSession!
     private var serviceAdvertiser: MCNearbyServiceAdvertiser!

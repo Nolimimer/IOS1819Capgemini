@@ -16,12 +16,12 @@ extension ARViewController {
         let message: String
         
         switch trackingState {
-        case .normal where frame.anchors.isEmpty && multipeerSession.connectedPeers.isEmpty:
+        case .normal where frame.anchors.isEmpty && ARViewController.multipeerSession.connectedPeers.isEmpty:
             // No planes detected; provide instructions for this app's AR interactions.
             message = "Detect a car part or wait to join a shared session."
             
-        case .normal where !multipeerSession.connectedPeers.isEmpty && mapProvider == nil:
-            let peerNames = multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
+        case .normal where !ARViewController.multipeerSession.connectedPeers.isEmpty && mapProvider == nil:
+            let peerNames = ARViewController.multipeerSession.connectedPeers.map({ $0.displayName }).joined(separator: ", ")
             message = "Connected"
             connectionLabel.text = message
         case .notAvailable:
