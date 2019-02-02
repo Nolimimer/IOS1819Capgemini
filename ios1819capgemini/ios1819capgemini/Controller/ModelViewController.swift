@@ -38,9 +38,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         return contents
     }
     
-    func saveBundleToAsset(name: String, item: URL) {
+    func saveBundleToDocuments(name: String, item: URL) {
         let fileManager = FileManager.default
-//        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         do {
             if let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                   .userDomainMask,
@@ -55,11 +54,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
     
-    func saveBundleToAsset() {
+    func saveBundleToDocuments() {
         let urls = getURLOfSavedScan()
         getURLOfScan(name: "dashboard.jpg",urls: urls)
         getURLOfScan(name: "mi_becher.jpg",urls: urls)
-//        printDocumentsDirectory()
     }
     
     func printDocumentsDirectory() {
@@ -77,7 +75,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     func getURLOfScan(name: String, urls: [URL]) {
         for item in urls {
             if item.lastPathComponent == name {
-                saveBundleToAsset(name: name, item: item)
+                saveBundleToDocuments(name: name, item: item)
             }
         }
     }
@@ -110,7 +108,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        saveBundleToAsset()
+        saveBundleToDocuments()
         DataHandler.saveCarPart()
         
         // add blurred subview
@@ -168,18 +166,12 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { print("collection View error"); return nil }
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            // handle action by updating model with deletion
-//            let name = self.sortedDictonary[indexPath.item]
             let carPart = DataHandler.carParts[indexPath.item]
             let name = carPart.name
             self.removeScan(identifier: name)
-//            DataHandler.objectsToIncidents.removeValue(forKey: name)
-//            DataHandler.saveToJSON()
             DataHandler.carParts.removeAll(where: { $0.name == "\(name)" })
             DataHandler.saveToJSON()
         }
-        // customize the action appearance
-//        deleteAction.image = #imageLiteral(resourceName: "Trash Icon")
         
         return [deleteAction]
     }
@@ -203,7 +195,6 @@ extension FileManager {
             let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                .userDomainMask,
                                                                true).first {
-            print("bundle path : \(bundlePath)")
             let fileName = "\(name).\(ext)"
             let fullDestPath = URL(fileURLWithPath: destPath)
                 .appendingPathComponent(fileName)
