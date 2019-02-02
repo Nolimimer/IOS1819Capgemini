@@ -76,7 +76,6 @@ enum DataHandler {
             }
             carParts = try JSONDecoder().decode([CarPart].self, from: data)
         } catch _ {
-            print("Could not load ar object: [incident] dictionary")
         }
         
         do {
@@ -86,7 +85,6 @@ enum DataHandler {
             }
             objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
         } catch _ {
-            print("Could not load ar object: [incident] dictionary")
         }
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
@@ -103,7 +101,6 @@ enum DataHandler {
                 }
             }
         } catch _ {
-            print("Could not load ar object: [incident] dictionary")
         }
     }
     
@@ -114,7 +111,6 @@ enum DataHandler {
             try jsonFileWrapper.write(to: Constants.localStorageModelURL,
                                       options: FileWrapper.WritingOptions.atomic,
                                       originalContentsURL: nil)        } catch _ {
-            print("Could not save ar object: [incident] dictionary")
         }
         do {
             let data = try JSONEncoder().encode(carParts)
@@ -122,9 +118,7 @@ enum DataHandler {
             try jsonFileWrapper.write(to: Constants.localStorageModelURL,
                                       options: FileWrapper.WritingOptions.atomic,
                                       originalContentsURL: nil)
-        } catch _ {
-            print("Could not save ar object: [incident] dictionary")
-                
+        } catch _ {                
         }
         
     }

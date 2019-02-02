@@ -38,8 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         DataHandler.setCarParts()
         CUU.start()
         ARViewController.multipeerSession = MultipeerSession(receivedDataHandler: ARViewController.receivedData)
-        print("multi peer session created")
-
         return true
     }
     

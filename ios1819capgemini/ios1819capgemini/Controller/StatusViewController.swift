@@ -50,10 +50,7 @@ class StatusViewController: UIViewController {
             DataHandler.incidents = []
             self.removeScans()
             DataHandler.saveToJSON()
-            
-//            if let par = self.parent as? ARViewController {
-//                par.detectionButton.setTitle("Automatic Detection: Off", for: .normal)
-//            }
+            DataHandler.setCarParts()
             UserDefaults.standard.set(false, forKey: "enable_detection")
 //            self.dismiss(animated: true, completion: nil)
         }))

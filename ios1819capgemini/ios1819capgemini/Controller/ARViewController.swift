@@ -131,10 +131,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configureLighting()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapped))
         sceneView.addGestureRecognizer(gestureRecognizer)
-//        if multipeerSession == nil {
-//            print("multi peer session created")
-//            multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
-//        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -150,15 +146,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-//        multipeerSession.disconnectSession()
     }
     
     func reset() {
-
-//        print(objectAnchor?.referenceObject.name)
-        if let name = objectAnchor?.referenceObject.name {
-            DataHandler.objectsToIncidents[name] = DataHandler.incidents
-        }
         DataHandler.saveToJSON()
         self.scene.rootNode.childNodes.forEach { node in
             guard let name = node.name else {
@@ -257,10 +247,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     
     override func viewWillAppear(_ animated: Bool) {
-//        if multipeerSession == nil {
-//            multipeerSession = MultipeerSession(receivedDataHandler: receivedData)
-//            print("multipeer session created")
-//        }
+        
         super.viewWillAppear(animated)
         let config = ARWorldTrackingConfiguration()
         
@@ -413,7 +400,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func setDescriptionLabel() {
         guard let descriptionNode = descriptionNode else {
-//            print("description node not initialized")
             return
         }
         let openIncidents = (DataHandler.incidents.filter { $0.status == .open }).count

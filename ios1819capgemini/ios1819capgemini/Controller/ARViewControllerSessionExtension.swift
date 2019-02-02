@@ -65,23 +65,9 @@ extension ARViewController {
             guard let name = node.name else {
                 return
             }
-//            if DataHandler.incidents.isEmpty {
-//                do {
-//                    let data = try JSONEncoder().encode(DataHandler.incidents)
-//                    self.multipeerSession.sendToAllPeers(data)
-//                } catch {
-//                    print("sending incidents array failed (refreshNodes DataHandler.incidents.isEmpty)")
-//                }
-//            }
             if DataHandler.incident(withId: name) == nil {
                 self.scene.rootNode.childNode(withName: name, recursively: false)?.removeFromParentNode()
                 deleteNode(identifier: name)
-//                do {
-//                    let data = try JSONEncoder().encode(DataHandler.incidents)
-//                    self.multipeerSession.sendToAllPeers(data)
-//                } catch {
-//                    print("sending incidents array failed (refreshNodes DataHandler.incident(withId: name) == nil")
-//                }
             }
         }
     }
