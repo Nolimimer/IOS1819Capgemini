@@ -49,7 +49,7 @@ public class Incident: Codable {
     private func suggest() -> IncidentType? {
         return nil
     }
-
+    
     func getCoordinateToVector() -> SCNVector3 {
         var res = SCNVector3.init()
         res.x = coordinate.pointX

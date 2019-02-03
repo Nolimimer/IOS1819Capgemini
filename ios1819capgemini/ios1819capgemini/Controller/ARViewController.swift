@@ -286,7 +286,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         updateSession(for: frame.camera.trackingState, incident: ARViewController.navigatingIncident)
     }
     
-    
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         
