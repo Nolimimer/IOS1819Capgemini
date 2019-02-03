@@ -16,7 +16,8 @@ class CarPart: Codable {
     var name: String
     var filePath: URL
     var data: Data?
-    
+    var picturePath: URL?
+    var pictureData: Data?
     init(incidents: [Incident], filePath: URL) {
         self.incidents = incidents
         self.name = filePath.lastPathComponent
@@ -25,6 +26,16 @@ class CarPart: Codable {
             data = try Data(contentsOf: filePath)
         } catch {
             print("could not load arobject")
+        }
+    }
+    
+    convenience init(incidents: [Incident], filePath: URL, previewPicture: URL) {
+        self.init(incidents: incidents, filePath: filePath)
+        self.picturePath = previewPicture
+        do {
+            pictureData = try Data(contentsOf: previewPicture)
+        } catch {
+            print("could not load preview picture")
         }
     }
     
@@ -46,4 +57,21 @@ class CarPart: Codable {
         }
     }
     
+    func reevaluatePicturePath() {
+        do {
+            let paths = NSSearchPathForDirectoriesInDomains(
+                FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+            let documentsDirectory = URL(fileURLWithPath: paths[0])
+            let pictureName = "\(self.name.dropLast(".arobject".count)).jpg"
+            let path = documentsDirectory.appendingPathComponent(pictureName)
+            guard let data = pictureData else {
+                print("picture data is nil")
+                return
+            }
+            try data.write(to: path, options: [])
+            picturePath = URL(fileURLWithPath: "\(paths[0])/\(pictureName)")
+        } catch _ {
+            print("Could not save picture data")
+        }
+    }
 }
