@@ -11,11 +11,17 @@ import ARKit
 
 extension ARViewController {
     
+    //swiftlint:disable all
     func updateIncidents() {
         
         if !ARViewController.objectDetected {
             return
         }
+//        print("detected object node before setting to anchor : \(self.detectedObjectNode!.position)")
+        detectedObjectNode!.position = SCNVector3(x: objectAnchor!.transform.columns.3.x,
+                                                  y: objectAnchor!.transform.columns.3.y,
+                                                  z: objectAnchor!.transform.columns.3.z)
+//        print("detected object node position after anchor: \(detectedObjectNode!.position)")
         incidentEditted()
         for incident in DataHandler.incidents {
             if incidentHasNotBeenPlaced(incident: incident) {

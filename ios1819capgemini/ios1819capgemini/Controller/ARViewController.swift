@@ -54,7 +54,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var automaticallyDetectedIncidents = [CGPoint]()
     private var descriptionNode: SKLabelNode?
     private var anchorLabels = [UUID: String]()
-    private var objectAnchor: ARObjectAnchor?
+    var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?
     // swiftlint:disable force_unwrapping implicit_return
     lazy var statusViewController: StatusViewController = {
@@ -162,6 +162,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         automaticallyDetectedIncidents = []
         descriptionNode = nil
         ARViewController.navigatingIncident = nil
+        ARViewController.objectDetected = false
+        objectAnchor = nil 
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
         let config = ARWorldTrackingConfiguration()
         loadCustomScans()
@@ -179,8 +181,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
      If a new pin is created a screenshot of the location is taken before/after placing the pin.
      */
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("object node : \(self.detectedObjectNode?.position)")
-        print("object anchor: \(self.objectAnchor?.transform.columns.3)")
         if !creatingNodePossible {
             return
         }
@@ -213,13 +213,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     self.progressRing.isHidden = true
                     self.progressRing.resetProgress()
                     if self.detectedObjectNode != nil {
-                        let anchorCoordinate = self.objectAnchor!.transform.columns.3
+//                        let anchorCoordinate = self.objectAnchor!.transform.columns.3
                         let coordinateRelativeToObject = self.sceneView.scene.rootNode.convertPosition(
                             SCNVector3(hitResult.worldTransform.columns.3.x,
                                        hitResult.worldTransform.columns.3.y,
                                        hitResult.worldTransform.columns.3.z),
                             to: self.detectedObjectNode)
-                        let coordinate = self.sceneView.scene.rootNode
+//                        let coordinate = self.sceneView.scene.rootNode
                         let incident = Incident (type: .other,
                                                  description: "New Incident",
                                                  coordinate: Coordinate(vector: coordinateRelativeToObject))
