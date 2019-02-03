@@ -48,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         ARViewController.resetButtonPressed = true
         DataHandler.loadFromJSON(url: url)
+//        ModelViewController.printDocumentsDirectory()
         return true
     }
 
