@@ -56,15 +56,34 @@ enum DataHandler {
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
             for file in fileURLs {
                 if file.lastPathComponent.hasSuffix(".arobject") {
-                    let carPart = CarPart(incidents: [], filePath: file)
-                    if !carParts.contains(where: { $0.name == carPart.name }) {
-                        DataHandler.carParts.append(carPart)
+                    if let previewPictureURL = DataHandler.matchPreviewPicture(carPart: file) {
+                        let carPart = CarPart(incidents: [], filePath: file, picturePath: previewPictureURL)
+                        if !carParts.contains(where: { $0.name == carPart.name }) {
+                            DataHandler.carParts.append(carPart)
+                        }
                     }
+
                 }
             }
         } catch {
             print("Error loading custom scans")
         }
+//        for carPart in DataHandler.carParts {
+//            print("car part picture : \(carPart.picturePath?.lastPathComponent)")
+//        }
+        DataHandler.saveToJSON()
+    }
+    static func matchPreviewPicture(carPart: URL) -> URL? {
+        let nsDocumentDirectory = FileManager.SearchPathDirectory.documentDirectory
+        let nsUserDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+        let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+
+        if let dirPath = paths.first {
+            let name = "\(carPart.lastPathComponent.dropLast(".arobject".count).lowercased()).jpg"
+            let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent(name)
+            return imageURL
+        }
+        return nil
     }
     
     // MARK: Type Methods
@@ -95,6 +114,7 @@ enum DataHandler {
             carParts = try JSONDecoder().decode([CarPart].self, from: data)
             for carPart in carParts {
                 carPart.reevaluateFilePath()
+                carPart.reevaluatePicturePath()
                 for incident in carPart.incidents {
                     for attachment in incident.attachments {
                         attachment.attachment.reevaluatePath()
@@ -119,7 +139,7 @@ enum DataHandler {
             try jsonFileWrapper.write(to: Constants.localStorageModelURL,
                                       options: FileWrapper.WritingOptions.atomic,
                                       originalContentsURL: nil)
-        } catch _ {                
+        } catch _ {
         }
         
     }
@@ -163,6 +183,7 @@ enum DataHandler {
             carParts = try JSONDecoder().decode([CarPart].self, from: data)
             for carPart in carParts {
                 carPart.reevaluateFilePath()
+                carPart.reevaluatePicturePath()
                 for incident in carPart.incidents {
                     for attachment in incident.attachments {
                         attachment.attachment.reevaluatePath()

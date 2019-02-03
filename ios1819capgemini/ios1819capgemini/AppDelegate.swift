@@ -36,7 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         }
         // Override point for customization after application launch.
         DataHandler.setCarParts()
+//        ModelViewController.printDocumentsDirectory()
+        ModelViewController.saveBundleToDocuments()
+//        ModelViewController.printDocumentsDirectory()
         CUU.start()
+
         ARViewController.multipeerSession = MultipeerSession(receivedDataHandler: ARViewController.receivedData)
         return true
     }
