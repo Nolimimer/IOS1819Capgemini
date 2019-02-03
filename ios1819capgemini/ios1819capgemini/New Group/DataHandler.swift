@@ -86,6 +86,7 @@ enum DataHandler {
             objectsToIncidents = try JSONDecoder().decode([String: [Incident]].self, from: data)
         } catch _ {
         }
+        
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
