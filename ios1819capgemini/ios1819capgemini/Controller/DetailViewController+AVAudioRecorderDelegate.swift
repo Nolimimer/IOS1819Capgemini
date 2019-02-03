@@ -69,7 +69,6 @@ extension DetailViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
             guard let audioPlayerUnwrapped = audioPlayer else {
                 return
             }
-            
             audioPlayerUnwrapped.play()
         } catch let error {
             print(error)

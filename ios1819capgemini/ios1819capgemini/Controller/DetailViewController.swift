@@ -76,6 +76,13 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
     @IBAction private func backButtonPressed(_ sender: Any) {
          creatingNodePossible = true
+         if recordingSession != nil {
+            do {
+                try recordingSession.setActive(false, options: .notifyOthersOnDeactivation)
+            } catch {
+                print("setting recording session passive failed")
+            }
+        }
          self.dismiss(animated: true, completion: nil)
     }
 
@@ -166,15 +173,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        recordingSession = AVAudioSession.sharedInstance()
-        
-        do {
-            try recordingSession.setCategory(.playAndRecord, mode: .default)
-            try recordingSession.setActive(true)
-        } catch {
-            print("Failed to record audio!")
-        }
-
         reloadCollectionView()
 
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -266,12 +264,27 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             reloadCollectionView()
             recordingSession = nil
             recordingSession = AVAudioSession.sharedInstance()
+            do {
+                try recordingSession.setActive(false, options: .notifyOthersOnDeactivation)
+            } catch {
+                print("????")
+            }
         } else {
             recordButton.setTitle("Tap to Record", for: .normal)
         }
+
     }
     
     @objc func recordTapped() {
+        
+        recordingSession = AVAudioSession.sharedInstance()
+        
+        do {
+            try recordingSession.setCategory(.playAndRecord, mode: .default)
+            try recordingSession.setActive(true)
+        } catch {
+            print("Failed to record audio!")
+        }
         if audioRecorder == nil {
             do {
                 try recordingSession.setCategory(.playAndRecord, mode: .default)
@@ -315,7 +328,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             alertController.addAction(UIAlertAction(title: "OK", style: .default))
             present(alertController, animated: true)
         } else {
-            print("Saved picture")
             hidePopup()
         }
     }
@@ -423,8 +435,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         }
     }
     //swiftlint:enable function_body_length cyclomatic_complexity
-    
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "attachmentCell", for: indexPath) as? CollectionViewCell
         cell?.populateWithAttachment(attachments[(indexPath as NSIndexPath).row].attachment, detail: self, isEdit: modus == Modus.edit ? true : false)
