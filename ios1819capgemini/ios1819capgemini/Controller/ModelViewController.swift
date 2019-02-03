@@ -29,7 +29,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
     
-    func getURLOfSavedScan() -> [URL] {
+    static func getURLOfSavedScan() -> [URL] {
         let fileManager = FileManager.default
         let bundleURL = Bundle.main.bundleURL
         let assetURL = bundleURL.appendingPathComponent("PreviewPictures.bundle")
@@ -38,7 +38,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         return contents
     }
     
-    func saveBundleToDocuments(name: String, item: URL) {
+    static func saveBundleToDocuments(name: String, item: URL) {
         let fileManager = FileManager.default
         do {
             if let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
@@ -54,13 +54,13 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
     
-    func saveBundleToDocuments() {
-        let urls = getURLOfSavedScan()
-        getURLOfScan(name: "dashboard.jpg",urls: urls)
-        getURLOfScan(name: "mi_becher.jpg",urls: urls)
+    static func saveBundleToDocuments() {
+        let urls = ModelViewController.getURLOfSavedScan()
+        ModelViewController.getURLOfScan(name: "dashboard.jpg",urls: urls)
+        ModelViewController.getURLOfScan(name: "mi_becher.jpg",urls: urls)
     }
     
-    func printDocumentsDirectory() {
+    static func printDocumentsDirectory() {
         let fileManager = FileManager.default
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         do {
@@ -72,10 +72,10 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
     
-    func getURLOfScan(name: String, urls: [URL]) {
+    static func getURLOfScan(name: String, urls: [URL]) {
         for item in urls {
             if item.lastPathComponent == name {
-                saveBundleToDocuments(name: name, item: item)
+                ModelViewController.saveBundleToDocuments(name: name, item: item)
             }
         }
     }
@@ -108,7 +108,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: Overriddent instance methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        saveBundleToDocuments()
+        ModelViewController.saveBundleToDocuments()
         DataHandler.saveCarPart()
         
         // add blurred subview
@@ -152,8 +152,18 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         if let dirPath = paths.first {
             let name = carPart.name.dropLast(".arobject".count).lowercased()
             let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent("\(name).jpg")
-            let image = UIImage(contentsOfFile: imageURL.path)
-            cell.modelImage.image = image
+            //fuck this shit
+            if name == "dashboard" {
+                let image = UIImage(named: "dashboard")
+                cell.modelImage.image = image
+            }
+            else if name == "mi_becher" {
+                let image = UIImage(named: "becher")
+                cell.modelImage.image = image
+            } else {
+                let image = UIImage(contentsOfFile: imageURL.path)
+                cell.modelImage.image = image
+            }
             cell.incidentLabel.text = String(name)
             cell.openNumber.text = String(incidents.filter { $0.status == .open }.count)
             cell.progessNumber.text = String(incidents.filter { $0.status == .progress }.count)

@@ -36,7 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         }
         // Override point for customization after application launch.
         DataHandler.setCarParts()
+//        ModelViewController.printDocumentsDirectory()
+        ModelViewController.saveBundleToDocuments()
+//        ModelViewController.printDocumentsDirectory()
         CUU.start()
+
         ARViewController.multipeerSession = MultipeerSession(receivedDataHandler: ARViewController.receivedData)
         return true
     }
@@ -44,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         ARViewController.resetButtonPressed = true
         DataHandler.loadFromJSON(url: url)
+//        ModelViewController.printDocumentsDirectory()
         return true
     }
 
