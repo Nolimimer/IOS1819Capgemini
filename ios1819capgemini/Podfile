@@ -12,6 +12,7 @@ pod 'SwiftLint'
 pod 'INSPhotoGallery'
 pod 'UICircularProgressRing'
 pod 'SwipeCellKit'
+pod 'TouchVisualizer'
 
 end
 
