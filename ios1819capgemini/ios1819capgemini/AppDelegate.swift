@@ -9,6 +9,7 @@
 import UIKit
 import Prototyper
 import CUU
+import TouchVisualizer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
@@ -40,6 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         ModelViewController.saveBundleToDocuments()
 //        ModelViewController.printDocumentsDirectory()
         CUU.start()
+        
+        Visualizer.start()
 
         ARViewController.multipeerSession = MultipeerSession(receivedDataHandler: ARViewController.receivedData)
         return true
@@ -49,6 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         ARViewController.resetButtonPressed = true
         DataHandler.loadFromJSON(url: url)
 //        ModelViewController.printDocumentsDirectory()
+        
+        Visualizer.start()
+        
         return true
     }
 
@@ -89,6 +95,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, IKAppDelegate {
         DataHandler.saveToJSON()
         ARViewController.multipeerSession.disconnectSession()
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        Visualizer.stop()
+        
         CUU.stop()
     }
 
