@@ -127,7 +127,6 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
             ARViewController.editedIncident = tmpIncident
             lastModifiedDateLabel.text = dateFormatter.string(from: tmpIncident.modifiedDate)
             modus = .view
-            
         }
         setAttachmentsToEditMode()
     }
@@ -302,6 +301,7 @@ class DetailViewController: UIViewController, UINavigationControllerDelegate, UI
     
 
     @objc private func takePhoto() {
+        
         overlay.removeFromSuperview()
         
         imagePicker = UIImagePickerController()
