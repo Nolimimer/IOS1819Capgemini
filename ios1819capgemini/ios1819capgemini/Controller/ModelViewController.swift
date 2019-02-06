@@ -185,15 +185,20 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             DataHandler.carParts.removeAll(where: { $0.name == "\(name)" })
             DataHandler.saveToJSON()
         }
+        let shareAction = SwipeAction(style: .default, title: "Share") { action, indexPath in
+        }
+        shareAction.backgroundColor = UIColor.orange
         
-        return [deleteAction]
+        return [deleteAction, shareAction]
     }
+    
     func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
         var options = SwipeOptions()
         options.expansionStyle = .destructiveAfterFill
         options.transitionStyle = .border
         return options
     }
+    
     // MARK: - UICollectionViewDelegate protocol
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
