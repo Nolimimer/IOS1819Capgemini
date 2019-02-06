@@ -110,8 +110,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
         ModelViewController.saveBundleToDocuments()
+        ARViewController.allowRendering = false
         DataHandler.saveCarPart()
-        
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -185,6 +185,25 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             DataHandler.saveToJSON()
         }
         let shareAction = SwipeAction(style: .default, title: "Share") { action, indexPath in
+            let carPart = DataHandler.carParts[indexPath.item]
+            DataHandler.saveToJSON(carPart: carPart)
+            let data = DataHandler.getJSONCurrentCarPart()
+            let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+            
+            let excludedActivities =
+                [UIActivity.ActivityType.mail,
+                 UIActivity.ActivityType.addToReadingList,
+                 UIActivity.ActivityType.assignToContact,
+                 UIActivity.ActivityType.copyToPasteboard,
+                 UIActivity.ActivityType.postToTencentWeibo,
+                 UIActivity.ActivityType.postToFacebook,
+                 UIActivity.ActivityType.postToTwitter,
+                 UIActivity.ActivityType.postToFlickr,
+                 UIActivity.ActivityType.postToWeibo,
+                 UIActivity.ActivityType.postToVimeo]
+            
+            activityController.excludedActivityTypes = excludedActivities
+            self.present(activityController, animated: true, completion: nil)
         }
         shareAction.backgroundColor = UIColor.orange
         

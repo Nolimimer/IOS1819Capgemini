@@ -153,7 +153,6 @@ enum DataHandler {
     static func saveToJSON(carPart: CarPart) {
         do {
             let data = try JSONEncoder().encode(carPart)
-            print("data : \(data)")
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
             try jsonFileWrapper.write(to: Constants.localStorageSingleCarPartURL,
                                       options: FileWrapper.WritingOptions.atomic,
