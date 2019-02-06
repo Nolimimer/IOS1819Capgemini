@@ -53,7 +53,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var isDetecting = false
     var automaticallyDetectedVectors = [SCNVector3]()
     var automaticallyDetectedIncidents = [CGPoint]()
-    private var descriptionNode: SKLabelNode?
+    var descriptionNode: SKLabelNode?
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?

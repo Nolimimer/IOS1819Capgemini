@@ -174,7 +174,6 @@ extension ARViewController {
     }
     
     func updateSession(for trackingState: ARCamera.TrackingState, incident: Incident?) {
-        
         checkTappingCreateButtonPossible()
         checkSettings()
         checkConnection()
@@ -190,6 +189,7 @@ extension ARViewController {
         setDescriptionLabel()
         setNavigationArrows(for: trackingState, incident: incident)
         ARViewController.tappingCreateIncidentButtonPossible = false
+        
     }
     
 }
