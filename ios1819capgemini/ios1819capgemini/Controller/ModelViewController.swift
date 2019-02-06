@@ -189,7 +189,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             DataHandler.saveToJSON(carPart: carPart)
             let data = DataHandler.getJSONCurrentCarPart()
             
-            guard let data = data else { print("dumm gelaufen") return }
+            guard let data = data else { print("dumm gelaufen"); return }
             let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
             
             let excludedActivities =
