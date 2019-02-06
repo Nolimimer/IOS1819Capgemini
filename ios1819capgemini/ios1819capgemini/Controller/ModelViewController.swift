@@ -176,7 +176,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { print("collection View error"); return nil }
+        guard orientation == .right else { return nil }
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
             let carPart = DataHandler.carParts[indexPath.item]
             let name = carPart.name
@@ -188,6 +188,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             let carPart = DataHandler.carParts[indexPath.item]
             DataHandler.saveToJSON(carPart: carPart)
             let data = DataHandler.getJSONCurrentCarPart()
+            
+            guard let data = data else { print("dumm gelaufen") return }
             let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
             
             let excludedActivities =

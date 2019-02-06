@@ -166,12 +166,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         ARViewController.selectedCarPart = nil 
         ARViewController.navigatingIncident = nil
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
-//        let config = ARWorldTrackingConfiguration()
+        config = ARWorldTrackingConfiguration()
         loadCustomScans()
-//        guard ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) != nil else {
-//            return
-//        }
-//        config.detectionObjects = detectionObjects
+        guard ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) != nil else {
+            return
+        }
+        config?.detectionObjects = detectionObjects
         guard let config = self.config else {
             return
         }
