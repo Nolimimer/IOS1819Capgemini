@@ -102,6 +102,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
+        print("allow rendering = true")
+        ARViewController.allowRendering = true
         self.dismiss(animated: false, completion: nil)
     }
     
@@ -121,11 +123,12 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        ARViewController.resetButtonPressed = true
         creatingNodePossible = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        ARViewController.resetButtonPressed = true
+        ARViewController.allowRendering = true
     }
 
     

@@ -31,6 +31,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var objectDetected = false
     static var tappingCreateIncidentButtonPossible = false
     static var incidentCreated = false
+    static var allowRendering = true
     static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     static var editedIncident: Incident?
     var detectedObjectNode: SCNNode?
@@ -297,8 +298,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         
+
         let node = SCNNode()
         
+        if !ARViewController.allowRendering {
+            print("creating node not possible")
+            return node
+        }
         if detectedObjectNode != nil {
             return node
         }
@@ -325,6 +331,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             ARViewController.objectDetected = true
+            ARViewController.allowRendering = false
         }
         return node
     }
