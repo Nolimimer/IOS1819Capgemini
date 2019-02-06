@@ -91,7 +91,6 @@ class ListViewController: UIViewController, UITableViewDelegate {
             DataHandler.saveToJSON(carPart: carPart)
             data = DataHandler.getJSONCurrentCarPart()
         } else {
-            print("selected car part is nil")
             data = DataHandler.getJSON()
         }
 //        DataHandler.saveToJSON(carPart: carPart)
