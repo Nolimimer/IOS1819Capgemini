@@ -82,22 +82,33 @@ class ListViewController: UIViewController, UITableViewDelegate {
   
     
     private func share() {
-        guard let carPart = ARViewController.selectedCarPart else {
-            print("selected car part is empty")
-            return
+        var data: Data?
+//        guard let carPart = ARViewController.selectedCarPart else {
+//            print("selected car part is empty")
+//            return
+//        }
+        if let carPart = ARViewController.selectedCarPart {
+            DataHandler.saveToJSON(carPart: carPart)
+            data = DataHandler.getJSONCurrentCarPart()
+        } else {
+            print("selected car part is nil")
+            data = DataHandler.getJSON()
         }
-        DataHandler.saveToJSON(carPart: carPart)
+//        DataHandler.saveToJSON(carPart: carPart)
 //        guard let dataHandlerGetJason = DataHandler.getJSON() else {
 //            print("share error")
 //            return
 //        }
         
-        guard let dataHandlerGetCarPart = DataHandler.getJSONCurrentCarPart() else {
-            print("json file current car part does not have any data")
-            return 
+//        guard let dataHandlerGetCarPart = DataHandler.getJSONCurrentCarPart() else {
+//            print("json file current car part does not have any data")
+//            return
+//        }
+        if data == nil {
+            print("I fucked up")
+            return
         }
-        
-        let activityController = UIActivityViewController(activityItems: [dataHandlerGetCarPart], applicationActivities: nil)
+        let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
         
             let excludedActivities =
                 [UIActivity.ActivityType.mail,
