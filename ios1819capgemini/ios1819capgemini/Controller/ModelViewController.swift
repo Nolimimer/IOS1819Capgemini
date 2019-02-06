@@ -102,7 +102,6 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
-        print("allow rendering = true")
         ARViewController.allowRendering = true
         self.dismiss(animated: false, completion: nil)
     }
