@@ -242,6 +242,12 @@ enum DataHandler {
                     attachment.attachment.reevaluatePath()
                 }
             }
+            //swiftlint:disable all
+            for (index, part) in carParts.enumerated() {
+                if part.name == carPart.name {
+                    carParts.remove(at: index)
+                }
+            }
             carParts.append(carPart)
         } catch _ {
         }
