@@ -108,7 +108,7 @@ class ListViewController: UIViewController, UITableViewDelegate {
             print("I fucked up")
             return
         }
-        let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        let activityController = UIActivityViewController(activityItems: [data!], applicationActivities: nil)
         
             let excludedActivities =
                 [UIActivity.ActivityType.mail,

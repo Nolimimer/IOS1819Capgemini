@@ -15,7 +15,6 @@ extension AttachmentViewController: UIImagePickerControllerDelegate {
         imagePicker.dismiss(animated: true, completion: nil)
         if let selectedImage = info[.originalImage] as? UIImage {
             if saveImage(image: selectedImage) {
-                print("Saved image")
             }
         }
         

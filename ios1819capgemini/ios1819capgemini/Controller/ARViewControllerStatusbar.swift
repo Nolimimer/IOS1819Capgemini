@@ -12,7 +12,7 @@ extension ARViewController {
         
     func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
         statusViewController.showTrackingQualityInfo(for: camera.trackingState, autoHide: true)
-        if camera.trackingState.presentationString == "RELOCALIZING" || camera.trackingState.presentationString == "INITIALIZING" {
+        if camera.trackingState.presentationString == "RELOCALIZING" || camera.trackingState.presentationString == "INITIALIZING" {
             for node in nodes {
                 node.opacity = 0
             }
