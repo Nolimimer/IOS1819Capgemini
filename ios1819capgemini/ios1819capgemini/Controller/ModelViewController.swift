@@ -102,6 +102,7 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBAction private func backButton(_ sender: Any) {
         creatingNodePossible = true
+        ARViewController.allowRendering = true
         self.dismiss(animated: false, completion: nil)
     }
     
@@ -109,8 +110,8 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
         ModelViewController.saveBundleToDocuments()
+        ARViewController.allowRendering = false
         DataHandler.saveCarPart()
-        
         // add blurred subview
         let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         blurView.frame = UIScreen.main.bounds
@@ -121,11 +122,12 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        ARViewController.resetButtonPressed = true
         creatingNodePossible = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        ARViewController.resetButtonPressed = true
+        ARViewController.allowRendering = true
     }
 
     
@@ -182,15 +184,39 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
             DataHandler.carParts.removeAll(where: { $0.name == "\(name)" })
             DataHandler.saveToJSON()
         }
+        let shareAction = SwipeAction(style: .default, title: "Share") { action, indexPath in
+            let carPart = DataHandler.carParts[indexPath.item]
+            DataHandler.saveToJSON(carPart: carPart)
+            let data = DataHandler.getJSONCurrentCarPart()
+            let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+            
+            let excludedActivities =
+                [UIActivity.ActivityType.mail,
+                 UIActivity.ActivityType.addToReadingList,
+                 UIActivity.ActivityType.assignToContact,
+                 UIActivity.ActivityType.copyToPasteboard,
+                 UIActivity.ActivityType.postToTencentWeibo,
+                 UIActivity.ActivityType.postToFacebook,
+                 UIActivity.ActivityType.postToTwitter,
+                 UIActivity.ActivityType.postToFlickr,
+                 UIActivity.ActivityType.postToWeibo,
+                 UIActivity.ActivityType.postToVimeo]
+            
+            activityController.excludedActivityTypes = excludedActivities
+            self.present(activityController, animated: true, completion: nil)
+        }
+        shareAction.backgroundColor = UIColor.orange
         
-        return [deleteAction]
+        return [deleteAction, shareAction]
     }
+    
     func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
         var options = SwipeOptions()
         options.expansionStyle = .destructiveAfterFill
         options.transitionStyle = .border
         return options
     }
+    
     // MARK: - UICollectionViewDelegate protocol
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

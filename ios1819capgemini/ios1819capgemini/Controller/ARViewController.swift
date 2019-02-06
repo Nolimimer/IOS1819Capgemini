@@ -31,6 +31,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     static var objectDetected = false
     static var tappingCreateIncidentButtonPossible = false
     static var incidentCreated = false
+    static var allowRendering = true
     static var multiUserEnabled = UserDefaults.standard.bool(forKey: "multi_user")
     static var editedIncident: Incident?
     var detectedObjectNode: SCNNode?
@@ -52,7 +53,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var isDetecting = false
     var automaticallyDetectedVectors = [SCNVector3]()
     var automaticallyDetectedIncidents = [CGPoint]()
-    private var descriptionNode: SKLabelNode?
+    var descriptionNode: SKLabelNode?
     private var anchorLabels = [UUID: String]()
     private var objectAnchor: ARObjectAnchor?
     private var node: SCNNode?
@@ -64,6 +65,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
+    var config: ARWorldTrackingConfiguration?
     // swiftlint:enable force_unwrapping implicit_return
     
     // The pixel buffer being held for analysis; used to serialize Vision requests.
@@ -161,14 +163,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         automaticallyDetectedVectors = []
         automaticallyDetectedIncidents = []
         descriptionNode = nil
+        ARViewController.selectedCarPart = nil 
         ARViewController.navigatingIncident = nil
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
-        let config = ARWorldTrackingConfiguration()
+//        let config = ARWorldTrackingConfiguration()
         loadCustomScans()
-        guard ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) != nil else {
+//        guard ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) != nil else {
+//            return
+//        }
+//        config.detectionObjects = detectionObjects
+        guard let config = self.config else {
             return
         }
-        config.detectionObjects = detectionObjects
         sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
         DataHandler.loadFromJSON()
     }
@@ -244,7 +250,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
-        let config = ARWorldTrackingConfiguration()
+        config = ARWorldTrackingConfiguration()
         
         loadCustomScans()
         guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
@@ -267,8 +273,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
         //swiftlint:enable multiline_function_chains
-        config.detectionObjects = detectionObjects
-        sceneView.session.run(config)
+        if config == nil {
+            return
+        }
+        config!.detectionObjects = detectionObjects
+        sceneView.session.run(config!)
     }
 
     
@@ -289,8 +298,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     //method is automatically executed. scans the AR View for the object which should be detected
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         
+
         let node = SCNNode()
         
+        if !ARViewController.allowRendering {
+            print("creating node not possible")
+            return node
+        }
         if detectedObjectNode != nil {
             return node
         }
@@ -317,6 +331,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.detectedObjectNode = node
             addInfoPlane(carPart: objectAnchor.referenceObject.name ?? "Unknown Car Part")
             ARViewController.objectDetected = true
+            ARViewController.allowRendering = false
         }
         return node
     }

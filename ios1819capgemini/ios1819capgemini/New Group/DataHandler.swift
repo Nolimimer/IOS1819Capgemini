@@ -16,6 +16,7 @@ enum DataHandler {
     private enum Constants {
         static let fileName = "Incident.json"
         static let fileNameModels = "ModelsToIncident.json"
+        static let fileNameSingleCarPart = "carPart.json"
         static var localStorageURL: URL {
             guard let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first else {
                 fatalError("Can't access the document directory in the user's home directory.")
@@ -27,6 +28,12 @@ enum DataHandler {
                 fatalError("Can't access the document directory in the user's home directory.")
             }
             return documentsDirectory.appendingPathComponent(Constants.fileNameModels)
+        }
+        static var localStorageSingleCarPartURL : URL {
+            guard let documentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first else {
+                fatalError("Can't access the document directory in the user's home directory.")
+            }
+            return documentsDirectory.appendingPathComponent(Constants.fileNameSingleCarPart)
         }
     }
 
@@ -96,7 +103,6 @@ enum DataHandler {
             carParts = try JSONDecoder().decode([CarPart].self, from: data)
         } catch _ {
         }
-        
         do {
             let fileWrapper = try FileWrapper(url: Constants.localStorageModelURL, options: .immediate)
             guard let data = fileWrapper.regularFileContents else {
@@ -131,7 +137,8 @@ enum DataHandler {
             let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
             try jsonFileWrapper.write(to: Constants.localStorageModelURL,
                                       options: FileWrapper.WritingOptions.atomic,
-                                      originalContentsURL: nil)        } catch _ {
+                                      originalContentsURL: nil)
+        } catch _ {
         }
         do {
             let data = try JSONEncoder().encode(carParts)
@@ -141,7 +148,30 @@ enum DataHandler {
                                       originalContentsURL: nil)
         } catch _ {
         }
-        
+    }
+    
+    static func saveToJSON(carPart: CarPart) {
+        do {
+            let data = try JSONEncoder().encode(carPart)
+            let jsonFileWrapper = FileWrapper(regularFileWithContents: data)
+            try jsonFileWrapper.write(to: Constants.localStorageSingleCarPartURL,
+                                      options: FileWrapper.WritingOptions.atomic,
+                                      originalContentsURL: nil)
+        } catch _ {
+        }
+    }
+
+    static func getJSONCurrentCarPart() -> Data? {
+        do {
+            let fileWrapper = try FileWrapper(url: Constants.localStorageSingleCarPartURL, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            return data
+        } catch _ {
+            print("Could not load incidents, DataHandler uses no incident")
+            return nil
+        }
     }
     
     static func getJSON() -> Data? {
@@ -156,6 +186,12 @@ enum DataHandler {
             return nil
         }
     }
+    
+//    static func getJSON(carPart: CarPart) -> Data? {
+//        do {
+//            let fileWrapper = try FileWrapper
+//        }
+//    }
     
     static func loadFromJSON(url: URL) {
         
@@ -190,6 +226,28 @@ enum DataHandler {
                     }
                 }
             }
+        } catch _ {
+        }
+        do {
+            let fileWrapper = try FileWrapper(url: url, options: .immediate)
+            guard let data = fileWrapper.regularFileContents else {
+                throw NSError()
+            }
+            let carPart = try JSONDecoder().decode(CarPart.self, from: data)
+            carPart.reevaluatePicturePath()
+            carPart.reevaluateFilePath()
+            for incident in carPart.incidents {
+                for attachment in incident.attachments {
+                    attachment.attachment.reevaluatePath()
+                }
+            }
+            //swiftlint:disable all
+            for (index, part) in carParts.enumerated() {
+                if part.name == carPart.name {
+                    carParts.remove(at: index)
+                }
+            }
+            carParts.append(carPart)
         } catch _ {
         }
     }
