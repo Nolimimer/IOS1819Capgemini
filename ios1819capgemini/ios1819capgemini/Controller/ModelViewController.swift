@@ -187,9 +187,11 @@ class ModelViewController: UIViewController, UICollectionViewDataSource, UIColle
         let shareAction = SwipeAction(style: .default, title: "Share") { action, indexPath in
             let carPart = DataHandler.carParts[indexPath.item]
             DataHandler.saveToJSON(carPart: carPart)
-            let data = DataHandler.getJSONCurrentCarPart()
             
-            guard let data = data else { print("dumm gelaufen"); return }
+            guard let data = DataHandler.getJSONCurrentCarPart() else {
+                print("data is nil")
+                return
+            }
             let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
             
             let excludedActivities =
