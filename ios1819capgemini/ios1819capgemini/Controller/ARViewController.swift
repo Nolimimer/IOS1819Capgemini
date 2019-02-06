@@ -64,6 +64,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
+    var config: ARWorldTrackingConfiguration?
     // swiftlint:enable force_unwrapping implicit_return
     
     // The pixel buffer being held for analysis; used to serialize Vision requests.
@@ -163,12 +164,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         descriptionNode = nil
         ARViewController.navigatingIncident = nil
         self.scene.rootNode.childNode(withName: "info-plane", recursively: true)?.removeFromParentNode()
-        let config = ARWorldTrackingConfiguration()
+//        let config = ARWorldTrackingConfiguration()
         loadCustomScans()
-        guard ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) != nil else {
+//        guard ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) != nil else {
+//            return
+//        }
+//        config.detectionObjects = detectionObjects
+        guard let config = self.config else {
             return
         }
-        config.detectionObjects = detectionObjects
         sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
         DataHandler.loadFromJSON()
     }
@@ -244,7 +248,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
-        let config = ARWorldTrackingConfiguration()
+        config = ARWorldTrackingConfiguration()
         
         loadCustomScans()
         guard let testObjects = ARReferenceObject.referenceObjects(inGroupNamed: "TestObjects", bundle: Bundle.main) else {
@@ -267,8 +271,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         }
         //swiftlint:enable multiline_function_chains
-        config.detectionObjects = detectionObjects
-        sceneView.session.run(config)
+        if config == nil {
+            return
+        }
+        config!.detectionObjects = detectionObjects
+        sceneView.session.run(config!)
     }
 
     
