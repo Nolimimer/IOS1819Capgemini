@@ -9,6 +9,10 @@ target 'ios1819capgemini' do
 pod 'Prototyper'
 pod 'CUU'
 pod 'SwiftLint'
+pod 'INSPhotoGallery'
+pod 'UICircularProgressRing'
+pod 'SwipeCellKit'
+pod 'TouchVisualizer'
 
 end
 

@@ -1,40 +1,48 @@
 PODS:
-  - CUU (1.0.0):
-    - CUU/CUUCore (= 1.0.0)
-    - CUU/FeatureKit (= 1.0.0)
-    - CUU/InteractionKit (= 1.0.0)
-  - CUU/CUUCore (1.0.0)
-  - CUU/FeatureKit (1.0.0):
-    - CUU/CUUCore
-  - CUU/InteractionKit (1.0.0):
-    - CUU/CUUCore
+  - CUU (2.1.0)
+  - INSPhotoGallery (1.2.7)
   - KeychainSwift (13.0.0)
   - Prototype (0.3.3)
   - Prototyper (1.1):
     - KeychainSwift (= 13.0.0)
     - Prototype (= 0.3.3)
   - SwiftLint (0.27.0)
+  - SwipeCellKit (2.5.1)
+  - TouchVisualizer (3.1.0)
+  - UICircularProgressRing (4.1.0)
 
 DEPENDENCIES:
   - CUU
+  - INSPhotoGallery
   - Prototyper
   - SwiftLint
+  - SwipeCellKit
+  - TouchVisualizer
+  - UICircularProgressRing
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CUU
+    - INSPhotoGallery
     - KeychainSwift
     - Prototype
     - Prototyper
     - SwiftLint
+    - SwipeCellKit
+    - TouchVisualizer
+    - UICircularProgressRing
 
 SPEC CHECKSUMS:
-  CUU: fcb53c8490d8ca873c7e11eb8b28c0d46c5c7879
+  CUU: a343f4f8a2b2aa20a98e24927abd2d98dd3de0b8
+  INSPhotoGallery: a4e698e3d6338d9016328d6747488a2a111d94e2
   KeychainSwift: 23d6c16cbc33f20fafa30c3d783241b4b87d998c
   Prototype: 2009eb25fccdcbe5339d1cbe4f116eb6e68466aa
   Prototyper: 09bf1e15d619a7cd6ae358beaa58dc2e0955fa16
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
+  SwipeCellKit: 30fd6a4f8a8b8ac864ea389c8b4c8bac5ba5471a
+  TouchVisualizer: b97b1efb0f25d1408bb4557e6f493eae454425e7
+  UICircularProgressRing: 5a32c01f54474571b1e66e8fa050c0f83d6d981b
 
-PODFILE CHECKSUM: e7bbbe3c6eaa61c66dd11f3f2b925975a2f73048
+PODFILE CHECKSUM: e64f9982a6fb763b5922cb0a4d9ad03f23820010
 
 COCOAPODS: 1.5.3
